@@ -2,9 +2,15 @@
   "placeholderImages": [
     {
       "id": "hero",
-      "description": "A modern office with a person on the phone, representing a virtual receptionist.",
-      "imageUrl": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MDYwMDYzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "modern office"
+      "description": "A woman with a headset on, looking at the camera as if in a video call.",
+      "imageUrl": "https://images.unsplash.com/photo-1554774853-719586f82d77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYWxsJTIwY2VudGVyJTIwYWdlbnR8ZW58MHx8fHwxNzE1MTk0NTYwfDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "call center agent"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Portrait of a smiling person for a testimonial.",
+      "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2NTE4NjU3MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smiling person"
     }
   ]
 }

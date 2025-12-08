@@ -9,13 +9,13 @@ const features = [
   },
   {
     icon: <Filter className="h-8 w-8 text-primary" />,
-    title: 'Lead Qualification',
-    description: 'Evaluate leads based on defined criteria, forwarding qualified leads to sales and filtering out unqualified ones.',
+    title: 'Custom Instructions',
+    description: 'Our team listens to the unique needs of your business and you have total control 24/7.',
   },
   {
     icon: <CalendarDays className="h-8 w-8 text-primary" />,
-    title: 'Appointment Scheduling',
-    description: 'Automate scheduling by integrating with calendars, allowing callers to book appointments directly.',
+    title: 'Top-Notch Support',
+    description: 'Our client and support teams are mostly based in the US so they\'re experts on all small and mid-sized businesses.',
   },
   {
     icon: <Mail className="h-8 w-8 text-primary" />,
@@ -36,20 +36,21 @@ const features = [
 
 export default function Features() {
   return (
-    <section id="features" className="py-20 md:py-28">
+    <section id="features" className="bg-card py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
+           <div className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">How we compare</div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Everything You Need, All In One Place
+            Why growing businesses choose Smith.ai
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Our AI-powered platform provides a comprehensive suite of tools to manage your communications efficiently.
+            We don't just answer calls. We deliver results.
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
-            <Card key={feature.title} className="transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-              <CardHeader>
+            <Card key={feature.title} className="transform border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
+              <CardHeader className="items-center text-center">
                 {feature.icon}
                 <CardTitle className="mt-4">{feature.title}</CardTitle>
                 <CardDescription className="mt-2">{feature.description}</CardDescription>

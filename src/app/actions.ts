@@ -2,7 +2,6 @@
 
 import {
   intelligentCallTriage,
-  IntelligentCallTriageInput,
   IntelligentCallTriageOutput,
 } from '@/ai/flows/intelligent-call-triage';
 import {

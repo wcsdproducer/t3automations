@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { IntelligentCallTriageOutput } from '@/ai/flows/intelligent-call-triage';
 import { Bot, CheckCircle, HelpCircle, User } from 'lucide-react';
-import React, { useActionState } from 'react';
+import React from 'react';
 import { useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
@@ -42,19 +43,17 @@ export default function AnsweringService() {
 
   return (
     <section className="bg-card py-20 md:py-28" id="demos">
-      <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
-        <div className="space-y-4">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Intelligent Answering Service</h2>
-          <p className="text-lg text-muted-foreground">
-            Our AI intelligently triages calls, routing them to the right person or department based on your custom rules.
-            See it in action by providing a sample conversation and rules below.
-          </p>
-        </div>
-
+      <div className="container text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Choose who answers</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            Explore having your calls handled by AI, humans, or a mix of both.
+        </p>
+      </div>
+      <div className="container mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
         <Card className="shadow-lg">
           <form action={formAction}>
-            <CardHeader>
-              <CardTitle>Call Triage Demo</CardTitle>
+            <CardHeader className='text-center'>
+              <CardTitle>AI Receptionist</CardTitle>
               <CardDescription>Enter a mock call transcript and routing rules.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -65,7 +64,7 @@ export default function AnsweringService() {
                   name="callTranscript"
                   placeholder="e.g., 'Hi, I'd like to ask about the pricing for your enterprise plan.'"
                   defaultValue="Hi, I wanted to follow up on an invoice I received. I think there might be a mistake on it. Can you help?"
-                  rows={4}
+                  rows={3}
                   required
                 />
               </div>
@@ -76,7 +75,7 @@ export default function AnsweringService() {
                   name="predefinedRules"
                   placeholder="e.g., 'If call is about pricing, route to Sales. If about support, route to Tech Support.'"
                   defaultValue="If intent is 'Billing Inquiry', route to 'Billing Department'. If intent is 'Sales', route to 'Sales Team'. Otherwise, route to 'General Support'."
-                  rows={4}
+                  rows={3}
                   required
                 />
               </div>
@@ -119,6 +118,21 @@ export default function AnsweringService() {
               </Alert>
             </div>
           )}
+        </Card>
+        <Card className="shadow-lg">
+            <CardHeader className='text-center'>
+              <CardTitle>Human Receptionist</CardTitle>
+              <CardDescription>Starting at $285/month</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">Live agents handle calls with professionalism so you can focus on other tasks.</p>
+                <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> 24/7 North American agents</li>
+                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Warm anwers/transfers</li>
+                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Inbound + outbound calling</li>
+                </ul>
+                <Button className='w-full'>Learn More</Button>
+            </CardContent>
         </Card>
       </div>
     </section>

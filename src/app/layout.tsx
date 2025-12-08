@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Virtual Receptionist AI',
+  title: 'Smith.ai | Virtual Receptionist AI',
   description: 'AI-powered virtual receptionist services to streamline your business communications.',
 };
 

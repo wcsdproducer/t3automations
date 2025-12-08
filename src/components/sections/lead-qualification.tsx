@@ -53,7 +53,7 @@ export default function LeadQualification() {
 
   return (
     <section className="py-20 md:py-28">
-      <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+      <div className="container grid grid-cols-1 gap-12 md:grid-cols-2 md:items-start">
         <Card className="shadow-lg">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -69,7 +69,7 @@ export default function LeadQualification() {
                   <FormItem><FormLabel>Phone</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="callerEmail" render={({ field }) => (
-                  <FormItem><FormLabel>Email</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem className="sm:col-span-2"><FormLabel>Email</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="companyName" render={({ field }) => (
                   <FormItem><FormLabel>Company</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -78,7 +78,7 @@ export default function LeadQualification() {
                   <FormItem><FormLabel>Job Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="reasonForCalling" render={({ field }) => (
-                  <FormItem className="sm:col-span-2"><FormLabel>Reason for Calling</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                  <FormItem className="sm:col-span-2"><FormLabel>Reason for Calling</FormLabel><FormControl><Textarea {...field} rows={3} /></FormControl><FormMessage /></FormItem>
                 )} />
                 <FormField control={form.control} name="predefinedCriteria" render={({ field }) => (
                   <FormItem className="sm:col-span-2"><FormLabel>Qualification Criteria</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>

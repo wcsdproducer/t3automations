@@ -19,7 +19,7 @@ export default function Header() {
         <div className="mr-6 flex items-center">
           <Link href="/" className="flex items-center space-x-2">
             <Phone className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">Virtual Receptionist AI</span>
+            <span className="hidden font-bold sm:inline-block">Smith.ai</span>
           </Link>
         </div>
         <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
@@ -34,7 +34,8 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
-          <Button>Get Started</Button>
+          <Button variant="ghost">Login</Button>
+          <Button>Book a consultation</Button>
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -45,7 +46,7 @@ export default function Header() {
             <SheetContent side="left">
               <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
                  <Phone className="h-6 w-6 text-primary" />
-                <span className="font-bold">Virtual Receptionist AI</span>
+                <span className="font-bold">Smith.ai</span>
               </Link>
               <div className="grid gap-4 py-6">
                 {navLinks.map((link) => (
