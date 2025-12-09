@@ -14,20 +14,20 @@ body {
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 14 90% 55%;
+    --primary: 26 95% 53%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 14 90% 55%;
+    --accent: 26 95% 53%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 14 90% 55%;
-    --chart-1: 14 90% 55%;
+    --ring: 26 95% 53%;
+    --chart-1: 26 95% 53%;
     --chart-2: 194 52% 40%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
@@ -41,20 +41,20 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 14 90% 55%;
+    --primary: 26 95% 53%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 14 90% 55%;
+    --accent: 26 95% 53%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 14 90% 55%;
-    --chart-1: 14 90% 55%;
+    --ring: 26 95% 53%;
+    --chart-1: 26 95% 53%;
     --chart-2: 194 52% 40%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
@@ -69,4 +69,29 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+section {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.dark section {
+    background-color: rgba(3, 7, 18, 0.8);
 }
