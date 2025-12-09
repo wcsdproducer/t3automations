@@ -20,11 +20,6 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <div className="video-background">
-          <video autoPlay loop muted playsInline>
-            <source src="https://storage.googleapis.com/aurora-ai-images/smith-ai-assets/smith-ai-bg-video.mp4" type="video/mp4" />
-          </video>
-        </div>
         <div className="relative z-10">
           {children}
         </div>
