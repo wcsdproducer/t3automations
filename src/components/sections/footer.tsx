@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-white">Solutions</h3>
             <ul className="mt-4 space-y-2">
-              <li><a href="#" className="hover:text-white">Virtual Receptionists</a></li>
+              <li><a href="#" className="hover:text-white">AI Receptionists</a></li>
               <li><a href="#" className="hover:text-white">Live Chat</a></li>
               <li><a href="#" className="hover:text-white">AI Chatbot</a></li>
             </ul>

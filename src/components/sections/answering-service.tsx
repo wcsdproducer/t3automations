@@ -6,10 +6,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { IntelligentCallTriageOutput } from '@/ai/flows/intelligent-call-triage';
-import { Bot, CheckCircle, HelpCircle, User } from 'lucide-react';
-import React from 'react';
+import { Bot, CheckCircle, HelpCircle } from 'lucide-react';
+import React, { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { useActionState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
@@ -32,7 +31,7 @@ export default function AnsweringService() {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    if (state.message && state.message !== 'Triage complete') {
+    if (state.message && state.message !== 'Triage complete' && !state.data) {
       toast({
         variant: 'destructive',
         title: 'Triage Failed',
@@ -42,14 +41,15 @@ export default function AnsweringService() {
   }, [state, toast]);
 
   return (
-    <section className="bg-card py-20 md:py-28" id="demos">
+    <section className="py-20 md:py-28" id="demos">
       <div className="container text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Choose who answers</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Explore what our AI can do for you</h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Explore having your calls handled by AI, humans, or a mix of both.
+          See how our AI can handle your calls, routing them to the right people every time.
         </p>
       </div>
-      <div className="container mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
+      <div className="container mt-12 grid grid-cols-1 justify-center">
+        <div className="max-w-2xl mx-auto w-full">
         <Card className="shadow-lg">
           <form action={formAction}>
             <CardHeader className='text-center'>
@@ -66,6 +66,7 @@ export default function AnsweringService() {
                   defaultValue="Hi, I wanted to follow up on an invoice I received. I think there might be a mistake on it. Can you help?"
                   rows={3}
                   required
+                  className="bg-muted"
                 />
               </div>
               <div className="space-y-2">
@@ -77,6 +78,7 @@ export default function AnsweringService() {
                   defaultValue="If intent is 'Billing Inquiry', route to 'Billing Department'. If intent is 'Sales', route to 'Sales Team'. Otherwise, route to 'General Support'."
                   rows={3}
                   required
+                  className="bg-muted"
                 />
               </div>
             </CardContent>
@@ -100,7 +102,7 @@ export default function AnsweringService() {
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <User className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
+                      <Bot className="mt-1 h-5 w-5 flex-shrink-0 text-accent" />
                       <div>
                         <p className="font-semibold">Suggested Department</p>
                         <p className="text-muted-foreground">{state.data.department}</p>
@@ -119,21 +121,7 @@ export default function AnsweringService() {
             </div>
           )}
         </Card>
-        <Card className="shadow-lg">
-            <CardHeader className='text-center'>
-              <CardTitle>Human Receptionist</CardTitle>
-              <CardDescription>Starting at $285/month</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">Live agents handle calls with professionalism so you can focus on other tasks.</p>
-                <ul className="space-y-2 text-muted-foreground">
-                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> 24/7 North American agents</li>
-                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Warm anwers/transfers</li>
-                    <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" /> Inbound + outbound calling</li>
-                </ul>
-                <Button className='w-full'>Learn More</Button>
-            </CardContent>
-        </Card>
+        </div>
       </div>
     </section>
   );
