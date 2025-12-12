@@ -40,7 +40,9 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
-          <Button variant="ghost">Login</Button>
+          <Link href="/dashboard">
+            <Button variant="ghost">Login</Button>
+          </Link>
           <Button>Book a consultation</Button>
           {isClient && (
             <Sheet>
