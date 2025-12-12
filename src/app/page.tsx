@@ -5,6 +5,7 @@ import Footer from '@/components/sections/footer';
 import Header from '@/components/sections/header';
 import Hero from '@/components/sections/hero';
 import LeadQualification from '@/components/sections/lead-qualification';
+import Pricing from '@/components/sections/pricing';
 import Solutions from '@/components/sections/solutions';
 import Stats from '@/components/sections/stats';
 import Testimonials from '@/components/sections/testimonials';
@@ -22,6 +23,7 @@ export default function Home() {
         <AnsweringService />
         <LeadQualification />
         <AppointmentScheduling />
+        <Pricing />
       </main>
       <Footer />
     </div>
