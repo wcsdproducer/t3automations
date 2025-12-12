@@ -11,6 +11,24 @@
       "description": "Portrait of a smiling person for a testimonial.",
       "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2NTE4NjU3MXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "smiling person"
+    },
+    {
+      "id": "how-it-works-1",
+      "description": "A 2D graphic representing a new lead coming in from various sources like an ad or webform.",
+      "imageUrl": "https://images.unsplash.com/photo-1700951372804-0764d874ccd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwyZCUyMGdyYXBoaWMlMjBsZWFkJTIwZ2VuZXJhdGlvbnxlbnwwfHx8fDE3NjU1NzM4OTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "2d graphic lead generation"
+    },
+    {
+      "id": "how-it-works-2",
+      "description": "A 2D graphic of a robot or AI chatbot qualifying a lead by asking questions.",
+      "imageUrl": "https://images.unsplash.com/photo-1754342536543-e71f11e6063d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHwyZCUyMGdyYXBoaWMlMjBhaSUyMGNoYXRib3R8ZW58MHx8fHwxNzY1NTczODk4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "2d graphic ai chatbot"
+    },
+    {
+      "id": "how-it-works-3",
+      "description": "A 2D graphic of a calendar with a checkmark, representing a booked appointment.",
+      "imageUrl": "https://images.unsplash.com/photo-1703300450387-047da16a89c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwyZCUyMGdyYXBoaWMlMjBjYWxlbmRhciUyMGFwcG9pbnRtZW50fGVufDB8fHx8MTc2NTU3Mzg5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "2d graphic calendar appointment"
     }
   ]
 }

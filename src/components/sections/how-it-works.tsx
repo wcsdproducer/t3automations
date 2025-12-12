@@ -1,20 +1,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Image from 'next/image';
 
 const steps = [
   {
     step: 1,
     title: 'A New Lead Comes In',
     description: 'They click on an ad, submit a webform, or send you a request.',
+    imageId: 'how-it-works-1',
   },
   {
     step: 2,
     title: 'AI Qualifies the Lead',
     description: 'Our AI answers their questions and qualifies the lead based on your criteria.',
+    imageId: 'how-it-works-2',
   },
   {
     step: 3,
     title: 'AI Books the Appointment',
     description: 'Qualified prospects are scheduled directly on your team\'s calendar.',
+    imageId: 'how-it-works-3',
   },
 ];
 
@@ -32,12 +37,23 @@ export default function HowItWorks() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
           {steps.map((step) => {
+            const stepImage = PlaceHolderImages.find((img) => img.id === step.imageId);
             return (
               <Card key={step.step} className="bg-card text-card-foreground border-gray-700 flex flex-col">
                 <CardHeader className="relative items-center text-center pt-12">
                   <div className="absolute -top-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground">
                     {step.step}
                   </div>
+                  {stepImage && (
+                    <Image
+                      src={stepImage.imageUrl}
+                      alt={step.title}
+                      data-ai-hint={stepImage.imageHint}
+                      width={128}
+                      height={128}
+                      className="mb-4 h-32 w-32 object-contain"
+                    />
+                  )}
                 </CardHeader>
                 <CardContent className="flex-grow text-center">
                   <CardTitle className="text-lg font-semibold">{step.title}</CardTitle>
