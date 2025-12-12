@@ -7,7 +7,6 @@ import Hero from '@/components/sections/hero';
 import HowItWorks from '@/components/sections/how-it-works';
 import Pricing from '@/components/sections/pricing';
 import Solutions from '@/components/sections/solutions';
-import Stats from '@/components/sections/stats';
 import Testimonials from '@/components/sections/testimonials';
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
         <Hero />
         <Solutions />
         <Features />
-        <Stats />
         <AnsweringService />
         <HowItWorks />
         <Testimonials />
