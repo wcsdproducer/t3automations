@@ -11,27 +11,15 @@ const steps = [
   },
   {
     step: 2,
-    title: 'AI Calls the Prospect',
-    description: 'In under 30 seconds, they\'re on the phone talking to our AI in natural conversation.',
-    imageId: 'how-it-works-2',
-  },
-  {
-    step: 3,
     title: 'AI Qualifies the Lead',
     description: 'Our AI answers their questions and qualifies the lead based on your criteria.',
     imageId: 'how-it-works-3',
   },
   {
-    step: 4,
+    step: 3,
     title: 'AI Books the Appointment',
     description: 'Qualified prospects are scheduled directly on your team\'s calendar.',
     imageId: 'how-it-works-4',
-  },
-  {
-    step: 5,
-    title: 'AI Follows Up',
-    description: 'Prospects receive SMS or email follow-ups with appointment confirmations, resources, or next steps.',
-    imageId: 'how-it-works-5',
   },
 ];
 
@@ -44,10 +32,10 @@ export default function HowItWorks() {
             How It Works
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            From first click to qualified meeting in 5 simple steps.
+            From first click to qualified meeting in 3 simple steps.
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
           {steps.map((step) => {
             const stepImage = PlaceHolderImages.find((img) => img.id === step.imageId);
             return (
