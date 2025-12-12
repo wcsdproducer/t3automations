@@ -61,9 +61,9 @@ export default function HowItWorks() {
                       src={stepImage.imageUrl}
                       alt={step.title}
                       data-ai-hint={stepImage.imageHint}
-                      width={150}
-                      height={100}
-                      className="mt-8 mb-4 h-[100px] w-auto object-contain"
+                      width={200}
+                      height={150}
+                      className="mt-8 mb-4 h-[150px] w-auto object-contain"
                     />
                   )}
                 </CardHeader>
