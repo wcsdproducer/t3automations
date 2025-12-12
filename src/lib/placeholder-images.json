@@ -11,6 +11,36 @@
       "description": "Portrait of a smiling person for a testimonial.",
       "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2NTE4NjU3MXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "smiling person"
+    },
+    {
+      "id": "how-it-works-1",
+      "description": "An illustration of a web form being submitted.",
+      "imageUrl": "https://images.unsplash.com/photo-1764440446149-43b125a89108?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3ZWIlMjBmb3JtfGVufDB8fHx8MTc2NTU2MjQ5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "web form"
+    },
+    {
+      "id": "how-it-works-2",
+      "description": "An illustration of a smartphone screen showing an incoming call.",
+      "imageUrl": "https://images.unsplash.com/photo-1605568985653-3d8e43f4efa6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwaG9uZSUyMGNhbGx8ZW58MHx8fHwxNzY1NTYyNDkwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "phone call"
+    },
+    {
+      "id": "how-it-works-3",
+      "description": "An illustration of a checklist or qualification form.",
+      "imageUrl": "https://images.unsplash.com/photo-1704390037907-dff6d2e353d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaGVja2xpc3QlMjBmb3JtfGVufDB8fHx8MTc2NTUyNDMzNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "checklist form"
+    },
+    {
+      "id": "how-it-works-4",
+      "description": "An illustration of a calendar with an appointment booked.",
+      "imageUrl": "https://images.unsplash.com/photo-1624969862293-b749659ccc4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxlbmRhciUyMGFwcG9pbnRtZW50fGVufDB8fHx8MTc2NTU2MjQ5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "calendar appointment"
+    },
+    {
+      "id": "how-it-works-5",
+      "description": "An illustration of a smartphone with SMS and email notifications.",
+      "imageUrl": "https://images.unsplash.com/photo-1654764450232-d0724be6dcd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9iaWxlJTIwbm90aWZpY2F0aW9uc3xlbnwwfHx8fDE3NjU1NjI0OTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mobile notifications"
     }
   ]
 }

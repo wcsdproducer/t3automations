@@ -4,7 +4,7 @@ import Features from '@/components/sections/features';
 import Footer from '@/components/sections/footer';
 import Header from '@/components/sections/header';
 import Hero from '@/components/sections/hero';
-import LeadQualification from '@/components/sections/lead-qualification';
+import HowItWorks from '@/components/sections/how-it-works';
 import Pricing from '@/components/sections/pricing';
 import Solutions from '@/components/sections/solutions';
 import Stats from '@/components/sections/stats';
@@ -21,7 +21,7 @@ export default function Home() {
         <Stats />
         <Testimonials />
         <AnsweringService />
-        <LeadQualification />
+        <HowItWorks />
         <AppointmentScheduling />
         <Pricing />
       </main>
