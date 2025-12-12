@@ -101,10 +101,10 @@ export default function Pricing() {
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Flexible Pricing for Agencies
+            Flexible Pricing
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Choose a plan that scales with you and your clients.
+            Choose a plan that scales with your business.
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
