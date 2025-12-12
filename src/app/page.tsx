@@ -19,9 +19,9 @@ export default function Home() {
         <Solutions />
         <Features />
         <Stats />
-        <Testimonials />
         <AnsweringService />
         <HowItWorks />
+        <Testimonials />
         <AppointmentScheduling />
         <Pricing />
       </main>
