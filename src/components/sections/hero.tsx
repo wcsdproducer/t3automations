@@ -14,7 +14,7 @@ export default function Hero() {
   const router = useRouter();
 
   return (
-    <section className="relative flex h-screen flex-col justify-center bg-background">
+    <section className="relative flex h-screen flex-col justify-center items-center bg-background text-white">
       <div className="video-background">
         <iframe
           src="https://www.youtube.com/embed/onMNHAorvIY?autoplay=1&mute=1&loop=1&playlist=onMNHAorvIY&controls=0&showinfo=0&autohide=1&modestbranding=1&vq=hd1080"
@@ -23,16 +23,17 @@ export default function Hero() {
           allowFullScreen
         ></iframe>
       </div>
+       <div className="absolute inset-0 bg-black/50 z-10"></div>
       <div className="container z-20 text-center">
         <div className="mx-auto max-w-3xl">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-800 md:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
             Convert conversations to clients
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-6 text-lg leading-8 text-gray-200">
             Win and retain more business with AI-first, multi-channel comms for your home services company.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-4">
-            <Button size="lg" onClick={() => router.push('#demos')}>
+            <Button size="lg" onClick={() => router.push('#demos')} className="bg-white text-primary hover:bg-white/90">
               <Bot className="mr-2 h-5 w-5" /> Try our AI
             </Button>
           </div>
@@ -43,8 +44,8 @@ export default function Hero() {
           <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3">
             {stats.map((stat) => (
               <div key={stat.label}>
-                <p className="text-4xl font-bold text-gray-800">{stat.value}</p>
-                <p className="mt-1 text-base text-gray-600">{stat.label}</p>
+                <p className="text-4xl font-bold">{stat.value}</p>
+                <p className="mt-1 text-base text-gray-200">{stat.label}</p>
               </div>
             ))}
           </div>

@@ -15,13 +15,15 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <Solutions />
-        <Features />
-        <AnsweringService />
-        <HowItWorks />
-        <Testimonials />
-        <AppointmentScheduling />
-        <Pricing />
+        <div className="relative z-10 bg-background">
+          <Solutions />
+          <Features />
+          <AnsweringService />
+          <HowItWorks />
+          <Testimonials />
+          <AppointmentScheduling />
+          <Pricing />
+        </div>
       </main>
       <Footer />
     </div>

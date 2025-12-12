@@ -14,18 +14,26 @@ const navLinks = [
 
 export default function Header() {
   const [isClient, setIsClient] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
+    <header className={`fixed top-0 z-50 w-full transition-colors duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       <div className="container flex h-16 items-center">
         <div className="mr-6 flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <Phone className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">Smith.ai</span>
+            <Phone className={`h-6 w-6 transition-colors duration-300 ${isScrolled ? 'text-primary' : 'text-white'}`} />
+            <span className={`hidden font-bold sm:inline-block transition-colors duration-300 ${isScrolled ? 'text-foreground' : 'text-white'}`}>Smith.ai</span>
           </Link>
         </div>
         <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
@@ -33,7 +41,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              className={`transition-colors duration-300 hover:text-opacity-80 ${isScrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/80 hover:text-white'}`}
             >
               {link.label}
             </Link>
@@ -41,13 +49,13 @@ export default function Header() {
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
           <Link href="/dashboard">
-            <Button variant="ghost">Login</Button>
+            <Button variant="ghost" className={isScrolled ? '' : 'text-white hover:bg-white/10 hover:text-white'}>Login</Button>
           </Link>
-          <Button>Book a consultation</Button>
+          <Button className={isScrolled ? '' : 'bg-white text-primary hover:bg-white/90'}>Book a consultation</Button>
           {isClient && (
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
+                <Button variant="ghost" size="icon" className={`md:hidden ${isScrolled ? '' : 'text-white hover:bg-white/10 hover:text-white'}`}>
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
