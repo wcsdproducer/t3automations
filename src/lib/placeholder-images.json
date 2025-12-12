@@ -15,32 +15,32 @@
     {
       "id": "how-it-works-1",
       "description": "A 2D graphic of a web form being submitted.",
-      "imageUrl": "https://images.unsplash.com/photo-1647464884131-ce1af69be064?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHwyZCUyMHdlYiUyMGZvcm18ZW58MHx8fHwxNzY1NTYzMDEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d web form"
+      "imageUrl": "https://images.unsplash.com/photo-1517815004876-7e208dd0383e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWFkJTIwZm9ybXxlbnwwfHx8fDE3NjU1NjU4NTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lead form"
     },
     {
       "id": "how-it-works-2",
-      "description": "A 2D graphic of a smartphone with an incoming call.",
-      "imageUrl": "https://images.unsplash.com/photo-1617209570434-d9db3d33c1ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHwyZCUyMHBob25lJTIwY2FsbHxlbnwwfHx8fDE3NjU1NjMwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d phone call"
+      "description": "A 2D graphic of a smartphone with an incoming call from an AI.",
+      "imageUrl": "https://images.unsplash.com/photo-1761311984022-6a118699b0e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxBSSUyMGNhbGx8ZW58MHx8fHwxNzY1NTY1ODUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "AI call"
     },
     {
       "id": "how-it-works-3",
       "description": "A 2D graphic of a checklist or qualification form.",
-      "imageUrl": "https://images.unsplash.com/photo-1643706755594-d0e8d8d42a09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHwyZCUyMGNoZWNrbGlzdHxlbnwwfHx8fDE3NjU1NjMwMTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d checklist"
+      "imageUrl": "https://picsum.photos/seed/h3/200/150",
+      "imageHint": "lead qualification"
     },
     {
       "id": "how-it-works-4",
       "description": "A 2D graphic of a calendar with an appointment booked.",
-      "imageUrl": "https://images.unsplash.com/photo-1718815628185-2ff0f9332b32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHwyZCUyMGNhbGVuZGFyfGVufDB8fHx8MTc2NTU2MzAxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d calendar"
+      "imageUrl": "https://picsum.photos/seed/h4/200/150",
+      "imageHint": "appointment booked"
     },
     {
       "id": "how-it-works-5",
-      "description": "A 2D graphic of a smartphone with SMS and email notifications.",
-      "imageUrl": "https://images.unsplash.com/photo-1609162554108-6490759499ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwyZCUyMG5vdGlmaWNhdGlvbnN8ZW58MHx8fHwxNzY1NTYzMDEzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d notifications"
+      "description": "A 2D graphic of a smartphone with SMS and email notifications for follow-ups.",
+      "imageUrl": "https://picsum.photos/seed/h5/200/150",
+      "imageHint": "automated followup"
     }
   ]
 }
