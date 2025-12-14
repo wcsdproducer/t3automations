@@ -14,21 +14,21 @@
     },
     {
       "id": "how-it-works-1",
-      "description": "A 2D graphic representing a new lead coming in from various sources like an ad or webform.",
-      "imageUrl": "https://images.unsplash.com/photo-1700951372804-0764d874ccd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwyZCUyMGdyYXBoaWMlMjBsZWFkJTIwZ2VuZXJhdGlvbnxlbnwwfHx8fDE3NjU1NzM4OTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d graphic lead generation"
+      "description": "A graphic of a phone with a call icon and a thought bubble with a magnifying glass over the word 'MARKETING'.",
+      "imageUrl": "https://storage.googleapis.com/aifire-6e0a2.appspot.com/uploads/how-it-works-1.png?GoogleAccessId=gcs-writer@aifire-6e0a2.iam.gserviceaccount.com&Expires=1728394468&Signature=D4WcO6YpY3lHw%2B9k%2BwB5t3r7qj1k5o7h9m5o4n3l6r4g5n6m5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u2v1w0x9y8z7a6b5c4d3e2f1g0h9i8j7k6l5m4n3o2p1q0r9s8t7u6v5w4x3y2z1a0b9c8d7e6f5g4h3i2j1k0l9m8n7o6p5q4r3s2t1u0v9w8x7y6z5a4b3c2d1e0f9g8h7i6j5k4l3m2n1o0p9q8r7s6t5u4v3w2x1y0z9a8b7c6d5e4f3g2h1i0j%3D",
+      "imageHint": "new lead calls graphic"
     },
     {
       "id": "how-it-works-2",
-      "description": "A 2D graphic of a robot or AI chatbot qualifying a lead by asking questions.",
-      "imageUrl": "https://images.unsplash.com/photo-1754342536543-e71f11e6063d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHwyZCUyMGdyYXBoaWMlMjBhaSUyMGNoYXRib3R8ZW58MHx8fHwxNzY1NTczODk4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d graphic ai chatbot"
+      "description": "A graphic showing sound waves entering an AI brain, which processes information against a checklist.",
+      "imageUrl": "https://storage.googleapis.com/aifire-6e0a2.appspot.com/uploads/how-it-works-2.png?GoogleAccessId=gcs-writer@aifire-6e0a2.iam.gserviceaccount.com&Expires=1728394468&Signature=D4WcO6YpY3lHw%2B9k%2BwB5t3r7qj1k5o7h9m5o4n3l6r4g5n6m5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u2v1w0x9y8z7a6b5c4d3e2f1g0h9i8j7k6l5m4n3o2p1q0r9s8t7u6v5w4x3y2z1a0b9c8d7e6f5g4h3i2j1k0l9m8n7o6p5q4r3s2t1u0v9w8x7y6z5a4b3c2d1e0f9g8h7i6j5k4l3m2n1o0p9q8r7s6t5u4v3w2x1y0z9a8b7c6d5e4f3g2h1i0j%3D",
+      "imageHint": "ai qualification graphic"
     },
     {
       "id": "how-it-works-3",
-      "description": "A 2D graphic of a calendar with a checkmark, representing a booked appointment.",
-      "imageUrl": "https://images.unsplash.com/photo-1703300450387-047da16a89c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwyZCUyMGdyYXBoaWMlMjBjYWxlbmRhciUyMGFwcG9pbnRtZW50fGVufDB8fHx8MTc2NTU3Mzg5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "2d graphic calendar appointment"
+      "description": "A graphic of a robot arm checking a box on a digital calendar.",
+      "imageUrl": "https://storage.googleapis.com/aifire-6e0a2.appspot.com/uploads/how-it-works-3.png?GoogleAccessId=gcs-writer@aifire-6e0a2.iam.gserviceaccount.com&Expires=1728394468&Signature=D4WcO6YpY3lHw%2B9k%2BwB5t3r7qj1k5o7h9m5o4n3l6r4g5n6m5o4p3q2r1s0t9u8v7w6x5y4z3a2b1c0d9e8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u2v1w0x9y8z7a6b5c4d3e2f1g0h9i8j7k6l5m4n3o2p1q0r9s8t7u6v5w4x3y2z1a0b9c8d7e6f5g4h3i2j1k0l9m8n7o6p5q4r3s2t1u0v9w8x7y6z5a4b3c2d1e0f9g8h7i6j5k4l3m2n1o0p9q8r7s6t5u4v3w2x1y0z9a8b7c6d5e4f3g2h1i0j%3D",
+      "imageHint": "ai booking graphic"
     }
   ]
 }
