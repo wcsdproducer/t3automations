@@ -1,0 +1,220 @@
+rules_version = '2';
+
+/**
+ * Core Philosophy: This ruleset enforces a strict multi-tenant ownership model.
+ * Each business profile is treated as a separate, secure data silo. An
+ * authenticated user's UID is expected to correspond directly to a
+ * businessProfileId, granting them exclusive access to their own data.
+ *
+ * Data Structure: The database is organized hierarchically, with all business-
+ * specific data (greetings, call logs, appointments, etc.) stored in
+ * subcollections under a top-level `/businessProfiles/{businessProfileId}` document.
+ * This structure leverages Firestore's path-based security to ensure data isolation.
+ *
+ * Key Security Decisions:
+ * - Business Listing Disabled: Listing the top-level `/businessProfiles` collection
+ *   is explicitly forbidden to prevent enumeration of businesses on the platform.
+ * - Strict Ownership: All access control is based on the `businessProfileId` in
+ *   the document path. A user can only access documents where the path's
+ *   `businessProfileId` matches their own authentication UID.
+ * - Subcollection Inheritance: Security for subcollections is derived from their
+ *   parent business profile path, ensuring consistent access control throughout
+ *   a business's data tree.
+ *
+ * Denormalization for Authorization: The rules rely on the application to denormalize
+ * the `businessProfileId` onto every document within a business's subcollections.
+ * This strategy avoids costly and slow `get()` calls in security rules, enabling
+ * fast, efficient authorization checks. For example, a rule for a call log simply
+ * checks the `businessProfileId` in the path, rather than reading the parent
+ * business profile document.
+ *
+ * Structural Segregation: The data model naturally segregates different types of
+ * business data (e.g., `callLogs`, `appointments`, `messages`) into distinct
+ * subcollections. This is an efficient pattern that simplifies security rules
+ * and client-side queries.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------------------
+    // Helper Functions
+    // ----------------------------------------------------------------------
+
+    /**
+     * Verifies that the user is signed in.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Verifies that the requesting user's UID matches the businessProfileId.
+     * This is the primary ownership check for the entire database.
+     */
+    function isOwner(businessProfileId) {
+      return isSignedIn() && request.auth.uid == businessProfileId;
+    }
+    
+    /**
+     * Verifies ownership for an existing document. Used for update and delete.
+     * Combines ownership check with an existence check for robustness.
+     */
+    function isExistingOwner(businessProfileId) {
+      return isOwner(businessProfileId) && resource != null;
+    }
+    
+    /**
+     * On Create: Validates that the new BusinessProfile's ID matches the path.
+     */
+    function isValidBusinessProfileCreate(businessProfileId) {
+      return request.resource.data.id == businessProfileId;
+    }
+
+    /**
+     * On Update: Enforces immutability of the BusinessProfile's ID.
+     */
+    function isImmutableBusinessProfile() {
+      return request.resource.data.id == resource.data.id;
+    }
+
+    /**
+     * On Create: Validates foreign key and primary key for a subcollection document.
+     */
+    function isValidSubDocCreate(businessProfileId, docId) {
+       return request.resource.data.businessProfileId == businessProfileId && request.resource.data.id == docId;
+    }
+
+    /**
+     * On Update: Enforces immutability of foreign and primary keys for a subcollection document.
+     */
+    function isImmutableSubDoc() {
+       return request.resource.data.businessProfileId == resource.data.businessProfileId && request.resource.data.id == resource.data.id;
+    }
+
+    // ----------------------------------------------------------------------
+    // Business Profiles Collection
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Rules for the top-level business profile documents.
+     * @path /businessProfiles/{businessProfileId}
+     * @allow (get) An authenticated user reads their own profile: `auth.uid == 'biz-123'`, path `/businessProfiles/biz-123`
+     * @allow (create) An authenticated user creates their own profile: `auth.uid == 'biz-123'`, path `/businessProfiles/biz-123`
+     * @deny (list) Any user attempts to list all business profiles.
+     * @deny (update) An authenticated user tries to update another user's profile: `auth.uid == 'biz-123'`, path `/businessProfiles/biz-456`
+     * @principle Enforces self-creation and strict document ownership. Prevents data enumeration.
+     */
+    match /businessProfiles/{businessProfileId} {
+      allow get: if isOwner(businessProfileId);
+      allow list: if false;
+      allow create: if isOwner(businessProfileId) && isValidBusinessProfileCreate(businessProfileId);
+      allow update: if isExistingOwner(businessProfileId) && isImmutableBusinessProfile();
+      allow delete: if isExistingOwner(businessProfileId);
+
+      // --------------------------------------------------------------------
+      // Custom Greetings Subcollection
+      // --------------------------------------------------------------------
+
+      /**
+       * @description Rules for business-specific custom greetings.
+       * @path /businessProfiles/{businessProfileId}/customGreetings/{customGreetingId}
+       * @allow (list) An authenticated user lists greetings for their own business.
+       * @allow (create) An authenticated user adds a greeting to their own business profile.
+       * @deny (get) An authenticated user tries to read a greeting from another business.
+       * @deny (delete) A user tries to delete a greeting from a business they do not own.
+       * @principle Restricts access to a user's own data tree using path-based ownership.
+       */
+      match /customGreetings/{customGreetingId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, customGreetingId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+
+      // --------------------------------------------------------------------
+      // Call Logs Subcollection
+      // --------------------------------------------------------------------
+
+      /**
+       * @description Rules for business-specific call logs.
+       * @path /businessProfiles/{businessProfileId}/callLogs/{callLogId}
+       * @allow (list) An authenticated user lists call logs for their own business.
+       * @allow (create) An authenticated user adds a call log to their own business profile.
+       * @deny (get) An authenticated user tries to read a call log from another business.
+       * @deny (update) A user tries to modify a call log from a business they do not own.
+       * @principle Restricts access to a user's own data tree using path-based ownership.
+       */
+      match /callLogs/{callLogId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, callLogId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+
+        // ------------------------------------------------------------------
+        // Lead Qualifications Nested Subcollection
+        // ------------------------------------------------------------------
+
+        /**
+         * @description Rules for lead qualifications nested under call logs.
+         * @path /businessProfiles/{businessProfileId}/callLogs/{callLogId}/leadQualifications/{leadQualificationId}
+         * @allow (get) An authenticated user reads a lead qualification record for their own business's call log.
+         * @allow (create) An authenticated user adds a lead qualification to one of their own call logs.
+         * @deny (list) An authenticated user tries to list lead qualifications from another business.
+         * @deny (update) A user tries to modify a lead qualification from a business they do not own.
+         * @principle Inherits ownership from the top-level path, securing nested data.
+         */
+        match /leadQualifications/{leadQualificationId} {
+          allow get: if isOwner(businessProfileId);
+          allow list: if isOwner(businessProfileId);
+          allow create: if isOwner(businessProfileId) && request.resource.data.callLogId == callLogId && request.resource.data.id == leadQualificationId;
+          allow update: if isExistingOwner(businessProfileId) && request.resource.data.callLogId == resource.data.callLogId && request.resource.data.id == resource.data.id;
+          allow delete: if isExistingOwner(businessProfileId);
+        }
+      }
+
+      // --------------------------------------------------------------------
+      // Appointments Subcollection
+      // --------------------------------------------------------------------
+
+      /**
+       * @description Rules for business-specific appointments.
+       * @path /businessProfiles/{businessProfileId}/appointments/{appointmentId}
+       * @allow (list) An authenticated user lists appointments for their own business.
+       * @allow (create) An authenticated user adds an appointment to their own business profile.
+       * @deny (get) An authenticated user tries to read an appointment from another business.
+       * @deny (delete) A user tries to delete an appointment from a business they do not own.
+       * @principle Restricts access to a user's own data tree using path-based ownership.
+       */
+      match /appointments/{appointmentId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, appointmentId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+
+      // --------------------------------------------------------------------
+      // Messages Subcollection
+      // --------------------------------------------------------------------
+
+      /**
+       * @description Rules for business-specific messages.
+       * @path /businessProfiles/{businessProfileId}/messages/{messageId}
+       * @allow (list) An authenticated user lists messages for their own business.
+       * @allow (create) An authenticated user adds a message to their own business profile.
+       * @deny (get) An authenticated user tries to read a message from another business.
+       * @deny (update) A user tries to modify a message from a business they do not own.
+       * @principle Restricts access to a user's own data tree using path-based ownership.
+       */
+      match /messages/{messageId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, messageId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+    }
+  }
+}

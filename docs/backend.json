@@ -1,0 +1,365 @@
+{
+  "entities": {
+    "BusinessProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BusinessProfile",
+      "type": "object",
+      "description": "Represents a business using the virtual receptionist service.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BusinessProfile entity."
+        },
+        "businessName": {
+          "type": "string",
+          "description": "The name of the business."
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "The contact email address for the business.",
+          "format": "email"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The primary phone number for the business."
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "The website URL for the business.",
+          "format": "uri"
+        },
+        "customGreetingId": {
+          "type": "string",
+          "description": "Reference to CustomGreeting. (Relationship: BusinessProfile 1:1 CustomGreeting)"
+        }
+      },
+      "required": [
+        "id",
+        "businessName",
+        "contactEmail",
+        "phoneNumber"
+      ]
+    },
+    "CustomGreeting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CustomGreeting",
+      "type": "object",
+      "description": "Stores custom greeting messages for the virtual receptionist.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the CustomGreeting entity."
+        },
+        "greetingText": {
+          "type": "string",
+          "description": "The text of the custom greeting."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile. (Relationship: BusinessProfile 1:1 CustomGreeting)"
+        }
+      },
+      "required": [
+        "id",
+        "greetingText"
+      ]
+    },
+    "CallLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CallLog",
+      "type": "object",
+      "description": "Represents a record of a call handled by the virtual receptionist.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the CallLog entity."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile. (Relationship: BusinessProfile 1:N CallLog)"
+        },
+        "callerPhoneNumber": {
+          "type": "string",
+          "description": "The phone number of the caller."
+        },
+        "callStartTime": {
+          "type": "string",
+          "description": "The date and time the call started.",
+          "format": "date-time"
+        },
+        "callEndTime": {
+          "type": "string",
+          "description": "The date and time the call ended.",
+          "format": "date-time"
+        },
+        "callRecordingUrl": {
+          "type": "string",
+          "description": "URL where the call recording is stored.",
+          "format": "uri"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Notes about the call."
+        },
+        "leadQualificationId": {
+          "type": "string",
+          "description": "Reference to LeadQualification. (Relationship: LeadQualification 1:1 CallLog)"
+        }
+      },
+      "required": [
+        "id",
+        "businessProfileId",
+        "callerPhoneNumber",
+        "callStartTime",
+        "callEndTime"
+      ]
+    },
+    "LeadQualification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "LeadQualification",
+      "type": "object",
+      "description": "Stores the qualification status of a lead from a call.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the LeadQualification entity."
+        },
+        "isQualified": {
+          "type": "boolean",
+          "description": "Indicates whether the lead is qualified."
+        },
+        "qualificationNotes": {
+          "type": "string",
+          "description": "Additional notes about the lead qualification process."
+        },
+        "callLogId": {
+          "type": "string",
+          "description": "Reference to CallLog. (Relationship: LeadQualification 1:1 CallLog)"
+        }
+      },
+      "required": [
+        "id",
+        "isQualified"
+      ]
+    },
+    "Appointment": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Appointment",
+      "type": "object",
+      "description": "Represents a scheduled appointment.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Appointment entity."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile. (Relationship: BusinessProfile 1:N Appointment)"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "The start time of the appointment.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "The end time of the appointment.",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the appointment."
+        },
+        "attendees": {
+          "type": "array",
+          "description": "A list of attendees' email addresses.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "businessProfileId",
+        "startTime",
+        "endTime"
+      ]
+    },
+    "Message": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Message",
+      "type": "object",
+      "description": "Represents a message taken by the virtual receptionist and delivered to the business.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Message entity."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile. (Relationship: BusinessProfile 1:N Message)"
+        },
+        "callLogId": {
+          "type": "string",
+          "description": "Reference to CallLog. (Relationship: CallLog 1:1 Message)"
+        },
+        "recipient": {
+          "type": "string",
+          "description": "The recipient of the message (e.g., email or phone number)."
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the message."
+        },
+        "deliveryMethod": {
+          "type": "string",
+          "description": "The method used to deliver the message (e.g., email, SMS)."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The timestamp when the message was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "businessProfileId",
+        "recipient",
+        "content",
+        "deliveryMethod",
+        "timestamp"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/businessProfiles/{businessProfileId}",
+        "definition": {
+          "entityName": "BusinessProfile",
+          "schema": {
+            "$ref": "#/backend/entities/BusinessProfile"
+          },
+          "description": "Stores business profile information. This path uses path-based ownership. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/customGreetings/{customGreetingId}",
+        "definition": {
+          "entityName": "CustomGreeting",
+          "schema": {
+            "$ref": "#/backend/entities/CustomGreeting"
+          },
+          "description": "Stores custom greeting messages for each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "customGreetingId",
+              "description": "The unique identifier for the custom greeting."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/callLogs/{callLogId}",
+        "definition": {
+          "entityName": "CallLog",
+          "schema": {
+            "$ref": "#/backend/entities/CallLog"
+          },
+          "description": "Stores call logs associated with each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "callLogId",
+              "description": "The unique identifier for the call log."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/callLogs/{callLogId}/leadQualifications/{leadQualificationId}",
+        "definition": {
+          "entityName": "LeadQualification",
+          "schema": {
+            "$ref": "#/backend/entities/LeadQualification"
+          },
+          "description": "Stores lead qualification information for each call log. Includes denormalized 'businessProfileId' and 'callLogId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "callLogId",
+              "description": "The unique identifier for the call log."
+            },
+            {
+              "name": "leadQualificationId",
+              "description": "The unique identifier for the lead qualification."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/appointments/{appointmentId}",
+        "definition": {
+          "entityName": "Appointment",
+          "schema": {
+            "$ref": "#/backend/entities/Appointment"
+          },
+          "description": "Stores appointment information for each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "appointmentId",
+              "description": "The unique identifier for the appointment."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/messages/{messageId}",
+        "definition": {
+          "entityName": "Message",
+          "schema": {
+            "$ref": "#/backend/entities/Message"
+          },
+          "description": "Stores messages associated with each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "messageId",
+              "description": "The unique identifier for the message."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support the Virtual Receptionist AI application, focusing on secure and efficient data access. BusinessProfiles are the central entity, with other entities related to them via subcollections. This approach enables easy querying and management of data related to a specific business. Specifically, Authorization Independence is ensured by storing the BusinessProfile ID within each subcollection document, removing the need for `get()` calls in security rules. Each document within the BusinessProfile's subcollections includes the `businessProfileId` which enables flat reads to verify access. Segregation is implemented by storing data with different access requirements (e.g., CallLogs, Appointments) in separate subcollections under the BusinessProfile. The data structure also facilitates QAPs by enabling secure list operations within each business profile's subcollections."
+  }
+}
