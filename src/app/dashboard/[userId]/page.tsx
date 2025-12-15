@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
+import { Card } from '@/components/ui/card';
 
 const SidebarNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const params = useParams();
