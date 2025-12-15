@@ -10,19 +10,33 @@ export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const params = useParams();
   const router = useRouter();
-  const userId = params.userId as string;
+  const userIdSlug = params.userId as string;
 
   React.useEffect(() => {
-    // If not loading and user is not logged in, or logged in user doesn't match URL, redirect to login
-    if (!isUserLoading && (!user || user.uid !== userId)) {
-      router.push('/login');
+    // If not loading and user is not logged in, or the truncated user ID doesn't match the URL, redirect.
+    if (!isUserLoading) {
+      if (!user) {
+        router.push('/login');
+      } else if (user.uid.slice(-12) !== userIdSlug) {
+        // Redirect to the correct slug for the logged-in user.
+        router.push(`/dashboard/${user.uid.slice(-12)}`);
+      }
     }
-  }, [user, isUserLoading, userId, router]);
+  }, [user, isUserLoading, userIdSlug, router]);
 
   if (isUserLoading || !user) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
         <p>Loading...</p>
+      </div>
+    );
+  }
+
+  // Also check if the slug matches before rendering the content.
+  if (user.uid.slice(-12) !== userIdSlug) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <p>Redirecting...</p>
       </div>
     );
   }

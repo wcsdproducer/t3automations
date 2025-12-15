@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   React.useEffect(() => {
     if (!isUserLoading && user) {
-      router.push(`/dashboard/${user.uid}`);
+      router.push(`/dashboard/${user.uid.slice(-12)}`);
     }
   }, [user, isUserLoading, router]);
 
