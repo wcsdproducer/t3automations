@@ -36,7 +36,7 @@ export default function SignupPage() {
 
   React.useEffect(() => {
     if (!isUserLoading && user) {
-      router.push('/dashboard');
+      router.push(`/dashboard/${user.uid}`);
     }
   }, [user, isUserLoading, router]);
 
