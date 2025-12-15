@@ -1,3 +1,4 @@
+
 export const firebaseConfig = {
   "projectId": "studio-1410114603-9e1f6",
   "appId": "1:68343157012:web:badd07358f2c0a46187201",
@@ -6,3 +7,4 @@ export const firebaseConfig = {
   "measurementId": "",
   "messagingSenderId": "68343157012"
 };
+
