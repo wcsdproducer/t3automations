@@ -51,10 +51,12 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
-          <Link href="/dashboard">
+          <Link href="/login">
             <Button variant="ghost">Login</Button>
           </Link>
-          <Button>Book a consultation</Button>
+          <Link href="/signup">
+            <Button>Book a consultation</Button>
+          </Link>
           {isClient && (
             <Sheet>
               <SheetTrigger asChild>
