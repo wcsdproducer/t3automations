@@ -32,7 +32,6 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 
 const SidebarNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const params = useParams();
   const router = useRouter();
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   const isActive = currentPath.startsWith(href);
@@ -192,16 +191,18 @@ export default function DashboardPage() {
                   className="rounded-t-lg object-cover"
                 />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-t-lg">
-                  <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full">
-                    View Dashboard
-                  </Button>
+                  <Link href={`/dashboard/${userIdSlug}/agents/solar-london`}>
+                    <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full">
+                      View Dashboard
+                    </Button>
+                  </Link>
                   <Button variant="ghost" size="icon" className="absolute top-2 right-2 text-white">
                     <MoreHorizontal className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-semibold">Appointment Booking Agent</h3>
+                <h3 className="font-semibold">Solar London</h3>
                 <p className="text-sm text-muted-foreground">Last Edited Dec 6, 2025</p>
               </div>
             </Card>
