@@ -8,7 +8,7 @@ export default function Hero() {
     <section className="relative flex h-screen flex-col justify-center items-center text-white overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
         <iframe
-          className="w-full h-full"
+          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2"
           src="https://www.youtube.com/embed/sat_OOmdCAo?autoplay=1&mute=1&loop=1&playlist=sat_OOmdCAo&controls=0&showinfo=0&autohide=1&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1"
           frameBorder="0"
           allow="autoplay; encrypted-media"
