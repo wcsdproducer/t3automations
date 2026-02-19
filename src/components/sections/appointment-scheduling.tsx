@@ -33,15 +33,15 @@ export default function AppointmentScheduling() {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-gray-800 text-white">
+    <section className="py-20 md:py-28 bg-[#81ADBB] text-[#F5F0E7]">
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-4">
             <div className="text-sm font-bold uppercase tracking-wider text-primary">SKIP THE LINE</div>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Take the faster path to business growth</h2>
-            <p className="text-lg text-gray-300">Affordable plans for every budget.</p>
+            <p className="text-lg">Affordable plans for every budget.</p>
             <div className='flex gap-4'>
                 <Button>Talk to sales</Button>
-                <Button variant="link" className='text-white'>Learn More</Button>
+                <Button variant="link" className='text-[#F5F0E7]'>Learn More</Button>
             </div>
         </div>
 
