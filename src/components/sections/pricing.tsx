@@ -6,7 +6,7 @@ import { Ban, Check } from 'lucide-react';
 const PlanFeature = ({ children }: { children: React.ReactNode }) => (
   <div className="flex items-center gap-2">
     <Check className="h-4 w-4 text-primary" />
-    <span className="text-muted-foreground">{children}</span>
+    <span className="text-muted-foreground text-sm">{children}</span>
   </div>
 );
 
