@@ -51,7 +51,7 @@ export default function Pricing() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
-            <Card className="bg-card flex flex-col p-6 border-white">
+            <Card className="bg-card flex flex-col p-6 border-white border-2">
               <CardHeader className="p-0 text-center">
                 <CardTitle className="text-lg">6-MONTH COMMITMENT</CardTitle>
                 <CardDescription className="text-primary font-semibold">Paid upfront</CardDescription>
@@ -73,7 +73,7 @@ export default function Pricing() {
               </div>
             </Card>
 
-            <Card className="bg-card border-primary flex flex-col p-6">
+            <Card className="bg-card border-primary flex flex-col p-6 border-2">
               <CardHeader className="p-0 text-center">
                 <CardTitle className="text-lg">12-MONTH COMMITMENT</CardTitle>
                 <CardDescription className="text-primary font-semibold">Paid upfront</CardDescription>
