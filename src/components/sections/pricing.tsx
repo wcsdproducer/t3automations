@@ -6,7 +6,7 @@ import { Ban, Check } from 'lucide-react';
 const PlanFeature = ({ children }: { children: React.ReactNode }) => (
   <div className="flex items-center gap-2">
     <Check className="h-4 w-4 text-primary" />
-    <span className="text-muted-foreground text-sm">{children}</span>
+    <span className="text-muted-foreground text-xs whitespace-nowrap">{children}</span>
   </div>
 );
 
@@ -50,7 +50,7 @@ export default function Pricing() {
             <Button size="lg" className="mt-6 rounded-full px-48 py-12 text-5xl">Get Started</Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
             <Card className="bg-card flex flex-col p-6 border-white">
               <CardHeader className="p-0 text-center">
                 <CardTitle className="text-lg">6-MONTH COMMITMENT</CardTitle>
@@ -62,7 +62,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex flex-wrap justify-center items-center gap-4">
+                <div className="flex justify-around items-center gap-4">
                   <PlanFeature>Save $200 per month</PlanFeature>
                   <PlanFeature>Total savings: $1,200</PlanFeature>
                   <PlanFeature>2-year price lock</PlanFeature>
@@ -84,7 +84,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex flex-wrap justify-center items-center gap-4">
+                <div className="flex justify-around items-center gap-4">
                   <PlanFeature>Save $500 per month</PlanFeature>
                   <PlanFeature>Total savings: $6,000</PlanFeature>
                   <PlanFeature>5-year price lock</PlanFeature>
