@@ -26,7 +26,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col items-center gap-8">
+        <div className="mt-16 flex flex-col items-center gap-16">
           <div className="text-center space-y-4">
             <div>
               <span className="text-6xl font-extrabold text-foreground">$1,499</span>
@@ -47,7 +47,7 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="rounded-full px-48 py-3 text-lg font-bold mt-8 mb-28">Get Started</Button>
+            <Button size="lg" className="rounded-full px-48 py-3 font-bold mt-8 mb-[136px]">Get Started</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
