@@ -11,16 +11,16 @@ import { T3LogoText } from '@/components/ui/logo';
 
 export default function ContactPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex flex-col bg-background">
       <Header />
       <main className="flex-1 pt-20">
         <section className="py-8">
           <div className="container">
             <div className="max-w-3xl">
               <p className="text-primary font-semibold uppercase tracking-wider">Talk to us</p>
-              <h1 className="text-3xl font-bold tracking-tight md:text-4xl mt-2">Schedule a free consultation</h1>
-              <p className="mt-4 text-lg text-muted-foreground">In this meeting, we'll discuss:</p>
-              <ul className="mt-4 space-y-2 text-base text-foreground/80">
+              <h1 className="text-2xl font-bold tracking-tight md:text-3xl mt-2">Schedule a free consultation</h1>
+              <p className="mt-4 text-base text-muted-foreground">In this meeting, we'll discuss:</p>
+              <ul className="mt-4 space-y-2 text-sm text-foreground/80">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="h-5 w-5 text-primary" />
                   <span>Your current business challenges and where you need help</span>
