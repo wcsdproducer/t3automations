@@ -7,10 +7,10 @@
       "imageHint": "man laying wood floor"
     },
     {
-      "id": "testimonial-1",
-      "description": "Portrait of a smiling person for a testimonial.",
-      "imageUrl": "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2NTE4NjU3MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "smiling person"
+      "id": "testimonial-steven-forester",
+      "description": "Portrait of Steven Forester, owner of Vertical Solutions LLC",
+      "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzE1MDUxMDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
     },
     {
       "id": "how-it-works-1",
