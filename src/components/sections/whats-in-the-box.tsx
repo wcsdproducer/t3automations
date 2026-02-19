@@ -79,7 +79,7 @@ export default function WhatsInTheBox() {
             Over <span className="text-primary">$7,000 worth</span> of features included:
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-3">
           {features.map((feature, index) => (
             <div key={index} className="border-l-2 border-zinc-300 p-8 flex flex-col gap-4">
               <div className="flex justify-between items-baseline">
