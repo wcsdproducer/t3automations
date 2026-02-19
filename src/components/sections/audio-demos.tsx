@@ -22,7 +22,7 @@ export default function AudioDemos() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {demos.map((demo) => (
-            <Card key={demo.title} className="bg-card">
+            <Card key={demo.title} className="bg-[#1A1A1A]">
               <CardHeader>
                 <CardTitle>{demo.title}</CardTitle>
               </CardHeader>
