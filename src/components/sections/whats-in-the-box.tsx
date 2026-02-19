@@ -71,7 +71,7 @@ export default function WhatsInTheBox() {
   return (
     <section className="bg-[#F5F0E7] text-zinc-800 py-20 md:py-28">
       <div className="container">
-        <div>
+        <div className="mb-2">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             What&apos;s in the box?
           </h2>
@@ -81,7 +81,7 @@ export default function WhatsInTheBox() {
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="border-l-2 border-[#C6410F] px-8 py-2 flex flex-col gap-1">
+            <div key={index} className="border-l-2 border-[#C6410F] px-8 py-2 flex flex-col gap-1 h-full">
               <div className="flex justify-between items-baseline">
                 <h3 className="text-lg font-bold">
                   {feature.title}{' '}
