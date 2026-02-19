@@ -21,6 +21,6 @@ export const T3Logo = (props: React.SVGProps<SVGSVGElement>) => (
 
 export const T3LogoText = ({ className }: { className?: string }) => (
     <span className={`font-bold text-2xl tracking-wider ${className}`}>
-        T3 <span className="font-light">AUTOMATIONS</span>
+        T3 AUTOMATIONS
     </span>
 );
