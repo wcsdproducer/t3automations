@@ -16,7 +16,7 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 bg-black/60 z-10"></div>
       <div className="container z-20 text-center">
-        <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+        <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
           Are you ready to scale your business?
         </h1>
       </div>
