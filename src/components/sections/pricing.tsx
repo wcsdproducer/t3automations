@@ -47,11 +47,11 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="mt-6 rounded-full px-24 py-8 text-3xl">Get Started</Button>
+            <Button size="lg" className="mt-6 rounded-full px-32 py-10 text-4xl">Get Started</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
-            <Card className="bg-card flex flex-col p-6">
+            <Card className="bg-card flex flex-col p-6 border-white">
               <CardHeader className="p-0 text-center">
                 <CardTitle className="text-lg">6-MONTH COMMITMENT</CardTitle>
                 <CardDescription className="text-primary font-semibold">Paid upfront</CardDescription>
