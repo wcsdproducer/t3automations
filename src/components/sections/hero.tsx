@@ -20,10 +20,10 @@ export default function Hero() {
           <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
             Are you ready to scale your business?
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-200">
+          <p className="mt-6 text-2xl leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-4">
+          <div className="mt-4 flex items-center justify-center gap-x-4">
             <Button size="lg" className="rounded-full font-bold">MORE LEADS</Button>
             <Button size="lg" className="rounded-full font-bold">MORE QUOTES</Button>
             <Button size="lg" className="rounded-full font-bold">MORE JOBS</Button>
