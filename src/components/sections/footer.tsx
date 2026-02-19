@@ -14,7 +14,7 @@ export default function Footer() {
                   width={64}
                   height={64}
                 />
-                <T3LogoText className="text-primary mt-4" />
+                <T3LogoText className="text-[#C6410F] mt-2" />
                 <p className="text-muted-foreground mt-1">Empowering small businesses through automations and AI Voice Assistants</p>
                 <div className="flex gap-4 mt-4">
                     <a href="#" aria-label="Facebook"><Facebook className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
@@ -22,38 +22,6 @@ export default function Footer() {
                     <a href="#" aria-label="LinkedIn"><Linkedin className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
                     <a href="#" aria-label="Youtube"><Youtube className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
                 </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
-              <div>
-                <h3 className="font-bold">Solutions</h3>
-                <ul className="mt-4 space-y-2">
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">AI Receptionists</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Live Chat</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">AI Chatbot</a></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold">Company</h3>
-                <ul className="mt-4 space-y-2">
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">About Us</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Careers</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Contact</a></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold">Resources</h3>
-                <ul className="mt-4 space-y-2">
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Blog</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Case Studies</a></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold">Legal</h3>
-                <ul className="mt-4 space-y-2">
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Terms of Service</a></li>
-                  <li><a href="#" className="hover:text-primary text-muted-foreground">Privacy Policy</a></li>
-                </ul>
-              </div>
             </div>
         </div>
         <div className="mt-12 border-t border-border pt-8 text-center text-muted-foreground">
