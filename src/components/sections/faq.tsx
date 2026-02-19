@@ -27,7 +27,7 @@ import {
   export default function Faq() {
     return (
       <section className="bg-secondary text-secondary-foreground py-20 md:py-28">
-        <div className="container max-w-4xl">
+        <div className="container">
           <div className="mx-auto text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Frequently asked questions
@@ -47,4 +47,3 @@ import {
       </section>
     )
   }
-  

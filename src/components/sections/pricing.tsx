@@ -19,7 +19,7 @@ export default function Pricing() {
                 <p className="text-muted-foreground">Plus usage-based pricing on additional talk time and messages.</p>
                 <Button size="lg" className="mt-6">Get Started</Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                 <Card className="bg-card">
                     <CardHeader>
                         <CardTitle>6-Month Commitment</CardTitle>
