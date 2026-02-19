@@ -19,8 +19,8 @@ import {
       answer: "With technology! Our system automatically blocks over 20 million spam and robocalls from ever getting through. If a new spam number does get through, you can mark it as spam to automatically block the caller and add it to your spam list, so it can’t get through ever again."
     },
     {
-      question: "Can it integrate with my existing CRM?",
-      answer: "Absolutely. Our AI Voice Assistant is designed to seamlessly integrate with most popular CRMs, ensuring a smooth workflow for your team."
+      question: "Do I have to sign a contract?",
+      answer: "We offer flexible month-to-month plans, but you can receive a significant discount by signing a 6 or 12-month contract. You can cancel your monthly plan at any time."
     },
     {
         question: "How is it billed?",
