@@ -14,7 +14,7 @@ export default function Footer() {
                   width={64}
                   height={64}
                 />
-                <T3LogoText className="text-foreground" />
+                <T3LogoText className="text-primary" />
                 <p className="text-muted-foreground">Empowering small businesses through automations and AI Voice Assistants</p>
                 <div className="flex gap-4 mt-4">
                     <a href="#" aria-label="Facebook"><Facebook className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
