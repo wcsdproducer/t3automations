@@ -71,7 +71,7 @@ export default function WhatsInTheBox() {
   return (
     <section className="bg-[#F5F0E7] text-zinc-800 py-20 md:py-28">
       <div className="container">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="max-w-4xl">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             What&apos;s in the box?
           </h2>
