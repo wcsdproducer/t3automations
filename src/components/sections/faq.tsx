@@ -8,7 +8,11 @@ import {
   const faqs = [
     {
       question: "Do you count SPAM calls towards my quota?",
-      answer: "No, we have advanced spam detection and you will not be billed for any calls that are identified as spam."
+      answer: (
+        <>
+          Every call answered by your AI Receptionist counts toward your call quota by default. Smith.ai offers AI Receptionist customers an allowance to remove up to 10% of their calls from their bill each billing cycle to account for selected spam calls. Calls from 20 million+ known spammers are automatically filtered out by our system before your AI Receptionist answers, and these calls do not count toward your quota. You can learn more about this <a href="#" className="text-primary underline">here</a>.
+        </>
+      )
     },
     {
       question: "How long does it take to set up?",
