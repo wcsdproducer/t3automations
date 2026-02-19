@@ -24,7 +24,7 @@ import {
     },
     {
         question: "Can I change my plan?",
-        answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will take effect at the start of your next billing cycle. Contact our support team for assistance."
+        answer: "We offer flexible monthly and annual plans. You'll be billed at the beginning of each cycle. We also have usage-based pricing for additional features and talk time."
     }
   ];
 
