@@ -20,7 +20,7 @@ import {
     },
     {
       question: "Do I have to sign a contract?",
-      answer: "We offer flexible month-to-month plans, but you can receive a significant discount by signing a 6 or 12-month contract. You can cancel your monthly plan at any time."
+      answer: "No. AI Receptionist is a month-to-month service. This means there aren’t any long-term contracts. You pay for the AI Receptionist service each month. If you ever cancel, we need 30 days’ notice, and then you’re done. And we will miss you."
     },
     {
         question: "How is it billed?",
