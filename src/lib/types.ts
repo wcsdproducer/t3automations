@@ -9,3 +9,9 @@ export const leadQualificationSchema = z.object({
   reasonForCalling: z.string().min(10, 'Please provide a reason for calling.'),
   predefinedCriteria: z.string().min(10, 'Please provide qualification criteria.'),
 });
+
+export const contactFormSchema = z.object({
+  name: z.string().min(1, { message: "Name is required." }),
+  email: z.string().email({ message: "A valid email is required." }),
+  message: z.string().min(1, { message: "Message is required." }),
+});

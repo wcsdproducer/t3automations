@@ -8,7 +8,7 @@ import {
   qualifyLeadAndRoute,
   LeadQualificationOutput,
 } from '@/ai/flows/lead-qualification-and-routing';
-import { leadQualificationSchema } from '@/lib/types';
+import { leadQualificationSchema, contactFormSchema } from '@/lib/types';
 import { z } from 'zod';
 
 interface CallTriageState {
@@ -66,4 +66,46 @@ export async function handleLeadQualification(
     console.error(error);
     return { message: 'An error occurred during qualification. Please try again.', data: null };
   }
+}
+
+interface ContactFormState {
+  message: string;
+  errors?: {
+      name?: string[];
+      email?: string[];
+      message?: string[];
+  };
+  success: boolean;
+}
+
+export async function handleContactForm(
+  prevState: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> {
+  const validatedFields = contactFormSchema.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      message: formData.get('message'),
+  });
+
+  if (!validatedFields.success) {
+      return {
+          errors: validatedFields.error.flatten().fieldErrors,
+          message: 'Please fill out all the fields.',
+          success: false,
+      };
+  }
+
+  const { name, email, message } = validatedFields.data;
+
+  // This is where you would integrate with an email sending service like SendGrid, Resend, etc.
+  // For demonstration purposes, we are logging to the console.
+  console.log('--- Website Inquiry ---');
+  console.log(`To: info@t3automations.com`);
+  console.log(`Subject: Website Inquiry`);
+  console.log(`From: ${name} <${email}>`);
+  console.log(`Message: ${message}`);
+  console.log('---------------------');
+
+  return { message: 'Email Sent Successfully!', success: true, errors: undefined };
 }

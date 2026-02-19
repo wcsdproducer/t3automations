@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useActionState, useRef } from 'react';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Button } from '@/components/ui/button';
@@ -9,39 +9,41 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle } from 'lucide-react';
 import { T3LogoText } from '@/components/ui/logo';
+import { handleContactForm } from '@/app/actions';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 
+const initialState = {
+  message: '',
+  errors: undefined,
+  success: false,
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full text-md py-4" disabled={pending}>
+      {pending ? 'Sending...' : 'Send'}
+    </Button>
+  );
+}
+
 export default function ContactPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [state, formAction] = useActionState(handleContactForm, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!name || !email || !message) {
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+    } else if (state.message && state.errors) {
       toast({
-        variant: "destructive",
-        title: "Incomplete Form",
-        description: "Please fill out all the fields.",
+        variant: 'destructive',
+        title: 'Incomplete Form',
+        description: 'Please fill out all the required fields.',
       });
-      return;
     }
-
-    // Here you would typically send the form data to a server
-    console.log({ name, email, message });
-
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for contacting us. We'll be in touch soon.",
-    });
-
-    // Clear form
-    setName('');
-    setEmail('');
-    setMessage('');
-  };
+  }, [state, toast]);
 
   return (
     <div className="flex flex-col bg-background min-h-screen">
@@ -74,50 +76,46 @@ export default function ContactPage() {
             </div>
 
             <div className="mt-8 bg-card p-6 rounded-lg flex-grow flex flex-col">
-                <div className="grid md:grid-cols-2 gap-8 items-start flex-grow">
-                    <div className="space-y-4">
-                        <T3LogoText className="text-primary" />
-                        <h2 className="text-2xl font-bold">T3 Automations Consultation</h2>
-                        <p className="text-muted-foreground text-sm">Learn how T3 Automations can help your business.</p>
-                        <p className="text-muted-foreground text-sm">We'll address your questions and discuss solutions, whether you're interested in our receptionist, chat, or outreach services.</p>
-                    </div>
-                    <form className="space-y-4" onSubmit={handleSubmit}>
-                        <div>
-                            <Label htmlFor="name">Name</Label>
-                            <Input
-                              id="name"
-                              type="text"
-                              placeholder="Name"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                              required
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              placeholder="Email"
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)}
-                              required
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="message">Message</Label>
-                            <Textarea
-                              id="message"
-                              placeholder="Message"
-                              rows={3}
-                              value={message}
-                              onChange={(e) => setMessage(e.target.value)}
-                              required
-                            />
-                        </div>
-                        <Button type="submit" className="w-full text-md py-4">Send</Button>
-                    </form>
+              <div className="grid md:grid-cols-2 gap-8 items-start flex-grow">
+                <div className="space-y-4">
+                  <T3LogoText className="text-primary" />
+                  <h2 className="text-2xl font-bold">T3 Automations Consultation</h2>
+                  <p className="text-muted-foreground text-sm">
+                    Learn how T3 Automations can help your business.
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    We'll address your questions and discuss solutions, whether you're interested in our
+                    receptionist, chat, or outreach services.
+                  </p>
                 </div>
+                <form ref={formRef} action={formAction} className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" name="name" type="text" placeholder="Name" required />
+                    {state.errors?.name && (
+                      <p className="text-destructive text-sm mt-1">{state.errors.name[0]}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" name="email" type="email" placeholder="Email" required />
+                    {state.errors?.email && (
+                      <p className="text-destructive text-sm mt-1">{state.errors.email[0]}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea id="message" name="message" placeholder="Message" rows={3} required />
+                    {state.errors?.message && (
+                      <p className="text-destructive text-sm mt-1">{state.errors.message[0]}</p>
+                    )}
+                  </div>
+                  <SubmitButton />
+                  {state.success && (
+                    <p className="text-green-500 text-sm mt-2 text-center">{state.message}</p>
+                  )}
+                </form>
+              </div>
             </div>
           </div>
         </section>
