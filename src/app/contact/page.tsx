@@ -18,7 +18,7 @@ export default function ContactPage() {
           <div className="container">
             <div className="max-w-3xl">
               <p className="text-primary font-semibold uppercase tracking-wider">Talk to us</p>
-              <h1 className="text-4xl font-bold tracking-tight md:text-5xl mt-2">Schedule a free consultation</h1>
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl mt-2">Schedule a free consultation</h1>
               <p className="mt-4 text-lg text-muted-foreground">In this meeting, we'll discuss:</p>
               <ul className="mt-4 space-y-2 text-base text-foreground/80">
                 <li className="flex items-center gap-3">
