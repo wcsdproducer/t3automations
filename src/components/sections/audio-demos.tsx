@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 const demos = [
   { title: 'Solar', src: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FAI%20Voice%20Agent%20-%20Solar%20Demo.wav?alt=media&token=a7d7be31-efd3-4e0e-b98d-b6648a1b67f0', type: 'audio/wav' },
   { title: 'Kitchens & Baths', src: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FAI%20Voice%20Agent%20-%20Kitchen%20%26%20Bath%20Demo.wav?alt=media&token=0a6b5d1b-bfec-4a92-9f4e-65bb5fcf43ba', type: 'audio/wav' },
-  { title: 'Flooring', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', type: 'audio/mpeg' },
+  { title: 'Flooring', src: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FAI%20Voice%20Agent%20-%20Flooring%20Demo.wav?alt=media&token=98b22a05-fec7-4911-926f-849f5922677f', type: 'audio/wav' },
   { title: 'Carpet Cleaning', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', type: 'audio/mpeg' },
 ];
 
