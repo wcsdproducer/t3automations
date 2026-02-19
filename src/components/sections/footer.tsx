@@ -44,13 +44,13 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-white">Company</h3>
             <ul className="mt-4 space-y-2">
-              <li><a href="#" className="hover:text-white">About Smith.ai</a></li>
+              <li><a href="#" className="hover:text-white">About T3 Automations</a></li>
               <li><a href="#" className="hover:text-white">Careers</a></li>
             </ul>
           </div>
         </div>
         <div className="mt-12 border-t border-gray-700 pt-8 flex flex-col md:flex-row items-center justify-between">
-            <p className="text-sm text-gray-400">© {new Date().getFullYear()} Smith.ai, Inc. All Rights Reserved.</p>
+            <p className="text-sm text-gray-400">© {new Date().getFullYear()} T3 Automations. All Rights Reserved.</p>
             <div className="flex gap-4 mt-4 md:mt-0">
                 <a href="#" className="text-sm hover:text-white">Terms of Service</a>
                 <a href="#" className="text-sm hover:text-white">Privacy Policy</a>

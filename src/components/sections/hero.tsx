@@ -27,10 +27,10 @@ export default function Hero() {
       <div className="container z-20 text-center">
         <div className="mx-auto max-w-3xl">
           <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
-            Convert conversations to clients
+            Automate Your Success
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-200">
-            Win and retain more business with AI-first, multi-channel comms for your home services company.
+            Streamline your operations, boost efficiency, and drive growth with our intelligent automation solutions.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-4">
             <Button size="lg" onClick={() => router.push('#demos')} className="bg-white text-primary hover:bg-white/90">

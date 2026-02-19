@@ -16,7 +16,7 @@ import { Button } from '../ui/button';
 const testimonials = [
   {
     quote:
-      'Smith.ai is our inbound sales team. Having a trained and personable voice has transformed our ability to answer the phone and convert callers to clients.',
+      'Their service is our inbound sales team. Having a trained and personable voice has transformed our ability to answer the phone and convert callers to clients.',
     author: 'Jeremy Fremont',
     title: 'Fremont Law Firm',
     imageId: 'testimonial-1',

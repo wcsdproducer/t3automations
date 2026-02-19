@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'Smith.ai | Virtual Receptionist AI',
-  description: 'AI-powered virtual receptionist services to streamline your business communications.',
+  title: 'T3 Automations | Business Process Automation',
+  description: 'Automate your success with custom AI solutions.',
 };
 
 export default function RootLayout({

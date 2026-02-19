@@ -41,7 +41,7 @@ export default function Features() {
         <div className="mx-auto max-w-2xl text-center">
            <div className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">How we compare</div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Why growing businesses choose Smith.ai
+            Why growing businesses choose T3 Automations
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             We don't just answer calls. We deliver results.
