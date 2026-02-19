@@ -22,7 +22,7 @@ export default function Hero() {
       </div>
 
       <div className="absolute bottom-8 z-20 w-full px-4 text-center flex flex-col items-center">
-        <div className="mx-auto max-w-4xl mb-5">
+        <div className="mx-auto max-w-4xl mb-8">
           <p className="text-3xl font-bold leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
