@@ -47,7 +47,7 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="rounded-full px-48 py-3 text-base font-bold mt-6 mb-10">Get Started</Button>
+            <Button size="lg" className="rounded-full px-48 py-3 text-base font-bold mt-6 mb-20">Get Started</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
