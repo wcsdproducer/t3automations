@@ -20,7 +20,12 @@ export default function Hero() {
           <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
             Are you ready to scale your business?
           </h1>
-          <p className="mt-6 text-2xl leading-9 text-gray-200">
+        </div>
+      </div>
+
+      <div className="absolute bottom-24 z-20 w-full px-4 text-center">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-2xl leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
           <div className="mt-4 flex items-center justify-center gap-x-4">
@@ -30,6 +35,8 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20">
         <ChevronDown className="h-8 w-8 animate-bounce" />
       </div>
