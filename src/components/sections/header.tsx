@@ -50,7 +50,7 @@ export default function Header() {
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/login">
-              <Button variant="ghost">Client Login</Button>
+              <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">Client Login</Button>
             </Link>
           </div>
           {isClient && (
