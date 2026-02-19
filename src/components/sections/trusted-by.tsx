@@ -16,14 +16,16 @@ export default function TrustedBy() {
                     <p className="mt-4 text-muted-foreground max-w-2xl">T3 Solutions is our inbound sales team. Having a trained and personable voice has transformed our ability to answer the phone and convert callers to clients.</p>
                     <div className="mt-6 flex items-center gap-4">
                         {testimonialImage && (
-                            <Image
-                            src={testimonialImage.imageUrl}
-                            alt="Steven Forester"
-                            data-ai-hint="man portrait"
-                            width={56}
-                            height={56}
-                            className="rounded-full"
-                            />
+                            <div className="w-14 h-14 rounded-full overflow-hidden">
+                                <Image
+                                src={testimonialImage.imageUrl}
+                                alt="Steven Forester"
+                                data-ai-hint="man portrait"
+                                width={56}
+                                height={56}
+                                className="object-cover w-full h-full"
+                                />
+                            </div>
                         )}
                          <div>
                             <p className="font-semibold">Steven Forester</p>
