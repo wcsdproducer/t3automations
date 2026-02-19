@@ -9,7 +9,7 @@ const checklistItems = [
 
 export default function FindYourAnswer() {
   return (
-    <section className="bg-secondary text-secondary-foreground py-12">
+    <section className="bg-[#F5F0E7] text-secondary-foreground py-12">
       <div className="container mx-auto flex justify-center">
         <div className="flex flex-col items-center gap-6">
           <Button size="lg" className="h-auto px-8 py-4 text-xl font-bold rounded-lg">
