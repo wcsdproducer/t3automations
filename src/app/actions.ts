@@ -8,7 +8,7 @@ import {
   qualifyLeadAndRoute,
   LeadQualificationOutput,
 } from '@/ai/flows/lead-qualification-and-routing';
-import { leadQualificationSchema, contactFormSchema } from '@/lib/types';
+import { leadQualificationSchema, contactFormSchema, assessmentFormSchema } from '@/lib/types';
 import { z } from 'zod';
 
 interface CallTriageState {
@@ -108,4 +108,47 @@ export async function handleContactForm(
   console.log('---------------------');
 
   return { message: 'Email Sent Successfully!', success: true, errors: undefined };
+}
+
+interface AssessmentFormState {
+    message: string;
+    errors?: {
+        name?: string[];
+        email?: string[];
+        phone?: string[];
+        comment?: string[];
+    };
+    success: boolean;
+}
+
+export async function handleAssessmentForm(
+    prevState: AssessmentFormState,
+    formData: FormData
+): Promise<AssessmentFormState> {
+    const validatedFields = assessmentFormSchema.safeParse({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        comment: formData.get('comment'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Please fill out all fields.',
+            success: false,
+        };
+    }
+
+    const { name, email, phone, comment } = validatedFields.data;
+
+    // TODO: Integrate with a backend service to store the assessment data
+    console.log('--- Assessment Submission ---');
+    console.log(`Name: ${name}`);
+    console.log(`Email: ${email}`);
+    console.log(`Phone: ${phone}`);
+    console.log(`Comment: ${comment}`);
+    console.log('---------------------------');
+
+    return { message: 'Assessment submitted successfully!', success: true, errors: undefined };
 }

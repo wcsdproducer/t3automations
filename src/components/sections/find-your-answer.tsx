@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import Link from 'next/link';
 
 const checklistItems = [
   'Takes 3 minutes',
@@ -12,9 +13,11 @@ export default function FindYourAnswer() {
     <section className="bg-[#F5F0E7] text-secondary-foreground py-12">
       <div className="container mx-auto flex justify-center">
         <div className="flex flex-col items-center gap-6">
-          <Button size="lg" className="h-auto px-8 py-4 text-xl font-bold rounded-lg">
-            Start Your Assessment
-          </Button>
+          <Link href="/assessment">
+            <Button size="lg" className="h-auto px-8 py-4 text-xl font-bold rounded-lg">
+              Start Your Assessment
+            </Button>
+          </Link>
           <div className="flex flex-col gap-3">
             {checklistItems.map((item, index) => (
               <div key={index} className="flex items-center gap-3">
