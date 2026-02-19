@@ -60,7 +60,7 @@ export default function HowItWorks() {
                     </div>
                     <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gray-700 text-white shadow-lg">
                         <div className="flex flex-col items-center">
-                        <span className="text-xs font-semibold">STEP</span>
+                        <span className="text-xs font-bold">STEP</span>
                         <span className="text-3xl font-bold">{step.step}</span>
                         </div>
                     </div>
