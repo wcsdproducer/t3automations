@@ -1,5 +1,6 @@
 import { Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
-import { T3Logo, T3LogoText } from '../ui/logo';
+import Image from 'next/image';
+import { T3LogoText } from '../ui/logo';
 
 export default function Footer() {
   return (
@@ -7,7 +8,12 @@ export default function Footer() {
       <div className="container py-12">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex flex-col items-center md:items-start gap-4">
-                <T3Logo className="text-primary h-16 w-16" />
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FNew%20Logo%20(white).png?alt=media&token=b6f97462-93bc-464e-9a0c-a28fe81262c9"
+                  alt="T3 Automations Logo"
+                  width={64}
+                  height={64}
+                />
                 <T3LogoText className="text-foreground" />
                 <p className="text-muted-foreground">Automating the world's conversations.</p>
                 <div className="flex gap-4 mt-4">
