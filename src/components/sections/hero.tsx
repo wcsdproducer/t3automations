@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronsDown } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -16,11 +16,9 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 bg-black/60 z-10"></div>
       <div className="container z-20 text-center">
-        <div className="mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-            Are you ready to scale your business?
-          </h1>
-        </div>
+        <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+          Are you ready to scale your business?
+        </h1>
       </div>
 
       <div className="absolute bottom-24 z-20 w-full px-4 text-center">
@@ -29,16 +27,16 @@ export default function Hero() {
             Answer 15 questions that will help you get
           </p>
           <div className="mt-4 flex items-center justify-center gap-x-4">
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE LEADS</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE QUOTES</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE JOBS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE LEADS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE QUOTES</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE JOBS</Button>
           </div>
         </div>
       </div>
 
 
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20">
-        <ChevronDown className="h-8 w-8 animate-bounce" />
+        <ChevronsDown className="h-12 w-12 animate-bounce text-primary" />
       </div>
     </section>
   );
