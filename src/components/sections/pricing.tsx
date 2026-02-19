@@ -47,7 +47,7 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="mt-6 rounded-full px-48 py-12 text-2xl">Get Started</Button>
+            <Button size="lg" className="mt-6 rounded-full px-48 py-6 text-sm">Get Started</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
