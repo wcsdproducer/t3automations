@@ -23,8 +23,8 @@ import {
       answer: "No. AI Receptionist is a month-to-month service. This means there aren’t any long-term contracts. You pay for the AI Receptionist service each month. If you ever cancel, we need 30 days’ notice, and then you’re done. And we will miss you."
     },
     {
-        question: "How is it billed?",
-        answer: "We offer flexible monthly and annual plans. You'll be billed at the beginning of each cycle. We also have usage-based pricing for additional features and talk time."
+        question: "Can I change my plan?",
+        answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will take effect at the start of your next billing cycle. Contact our support team for assistance."
     }
   ];
 
