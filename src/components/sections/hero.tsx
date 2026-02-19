@@ -21,7 +21,7 @@ export default function Hero() {
             Are you ready to scale your business?
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-200">
-            America's highest-rated live chat & virtual receptionist service.
+            Answer 15 questions that will help you get
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-4">
             <Button size="lg" className="rounded-full font-bold">MORE LEADS</Button>
