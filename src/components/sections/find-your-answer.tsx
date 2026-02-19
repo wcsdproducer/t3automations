@@ -2,23 +2,27 @@ import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 
 const checklistItems = [
-  'Never miss a lead',
-  'Completely free',
-  'Automation from our website',
+  'Takes 3 minutes',
+  'Completely Free',
+  'Immediate Recommendations',
 ];
 
 export default function FindYourAnswer() {
   return (
-    <section className="bg-secondary text-secondary-foreground py-20">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
-        <Button className="h-24 px-8 text-lg">Find Your Answer!</Button>
-        <div className="flex flex-col gap-2">
-          {checklistItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-primary" />
-              <span className="font-medium">{item}</span>
-            </div>
-          ))}
+    <section className="bg-secondary text-secondary-foreground py-12">
+      <div className="container mx-auto flex justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <Button size="lg" className="h-auto px-8 py-4 text-xl font-bold rounded-lg">
+            Start Your Assessment
+          </Button>
+          <div className="flex flex-col gap-3">
+            {checklistItems.map((item, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <Check className="h-6 w-6 text-primary" />
+                <span className="font-medium text-lg">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
