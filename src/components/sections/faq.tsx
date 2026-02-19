@@ -15,8 +15,8 @@ import {
       )
     },
     {
-      question: "How long does it take to set up?",
-      answer: "Setup is incredibly fast. We can typically get your AI Voice Assistant up and running within 24-48 hours after our initial consultation."
+      question: "How do you determine if calls are SPAM?",
+      answer: "We use a multi-layered approach to identify spam. This includes a massive, constantly updated database of known spam numbers, real-time call analysis to detect robocall patterns, and sophisticated AI algorithms that learn to identify suspicious call behavior."
     },
     {
       question: "Can it integrate with my existing CRM?",
