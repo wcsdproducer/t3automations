@@ -9,7 +9,7 @@ const demos = [
 
 export default function AudioDemos() {
   return (
-    <section id="demos" className="bg-background py-20 md:py-28">
+    <section id="demos" className="bg-[#282824] py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
             <p className="text-primary font-semibold uppercase tracking-wider">A few of our agents</p>
