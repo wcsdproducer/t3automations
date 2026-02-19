@@ -36,14 +36,14 @@ const benefits = [
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="bg-secondary text-secondary-foreground py-20 md:py-28">
+    <section id="benefits" className="bg-[#F5F0E7] py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
            <p className="text-primary font-semibold uppercase tracking-wider">How we help</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-secondary-foreground sm:text-4xl">
             Discover the Benefits of Automation
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-lg text-secondary-foreground/80">
             Stop losing customers to your competition. We've got you covered.
           </p>
         </div>
