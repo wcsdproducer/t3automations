@@ -24,9 +24,9 @@ export default function Hero() {
             America's highest-rated live chat & virtual receptionist service.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-4">
-            <Button size="lg">Website Chat</Button>
-            <Button size="lg">Answering Service</Button>
-            <Button size="lg">Outbound Calls</Button>
+            <Button size="lg">MORE LEADS</Button>
+            <Button size="lg">MORE QUOTES</Button>
+            <Button size="lg">MORE JOBS</Button>
           </div>
         </div>
       </div>
