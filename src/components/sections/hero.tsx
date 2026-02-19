@@ -25,7 +25,7 @@ export default function Hero() {
 
       <div className="absolute bottom-24 z-20 w-full px-4 text-center">
         <div className="mx-auto max-w-4xl">
-          <p className="text-2xl leading-9 text-gray-200">
+          <p className="text-3xl font-bold leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
           <div className="mt-4 flex items-center justify-center gap-x-4">
