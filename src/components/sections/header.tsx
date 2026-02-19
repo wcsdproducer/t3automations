@@ -7,11 +7,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import React from 'react';
 import { T3LogoText } from '../ui/logo';
 
-const navLinks = [
-  { href: '#demos', label: 'Demos' },
-  { href: '#pricing', label: 'Pricing' },
-  { href: '/contact', label: 'Contact' },
-];
+const navLinks: { href: string; label: string }[] = [];
 
 export default function Header() {
   const [isClient, setIsClient] = React.useState(false);
@@ -54,7 +50,7 @@ export default function Header() {
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/login">
-              <Button variant="ghost">Login</Button>
+              <Button variant="ghost">Client Login</Button>
             </Link>
             <Link href="/signup">
               <Button>Get Started</Button>
@@ -86,7 +82,7 @@ export default function Header() {
                    <div className="flex flex-col gap-4 mt-4">
                     <SheetClose asChild>
                         <Link href="/login">
-                            <Button variant="outline" className="w-full">Login</Button>
+                            <Button variant="outline" className="w-full">Client Login</Button>
                         </Link>
                     </SheetClose>
                     <SheetClose asChild>
