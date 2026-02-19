@@ -20,7 +20,7 @@ export default function AudioDemos() {
             24/7 call answering and web chat for small businesses, powered by superior people and technology.
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
           {demos.map((demo) => (
             <Card key={demo.title} className="bg-[#1A1A1A]">
               <CardHeader>
