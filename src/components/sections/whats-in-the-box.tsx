@@ -81,7 +81,7 @@ export default function WhatsInTheBox() {
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-3">
           {features.map((feature, index) => (
-            <div key={index} className="border-l-2 border-zinc-300 px-8 py-2 flex flex-col gap-1">
+            <div key={index} className="border-l-2 border-[#C6410F] px-8 py-2 flex flex-col gap-1">
               <div className="flex justify-between items-baseline">
                 <h3 className="text-lg font-bold">
                   {feature.title}{' '}
