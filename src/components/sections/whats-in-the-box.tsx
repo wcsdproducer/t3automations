@@ -69,7 +69,7 @@ const features = [
 
 export default function WhatsInTheBox() {
   return (
-    <section className="bg-[#FBF8F3] text-zinc-800 py-20 md:py-28">
+    <section className="bg-[#F5F0E7] text-zinc-800 py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -81,7 +81,7 @@ export default function WhatsInTheBox() {
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-3">
           {features.map((feature, index) => (
-            <div key={index} className="border-l-2 border-zinc-300 px-8 py-4 flex flex-col gap-4">
+            <div key={index} className="border-l-2 border-zinc-300 px-8 py-2 flex flex-col gap-1">
               <div className="flex justify-between items-baseline">
                 <h3 className="text-lg font-bold">
                   {feature.title}{' '}
