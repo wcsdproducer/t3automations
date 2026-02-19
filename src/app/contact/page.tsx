@@ -1,4 +1,3 @@
-
 'use client';
 
 import Header from '@/components/sections/header';
@@ -15,7 +14,7 @@ export default function ContactPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 pt-20">
-        <section className="py-20 md:py-28">
+        <section className="pb-20 pt-10 md:pb-28">
           <div className="container">
             <div className="max-w-3xl">
               <p className="text-primary font-semibold uppercase tracking-wider">Talk to us</p>
