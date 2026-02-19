@@ -1,60 +1,64 @@
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AreaChart, CalendarDays, Filter, Mail, PhoneForwarded, Smile } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Zap, CheckCircle, Calendar, Clock, Users, Star } from 'lucide-react';
 
-const features = [
+const benefits = [
   {
-    icon: <PhoneForwarded className="h-8 w-8 text-primary" />,
-    title: 'Answering Service',
-    description: 'AI-driven call answering to intelligently triage and route calls based on pre-defined rules and caller intent.',
+    icon: <Zap className="h-8 w-8 text-primary" />,
+    title: 'Instant Response',
+    description: 'Our AI and human agents are trained to respond to your leads in seconds, not minutes.',
   },
   {
-    icon: <Filter className="h-8 w-8 text-primary" />,
-    title: 'Custom Instructions',
-    description: 'Our team listens to the unique needs of your business and you have total control 24/7.',
+    icon: <CheckCircle className="h-8 w-8 text-primary" />,
+    title: 'Never Miss A Lead',
+    description: 'With 24/7/365 availability, we ensure every potential customer is greeted and qualified.',
   },
   {
-    icon: <CalendarDays className="h-8 w-8 text-primary" />,
-    title: 'Top-Notch Support',
-    description: 'Our client and support teams are mostly based in the US so they\'re experts on all small and mid-sized businesses.',
+    icon: <Calendar className="h-8 w-8 text-primary" />,
+    title: 'Automated Appointment Booking',
+    description: 'Qualified leads can book directly on your calendar without you lifting a finger.',
   },
   {
-    icon: <Mail className="h-8 w-8 text-primary" />,
-    title: 'Message Taking',
-    description: 'Record detailed messages and deliver them via email or SMS to the appropriate personnel.',
+    icon: <Clock className="h-8 w-8 text-primary" />,
+    title: '24/7/365 Availability',
+    description: 'Our service never sleeps, providing constant coverage for your business.',
   },
   {
-    icon: <Smile className="h-8 w-8 text-primary" />,
-    title: 'Customizable Greetings',
-    description: 'Create and update custom greetings to align with your brand voice and for specific scenarios.',
+    icon: <Users className="h-8 w-8 text-primary" />,
+    title: 'Seamless CRM Integration',
+    description: 'Automatically sync lead data with your existing CRM for streamlined workflow.',
   },
   {
-    icon: <AreaChart className="h-8 w-8 text-primary" />,
-    title: 'Analytics Dashboard',
-    description: 'Track call volumes, lead quality, and other key metrics to evaluate the effectiveness of the service.',
+    icon: <Star className="h-8 w-8 text-primary" />,
+    title: 'Custom-Trained For You',
+    description: 'We train our agents on the specifics of your business for a personalized experience.',
   },
 ];
 
-export default function Features() {
+export default function Benefits() {
   return (
-    <section id="features" className="bg-card py-20 md:py-28">
+    <section id="benefits" className="bg-secondary text-secondary-foreground py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
-           <div className="mb-2 text-sm font-bold uppercase tracking-wider text-primary">How we compare</div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Why growing businesses choose T3 Automations
+           <p className="text-primary font-semibold uppercase tracking-wider">How we help</p>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            Discover the Benefits of Automation
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            We don't just answer calls. We deliver results.
+            Stop losing customers to your competition. We've got you covered.
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <Card key={feature.title} className="transform border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
-              <CardHeader className="items-center text-center">
-                {feature.icon}
-                <CardTitle className="mt-4">{feature.title}</CardTitle>
-                <CardDescription className="mt-2">{feature.description}</CardDescription>
+          {benefits.map((benefit) => (
+            <Card key={benefit.title} className="bg-card text-card-foreground border-none shadow-lg">
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                    {benefit.icon}
+                    <CardTitle>{benefit.title}</CardTitle>
+                </div>
               </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">{benefit.description}</p>
+              </CardContent>
             </Card>
           ))}
         </div>

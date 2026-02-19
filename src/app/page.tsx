@@ -1,29 +1,35 @@
-import AnsweringService from '@/components/sections/answering-service';
-import AppointmentScheduling from '@/components/sections/appointment-scheduling';
-import Features from '@/components/sections/features';
-import Footer from '@/components/sections/footer';
 import Header from '@/components/sections/header';
 import Hero from '@/components/sections/hero';
-import HowItWorks from '@/components/sections/how-it-works';
-import Pricing from '@/components/sections/pricing';
-import Solutions from '@/components/sections/solutions';
+import FindYourAnswer from '@/components/sections/find-your-answer';
+import AudioDemos from '@/components/sections/audio-demos';
+import Benefits from '@/components/sections/features'; // Renamed features to benefits
+import AiTypes from '@/components/sections/solutions'; // Renamed solutions to AiTypes
+import UnlockPotentialCta from '@/components/sections/unlock-potential-cta';
 import Testimonials from '@/components/sections/testimonials';
+import Pricing from '@/components/sections/pricing';
+import WhatsInTheBox from '@/components/sections/whats-in-the-box';
+import TrustedBy from '@/components/sections/trusted-by';
+import Faq from '@/components/sections/faq';
+import FinalCta from '@/components/sections/final-cta';
+import Footer from '@/components/sections/footer';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1">
         <Hero />
-        <div className="relative z-10 bg-background">
-          <Solutions />
-          <Features />
-          <AnsweringService />
-          <HowItWorks />
-          <Testimonials />
-          <AppointmentScheduling />
-          <Pricing />
-        </div>
+        <FindYourAnswer />
+        <AudioDemos />
+        <Benefits />
+        <AiTypes />
+        <UnlockPotentialCta />
+        <Testimonials />
+        <Pricing />
+        <WhatsInTheBox />
+        <TrustedBy />
+        <Faq />
+        <FinalCta />
       </main>
       <Footer />
     </div>

@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "hero",
-      "description": "A woman with a headset on, looking at the camera as if in a video call.",
-      "imageUrl": "https://images.unsplash.com/photo-1554774853-719586f82d77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYWxsJTIwY2VudGVyJTIwYWdlbnR8ZW58MHx8fHwxNzE1MTk0NTYwfDA&ixlib=rb-4.0.3&q=80&w=1080",
-      "imageHint": "call center agent"
+      "description": "A man laying wood flooring in a house under construction.",
+      "imageUrl": "https://images.unsplash.com/photo-1599694824341-398d24b6182c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBsYXlpbmclMjB3b29kJTIwZmxvb3J8ZW58MHx8fHwxNzE1MTk0NTYwfDA&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "man laying wood floor"
     },
     {
       "id": "testimonial-1",
