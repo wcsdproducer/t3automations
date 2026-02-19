@@ -16,7 +16,7 @@ import {
     },
     {
       question: "How do you determine if calls are SPAM?",
-      answer: "We use a multi-layered approach to identify spam. This includes a massive, constantly updated database of known spam numbers, real-time call analysis to detect robocall patterns, and sophisticated AI algorithms that learn to identify suspicious call behavior."
+      answer: "With technology! Our system automatically blocks over 20 million spam and robocalls from ever getting through. If a new spam number does get through, you can mark it as spam to automatically block the caller and add it to your spam list, so it can’t get through ever again."
     },
     {
       question: "Can it integrate with my existing CRM?",
