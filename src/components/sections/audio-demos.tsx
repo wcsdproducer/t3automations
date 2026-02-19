@@ -1,11 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlayCircle, MoreHorizontal } from 'lucide-react';
 
 const demos = [
-  { title: 'Solar', duration: '3:11' },
-  { title: 'Kitchens & Baths', duration: '3:33' },
-  { title: 'Flooring', duration: '2:02' },
-  { title: 'Carpet Cleaning', duration: '3:52' },
+  { title: 'Solar', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { title: 'Kitchens & Baths', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { title: 'Flooring', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { title: 'Carpet Cleaning', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
 ];
 
 export default function AudioDemos() {
@@ -27,12 +26,11 @@ export default function AudioDemos() {
               <CardHeader>
                 <CardTitle>{demo.title}</CardTitle>
               </CardHeader>
-              <CardContent className="flex items-center justify-between">
-                <div className="text-lg font-mono">0:00 / {demo.duration}</div>
-                <div className="flex items-center gap-2">
-                    <PlayCircle className="h-10 w-10 text-primary cursor-pointer hover:text-primary/80"/>
-                    <MoreHorizontal className="h-6 w-6 text-muted-foreground" />
-                </div>
+              <CardContent className="pt-4">
+                <audio controls className="w-full">
+                  <source src={demo.src} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
               </CardContent>
             </Card>
           ))}
