@@ -75,8 +75,8 @@ export default function WhatsInTheBox() {
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             What&apos;s in the box?
           </h2>
-          <p className="mt-4 text-2xl text-muted-foreground">
-            Over <span className="text-primary">$7,000 worth</span> of features included:
+          <p className="mt-4 text-2xl font-bold text-[#C6410F]">
+            Over $7,000 worth of features included:
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-3">
