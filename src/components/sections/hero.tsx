@@ -29,9 +29,9 @@ export default function Hero() {
             Answer 15 questions that will help you get
           </p>
           <div className="mt-4 flex items-center justify-center gap-x-4">
-            <Button size="lg" className="rounded-full font-bold">MORE LEADS</Button>
-            <Button size="lg" className="rounded-full font-bold">MORE QUOTES</Button>
-            <Button size="lg" className="rounded-full font-bold">MORE JOBS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE LEADS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE QUOTES</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary">MORE JOBS</Button>
           </div>
         </div>
       </div>
