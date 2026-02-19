@@ -19,6 +19,6 @@ export const contactFormSchema = z.object({
 export const assessmentFormSchema = z.object({
     name: z.string().min(1, { message: "Name is required." }),
     email: z.string().email({ message: "A valid email is required." }),
-    phone: z.string().min(1, { message: "Phone number is required." }),
-    comment: z.string().min(1, { message: "Comment is required." }),
+    phone: z.string().optional(),
+    comment: z.string().optional(),
 });

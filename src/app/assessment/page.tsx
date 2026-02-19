@@ -72,14 +72,14 @@ export default function AssessmentPage() {
                   </div>
                    <div>
                     <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+                    <Input id="phone" name="phone" type="tel" placeholder="Optional" />
                     {state.errors?.phone && (
                       <p className="text-destructive text-sm mt-1">{state.errors.phone[0]}</p>
                     )}
                   </div>
                   <div>
                     <Label htmlFor="comment">Comment</Label>
-                    <Textarea id="comment" name="comment" placeholder="Your comment here..." rows={4} required />
+                    <Textarea id="comment" name="comment" placeholder="Optional" rows={4} />
                     {state.errors?.comment && (
                       <p className="text-destructive text-sm mt-1">{state.errors.comment[0]}</p>
                     )}

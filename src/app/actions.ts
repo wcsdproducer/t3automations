@@ -135,7 +135,7 @@ export async function handleAssessmentForm(
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Please fill out all fields.',
+            message: 'Please fill out all required fields.',
             success: false,
         };
     }
