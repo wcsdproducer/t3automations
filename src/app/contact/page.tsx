@@ -78,7 +78,6 @@ export default function ContactPage() {
             <div className="mt-8 bg-card p-6 rounded-lg flex-grow flex flex-col">
               <div className="grid md:grid-cols-2 gap-8 items-start flex-grow">
                 <div className="space-y-4">
-                  <T3LogoText className="text-primary" />
                   <h2 className="text-2xl font-bold">T3 Automations Consultation</h2>
                   <p className="text-muted-foreground text-sm">
                     Learn how T3 Automations can help your business.
