@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const demos = [
-  { title: 'Solar', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-  { title: 'Kitchens & Baths', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { title: 'Flooring', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-  { title: 'Carpet Cleaning', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { title: 'Solar', src: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FAI%20Voice%20Agent%20-%20Solar%20Demo.wav?alt=media&token=a7d7be31-efd3-4e0e-b98d-b6648a1b67f0', type: 'audio/wav' },
+  { title: 'Kitchens & Baths', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', type: 'audio/mpeg' },
+  { title: 'Flooring', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', type: 'audio/mpeg' },
+  { title: 'Carpet Cleaning', src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', type: 'audio/mpeg' },
 ];
 
 export default function AudioDemos() {
@@ -28,7 +28,7 @@ export default function AudioDemos() {
               </CardHeader>
               <CardContent className="pt-4">
                 <audio controls className="w-full">
-                  <source src={demo.src} type="audio/mpeg" />
+                  <source src={demo.src} type={demo.type} />
                   Your browser does not support the audio element.
                 </audio>
               </CardContent>
