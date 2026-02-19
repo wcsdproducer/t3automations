@@ -10,15 +10,27 @@ import { T3LogoText } from '../ui/logo';
 const navLinks = [
   { href: '#demos', label: 'Demos' },
   { href: '#pricing', label: 'Pricing' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 export default function Header() {
   const [isClient, setIsClient] = React.useState(false);
+  const [isHomePage, setIsHomePage] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
+    setIsHomePage(window.location.pathname === '/');
   }, []);
+
+  const getHref = (href: string) => {
+    if (isHomePage) {
+      return href;
+    }
+    if (href.startsWith('#')) {
+        return `/${href}`;
+    }
+    return href;
+  }
 
   return (
     <header className="fixed top-0 z-50 w-full bg-[#1A1A1A]">
@@ -32,8 +44,8 @@ export default function Header() {
           <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.label}
+                href={getHref(link.href)}
                 className="transition-colors duration-300 hover:text-primary text-foreground/80"
               >
                 {link.label}
@@ -62,9 +74,9 @@ export default function Header() {
                 </Link>
                 <div className="grid gap-4 py-6">
                   {navLinks.map((link) => (
-                    <SheetClose asChild key={link.href}>
+                    <SheetClose asChild key={link.label}>
                       <Link
-                        href={link.href}
+                        href={getHref(link.href)}
                         className="-ml-4 flex w-full items-center py-2 px-4 text-lg font-semibold rounded-md hover:bg-muted"
                       >
                         {link.label}
