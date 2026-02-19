@@ -47,7 +47,7 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="mt-6 rounded-full px-32 py-10 text-4xl">Get Started</Button>
+            <Button size="lg" className="mt-6 rounded-full px-48 py-12 text-5xl">Get Started</Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
@@ -62,7 +62,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="space-y-2">
+                <div className="flex flex-wrap justify-center items-center gap-4">
                   <PlanFeature>Save $200 per month</PlanFeature>
                   <PlanFeature>Total savings: $1,200</PlanFeature>
                   <PlanFeature>2-year price lock</PlanFeature>
@@ -84,7 +84,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="space-y-2">
+                <div className="flex flex-wrap justify-center items-center gap-4">
                   <PlanFeature>Save $500 per month</PlanFeature>
                   <PlanFeature>Total savings: $6,000</PlanFeature>
                   <PlanFeature>5-year price lock</PlanFeature>
