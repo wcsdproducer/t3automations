@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle } from 'lucide-react';
-import { T3LogoText } from '@/components/ui/logo';
 import { handleContactForm } from '@/app/actions';
 import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -52,7 +51,6 @@ export default function ContactPage() {
         <section className="py-8 flex-grow flex flex-col">
           <div className="container flex flex-col flex-grow">
             <div className="max-w-3xl">
-              <p className="text-primary font-semibold uppercase tracking-wider">Talk to us</p>
               <h1 className="text-2xl font-bold tracking-tight mt-2">Schedule a free consultation</h1>
               <p className="mt-4 text-base text-muted-foreground">In this meeting, we'll discuss:</p>
               <ul className="mt-4 space-y-2 text-xs text-foreground/80">
