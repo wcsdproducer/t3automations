@@ -21,22 +21,18 @@ export default function Hero() {
         </h1>
       </div>
 
-      <div className="absolute bottom-24 z-20 w-full px-4 text-center">
-        <div className="mx-auto max-w-4xl">
+      <div className="absolute bottom-8 z-20 w-full px-4 text-center flex flex-col items-center">
+        <div className="mx-auto max-w-4xl mb-5">
           <p className="text-3xl font-bold leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
           <div className="mt-4 flex items-center justify-center gap-x-4">
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary/90">MORE LEADS</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary/90">MORE QUOTES</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg hover:bg-primary/90">MORE JOBS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE LEADS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE QUOTES</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg">MORE JOBS</Button>
           </div>
         </div>
-      </div>
-
-
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <ChevronsDown className="h-16 w-16 animate-bounce text-primary" />
+        <ChevronsDown className="h-20 w-20 animate-bounce text-primary" />
       </div>
     </section>
   );
