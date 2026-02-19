@@ -52,9 +52,6 @@ export default function Header() {
             <Link href="/login">
               <Button variant="ghost">Client Login</Button>
             </Link>
-            <Link href="/signup">
-              <Button>Get Started</Button>
-            </Link>
           </div>
           {isClient && (
             <Sheet>
@@ -83,11 +80,6 @@ export default function Header() {
                     <SheetClose asChild>
                         <Link href="/login">
                             <Button variant="outline" className="w-full">Client Login</Button>
-                        </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                        <Link href="/signup">
-                            <Button className="w-full">Get Started</Button>
                         </Link>
                     </SheetClose>
                    </div>
