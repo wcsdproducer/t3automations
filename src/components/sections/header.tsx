@@ -7,7 +7,6 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import React from 'react';
 
 const navLinks = [
-  { href: '#features', label: 'Features' },
   { href: '#demos', label: 'Demos' },
   { href: '#contact', label: 'Contact' },
 ];
