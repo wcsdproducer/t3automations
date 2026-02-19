@@ -7,8 +7,8 @@ import {
   
   const faqs = [
     {
-      question: "Is the trial run of the AI Voice Assistant free?",
-      answer: "Yes, the trial run is completely free. We want you to experience the full power of our AI without any commitment."
+      question: "Do you count SPAM calls towards my quota?",
+      answer: "No, we have advanced spam detection and you will not be billed for any calls that are identified as spam."
     },
     {
       question: "How long does it take to set up?",
