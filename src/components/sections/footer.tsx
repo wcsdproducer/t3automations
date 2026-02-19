@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-background text-foreground" id="contact">
       <div className="container py-12">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-shrink-0">
                 <Image
                   src="https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FNew%20Logo%20(white).png?alt=media&token=b6f97462-93bc-464e-9a0c-a28fe81262c9"
@@ -16,9 +16,9 @@ export default function Footer() {
                 />
             </div>
             
-            <div className="flex flex-col items-center md:items-end">
+            <div className="flex flex-col items-center md:items-start">
                 <T3LogoText className="text-[#C6410F]" />
-                <p className="text-muted-foreground mt-1 text-center md:text-right">Empowering small businesses through automations and AI Voice Assistants</p>
+                <p className="text-muted-foreground mt-1 text-center md:text-left">Empowering small businesses through automations and AI Voice Assistants</p>
                 <div className="flex gap-4 mt-4">
                     <a href="#" aria-label="Facebook"><Facebook className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
                     <a href="#" aria-label="Twitter"><Twitter className="h-6 w-6 text-muted-foreground hover:text-primary"/></a>
