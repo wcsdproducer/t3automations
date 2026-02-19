@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Ban, Check } from 'lucide-react';
+import Link from 'next/link';
 
 const PlanFeature = ({ children }: { children: React.ReactNode }) => (
   <div className="flex items-center gap-2">
@@ -47,7 +48,9 @@ export default function Pricing() {
                 <span>No Hidden Costs</span>
               </div>
             </div>
-            <Button size="lg" className="rounded-full px-48 py-3 font-bold mt-8 mb-[136px]">Get Started</Button>
+            <Link href="/contact">
+              <Button size="lg" className="rounded-full px-48 py-3 font-bold mt-8 mb-[136px]">Get Started</Button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
