@@ -27,7 +27,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col items-center gap-16">
+        <div className="mt-16 flex flex-col items-center gap-8">
           <div className="text-center space-y-4">
             <div>
               <span className="text-6xl font-extrabold text-foreground">$1,499</span>
@@ -65,7 +65,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex justify-around items-center gap-4">
+                <div className="flex flex-col md:flex-row justify-around items-center gap-4">
                   <PlanFeature>Save $200 per month</PlanFeature>
                   <PlanFeature>Total savings: $1,200</PlanFeature>
                   <PlanFeature>2-year price lock</PlanFeature>
@@ -87,7 +87,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex justify-around items-center gap-4">
+                <div className="flex flex-col md:flex-row justify-around items-center gap-4">
                   <PlanFeature>Save $500 per month</PlanFeature>
                   <PlanFeature>Total savings: $6,000</PlanFeature>
                   <PlanFeature>5-year price lock</PlanFeature>
