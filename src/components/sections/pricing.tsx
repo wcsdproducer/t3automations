@@ -17,7 +17,7 @@ export default function Pricing() {
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Pricing that scales with your success
+            Business Automation Starter Package
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Choose the plan that fits your business needs
