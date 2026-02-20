@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -147,9 +148,9 @@ export default function AssessmentPage() {
   };
 
   return (
-    <div className="flex flex-col bg-background min-h-screen">
+    <div className="flex flex-col bg-background">
       <Header />
-      <main className="flex-grow flex flex-col items-center justify-center px-4 pt-24 pb-12">
+      <main className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12">
         <div className="container max-w-3xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
