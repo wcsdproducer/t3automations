@@ -49,7 +49,7 @@ export default function Pricing() {
               </div>
             </div>
             <Link href="/contact">
-              <Button size="lg" className="rounded-full sm:px-24 py-3 font-bold my-5 mx-2.5 sm:w-auto w-[calc(100%-20px)]">Get Started</Button>
+              <Button size="lg" className="rounded-full sm:px-32 py-3 font-bold my-5 mx-2.5 sm:w-auto w-[calc(100%-20px)]">Get Started</Button>
             </Link>
           </div>
 
