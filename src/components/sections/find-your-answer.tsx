@@ -18,10 +18,10 @@ export default function FindYourAnswer() {
               Start Your Assessment
             </Button>
           </Link>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
             {checklistItems.map((item, index) => (
               <div key={index} className="flex items-center gap-3">
-                <Check className="h-6 w-6 text-primary" />
+                <Check className="h-6 w-6 text-primary" strokeWidth={3} />
                 <span className="font-medium text-base md:text-lg">{item}</span>
               </div>
             ))}
