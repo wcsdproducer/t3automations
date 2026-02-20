@@ -49,7 +49,7 @@ export default function Pricing() {
               </div>
             </div>
             <Link href="/contact">
-              <Button size="lg" className="rounded-full px-8 md:px-12 py-3 font-bold m-5 w-full max-w-xs sm:w-auto">Get Started</Button>
+              <Button size="lg" className="rounded-full px-16 py-3 font-bold my-5 mx-2.5">Get Started</Button>
             </Link>
           </div>
 
@@ -65,7 +65,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex flex-col md:flex-row justify-around items-center gap-4">
+                <div className="flex flex-col md:flex-row justify-around items-start md:items-center gap-4">
                   <PlanFeature>Save $200 per month</PlanFeature>
                   <PlanFeature>Total savings: $1,200</PlanFeature>
                   <PlanFeature>2-year price lock</PlanFeature>
@@ -87,7 +87,7 @@ export default function Pricing() {
                   <span className="text-xl text-muted-foreground">/mo</span>
                   <span className="ml-2 text-muted-foreground line-through">was $1,499/mo</span>
                 </div>
-                <div className="flex flex-col md:flex-row justify-around items-center gap-4">
+                <div className="flex flex-col md:flex-row justify-around items-start md:items-center gap-4">
                   <PlanFeature>Save $500 per month</PlanFeature>
                   <PlanFeature>Total savings: $6,000</PlanFeature>
                   <PlanFeature>5-year price lock</PlanFeature>
