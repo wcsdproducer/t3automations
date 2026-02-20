@@ -19,9 +19,6 @@ export default function Pricing() {
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Business Automation Starter Package
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Choose the plan that fits your business needs
-          </p>
           <p className="mt-4 text-sm text-primary">
             All tiers include $0.25/min usage charges • Phone Numbers are $3.00/ea • First month due upon signing up
           </p>
