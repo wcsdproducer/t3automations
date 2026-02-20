@@ -118,12 +118,6 @@ export default function AssessmentPage() {
     setAnswers(prev => ({...prev, [currentQuestionIndex]: event.target.value}));
   };
 
-  const restartQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setAnswers({});
-    setQuizFinished(false);
-  };
-
   const calculateScore = () => {
     return Object.values(answers).filter(answer => typeof answer === 'string' && answer === 'yes').length;
   };
@@ -161,7 +155,7 @@ export default function AssessmentPage() {
                     </p>
                   </div>
 
-                  <div className="mt-12 border-t pt-8">
+                  <div className="mt-8 border-t pt-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                         <div className="text-left">
                             <h3 className="text-xl font-semibold mb-4 text-center">Key Insights</h3>
