@@ -233,12 +233,6 @@ function PlanPageContent() {
                             <Button size="lg">See Recommended Product</Button>
                         </Link>
                     </div>
-
-                    <div className="mt-12">
-                        <p className="font-bold">T3 Automations</p>
-                        <p className="text-sm text-muted-foreground">Email: contact@t3automations.com</p>
-                        <p className="text-sm text-muted-foreground">Phone: (123) 456-7890</p>
-                    </div>
                 </div>
             </div>
         </Card>
