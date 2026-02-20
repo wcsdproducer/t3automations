@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Button } from '@/components/ui/button';
@@ -12,10 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { CheckCircle, Download } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import AssessmentPDF from '@/components/sections/assessment-pdf';
+import { CheckCircle } from 'lucide-react';
 
 const questions: {
   question: string;
@@ -88,7 +84,6 @@ export default function AssessmentPage() {
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [quizFinished, setQuizFinished] = useState(false);
   const currentQuestion = questions[currentQuestionIndex];
-  const pdfRef = useRef<HTMLDivElement>(null);
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -137,30 +132,6 @@ export default function AssessmentPage() {
       return "You've got a solid foundation. Let us show you how to fill in the gaps and turn more leads into customers.";
     }
     return "There's a huge opportunity for growth. Our AI solutions can build and execute a customer acquisition strategy for you.";
-  };
-
-  const handleDownloadPDF = () => {
-    const input = pdfRef.current;
-    if (input) {
-      html2canvas(input, { scale: 2 }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-        pdf.save('T3-Automations-Plan.pdf');
-      });
-    }
   };
 
   return (
@@ -218,12 +189,13 @@ export default function AssessmentPage() {
                                       </div>
                                       <div className="border-t pt-4">
                                         <p className="text-muted-foreground mb-4">
-                                            Or download a copy of your personalized plan.
+                                            Or view your personalized plan.
                                         </p>
-                                        <Button size="lg" variant="outline" onClick={handleDownloadPDF}>
-                                          <Download className="mr-2 h-5 w-5" />
-                                          Download Your Plan
-                                        </Button>
+                                        <Link href={`/assessment/plan?score=${score}`}>
+                                            <Button size="lg" variant="outline">
+                                              View Your Custom Plan
+                                            </Button>
+                                        </Link>
                                       </div>
                                   </div>
                               </div>
@@ -231,14 +203,6 @@ export default function AssessmentPage() {
                       </div>
                     </div>
                   </CardContent>
-                </div>
-                <div ref={pdfRef} style={{ display: 'none' }}>
-                  <AssessmentPDF
-                    score={score}
-                    yesNoQuestionsCount={yesNoQuestionsCount}
-                    getResultMessage={getResultMessage}
-                    answers={answers}
-                  />
                 </div>
               </>
             ) : (
