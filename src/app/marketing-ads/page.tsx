@@ -28,7 +28,7 @@ const adExamples = [
   {
     title: 'Ad Example 5: Behind The Scenes',
     description: 'A quick look at what we do.',
-    videoSrc: ''
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%205.mov?alt=media&token=0453cfd1-b20e-425b-b0e5-5cbb4d522975'
   },
 ];
 
