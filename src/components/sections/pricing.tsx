@@ -53,7 +53,7 @@ export default function Pricing() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl mx-auto">
             <Card className="bg-card flex flex-col p-6 border-white border-2">
               <CardHeader className="p-0 text-center">
                 <CardTitle className="text-lg">6-MONTH COMMITMENT</CardTitle>
