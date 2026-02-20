@@ -8,6 +8,7 @@ const adExamples = [
   {
     title: 'Ad Example 1: Summer Sale',
     description: 'A 15-second ad for our summer promotion.',
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%201.mov?alt=media&token=a8b3a74f-2757-43fa-812d-cc7b89d2f198'
   },
   {
     title: 'Ad Example 2: New Product Launch',
@@ -45,7 +46,14 @@ export default function MarketingAdsPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
-                      <p className="text-muted-foreground">Video Placeholder</p>
+                      {ad.videoSrc ? (
+                        <video controls className="w-full h-full rounded-md object-cover">
+                          <source src={ad.videoSrc} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <p className="text-muted-foreground">Video Placeholder</p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
