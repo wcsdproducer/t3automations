@@ -3,9 +3,9 @@ import { Check } from 'lucide-react';
 import Link from 'next/link';
 
 const checklistItems = [
-  'Takes 3 minutes',
   'Completely Free',
   'Immediate Recommendations',
+  'Takes 3 minutes',
 ];
 
 export default function FindYourAnswer() {
