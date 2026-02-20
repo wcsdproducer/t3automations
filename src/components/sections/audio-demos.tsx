@@ -17,7 +17,7 @@ export default function AudioDemos() {
             The Most Powerful Receptionist Service
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            24/7 call answering and web chat for small businesses, powered by superior people and technology.
+            24/7 call answering for small business, powered by superior ai technology
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
