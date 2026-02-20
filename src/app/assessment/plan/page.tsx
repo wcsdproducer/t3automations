@@ -104,20 +104,20 @@ function PlanPageContent() {
         let recommendation = "";
         let title = "";
         if (situation.includes("need more leads")) {
-            title = "Generate More Leads";
-            recommendation = "To generate more leads, we'll focus on a multi-channel approach including targeted online advertising and content marketing to attract your ideal customers.";
+            title = "Strategy for Generating More Leads";
+            recommendation = "To generate more leads, focus on a multi-channel approach. Consider using targeted online advertising and content marketing to attract your ideal customers.";
         } else if (situation.includes("struggling to follow up")) {
-            title = "Improve Lead Follow-Up Speed";
-            recommendation = "To solve follow-up struggles, we will implement an AI-powered system that instantly engages every new lead via SMS and email, ensuring no opportunity is missed.";
+            title = "Strategy for Improving Lead Follow-Up";
+            recommendation = "To improve lead follow-up, consider implementing an automated system to instantly engage new leads via SMS and email. This ensures no opportunity is missed.";
         } else if (situation.includes("overwhelmed by repetitive manual tasks")) {
-            title = "Automate Repetitive Tasks";
-            recommendation = "To free up your sales team, we'll automate repetitive tasks like data entry, lead qualification, and appointment scheduling, allowing them to focus on high-value activities.";
+            title = "Strategy for Automating Repetitive Tasks";
+            recommendation = "To free up your team, identify and automate repetitive tasks such as data entry, lead qualification, and appointment scheduling. This will allow them to focus on high-value activities.";
         } else if (situation.includes("cost is too high")) {
-            title = "Reduce Customer Acquisition Cost";
-            recommendation = "To reduce your customer acquisition cost, we will optimize your ad campaigns and implement a lead nurturing system to maximize the value of every lead you generate.";
+            title = "Strategy for Reducing Customer Acquisition Cost";
+            recommendation = "To reduce your customer acquisition cost, focus on optimizing your ad campaigns. Additionally, implement a lead nurturing system to maximize the value of every lead you generate.";
         } else if (situation.includes("ready to scale")) {
-            title = "Build Systems for Scale";
-            recommendation = "To prepare your business for scale, we'll build robust, automated systems for lead management and customer onboarding that can handle increased volume without increasing headcount.";
+            title = "Strategy for Building Scalable Systems";
+            recommendation = "To prepare your business for scale, build robust and automated systems for lead management and customer onboarding. This will help handle increased volume without needing to increase headcount.";
         }
         if (recommendation) {
             plan.push({ title, description: recommendation });
@@ -130,20 +130,20 @@ function PlanPageContent() {
             let recommendation = "";
             let title = "";
             if (outcome.includes("Recapture 'lost' revenue")) {
-                title = "Recapture 'Lost' Revenue";
-                recommendation = "We will implement an automated lead follow-up sequence to re-engage and convert leads that have previously gone cold, recapturing lost revenue opportunities.";
+                title = "How to Recapture 'Lost' Revenue";
+                recommendation = "Implement an automated lead follow-up sequence to re-engage and convert leads that have gone cold. This can help recapture lost revenue opportunities.";
             } else if (outcome.includes("Reduce operational overhead")) {
-                title = "Reduce Operational Overhead";
-                recommendation = "We will map your current workflows and identify key areas for automation, such as data entry and reporting, to significantly reduce operational overhead.";
+                title = "How to Reduce Operational Overhead";
+                recommendation = "Map your current workflows to identify key areas for automation, like data entry and reporting. This can significantly reduce operational overhead.";
             } else if (outcome.includes("Launch a 24/7 AI-driven")) {
-                title = "Launch a 24/7 AI-Driven System";
-                recommendation = "We will deploy a 24/7 AI Voice Agent to handle inbound calls, answer common questions, and qualify leads, providing round-the-clock sales and support coverage.";
+                title = "How to Launch a 24/7 AI-Driven System";
+                recommendation = "Consider deploying a 24/7 AI-driven system to handle inbound calls, answer common questions, and qualify leads. This provides round-the-clock coverage.";
             } else if (outcome.includes("Scale our appointment volume")) {
-                title = "Scale Appointment Volume";
-                recommendation = "Our AI appointment booking system will integrate with your team's calendars, allowing leads to book meetings automatically, scaling your appointment volume efficiently.";
+                title = "How to Scale Appointment Volume";
+                recommendation = "An automated appointment booking system that integrates with your team's calendars can allow leads to book meetings automatically, helping you scale appointment volume efficiently.";
             } else if (outcome.includes("Clean up our data")) {
-                title = "Clean Up Data & Sync Systems";
-                recommendation = "We will set up integrations between your key systems (CRM, email, etc.) to create a single source of truth for your customer data, ensuring consistency and accuracy.";
+                title = "How to Clean Up Data & Sync Systems";
+                recommendation = "Set up integrations between your key systems (CRM, email, etc.) to create a single source of truth for your customer data. This ensures consistency and accuracy.";
             }
             if (recommendation) {
                 plan.push({ title, description: recommendation });
@@ -156,20 +156,20 @@ function PlanPageContent() {
         let recommendation = "";
         let title = "";
         if (obstacle.includes("systems don't 'talk'")) {
-            title = "Integrate Your Systems";
-            recommendation = "Our team specializes in system integration. We will connect your disparate software tools to create a seamless flow of data across your business.";
+            title = "How to Overcome System Integration Challenges";
+            recommendation = "To solve this, focus on system integration. Connect your disparate software tools to create a seamless flow of data across your business. Tools like Zapier or Make can be a good starting point for this.";
         } else if (obstacle.includes("don't have the internal technical expertise")) {
-            title = "Leverage Our Expertise";
-            recommendation = "We act as your dedicated AI and automation partner. Our team will handle all the technical implementation and management, so you don't need in-house expertise.";
+            title = "How to Address a Lack of Technical Expertise";
+            recommendation = "Since you lack internal technical expertise, consider upskilling your team with online courses, hiring a freelance automation expert, or partnering with a specialized agency. Start with simple, low-code automation tools to build confidence.";
         } else if (obstacle.includes("team is buried in 'busy work'")) {
-            title = "Free Up Your Team";
-            recommendation = "Our automation solutions are designed to lift the burden of 'busy work' from your team, freeing them up to focus on strategic initiatives and customer-facing activities.";
+            title = "How to Free Your Team from 'Busy Work'";
+            recommendation = "The first step is to identify and prioritize the 'busy work' that can be automated. Start with small, high-impact tasks to demonstrate the value of automation and free up time for more strategic initiatives.";
         } else if (obstacle.includes("tried other tools or agencies")) {
-            title = "Get a Custom-Tailored Solution";
-            recommendation = "We differentiate ourselves by building custom, fully-integrated solutions tailored to your specific workflow, rather than providing one-size-fits-all tools that often fail.";
+            title = "How to Find the Right Solution After Past Failures";
+            recommendation = "Past negative experiences can be discouraging. The key is to find the right-fit solution. Instead of one-size-fits-all tools, look for solutions that can be custom-tailored to your specific workflow for better results.";
         } else if (obstacle.includes("Lack of clarity on where AI fits")) {
-            title = "Get a Strategic AI Roadmap";
-            recommendation = "Our process begins with a deep-dive consultation to map your workflows and identify the highest-impact opportunities for AI, providing you with a clear, strategic implementation roadmap.";
+            title = "How to Find the Right Place for AI in Your Business";
+            recommendation = "To gain clarity, start by mapping your current business processes. Identify bottlenecks and repetitive tasks. This will help you pinpoint the highest-impact opportunities where AI and automation can be applied.";
         }
          if (recommendation) {
             plan.push({ title, description: recommendation });
@@ -181,21 +181,29 @@ function PlanPageContent() {
         let recommendation = "";
         let title = "";
         if (aiImpact.includes("administrative tasks")) {
-            title = "Automate Administrative Tasks";
-            recommendation = "We can deploy AI agents to automate administrative tasks like data entry, scheduling, and generating reports, freeing up significant time for your team.";
+            title = "Recommendation for Administrative Tasks";
+            recommendation = "AI agents are excellent for automating administrative tasks like data entry, scheduling, and generating reports. Look into tools that can handle these functions to free up significant time for your team.";
         } else if (aiImpact.includes("nurturing our existing lead database")) {
-            title = "Nurture Your Lead Database";
-            recommendation = "We will implement an automated SMS and email nurturing campaign to re-engage your existing lead database, identifying new opportunities and driving repeat business.";
+            title = "Recommendation for Nurturing Leads";
+            recommendation = "Implement an automated SMS and email nurturing campaign to re-engage your existing lead database. This is a powerful way to identify new opportunities and drive repeat business.";
         } else if (aiImpact.includes("Replacing/Augmenting our front-line Sales")) {
-            title = "Deploy a 24/7 AI Voice Agent";
-            recommendation = "Our AI Voice Agents can handle front-line sales and support calls 24/7, qualifying leads, answering FAQs, and routing complex issues to your human team.";
+            title = "Recommendation for Front-line Sales/Support";
+            recommendation = "AI Voice Agents can be used to handle front-line sales and support calls 24/7. They can qualify leads, answer FAQs, and route complex issues to your human team, ensuring you never miss a call.";
         } else if (aiImpact.includes("end-to-end automated sales funnel")) {
-            title = "Build an Automated Sales Funnel";
-            recommendation = "We will design and build a fully automated sales funnel, from initial lead capture and qualification to appointment booking and follow-up, creating a hands-free customer acquisition machine.";
+            title = "Recommendation for Building an Automated Sales Funnel";
+            recommendation = "Building a fully automated sales funnel is a powerful goal. This involves integrating tools for lead capture, qualification, appointment booking, and follow-up to create a seamless customer acquisition process.";
         }
         if (recommendation) {
             plan.push({ title, description: recommendation });
         }
+    }
+
+    const otherInfo = answers[14] as string;
+    if (otherInfo && otherInfo.trim()) {
+        plan.unshift({
+            title: "Your Additional Comments",
+            description: `You also mentioned the following: "${otherInfo}". Keep this context in mind as you review the recommendations below.`
+        });
     }
 
     if (plan.length === 0) {
