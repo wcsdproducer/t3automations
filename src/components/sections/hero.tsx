@@ -28,26 +28,28 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/60 z-10"></div>
       
       {/* Content Container */}
-      <div className="container z-20 text-center px-4">
-        <h1 className="text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
-          Are you ready to scale your business?
-        </h1>
-      </div>
-
-      <div className="absolute bottom-32 z-20 w-full px-4 text-center">
-        <p className="mt-4 text-4xl font-bold md:text-2xl md:font-normal text-gray-200 max-w-4xl mx-auto">
-          Answer 15 questions that will help you get
-        </p>
-        <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
-          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
-          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
+      <div className="container z-20 text-center px-4 flex flex-col h-full">
+        <div className="flex-grow flex items-center justify-center">
+            <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
+                Are you ready to scale your business?
+            </h1>
+        </div>
+        
+        <div className="pb-24">
+            <p className="mt-4 text-xl font-bold md:text-2xl text-gray-200 max-w-4xl mx-auto">
+                Answer 15 questions that will help you get
+            </p>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
+                <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
+                <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
+            </div>
         </div>
       </div>
 
 
       {/* Bottom Arrow */}
-      <div className="absolute bottom-8 z-20 w-full px-4 text-center">
+      <div className="absolute bottom-4 z-20 w-full px-4 text-center">
         <ChevronsDown className="h-12 w-12 md:h-20 md:w-20 animate-bounce text-primary mx-auto" />
       </div>
     </section>
