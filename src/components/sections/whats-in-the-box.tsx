@@ -47,7 +47,7 @@ const features = [
     title: 'Marketing Ads',
     value: 'a $3,000 value',
     price: 'Free!',
-    description: 'Our creative team will create 4 custom video ads per month for you using AI.',
+    description: 'Our creative team will create 4 custom video ads per month for you using AI. ',
     learnMore: true,
     subDescription: 'Ads are 10-15 seconds each in 1:1 and 4:5 aspect ratios and optimized for Facebook and Instagram.',
   },
@@ -94,7 +94,7 @@ export default function WhatsInTheBox() {
               <p className="text-muted-foreground">
                 {feature.description}
                 {feature.learnMore && (
-                  <Link href="/marketing-ads" className="text-primary underline ml-1 text-xs">
+                  <Link href="/marketing-ads" className="text-primary underline text-xs align-baseline">
                     Learn More
                   </Link>
                 )}
