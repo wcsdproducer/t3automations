@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 const PlanFeature = ({ children }: { children: React.ReactNode }) => (
   <div className="flex items-center gap-2">
-    <Check className="h-4 w-4 text-primary" />
-    <span className="text-muted-foreground text-xs whitespace-nowrap">{children}</span>
+    <Check className="h-4 w-4 text-primary flex-shrink-0" />
+    <span className="text-muted-foreground text-xs">{children}</span>
   </div>
 );
 
@@ -27,7 +27,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="mt-16 flex flex-col items-center gap-8">
+        <div className="mt-8 flex flex-col items-center gap-8">
           <div className="text-center space-y-4">
             <div>
               <span className="text-6xl font-extrabold text-foreground">$1,499</span>
