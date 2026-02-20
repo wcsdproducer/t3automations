@@ -3,7 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
 import React from 'react';
 import { T3LogoText } from '../ui/logo';
 
@@ -23,10 +31,10 @@ export default function Header() {
       return href;
     }
     if (href.startsWith('#')) {
-        return `/${href}`;
+      return `/${href}`;
     }
     return href;
-  }
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full bg-[#1A1A1A]">
@@ -50,7 +58,9 @@ export default function Header() {
           </nav>
           <div className="hidden md:flex items-center gap-4">
             <Link href="/login">
-              <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">Client Login</Button>
+              <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">
+                Client Login
+              </Button>
             </Link>
           </div>
           {isClient && (
@@ -62,6 +72,10 @@ export default function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
+                <SheetHeader>
+                  <SheetTitle className="sr-only">Menu</SheetTitle>
+                  <SheetDescription className="sr-only">Mobile navigation menu</SheetDescription>
+                </SheetHeader>
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
                   <T3LogoText className="text-primary" />
                 </Link>
@@ -76,13 +90,15 @@ export default function Header() {
                       </Link>
                     </SheetClose>
                   ))}
-                   <div className="flex flex-col gap-4 mt-4">
+                  <div className="flex flex-col gap-4 mt-4">
                     <SheetClose asChild>
-                        <Link href="/login">
-                            <Button variant="outline" className="w-full">Client Login</Button>
-                        </Link>
+                      <Link href="/login">
+                        <Button variant="outline" className="w-full">
+                          Client Login
+                        </Button>
+                      </Link>
                     </SheetClose>
-                   </div>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
