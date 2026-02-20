@@ -193,17 +193,6 @@ export default function AssessmentPage() {
                                     </Link>
                                 </div>
                             </div>
-
-                            <div>
-                                <h3 className="text-xl font-semibold mb-4 text-center">Contact Information</h3>
-                                <div className="text-center text-muted-foreground">
-                                    <p>T3 Automations</p>
-                                    <p>123 Automation Way, Suite 100, Techville, USA</p>
-                                    <p>
-                                        <a href="tel:+18005551234" className="hover:text-primary">1-800-555-1234</a> | <a href="mailto:contact@t3automations.com" className="hover:text-primary">contact@t3automations.com</a>
-                                    </p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                   </div>
