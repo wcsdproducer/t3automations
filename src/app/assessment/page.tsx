@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Download } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import AssessmentPDF from '@/components/sections/assessment-pdf';
 
 const questions: {
   question: string;
@@ -85,6 +88,7 @@ export default function AssessmentPage() {
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [quizFinished, setQuizFinished] = useState(false);
   const currentQuestion = questions[currentQuestionIndex];
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -135,6 +139,30 @@ export default function AssessmentPage() {
     return "There's a huge opportunity for growth. Our AI solutions can build and execute a customer acquisition strategy for you.";
   };
 
+  const handleDownloadPDF = () => {
+    const input = pdfRef.current;
+    if (input) {
+      html2canvas(input, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const pageHeight = 297;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        pdf.save('T3-Automations-Plan.pdf');
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col bg-background">
       <Header />
@@ -142,56 +170,77 @@ export default function AssessmentPage() {
         <div className="container max-w-4xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
-              <div className="p-6 md:p-8">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl md:text-3xl">Quiz Complete!</CardTitle>
-                  <CardDescription>Here are your results.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center">
-                    <p className="text-5xl md:text-6xl font-bold text-primary mb-4">{score}<span className="text-xl md:text-2xl text-muted-foreground">/{yesNoQuestionsCount}</span></p>
-                    <p className="text-base md:text-lg text-muted-foreground mb-8 min-h-[56px]">
-                      {getResultMessage()}
-                    </p>
-                  </div>
-
-                  <div className="mt-8 border-t pt-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                        <div className="text-left">
-                            <h3 className="text-xl font-semibold mb-4 text-center">Key Insights</h3>
-                            <ul className="space-y-3 text-muted-foreground">
-                                <li className="flex items-start gap-3">
-                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <span>Based on your score, you have a solid foundation but could see significant growth by automating lead follow-up.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <span>Your answers suggest that your team spends valuable time on repetitive manual tasks that could be automated.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                    <span>There's a clear opportunity to implement a 24/7 AI-driven system to capture and qualify leads, ensuring you never miss an opportunity.</span>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div className="space-y-8">
-                            <div>
-                                <h3 className="text-xl font-semibold mb-4 text-center">Recommended Next Steps</h3>
-                                 <div className="text-center bg-muted/50 p-6 rounded-lg">
-                                    <p className="text-muted-foreground mb-4">
-                                        Ready to turn these insights into action? Schedule a free, no-obligation consultation with one of our automation experts.
-                                    </p>
-                                    <Link href="/contact">
-                                        <Button size="lg">Book a Free Consultation</Button>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+              <>
+                <div className="p-6 md:p-8">
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl md:text-3xl">Quiz Complete!</CardTitle>
+                    <CardDescription>Here are your results.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <p className="text-5xl md:text-6xl font-bold text-primary mb-4">{score}<span className="text-xl md:text-2xl text-muted-foreground">/{yesNoQuestionsCount}</span></p>
+                      <p className="text-base md:text-lg text-muted-foreground mb-8 min-h-[56px]">
+                        {getResultMessage()}
+                      </p>
                     </div>
-                  </div>
-                </CardContent>
-              </div>
+
+                    <div className="mt-8 border-t pt-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                          <div className="text-left">
+                              <h3 className="text-xl font-semibold mb-4 text-center">Key Insights</h3>
+                              <ul className="space-y-3 text-muted-foreground">
+                                  <li className="flex items-start gap-3">
+                                      <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <span>Based on your score, you have a solid foundation but could see significant growth by automating lead follow-up.</span>
+                                  </li>
+                                  <li className="flex items-start gap-3">
+                                      <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <span>Your answers suggest that your team spends valuable time on repetitive manual tasks that could be automated.</span>
+                                  </li>
+                                  <li className="flex items-start gap-3">
+                                      <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                      <span>There's a clear opportunity to implement a 24/7 AI-driven system to capture and qualify leads, ensuring you never miss an opportunity.</span>
+                                  </li>
+                              </ul>
+                          </div>
+                          
+                          <div className="space-y-8">
+                              <div>
+                                  <h3 className="text-xl font-semibold mb-4 text-center">Recommended Next Steps</h3>
+                                   <div className="text-center bg-muted/50 p-6 rounded-lg space-y-4">
+                                      <div>
+                                        <p className="text-muted-foreground mb-4">
+                                            Ready to turn these insights into action? Schedule a free, no-obligation consultation with one of our automation experts.
+                                        </p>
+                                        <Link href="/contact">
+                                            <Button size="lg">Book a Free Consultation</Button>
+                                        </Link>
+                                      </div>
+                                      <div className="border-t pt-4">
+                                        <p className="text-muted-foreground mb-4">
+                                            Or download a copy of your personalized plan.
+                                        </p>
+                                        <Button size="lg" variant="outline" onClick={handleDownloadPDF}>
+                                          <Download className="mr-2 h-5 w-5" />
+                                          Download Your Plan
+                                        </Button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </div>
+                <div ref={pdfRef} style={{ display: 'none' }}>
+                  <AssessmentPDF
+                    score={score}
+                    yesNoQuestionsCount={yesNoQuestionsCount}
+                    getResultMessage={getResultMessage}
+                    answers={answers}
+                  />
+                </div>
+              </>
             ) : (
               <>
                 <CardHeader className="p-4 md:p-6">
