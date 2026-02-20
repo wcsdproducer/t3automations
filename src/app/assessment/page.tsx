@@ -222,7 +222,7 @@ export default function AssessmentPage() {
                   )}
 
                   {currentQuestion.type === 'multiple-choice-multiple' && (
-                      <div className="space-y-4 text-left max-w-md mx-auto">
+                      <div className="space-y-2 text-left max-w-md mx-auto">
                           {currentQuestion.options?.map(option => (
                               <div key={option} className="flex items-center space-x-2 p-3 rounded-md border hover:bg-muted transition-colors">
                                   <Checkbox 
