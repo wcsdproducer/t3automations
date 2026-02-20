@@ -226,12 +226,11 @@ function PlanPageContent() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t text-center">
-                    <p className="text-lg font-semibold">Ready to turn these insights into action?</p>
-                    <p className="mt-2 text-muted-foreground">Schedule a free, no-obligation consultation with one of our automation experts.</p>
+                    <p className="text-lg font-semibold">We also have a product that can take care of this for you.</p>
                     
                     <div className="mt-6">
-                        <Link href="/contact">
-                            <Button size="lg">Book a Free Consultation</Button>
+                        <Link href="/business-automation-starter-package">
+                            <Button size="lg">See Recommended Product</Button>
                         </Link>
                     </div>
 
