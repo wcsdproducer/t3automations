@@ -61,18 +61,18 @@ export default function AssessmentPage() {
   return (
     <div className="flex flex-col bg-background min-h-screen">
       <Header />
-      <main className="flex-1 pt-20 flex flex-col items-center justify-center py-12">
+      <main className="flex-1 pt-20 flex flex-col items-center justify-center py-12 px-4">
         <div className="container max-w-2xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
               <div className="text-center p-6 md:p-8">
                 <CardHeader>
-                  <CardTitle className="text-3xl">Quiz Complete!</CardTitle>
+                  <CardTitle className="text-2xl md:text-3xl">Quiz Complete!</CardTitle>
                   <CardDescription>Here are your results.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-6xl font-bold text-primary mb-4">{score}<span className="text-2xl text-muted-foreground">/{questions.length}</span></p>
-                  <p className="text-lg text-muted-foreground mb-8 min-h-[56px]">
+                  <p className="text-5xl md:text-6xl font-bold text-primary mb-4">{score}<span className="text-xl md:text-2xl text-muted-foreground">/{questions.length}</span></p>
+                  <p className="text-base md:text-lg text-muted-foreground mb-8 min-h-[56px]">
                     {getResultMessage()}
                   </p>
                   <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -85,8 +85,8 @@ export default function AssessmentPage() {
               </div>
             ) : (
               <>
-                <CardHeader>
-                  <CardTitle>Free Assessment Quiz</CardTitle>
+                <CardHeader className="p-4 md:p-6">
+                  <CardTitle className="text-xl md:text-2xl">Free Assessment Quiz</CardTitle>
                   <CardDescription>See how your customer acquisition strategy stacks up.</CardDescription>
                   <div className="pt-4">
                     <Progress value={progress} />
@@ -95,13 +95,13 @@ export default function AssessmentPage() {
                     </p>
                   </div>
                 </CardHeader>
-                <CardContent className="text-center py-8">
-                  <p className="text-xl font-semibold mb-8 min-h-[84px] flex items-center justify-center">
+                <CardContent className="text-center py-8 px-4 md:px-6">
+                  <p className="text-lg md:text-xl font-semibold mb-8 min-h-[120px] md:min-h-[84px] flex items-center justify-center">
                     {questions[currentQuestionIndex].question}
                   </p>
                   <div className="flex justify-center gap-4">
-                    <Button onClick={() => handleAnswer('yes')} className="w-32 h-12 text-lg">Yes</Button>
-                    <Button onClick={() => handleAnswer('no')} variant="outline" className="w-32 h-12 text-lg">No</Button>
+                    <Button onClick={() => handleAnswer('yes')} className="w-28 md:w-32 h-12 text-lg">Yes</Button>
+                    <Button onClick={() => handleAnswer('no')} variant="outline" className="w-28 md:w-32 h-12 text-lg">No</Button>
                   </div>
                 </CardContent>
               </>

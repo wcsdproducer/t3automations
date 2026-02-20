@@ -15,7 +15,7 @@ export default function Hero() {
         ></iframe>
       </div>
       <div className="absolute inset-0 bg-black/60 z-10"></div>
-      <div className="container z-20 text-center">
+      <div className="container z-20 text-center px-4">
         <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
           Are you ready to scale your business?
         </h1>
@@ -23,16 +23,16 @@ export default function Hero() {
 
       <div className="absolute bottom-8 z-20 w-full px-4 text-center flex flex-col items-center">
         <div className="mx-auto max-w-4xl mb-8">
-          <p className="text-3xl font-bold leading-9 text-gray-200">
+          <p className="text-xl md:text-3xl font-bold leading-9 text-gray-200">
             Answer 15 questions that will help you get
           </p>
-          <div className="mt-4 flex items-center justify-center gap-x-4">
-            <Button size="lg" className="rounded-full font-bold text-lg">MORE LEADS</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg">MORE QUOTES</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg">MORE JOBS</Button>
+          <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
+            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
           </div>
         </div>
-        <ChevronsDown className="h-20 w-20 animate-bounce text-primary" />
+        <ChevronsDown className="h-12 w-12 md:h-20 md:w-20 animate-bounce text-primary" />
       </div>
     </section>
   );

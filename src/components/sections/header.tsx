@@ -33,7 +33,7 @@ export default function Header() {
       <div className="container flex h-20 items-center">
         <div className="mr-6 flex items-center">
           <Link href="/" className="flex items-center space-x-2">
-            <T3LogoText className="text-primary" />
+            <T3LogoText className="text-primary text-xl sm:text-2xl" />
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">

@@ -48,7 +48,7 @@ export default function ContactPage() {
     <div className="flex flex-col bg-background min-h-screen">
       <Header />
       <main className="flex-1 pt-20 flex flex-col">
-        <section className="py-8 flex-grow flex flex-col">
+        <section className="py-8 flex-grow flex flex-col px-4 sm:px-0">
           <div className="container flex flex-col flex-grow">
             <div className="bg-card p-6 rounded-lg flex-grow flex flex-col">
               <div className="grid md:grid-cols-2 gap-8 items-start flex-grow">
