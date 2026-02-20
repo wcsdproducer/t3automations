@@ -82,12 +82,14 @@ export default function WhatsInTheBox() {
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <div key={index} className="border-l-2 border-[#C6410F] px-8 py-2 flex flex-col gap-3 h-full">
-              <div className="flex items-baseline justify-between">
+              <div className="flex items-start justify-between">
                 <h3 className="text-lg font-bold">
-                  {feature.title}{' '}
-                  {feature.value && <span className="text-xs font-normal text-muted-foreground">({feature.value})</span>}
+                  {feature.title}
                 </h3>
-                <span className="font-bold text-lg ml-4 flex-shrink-0">{feature.price}</span>
+                <div className="flex flex-col items-end">
+                    <span className="font-bold text-lg ml-4 flex-shrink-0">{feature.price}</span>
+                    {feature.value && <span className="text-xs font-normal text-muted-foreground">({feature.value})</span>}
+                </div>
               </div>
               <p className="text-muted-foreground">
                 {feature.description}
