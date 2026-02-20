@@ -34,7 +34,7 @@ export default function Pricing() {
               <span className="text-2xl font-medium text-muted-foreground">/mo</span>
             </div>
             <p className="text-muted-foreground">+ $.025/min</p>
-            <div className="flex justify-center gap-4 text-muted-foreground">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Ban className="h-4 w-4 text-primary" />
                 <span>No Setup Fee</span>
@@ -49,7 +49,7 @@ export default function Pricing() {
               </div>
             </div>
             <Link href="/contact">
-              <Button size="lg" className="rounded-full px-8 md:px-48 py-3 font-bold m-5">Get Started</Button>
+              <Button size="lg" className="rounded-full px-8 md:px-12 py-3 font-bold m-5 w-full max-w-xs sm:w-auto">Get Started</Button>
             </Link>
           </div>
 
