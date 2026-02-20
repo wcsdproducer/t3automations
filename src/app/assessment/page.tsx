@@ -133,10 +133,16 @@ export default function AssessmentPage() {
     }
     return "There's a huge opportunity for growth. Our AI solutions can build and execute a customer acquisition strategy for you.";
   };
+  
+  const getPlanUrl = () => {
+    const params = new URLSearchParams();
+    params.append('score', score.toString());
+    params.append('answers', JSON.stringify(answers));
+    return `/assessment/plan?${params.toString()}`;
+  };
 
   return (
     <div className="flex flex-col bg-background">
-      <Header />
       <main className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12">
         <div className="container max-w-4xl w-full">
           <Card className="shadow-lg w-full">
@@ -191,7 +197,7 @@ export default function AssessmentPage() {
                                         <p className="text-muted-foreground mb-4">
                                             Or view your personalized plan.
                                         </p>
-                                        <Link href={`/assessment/plan?score=${score}`}>
+                                        <Link href={getPlanUrl()}>
                                             <Button size="lg" variant="outline">
                                               View Your Custom Plan
                                             </Button>
@@ -281,7 +287,6 @@ export default function AssessmentPage() {
           </Card>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
