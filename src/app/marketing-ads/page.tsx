@@ -18,6 +18,7 @@ const adExamples = [
   {
     title: 'Ad Example 3: Customer Testimonial',
     description: 'A short clip featuring a happy customer.',
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%203.mov?alt=media&token=25d3d336-fa8e-41d1-a083-b4bf1ba69e3f'
   },
   {
     title: 'Ad Example 4: Brand Story',
