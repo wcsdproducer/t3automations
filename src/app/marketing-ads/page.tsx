@@ -23,6 +23,7 @@ const adExamples = [
   {
     title: 'Ad Example 4: Brand Story',
     description: 'Telling the story behind our brand.',
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%204.mov?alt=media&token=134b4dd2-d16a-4a41-8104-1cc6d3904520'
   },
 ];
 
