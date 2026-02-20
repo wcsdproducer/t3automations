@@ -192,12 +192,6 @@ export default function AssessmentPage() {
                     <p className="text-lg md:text-xl font-semibold">
                       {currentQuestion.question}
                     </p>
-                    {currentQuestionIndex >= yesNoQuestionsCount && currentQuestion.type === 'multiple-choice-single' && (
-                      <p className="text-muted-foreground text-sm mt-2">(Choose one)</p>
-                    )}
-                    {currentQuestionIndex >= yesNoQuestionsCount && currentQuestion.type === 'multiple-choice-multiple' && (
-                      <p className="text-muted-foreground text-sm mt-2">(Choose all that apply)</p>
-                    )}
                   </div>
                   
                   {currentQuestion.type === 'yes-no' && (
@@ -209,6 +203,9 @@ export default function AssessmentPage() {
 
                   {currentQuestion.type === 'multiple-choice-single' && (
                     <div className="space-y-2 text-left max-w-lg mx-auto">
+                        {currentQuestionIndex >= yesNoQuestionsCount && (
+                            <p className="text-muted-foreground text-sm mb-2 text-left">(Choose one)</p>
+                        )}
                         <RadioGroup onValueChange={handleMultipleChoiceSingleChange} value={answers[currentQuestionIndex] as string}>
                             {currentQuestion.options?.map(option => (
                                 <div key={option} className="flex items-center space-x-2 p-3 rounded-md border hover:bg-muted transition-colors">
@@ -223,6 +220,9 @@ export default function AssessmentPage() {
 
                   {currentQuestion.type === 'multiple-choice-multiple' && (
                       <div className="space-y-2 text-left max-w-lg mx-auto">
+                          {currentQuestionIndex >= yesNoQuestionsCount && (
+                            <p className="text-muted-foreground text-sm mb-2 text-left">(Choose all that apply)</p>
+                          )}
                           {currentQuestion.options?.map(option => (
                               <div key={option} className="flex items-center space-x-2 p-3 rounded-md border hover:bg-muted transition-colors">
                                   <Checkbox 
