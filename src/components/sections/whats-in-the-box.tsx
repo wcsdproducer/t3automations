@@ -94,7 +94,7 @@ export default function WhatsInTheBox() {
               <p className="text-muted-foreground">
                 {feature.description}
                 {feature.learnMore && (
-                  <Link href="#" className="text-primary underline ml-1">
+                  <Link href="/marketing-ads" className="text-primary underline ml-1">
                     Learn More
                   </Link>
                 )}
