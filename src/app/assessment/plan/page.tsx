@@ -12,20 +12,8 @@ import { T3LogoText } from '@/components/ui/logo';
 
 function PlanPageContent() {
   const searchParams = useSearchParams();
-  const scoreParam = searchParams.get('score');
-  const score = scoreParam ? parseInt(scoreParam, 10) : 0;
   const answersParam = searchParams.get('answers');
   const answers: Record<number, string | string[]> = answersParam ? JSON.parse(answersParam) : {};
-
-  const getResultMessage = () => {
-    if (score >= 8) {
-      return "Excellent! You're a marketing pro. Let's talk about how our AI can automate your success and take you to the next level.";
-    }
-    if (score >= 5) {
-      return "You've got a solid foundation. Let us show you how to fill in the gaps and turn more leads into customers.";
-    }
-    return "There's a huge opportunity for growth. Our AI solutions can build and execute a customer acquisition strategy for you.";
-  };
 
   const getPersonalizedPlan = () => {
     const plan: {title: string, description: string}[] = [];
@@ -198,14 +186,6 @@ function PlanPageContent() {
         }
     }
 
-    const otherInfo = answers[14] as string;
-    if (otherInfo && otherInfo.trim()) {
-        plan.unshift({
-            title: "Your Additional Comments",
-            description: `You also mentioned the following: "${otherInfo}". Keep this context in mind as you review the recommendations below.`
-        });
-    }
-
     if (plan.length === 0) {
         plan.push({
             title: "Continue Your Success",
@@ -217,7 +197,6 @@ function PlanPageContent() {
   };
   
   const plan = getPersonalizedPlan();
-  const yesNoQuestionsCount = 10; 
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12 bg-background">
@@ -228,12 +207,6 @@ function PlanPageContent() {
                     <T3LogoText className="text-primary text-3xl" />
                     <h1 className="text-2xl font-bold mt-4">Your Custom Automation Plan</h1>
                     <p className="text-muted-foreground">Generated on: {new Date().toLocaleDateString()}</p>
-                </div>
-
-                <div className="mb-8 p-6 bg-muted/20 rounded-lg">
-                    <h2 className="text-xl font-semibold mb-2">Your Assessment Score</h2>
-                    <p className="text-5xl font-bold text-primary">{score}<span className="text-xl text-muted-foreground">/{yesNoQuestionsCount}</span></p>
-                    <p className="text-lg text-muted-foreground mt-2">{getResultMessage()}</p>
                 </div>
                 
                 <div className="mb-8">
