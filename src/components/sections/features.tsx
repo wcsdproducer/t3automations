@@ -51,7 +51,7 @@ export default function Benefits() {
           {benefits.map((benefit) => (
             <Card key={benefit.title} className="bg-card text-card-foreground border-none shadow-lg">
               <CardHeader>
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-4">
                     {benefit.icon}
                     <CardTitle>{benefit.title}</CardTitle>
                 </div>
