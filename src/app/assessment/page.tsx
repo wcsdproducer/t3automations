@@ -30,7 +30,7 @@ const questions: {
   { question: "Do you track how customers find your business (e.g., referral source, marketing channel)?", category: "Best Practices", type: 'yes-no' },
   {
     question: "Which best describes your current situation?",
-    category: "Let’s Drill Down",
+    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "We need more leads.",
@@ -42,7 +42,7 @@ const questions: {
   },
   {
     question: "Which of these best describes the outcome that you would like to achieve in the next 90 days?",
-    category: "Let’s Drill Down",
+    category: "Best Practices",
     type: 'multiple-choice-multiple',
     options: [
       "Recapture 'lost' revenue by automating our lead follow-up.",
@@ -54,7 +54,7 @@ const questions: {
   },
   {
     question: "What is the biggest obstacle that you think is stopping you from achieving your goal?",
-    category: "Let’s Drill Down",
+    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "Our current systems don't 'talk' to each other.",
@@ -66,7 +66,7 @@ const questions: {
   },
   {
     question: "Where would an AI-driven 'extra set of hands' make the biggest impact right now?",
-    category: "Let’s Drill Down",
+    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "Handling basic administrative tasks and data entry.",
@@ -77,7 +77,7 @@ const questions: {
   },
   {
     question: "Is there anything else that you think we need to know about?",
-    category: "Let’s Drill Down",
+    category: "Best Practices",
     type: 'text'
   },
 ];
