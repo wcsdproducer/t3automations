@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useActionState, useRef } from 'react';
+import React, { useEffect, useActionState, useRef, useState } from 'react';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Button } from '@/components/ui/button';
@@ -17,10 +17,10 @@ const initialState = {
   success: false,
 };
 
-function SubmitButton() {
+function SubmitButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full text-md py-4" disabled={pending}>
+    <Button type="submit" className="w-full text-md py-4" disabled={disabled || pending}>
       {pending ? 'Submitting...' : 'Submit'}
     </Button>
   );
@@ -30,6 +30,10 @@ export default function AssessmentPage() {
   const [state, formAction] = useActionState(handleAssessmentForm, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const isSubmitDisabled = !name.trim() || !email.trim();
 
   useEffect(() => {
     if (state.success) {
@@ -38,6 +42,8 @@ export default function AssessmentPage() {
         description: state.message,
       });
       formRef.current?.reset();
+      setName('');
+      setEmail('');
     } else if (state.message && state.errors) {
       toast({
         variant: 'destructive',
@@ -58,14 +64,30 @@ export default function AssessmentPage() {
                 <form ref={formRef} action={formAction} className="space-y-4">
                   <div>
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" name="name" type="text" placeholder="Your Name" required />
+                    <Input 
+                      id="name" 
+                      name="name" 
+                      type="text" 
+                      placeholder="Your Name" 
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
                     {state.errors?.name && (
                       <p className="text-destructive text-sm mt-1">{state.errors.name[0]}</p>
                     )}
                   </div>
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="your.email@example.com" required />
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="your.email@example.com" 
+                      required 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                     {state.errors?.email && (
                       <p className="text-destructive text-sm mt-1">{state.errors.email[0]}</p>
                     )}
@@ -84,7 +106,7 @@ export default function AssessmentPage() {
                       <p className="text-destructive text-sm mt-1">{state.errors.comment[0]}</p>
                     )}
                   </div>
-                  <SubmitButton />
+                  <SubmitButton disabled={isSubmitDisabled} />
                   {state.success && !state.errors && (
                     <p className="text-green-500 text-sm mt-2 text-center">{state.message}</p>
                   )}
