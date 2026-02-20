@@ -13,6 +13,7 @@ const adExamples = [
   {
     title: 'Ad Example 2: New Product Launch',
     description: 'Highlighting the features of our latest product.',
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%202.mov?alt=media&token=281adae5-5acd-465e-9415-a20889ea1916'
   },
   {
     title: 'Ad Example 3: Customer Testimonial',
