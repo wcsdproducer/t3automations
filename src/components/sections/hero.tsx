@@ -30,12 +30,12 @@ export default function Hero() {
       {/* Content Container */}
       <div className="container z-20 text-center px-4 flex flex-col items-center h-full md:h-auto md:justify-center">
         <div className="flex-grow flex items-center justify-center md:flex-grow-0">
-          <h1 className="text-3xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
+          <h1 className="text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
             Are you ready to scale your business?
           </h1>
         </div>
         <div className="pb-24 md:pb-0">
-            <p className="mt-4 text-base md:text-xl text-gray-200 max-w-4xl">
+            <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-4xl">
               Answer 15 questions that will help you get
             </p>
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
