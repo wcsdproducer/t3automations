@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: <Zap className="h-8 w-8 text-primary" />,
     title: 'Instant Response',
-    description: 'Our AI and human agents are trained to respond to your leads in seconds, not minutes.',
+    description: 'Our AI agents are trained to respond to your leads in seconds, not minutes.',
   },
   {
     icon: <CheckCircle className="h-8 w-8 text-primary" />,
