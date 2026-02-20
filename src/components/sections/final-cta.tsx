@@ -9,9 +9,9 @@ export default function FinalCta() {
                 <p className="mt-4 text-lg">No software to install. No training required.</p>
                 <div className="mt-8 flex justify-center gap-4">
                     <Link href="/contact">
-                        <Button size="lg">Book a call</Button>
+                        <Button size="lg" className="w-48">Book a call</Button>
                     </Link>
-                    <Button size="lg" variant="outline" className="bg-transparent border-2 border-[#F5F0E7] text-[#F5F0E7] hover:bg-[#F5F0E7] hover:text-[#81ADBB] transition-colors duration-300">Watch a demo</Button>
+                    <Button size="lg" variant="outline" className="bg-transparent border-2 border-[#F5F0E7] text-[#F5F0E7] hover:bg-[#F5F0E7] hover:text-[#81ADBB] transition-colors duration-300 w-48">Watch a demo</Button>
                 </div>
             </div>
         </section>
