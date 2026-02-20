@@ -188,9 +188,17 @@ export default function AssessmentPage() {
                       {currentQuestion.category}
                     </h3>
                   )}
-                  <p className="text-lg md:text-xl font-semibold mb-8 min-h-[120px] md:min-h-[84px] flex items-center justify-center">
-                    {currentQuestion.question}
-                  </p>
+                  <div className="min-h-[120px] md:min-h-[84px] flex flex-col items-center justify-center mb-8">
+                    <p className="text-lg md:text-xl font-semibold">
+                      {currentQuestion.question}
+                    </p>
+                    {currentQuestionIndex >= yesNoQuestionsCount && currentQuestion.type === 'multiple-choice-single' && (
+                      <p className="text-muted-foreground text-sm mt-2">(Choose one)</p>
+                    )}
+                    {currentQuestionIndex >= yesNoQuestionsCount && currentQuestion.type === 'multiple-choice-multiple' && (
+                      <p className="text-muted-foreground text-sm mt-2">(Choose all that apply)</p>
+                    )}
+                  </div>
                   
                   {currentQuestion.type === 'yes-no' && (
                     <div className="flex justify-center gap-4">
