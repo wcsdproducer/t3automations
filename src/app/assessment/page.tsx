@@ -21,7 +21,7 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full text-md py-4" disabled={disabled || pending}>
-      {pending ? 'Submitting...' : 'Submit'}
+      {pending ? 'Submitting...' : 'Start Your Free Assessment'}
     </Button>
   );
 }
