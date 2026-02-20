@@ -196,10 +196,6 @@ export default function AssessmentPage() {
                         </div>
                     </div>
                   </div>
-
-                  <div className="mt-12 border-t pt-8 text-center">
-                    <Button size="lg" variant="outline" onClick={restartQuiz}>Take Quiz Again</Button>
-                  </div>
                 </CardContent>
               </div>
             ) : (
