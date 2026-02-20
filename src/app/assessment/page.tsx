@@ -148,8 +148,8 @@ export default function AssessmentPage() {
   return (
     <div className="flex flex-col bg-background min-h-screen">
       <Header />
-      <main className="flex-1 flex items-center justify-center px-4 pt-20">
-        <div className="container max-w-2xl w-full">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 pt-24 pb-12">
+        <div className="container max-w-3xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
               <div className="text-center p-6 md:p-8">
@@ -208,7 +208,7 @@ export default function AssessmentPage() {
                   )}
 
                   {currentQuestion.type === 'multiple-choice-single' && (
-                    <div className="space-y-4 text-left max-w-md mx-auto">
+                    <div className="space-y-2 text-left max-w-lg mx-auto">
                         <RadioGroup onValueChange={handleMultipleChoiceSingleChange} value={answers[currentQuestionIndex] as string}>
                             {currentQuestion.options?.map(option => (
                                 <div key={option} className="flex items-center space-x-2 p-3 rounded-md border hover:bg-muted transition-colors">
@@ -222,7 +222,7 @@ export default function AssessmentPage() {
                   )}
 
                   {currentQuestion.type === 'multiple-choice-multiple' && (
-                      <div className="space-y-2 text-left max-w-md mx-auto">
+                      <div className="space-y-2 text-left max-w-lg mx-auto">
                           {currentQuestion.options?.map(option => (
                               <div key={option} className="flex items-center space-x-2 p-3 rounded-md border hover:bg-muted transition-colors">
                                   <Checkbox 
@@ -238,7 +238,7 @@ export default function AssessmentPage() {
                   )}
 
                   {currentQuestion.type === 'text' && (
-                      <div className="space-y-4 max-w-md mx-auto">
+                      <div className="space-y-4 max-w-lg mx-auto">
                           <Textarea 
                               onChange={handleTextChange} 
                               value={answers[currentQuestionIndex] as string || ''}
