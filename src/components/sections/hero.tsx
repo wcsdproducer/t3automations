@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative flex h-screen flex-col justify-center items-center text-white overflow-hidden">
+    <section className="relative flex h-screen flex-col justify-start md:justify-center items-center text-white overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
         {/* Image for small screens */}
         <div className="block md:hidden w-full h-full relative">
@@ -26,24 +26,25 @@ export default function Hero() {
         ></iframe>
       </div>
       <div className="absolute inset-0 bg-black/60 z-10"></div>
-      <div className="container z-20 text-center px-4">
+      
+      {/* Centered Content */}
+      <div className="container z-20 text-center px-4 flex flex-col items-center pt-32 md:pt-0">
         <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
           Are you ready to scale your business?
         </h1>
+        <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-4xl">
+          Answer 15 questions that will help you get
+        </p>
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
+          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
+          <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
+        </div>
       </div>
 
-      <div className="absolute bottom-8 z-20 w-full px-4 text-center flex flex-col items-center">
-        <div className="mx-auto max-w-4xl mb-8">
-          <p className="text-xl md:text-3xl font-bold leading-9 text-gray-200">
-            Answer 15 questions that will help you get
-          </p>
-          <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
-            <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
-          </div>
-        </div>
-        <ChevronsDown className="h-12 w-12 md:h-20 md:w-20 animate-bounce text-primary" />
+      {/* Bottom Arrow */}
+      <div className="absolute bottom-8 z-20 w-full px-4 text-center">
+        <ChevronsDown className="h-12 w-12 md:h-20 md:w-20 animate-bounce text-primary mx-auto" />
       </div>
     </section>
   );
