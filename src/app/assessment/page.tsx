@@ -100,8 +100,8 @@ export default function AssessmentPage() {
                     {questions[currentQuestionIndex].question}
                   </p>
                   <div className="flex justify-center gap-4">
-                    <Button onClick={() => handleAnswer('yes')} className="w-28 md:w-32 h-12 text-lg">Yes</Button>
-                    <Button onClick={() => handleAnswer('no')} variant="outline" className="w-28 md:w-32 h-12 text-lg">No</Button>
+                    <Button onClick={() => handleAnswer('yes')} className="w-28 md:w-32 h-12 text-lg bg-[#1A1A1A] hover:bg-[#C6410F]">Yes</Button>
+                    <Button onClick={() => handleAnswer('no')} className="w-28 md:w-32 h-12 text-lg bg-[#1A1A1A] hover:bg-[#C6410F]">No</Button>
                   </div>
                 </CardContent>
               </>
