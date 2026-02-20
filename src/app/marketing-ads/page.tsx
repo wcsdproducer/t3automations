@@ -6,28 +6,28 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 
 const adExamples = [
   {
-    title: 'Ad Example 1: Summer Sale',
-    description: 'A 15-second ad for our summer promotion.',
+    title: 'Integrity Cleaning & Restoration',
+    description: 'A 10-second Meta Ad for an after-holiday promotion.',
     videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%201.mov?alt=media&token=a8b3a74f-2757-43fa-812d-cc7b89d2f198'
   },
   {
-    title: 'Ad Example 2: New Product Launch',
-    description: 'Highlighting the features of our latest product.',
+    title: 'Integrity Cleaning & Restoration',
+    description: 'A 9-second Meta Ad for an after-holiday promotion.',
     videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%202.mov?alt=media&token=281adae5-5acd-465e-9415-a20889ea1916'
   },
   {
-    title: 'Ad Example 3: Customer Testimonial',
-    description: 'A short clip featuring a happy customer.',
+    title: 'Integrity Cleaning & Restoration',
+    description: 'A 15-second Meta Ad for an after-holiday promotion.',
     videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%203.mov?alt=media&token=25d3d336-fa8e-41d1-a083-b4bf1ba69e3f'
   },
   {
-    title: 'Ad Example 4: Brand Story',
-    description: 'Telling the story behind our brand.',
+    title: 'Integrity Cleaning & Restoration',
+    description: 'A 24-second Meta Ad for remediation and restoration service.',
     videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%204.mov?alt=media&token=134b4dd2-d16a-4a41-8104-1cc6d3904520'
   },
   {
-    title: 'Ad Example 5: Behind The Scenes',
-    description: 'A quick look at what we do.',
+    title: 'Integrity Cleaning & Restoration',
+    description: 'A 10-second Meta Ad for a carpet cleaning promotion.',
     videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%205.mov?alt=media&token=0453cfd1-b20e-425b-b0e5-5cbb4d522975'
   },
 ];
