@@ -23,12 +23,12 @@ const adExamples = [
   {
     title: 'Ad Example 4: Brand Story',
     description: 'Telling the story behind our brand.',
-    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%204.mov?alt=media&token=134b4dd2-d16a-4a41-8104-1cc6d3904520'
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%204.mov?alt=media&token=134b4dd2-d16a-4a41-8104-1cc6d3904520'
   },
   {
     title: 'Ad Example 5: Behind The Scenes',
     description: 'A quick look at what we do.',
-    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%205.mov?alt=media&token=0453cfd1-b20e-425b-b0e5-5cbb4d522975'
+    videoSrc: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FIntegrity%20Cleaning%20Ad%205.mov?alt=media&token=0453cfd1-b20e-425b-b0e5-5cbb4d522975'
   },
 ];
 
