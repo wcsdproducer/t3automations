@@ -148,7 +148,7 @@ export default function AssessmentPage() {
   return (
     <div className="flex flex-col bg-background min-h-screen">
       <Header />
-      <main className="flex-grow flex flex-col items-center justify-center px-4 pt-20">
+      <main className="flex-1 flex items-center justify-center px-4 pt-20">
         <div className="container max-w-2xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
