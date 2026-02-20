@@ -16,23 +16,21 @@ import { CheckCircle } from 'lucide-react';
 
 const questions: {
   question: string;
-  category: string;
   type: 'yes-no' | 'multiple-choice-single' | 'multiple-choice-multiple' | 'text';
   options?: string[];
 }[] = [
-  { question: "Have you clearly defined your target audience?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you have a professional, mobile-friendly website?", category: "Best Practices", type: 'yes-no' },
-  { question: "Are you actively using social media for your business?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you have a system for collecting customer reviews or testimonials?", category: "Best Practices", type: 'yes-no' },
-  { question: "Are you running any online advertising campaigns (e.g., Google Ads, Facebook Ads)?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you maintain an email list for marketing to potential and existing customers?", category: "Best Practices", type: 'yes-no' },
-  { question: "Have you optimized your website for search engines (SEO)?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you regularly create and share content (e.g., blog posts, videos, articles)?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you have a documented process for following up with new leads?", category: "Best Practices", type: 'yes-no' },
-  { question: "Do you track how customers find your business (e.g., referral source, marketing channel)?", category: "Best Practices", type: 'yes-no' },
+  { question: "Have you clearly defined your target audience?", type: 'yes-no' },
+  { question: "Do you have a professional, mobile-friendly website?", type: 'yes-no' },
+  { question: "Are you actively using social media for your business?", type: 'yes-no' },
+  { question: "Do you have a system for collecting customer reviews or testimonials?", type: 'yes-no' },
+  { question: "Are you running any online advertising campaigns (e.g., Google Ads, Facebook Ads)?", type: 'yes-no' },
+  { question: "Do you maintain an email list for marketing to potential and existing customers?", type: 'yes-no' },
+  { question: "Have you optimized your website for search engines (SEO)?", type: 'yes-no' },
+  { question: "Do you regularly create and share content (e.g., blog posts, videos, articles)?", type: 'yes-no' },
+  { question: "Do you have a documented process for following up with new leads?", type: 'yes-no' },
+  { question: "Do you track how customers find your business (e.g., referral source, marketing channel)?", type: 'yes-no' },
   {
     question: "Which best describes your current situation?",
-    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "We need more leads.",
@@ -44,7 +42,6 @@ const questions: {
   },
   {
     question: "Which of these best describes the outcome that you would like to achieve in the next 90 days?",
-    category: "Best Practices",
     type: 'multiple-choice-multiple',
     options: [
       "Recapture 'lost' revenue by automating our lead follow-up.",
@@ -56,7 +53,6 @@ const questions: {
   },
   {
     question: "What is the biggest obstacle that you think is stopping you from achieving your goal?",
-    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "Our current systems don't 'talk' to each other.",
@@ -68,7 +64,6 @@ const questions: {
   },
   {
     question: "Where would an AI-driven 'extra set of hands' make the biggest impact right now?",
-    category: "Best Practices",
     type: 'multiple-choice-single',
     options: [
       "Handling basic administrative tasks and data entry.",
@@ -79,7 +74,6 @@ const questions: {
   },
   {
     question: "Is there anything else that you think we need to know about?",
-    category: "Best Practices",
     type: 'text'
   },
 ];
@@ -226,11 +220,6 @@ export default function AssessmentPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="text-center py-8 px-4 md:px-6">
-                  {currentQuestion.category && (currentQuestionIndex === 0 || currentQuestion.category !== questions[currentQuestionIndex - 1].category) && (
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4">
-                      {currentQuestion.category}
-                    </h3>
-                  )}
                   <div className="min-h-[120px] md:min-h-[84px] flex flex-col items-center justify-center mb-8">
                     <p className="text-lg md:text-xl font-semibold">
                       {currentQuestion.question}
