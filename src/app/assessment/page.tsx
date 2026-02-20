@@ -8,17 +8,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
 
-const questions = [
-  { question: "Have you clearly defined your target audience?" },
-  { question: "Do you have a professional, mobile-friendly website?" },
-  { question: "Are you actively using social media for your business?" },
-  { question: "Do you have a system for collecting customer reviews or testimonials?" },
-  { question: "Are you running any online advertising campaigns (e.g., Google Ads, Facebook Ads)?" },
-  { question: "Do you maintain an email list for marketing to potential and existing customers?" },
-  { question: "Have you optimized your website for search engines (SEO)?" },
-  { question: "Do you regularly create and share content (e.g., blog posts, videos, articles)?" },
-  { question: "Do you have a documented process for following up with new leads?" },
-  { question: "Do you track how customers find your business (e.g., referral source, marketing channel)?" },
+const questions: { question: string; category: string }[] = [
+  { question: "Have you clearly defined your target audience?", category: "Best Practices" },
+  { question: "Do you have a professional, mobile-friendly website?", category: "Best Practices" },
+  { question: "Are you actively using social media for your business?", category: "Best Practices" },
+  { question: "Do you have a system for collecting customer reviews or testimonials?", category: "Best Practices" },
+  { question: "Are you running any online advertising campaigns (e.g., Google Ads, Facebook Ads)?", category: "Best Practices" },
+  { question: "Do you maintain an email list for marketing to potential and existing customers?", category: "Best Practices" },
+  { question: "Have you optimized your website for search engines (SEO)?", category: "Best Practices" },
+  { question: "Do you regularly create and share content (e.g., blog posts, videos, articles)?", category: "Best Practices" },
+  { question: "Do you have a documented process for following up with new leads?", category: "Best Practices" },
+  { question: "Do you track how customers find your business (e.g., referral source, marketing channel)?", category: "Best Practices" },
 ];
 
 export default function AssessmentPage() {
@@ -96,6 +96,11 @@ export default function AssessmentPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="text-center py-8 px-4 md:px-6">
+                  {questions[currentQuestionIndex].category && (currentQuestionIndex === 0 || questions[currentQuestionIndex].category !== questions[currentQuestionIndex - 1].category) && (
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4">
+                      {questions[currentQuestionIndex].category}
+                    </h3>
+                  )}
                   <p className="text-lg md:text-xl font-semibold mb-8 min-h-[120px] md:min-h-[84px] flex items-center justify-center">
                     {questions[currentQuestionIndex].question}
                   </p>
