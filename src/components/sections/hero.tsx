@@ -35,7 +35,7 @@ export default function Hero() {
           </h1>
         </div>
         <div className="pb-24 md:pb-0">
-            <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-4xl">
+            <p className="mt-4 text-xl md:text-2xl text-gray-200 max-w-4xl">
               Answer 15 questions that will help you get
             </p>
             <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
