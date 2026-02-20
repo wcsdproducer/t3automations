@@ -145,64 +145,70 @@ export default function AssessmentPage() {
     <div className="flex flex-col bg-background">
       <Header />
       <main className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-12">
-        <div className="container max-w-3xl w-full">
+        <div className="container max-w-4xl w-full">
           <Card className="shadow-lg w-full">
             {quizFinished ? (
-              <div className="text-center p-6 md:p-8">
-                <CardHeader>
+              <div className="p-6 md:p-8">
+                <CardHeader className="text-center">
                   <CardTitle className="text-2xl md:text-3xl">Quiz Complete!</CardTitle>
                   <CardDescription>Here are your results.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-5xl md:text-6xl font-bold text-primary mb-4">{score}<span className="text-xl md:text-2xl text-muted-foreground">/{yesNoQuestionsCount}</span></p>
-                  <p className="text-base md:text-lg text-muted-foreground mb-8 min-h-[56px]">
-                    {getResultMessage()}
-                  </p>
+                  <div className="text-center">
+                    <p className="text-5xl md:text-6xl font-bold text-primary mb-4">{score}<span className="text-xl md:text-2xl text-muted-foreground">/{yesNoQuestionsCount}</span></p>
+                    <p className="text-base md:text-lg text-muted-foreground mb-8 min-h-[56px]">
+                      {getResultMessage()}
+                    </p>
+                  </div>
 
-                  <div className="text-left mt-12 space-y-10 border-t pt-8">
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4 text-center">Key Insights</h3>
-                        <ul className="space-y-3 text-muted-foreground max-w-md mx-auto">
-                            <li className="flex items-start gap-3">
-                                <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                <span>Based on your score, you have a solid foundation but could see significant growth by automating lead follow-up.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                <span>Your answers suggest that your team spends valuable time on repetitive manual tasks that could be automated.</span>
-                            </li>
-                            <li className="flex items-start gap-3">
-                                <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                                <span>There's a clear opportunity to implement a 24/7 AI-driven system to capture and qualify leads, ensuring you never miss an opportunity.</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4 text-center">Recommended Next Steps</h3>
-                         <div className="text-center bg-muted/50 p-6 rounded-lg max-w-md mx-auto">
-                            <p className="text-muted-foreground mb-4">
-                                Ready to turn these insights into action? Schedule a free, no-obligation consultation with one of our automation experts.
-                            </p>
-                            <Link href="/contact">
-                                <Button size="lg">Book a Free Consultation</Button>
-                            </Link>
+                  <div className="mt-12 border-t pt-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        <div className="text-left">
+                            <h3 className="text-xl font-semibold mb-4 text-center">Key Insights</h3>
+                            <ul className="space-y-3 text-muted-foreground">
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                    <span>Based on your score, you have a solid foundation but could see significant growth by automating lead follow-up.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                    <span>Your answers suggest that your team spends valuable time on repetitive manual tasks that could be automated.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <CheckCircle className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                                    <span>There's a clear opportunity to implement a 24/7 AI-driven system to capture and qualify leads, ensuring you never miss an opportunity.</span>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
+                        
+                        <div className="space-y-8">
+                            <div>
+                                <h3 className="text-xl font-semibold mb-4 text-center">Recommended Next Steps</h3>
+                                 <div className="text-center bg-muted/50 p-6 rounded-lg">
+                                    <p className="text-muted-foreground mb-4">
+                                        Ready to turn these insights into action? Schedule a free, no-obligation consultation with one of our automation experts.
+                                    </p>
+                                    <Link href="/contact">
+                                        <Button size="lg">Book a Free Consultation</Button>
+                                    </Link>
+                                </div>
+                            </div>
 
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4 text-center">Contact Information</h3>
-                        <div className="text-center text-muted-foreground">
-                            <p>T3 Automations</p>
-                            <p>123 Automation Way, Suite 100, Techville, USA</p>
-                            <p>
-                                <a href="tel:+18005551234" className="hover:text-primary">1-800-555-1234</a> | <a href="mailto:contact@t3automations.com" className="hover:text-primary">contact@t3automations.com</a>
-                            </p>
+                            <div>
+                                <h3 className="text-xl font-semibold mb-4 text-center">Contact Information</h3>
+                                <div className="text-center text-muted-foreground">
+                                    <p>T3 Automations</p>
+                                    <p>123 Automation Way, Suite 100, Techville, USA</p>
+                                    <p>
+                                        <a href="tel:+18005551234" className="hover:text-primary">1-800-555-1234</a> | <a href="mailto:contact@t3automations.com" className="hover:text-primary">contact@t3automations.com</a>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                   </div>
 
-                  <div className="mt-12 border-t pt-8">
+                  <div className="mt-12 border-t pt-8 text-center">
                     <Button size="lg" variant="outline" onClick={restartQuiz}>Take Quiz Again</Button>
                   </div>
                 </CardContent>
