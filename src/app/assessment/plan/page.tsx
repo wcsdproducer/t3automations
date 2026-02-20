@@ -205,12 +205,11 @@ function PlanPageContent() {
             <div className="p-8">
                 <div className="text-center mb-8">
                     <T3LogoText className="text-primary text-3xl" />
-                    <h1 className="text-2xl font-bold mt-4">Your Custom Automation Plan</h1>
+                    <h1 className="text-2xl font-bold mt-4">Your Immediate Implementation Plan</h1>
                     <p className="text-muted-foreground">Generated on: {new Date().toLocaleDateString()}</p>
                 </div>
                 
                 <div className="mb-8">
-                    <h2 className="text-xl font-semibold mb-4">Your Immediate Implementation Plan</h2>
                     <ul className="space-y-6">
                       {plan.map((item, index) => (
                         <li key={index} className="flex items-start gap-4">
