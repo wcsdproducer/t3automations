@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import React from 'react';
 import { T3LogoText } from '../ui/logo';
+import { LanguageSelector } from '../ui/language-selector';
 
 const navLinks: { href: string; label: string }[] = [];
 
@@ -57,6 +58,7 @@ export default function Header() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSelector />
             <Link href="/login">
               <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">
                 Client Login
@@ -91,6 +93,9 @@ export default function Header() {
                     </SheetClose>
                   ))}
                   <div className="flex flex-col gap-4 mt-4">
+                    <div className="px-4">
+                      <LanguageSelector />
+                    </div>
                     <SheetClose asChild>
                       <Link href="/login">
                         <Button variant="outline" className="w-full">

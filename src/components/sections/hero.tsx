@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { ChevronsDown } from 'lucide-react';
 import Image from 'next/image';
+import TranslatedText from '../TranslatedText';
 
 export default function Hero() {
   return (
@@ -31,19 +32,19 @@ export default function Hero() {
       <div className="container z-20 text-center px-4 flex flex-col h-full">
         <div className="flex-grow flex items-center justify-center">
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl max-w-[800px] mx-auto">
-                Are you ready to scale your business?
+                <TranslatedText>Are you ready to scale your business?</TranslatedText>
             </h1>
         </div>
         
         <div className="pb-4">
             <div>
                 <p className="mt-4 text-xl font-bold md:text-2xl text-gray-200 max-w-4xl mx-auto">
-                    Answer 15 questions that will help you get
+                    <TranslatedText>Answer 15 questions that will help you get</TranslatedText>
                 </p>
                 <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE LEADS</Button>
-                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE QUOTES</Button>
-                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto">MORE JOBS</Button>
+                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto"><TranslatedText>MORE LEADS</TranslatedText></Button>
+                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto"><TranslatedText>MORE QUOTES</TranslatedText></Button>
+                    <Button size="lg" className="rounded-full font-bold text-lg w-full sm:w-auto"><TranslatedText>MORE JOBS</TranslatedText></Button>
                 </div>
             </div>
 
