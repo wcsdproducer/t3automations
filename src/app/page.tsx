@@ -6,7 +6,6 @@ import Benefits from '@/components/sections/features'; // Renamed features to be
 import AiTypes from '@/components/sections/solutions'; // Renamed solutions to AiTypes
 import UnlockPotentialCta from '@/components/sections/unlock-potential-cta';
 import Testimonials from '@/components/sections/testimonials';
-import WhatsInTheBox from '@/components/sections/whats-in-the-box';
 import TrustedBy from '@/components/sections/trusted-by';
 import Faq from '@/components/sections/faq';
 import FinalCta from '@/components/sections/final-cta';
@@ -24,7 +23,6 @@ export default function Home() {
         <AiTypes />
         <UnlockPotentialCta />
         <Testimonials />
-        <WhatsInTheBox />
         <TrustedBy />
         <Faq />
         <FinalCta />
