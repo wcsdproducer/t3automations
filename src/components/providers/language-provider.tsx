@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, useContext, ReactNode, useCallback, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 import { batchTranslateText } from '@/ai/flows/translate-text';
 
 type LanguageContextType = {
@@ -17,10 +17,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [translationMap, setTranslationMap] = useState<Record<string, string>>({});
   const [textsToTranslate, setTextsToTranslate] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const registerText = useCallback((text: string) => {
     setTextsToTranslate(prev => {
-      if (prev.has(text)) {
+      if (prev.has(text) || !text) {
         return prev;
       }
       const newSet = new Set(prev);
@@ -30,36 +31,47 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const translateAll = async () => {
-      if (language === 'English' || textsToTranslate.size === 0) {
+    const translateBatch = async () => {
+      const textsToFetch = Array.from(textsToTranslate);
+      
+      if (language === 'English' || textsToFetch.length === 0) {
         setTranslationMap({});
         return;
       }
 
       setIsLoading(true);
-      const textsArray = Array.from(textsToTranslate);
-      
       try {
-        const result = await batchTranslateText({ texts: textsArray, targetLanguage: language });
+        const result = await batchTranslateText({ texts: textsToFetch, targetLanguage: language });
         const newMap: Record<string, string> = {};
-        textsArray.forEach((originalText, index) => {
+        textsToFetch.forEach((originalText, index) => {
           newMap[originalText] = result.translatedTexts[index];
         });
         setTranslationMap(newMap);
       } catch (e) {
         console.error("Batch translation failed:", e);
-        // On failure, map original text to itself to avoid breaking the UI
-        const newMap: Record<string, string> = {};
-        textsArray.forEach(text => {
-          newMap[text] = text;
+        const errorMap: Record<string, string> = {};
+        textsToFetch.forEach(text => {
+          errorMap[text] = text; // Fallback to original
         });
-        setTranslationMap(newMap);
+        setTranslationMap(errorMap);
       } finally {
         setIsLoading(false);
       }
     };
+    
+    if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+    }
+    
+    debounceTimer.current = setTimeout(() => {
+        translateBatch();
+    }, 500);
 
-    translateAll();
+    return () => {
+        if(debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+    }
   }, [language, textsToTranslate]);
 
   const getTranslation = useCallback((text: string) => {
