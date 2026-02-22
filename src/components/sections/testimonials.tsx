@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
+import TranslatedText from '../TranslatedText';
 
 const testimonials = [
   {
@@ -30,9 +31,9 @@ export default function Testimonials() {
     <section className="py-20 md:py-28 bg-[#F5F0E7]">
         <div className="container">
             <div className="mx-auto max-w-2xl text-center">
-                <p className="text-primary font-semibold uppercase tracking-wider">Social Proof</p>
+                <p className="text-primary font-semibold uppercase tracking-wider"><TranslatedText>Social Proof</TranslatedText></p>
                 <h2 className="mt-2 text-3xl font-bold tracking-tight text-secondary-foreground sm:text-4xl">
-                    What Our Clients Say About Our AI Agents
+                    <TranslatedText>What Our Clients Say About Our AI Agents</TranslatedText>
                 </h2>
             </div>
             <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -47,11 +48,11 @@ export default function Testimonials() {
                                 <Star className="w-5 h-5 text-primary fill-primary" />
                             </div>
                             <p className="flex-1">
-                                {testimonial.quote}
+                                <TranslatedText>{testimonial.quote}</TranslatedText>
                             </p>
                             <div className="mt-6">
-                                <p className="font-semibold">{testimonial.author}</p>
-                                <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                                <p className="font-semibold"><TranslatedText>{testimonial.author}</TranslatedText></p>
+                                <p className="text-sm text-muted-foreground"><TranslatedText>{testimonial.title}</TranslatedText></p>
                             </div>
                         </CardContent>
                     </Card>

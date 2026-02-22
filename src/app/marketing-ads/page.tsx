@@ -3,6 +3,7 @@
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import TranslatedText from '@/components/TranslatedText';
 
 const adExamples = [
   {
@@ -40,27 +41,27 @@ export default function MarketingAdsPage() {
         <section className="py-12 flex-grow flex flex-col px-4 sm:px-0">
           <div className="container">
             <div className="text-center mb-12">
-              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">AI-Powered Marketing Ads</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl"><TranslatedText>AI-Powered Marketing Ads</TranslatedText></h1>
               <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                We create 4 custom, high-impact video ads for you every month, optimized for platforms like Facebook and Instagram.
+                <TranslatedText>We create 4 custom, high-impact video ads for you every month, optimized for platforms like Facebook and Instagram.</TranslatedText>
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {adExamples.map((ad, index) => (
                 <Card key={index}>
                   <CardHeader>
-                    <CardTitle>{ad.title}</CardTitle>
-                    <CardDescription>{ad.description}</CardDescription>
+                    <CardTitle><TranslatedText>{ad.title}</TranslatedText></CardTitle>
+                    <CardDescription><TranslatedText>{ad.description}</TranslatedText></CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
                       {ad.videoSrc ? (
                         <video controls className="w-full h-full rounded-md object-cover">
                           <source src={ad.videoSrc} type="video/mp4" />
-                          Your browser does not support the video tag.
+                          <TranslatedText>Your browser does not support the video tag.</TranslatedText>
                         </video>
                       ) : (
-                        <p className="text-muted-foreground">Video Placeholder</p>
+                        <p className="text-muted-foreground"><TranslatedText>Video Placeholder</TranslatedText></p>
                       )}
                     </div>
                   </CardContent>

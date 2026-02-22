@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { initiateEmailSignIn, initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
+import TranslatedText from '@/components/TranslatedText';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
@@ -48,7 +49,7 @@ export default function LoginPage() {
   if (isUserLoading || user) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
-            <p>Loading...</p>
+            <p><TranslatedText>Loading...</TranslatedText></p>
         </div>
     );
   }
@@ -57,13 +58,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account.</CardDescription>
+          <CardTitle className="text-2xl"><TranslatedText>Login</TranslatedText></CardTitle>
+          <CardDescription><TranslatedText>Enter your email below to login to your account.</TranslatedText></CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
         <form onSubmit={handleSignIn}>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email"><TranslatedText>Email</TranslatedText></Label>
               <Input
                 id="email"
                 type="email"
@@ -74,7 +75,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="grid gap-2 mt-4">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password"><TranslatedText>Password</TranslatedText></Label>
               <Input
                 id="password"
                 type="password"
@@ -84,24 +85,24 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-            <Button className="w-full mt-6">Sign in</Button>
+            <Button className="w-full mt-6"><TranslatedText>Sign in</TranslatedText></Button>
           </form>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground"><TranslatedText>Or continue with</TranslatedText></span>
             </div>
           </div>
           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
             <GoogleIcon className="mr-2 h-4 w-4" />
-            Google
+            <TranslatedText>Google</TranslatedText>
           </Button>
         </CardContent>
         <CardFooter className="flex-col gap-4">
           <div className="text-sm text-center">
-              Don&apos;t have an account? <Link href="/signup" className='underline'>Sign up</Link>
+              <TranslatedText>Don&apos;t have an account?</TranslatedText> <Link href="/signup" className='underline'><TranslatedText>Sign up</TranslatedText></Link>
           </div>
         </CardFooter>
       </Card>

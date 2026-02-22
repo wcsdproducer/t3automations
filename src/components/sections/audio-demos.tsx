@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import TranslatedText from '../TranslatedText';
 
 const demos = [
   { title: 'Solar', subTitle: 'Radiant Path Solar', src: 'https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FAI%20Voice%20Agent%20-%20Solar%20Demo.wav?alt=media&token=a7d7be31-efd3-4e0e-b98d-b6648a1b67f0', type: 'audio/wav' },
@@ -12,20 +13,20 @@ export default function AudioDemos() {
     <section id="demos" className="bg-[#282824] py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
-            <p className="text-primary font-semibold uppercase tracking-wider">A few of our agents</p>
+            <p className="text-primary font-semibold uppercase tracking-wider"><TranslatedText>A few of our agents</TranslatedText></p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            The Most Powerful Receptionist Service
+            <TranslatedText>The Most Powerful Receptionist Service</TranslatedText>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            24/7 call answering for small business, powered by superior AI technology
+            <TranslatedText>24/7 call answering for small business, powered by superior AI technology</TranslatedText>
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
           {demos.map((demo) => (
             <Card key={demo.title} className="bg-[#1A1A1A]">
               <CardHeader>
-                <CardTitle>{demo.title}</CardTitle>
-                <CardDescription>{demo.subTitle}</CardDescription>
+                <CardTitle><TranslatedText>{demo.title}</TranslatedText></CardTitle>
+                <CardDescription><TranslatedText>{demo.subTitle}</TranslatedText></CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
                 <audio controls className="w-full">

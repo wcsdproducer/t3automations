@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Zap, CheckCircle, Calendar, Clock, Users, Star } from 'lucide-react';
+import TranslatedText from '../TranslatedText';
 
 const benefits = [
   {
@@ -39,12 +40,12 @@ export default function Benefits() {
     <section id="benefits" className="bg-[#F5F0E7] py-20 md:py-28">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
-           <p className="text-primary font-semibold uppercase tracking-wider">How we help</p>
+           <p className="text-primary font-semibold uppercase tracking-wider"><TranslatedText>How we help</TranslatedText></p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-secondary-foreground sm:text-4xl">
-            Discover the Benefits of Automation
+            <TranslatedText>Discover the Benefits of Automation</TranslatedText>
           </h2>
           <p className="mt-4 text-lg text-secondary-foreground/80">
-            Stop losing customers to your competition. We've got you covered.
+            <TranslatedText>Stop losing customers to your competition. We've got you covered.</TranslatedText>
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -53,11 +54,11 @@ export default function Benefits() {
               <CardHeader>
                 <div className="flex items-start gap-4">
                     {benefit.icon}
-                    <CardTitle>{benefit.title}</CardTitle>
+                    <CardTitle><TranslatedText>{benefit.title}</TranslatedText></CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">{benefit.description}</p>
+                <p className="text-muted-foreground"><TranslatedText>{benefit.description}</TranslatedText></p>
               </CardContent>
             </Card>
           ))}

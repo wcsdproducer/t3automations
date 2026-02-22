@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Filter, MessageSquare, PhoneForwarded } from 'lucide-react';
+import TranslatedText from '../TranslatedText';
 
 const aiTypes = [
   {
@@ -27,12 +28,12 @@ export default function AiTypes() {
     <section id="ai-types" className="py-20 md:py-28 bg-background">
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-primary font-semibold uppercase tracking-wider">Our Technology</p>
+          <p className="text-primary font-semibold uppercase tracking-wider"><TranslatedText>Our Technology</TranslatedText></p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Types of AI Voice Assistants
+            <TranslatedText>Types of AI Voice Assistants</TranslatedText>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Deploy specialized AI agents to automate and enhance your business operations.
+            <TranslatedText>Deploy specialized AI agents to automate and enhance your business operations.</TranslatedText>
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -42,10 +43,10 @@ export default function AiTypes() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                   {solution.icon}
                 </div>
-                <CardTitle className="mt-4">{solution.title}</CardTitle>
+                <CardTitle className="mt-4"><TranslatedText>{solution.title}</TranslatedText></CardTitle>
               </CardHeader>
               <CardContent className="text-muted-foreground">
-                <p>{solution.description}</p>
+                <p><TranslatedText>{solution.description}</TranslatedText></p>
               </CardContent>
             </Card>
           ))}

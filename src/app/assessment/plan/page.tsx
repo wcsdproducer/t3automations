@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { T3LogoText } from '@/components/ui/logo';
+import TranslatedText from '@/components/TranslatedText';
 
 function PlanPageContent() {
   const searchParams = useSearchParams();
@@ -205,8 +206,8 @@ function PlanPageContent() {
             <div className="p-8">
                 <div className="text-center mb-8">
                     <T3LogoText className="text-primary text-3xl" />
-                    <h1 className="text-2xl font-bold mt-4">Your Immediate Implementation Plan</h1>
-                    <p className="text-muted-foreground">Generated on: {new Date().toLocaleDateString()}</p>
+                    <h1 className="text-2xl font-bold mt-4"><TranslatedText>Your Immediate Implementation Plan</TranslatedText></h1>
+                    <p className="text-muted-foreground"><TranslatedText>Generated on</TranslatedText>: {new Date().toLocaleDateString()}</p>
                 </div>
                 
                 <div className="mb-8">
@@ -217,8 +218,8 @@ function PlanPageContent() {
                             <CheckCircle className="h-5 w-5 text-primary" />
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold">{item.title}</h3>
-                            <p className="mt-1 text-muted-foreground">{item.description}</p>
+                            <h3 className="text-lg font-semibold"><TranslatedText>{item.title}</TranslatedText></h3>
+                            <p className="mt-1 text-muted-foreground"><TranslatedText>{item.description}</TranslatedText></p>
                           </div>
                         </li>
                       ))}
@@ -226,11 +227,11 @@ function PlanPageContent() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t text-center">
-                    <p className="text-lg font-semibold">We also have a product that can take care of this for you.</p>
+                    <p className="text-lg font-semibold"><TranslatedText>We also have a product that can take care of this for you.</TranslatedText></p>
                     
                     <div className="mt-6">
                         <Link href="/business-automation-starter-package">
-                            <Button size="lg">See Recommended Product</Button>
+                            <Button size="lg"><TranslatedText>See Recommended Product</TranslatedText></Button>
                         </Link>
                     </div>
                 </div>

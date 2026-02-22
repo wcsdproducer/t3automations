@@ -15,6 +15,7 @@ import {
 import React from 'react';
 import { T3LogoText } from '../ui/logo';
 import { LanguageSelector } from '../ui/language-selector';
+import TranslatedText from '../TranslatedText';
 
 const navLinks: { href: string; label: string }[] = [];
 
@@ -53,15 +54,15 @@ export default function Header() {
                 href={getHref(link.href)}
                 className="transition-colors duration-300 hover:text-primary text-foreground/80"
               >
-                {link.label}
+                <TranslatedText>{link.label}</TranslatedText>
               </Link>
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-4">
-            <LanguageSelector />
+            {isClient && <LanguageSelector />}
             <Link href="/login">
               <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">
-                Client Login
+                <TranslatedText>Client Login</TranslatedText>
               </Button>
             </Link>
           </div>
@@ -88,7 +89,7 @@ export default function Header() {
                         href={getHref(link.href)}
                         className="-ml-4 flex w-full items-center py-2 px-4 text-lg font-semibold rounded-md hover:bg-muted"
                       >
-                        {link.label}
+                        <TranslatedText>{link.label}</TranslatedText>
                       </Link>
                     </SheetClose>
                   ))}
@@ -99,7 +100,7 @@ export default function Header() {
                     <SheetClose asChild>
                       <Link href="/login">
                         <Button variant="outline" className="w-full">
-                          Client Login
+                          <TranslatedText>Client Login</TranslatedText>
                         </Button>
                       </Link>
                     </SheetClose>

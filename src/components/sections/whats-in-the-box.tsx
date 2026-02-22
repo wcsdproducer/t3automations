@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import TranslatedText from '../TranslatedText';
 
 const features = [
   {
@@ -73,10 +74,10 @@ export default function WhatsInTheBox() {
       <div className="container">
         <div className="mb-2">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            What&apos;s in the box?
+            <TranslatedText>What's in the box?</TranslatedText>
           </h2>
           <p className="mt-2 text-2xl font-bold text-[#C6410F]">
-            Over $7,000 worth of features included:
+            <TranslatedText>Over $7,000 worth of features included:</TranslatedText>
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -84,23 +85,23 @@ export default function WhatsInTheBox() {
             <div key={index} className="border-l-2 border-[#C6410F] px-8 py-2 flex flex-col gap-3 h-full">
               <div className="flex items-start justify-between">
                 <h3 className="text-lg font-bold">
-                  {feature.title}
+                  <TranslatedText>{feature.title}</TranslatedText>
                 </h3>
                 <div className="flex flex-col items-end">
-                    <span className="font-bold text-lg ml-4 flex-shrink-0">{feature.price}</span>
-                    {feature.value && <span className="text-xs font-normal text-muted-foreground">({feature.value})</span>}
+                    <span className="font-bold text-lg ml-4 flex-shrink-0"><TranslatedText>{feature.price}</TranslatedText></span>
+                    {feature.value && <span className="text-xs font-normal text-muted-foreground">(<TranslatedText>{feature.value}</TranslatedText>)</span>}
                 </div>
               </div>
               <p className="text-muted-foreground">
-                {feature.description}
+                <TranslatedText>{feature.description}</TranslatedText>
                 {feature.learnMore && (
                   <Link href="/marketing-ads" className="text-primary underline text-xs align-baseline ml-1">
-                    Learn More
+                    <TranslatedText>Learn More</TranslatedText>
                   </Link>
                 )}
               </p>
               {feature.subDescription && (
-                <p className="text-xs text-muted-foreground/80">{feature.subDescription}</p>
+                <p className="text-xs text-muted-foreground/80"><TranslatedText>{feature.subDescription}</TranslatedText></p>
               )}
             </div>
           ))}

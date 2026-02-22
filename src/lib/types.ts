@@ -33,3 +33,14 @@ export const TranslateTextInputSchema = z.object({
 export const TranslateTextOutputSchema = z.object({
   translatedText: z.string().describe('The translated text.'),
 });
+
+export const BatchTranslateTextInputSchema = z.object({
+  texts: z.array(z.string()).describe('The texts to be translated.'),
+  targetLanguage: z
+    .string()
+    .describe('The target language for translation (e.g., "Spanish", "French").'),
+});
+
+export const BatchTranslateTextOutputSchema = z.object({
+  translatedTexts: z.array(z.string()).describe('The translated texts.'),
+});

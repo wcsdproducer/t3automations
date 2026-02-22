@@ -25,6 +25,7 @@ export function LanguageSelector() {
         <SelectItem value="Spanish">Spanish</SelectItem>
         <SelectItem value="French">French</SelectItem>
         <SelectItem value="German">German</SelectItem>
+        <SelectItem value="Brazilian Portuguese">Brazilian Portuguese</SelectItem>
       </SelectContent>
     </Select>
   );

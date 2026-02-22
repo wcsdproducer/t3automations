@@ -1,6 +1,7 @@
 import { Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import Image from 'next/image';
 import { T3LogoText } from '../ui/logo';
+import TranslatedText from '../TranslatedText';
 
 export default function Footer() {
   return (
@@ -18,7 +19,7 @@ export default function Footer() {
             
             <div className="flex flex-col items-start pt-2">
                 <T3LogoText className="text-[#C6410F]" />
-                <p className="text-muted-foreground mt-1 text-left">Empowering small businesses through automations and AI Voice Assistants</p>
+                <p className="text-muted-foreground mt-1 text-left"><TranslatedText>Empowering small businesses through automations and AI Voice Assistants</TranslatedText></p>
                 <div className="flex gap-4 mt-4">
                     <a href="#" aria-label="Facebook"><Facebook className="h-5 w-5 text-primary hover:opacity-80"/></a>
                     <a href="#" aria-label="Twitter"><Twitter className="h-5 w-5 text-primary hover:opacity-80"/></a>
@@ -28,7 +29,7 @@ export default function Footer() {
             </div>
         </div>
         <div className="mt-12 border-t border-border pt-8 text-center text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} T3 Automations. All Rights Reserved.</p>
+            <p>&copy; {new Date().getFullYear()} T3 Automations. <TranslatedText>All Rights Reserved.</TranslatedText></p>
         </div>
       </div>
     </footer>
