@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLanguage } from '@/components/providers/language-provider';
 
 type TranslatedTextProps = {
@@ -8,13 +8,7 @@ type TranslatedTextProps = {
 };
 
 const TranslatedText = ({ children }: TranslatedTextProps) => {
-  const { registerText, getTranslation } = useLanguage();
-
-  useEffect(() => {
-    if (children) {
-      registerText(children);
-    }
-  }, [children, registerText]);
+  const { getTranslation } = useLanguage();
 
   return <>{getTranslation(children)}</>;
 };

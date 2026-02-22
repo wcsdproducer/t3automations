@@ -22,25 +22,3 @@ export const assessmentFormSchema = z.object({
     phone: z.string().optional(),
     comment: z.string().optional(),
 });
-
-export const TranslateTextInputSchema = z.object({
-  text: z.string().describe('The text to be translated.'),
-  targetLanguage: z
-    .string()
-    .describe('The target language for translation (e.g., "Spanish", "French").'),
-});
-
-export const TranslateTextOutputSchema = z.object({
-  translatedText: z.string().describe('The translated text.'),
-});
-
-export const BatchTranslateTextInputSchema = z.object({
-  texts: z.array(z.string()).describe('The texts to be translated.'),
-  targetLanguage: z
-    .string()
-    .describe('The target language for translation (e.g., "Spanish", "French").'),
-});
-
-export const BatchTranslateTextOutputSchema = z.object({
-  translatedTexts: z.array(z.string()).describe('The translated texts.'),
-});
