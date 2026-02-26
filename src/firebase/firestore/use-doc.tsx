@@ -76,7 +76,7 @@ export function useDoc<T = any>(
           operation: 'get',
           path: memoizedDocRef.path,
         })
-
+        
         setError(contextualError)
         setData(null)
         setIsLoading(false)
