@@ -115,6 +115,53 @@
         "callEndTime"
       ]
     },
+    "Lead": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lead",
+      "type": "object",
+      "description": "Represents a potential customer lead.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Lead."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the lead."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the lead."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the lead.",
+          "format": "email"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the lead (e.g., 'New', 'Contacted', 'Qualified')."
+        },
+        "source": {
+          "type": "string",
+          "description": "The source from which the lead was generated (e.g., 'Website', 'Import')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The date and time the lead was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "businessProfileId",
+        "phoneNumber"
+      ]
+    },
     "LeadQualification": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "LeadQualification",
@@ -409,10 +456,28 @@
             }
           ]
         }
+      },
+       {
+        "path": "/businessProfiles/{businessProfileId}/leads/{leadId}",
+        "definition": {
+          "entityName": "Lead",
+          "schema": {
+            "$ref": "#/backend/entities/Lead"
+          },
+          "description": "Stores leads associated with each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            }
+          ]
+        }
       }
     ],
     "reasoning": "The Firestore data structure is designed to support the Virtual Receptionist AI application, focusing on secure and efficient data access. BusinessProfiles are the central entity, with other entities related to them via subcollections. This approach enables easy querying and management of data related to a specific business. Specifically, Authorization Independence is ensured by storing the BusinessProfile ID within each subcollection document, removing the need for `get()` calls in security rules. Each document within the BusinessProfile's subcollections includes the `businessProfileId` which enables flat reads to verify access. Segregation is implemented by storing data with different access requirements (e.g., CallLogs, Appointments) in separate subcollections under the BusinessProfile. The data structure also facilitates QAPs by enabling secure list operations within each business profile's subcollections."
   }
 }
-
-    
