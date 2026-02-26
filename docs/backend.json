@@ -32,6 +32,11 @@
         "customGreetingId": {
           "type": "string",
           "description": "Reference to CustomGreeting. (Relationship: BusinessProfile 1:1 CustomGreeting)"
+        },
+        "defaultLandingPage": {
+          "type": "string",
+          "description": "The identifier for the user's selected default landing page template.",
+          "enum": ["template-1", "template-2", "template-3", "template-4"]
         }
       },
       "required": [

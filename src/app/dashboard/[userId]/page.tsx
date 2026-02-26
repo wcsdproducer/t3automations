@@ -29,6 +29,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
+import { LandingPageManager } from '@/components/dashboard/landing-page-manager';
 
 const SidebarNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
@@ -194,6 +195,7 @@ export default function DashboardPage() {
               </div>
             </Card>
           </div>
+          <LandingPageManager />
         </main>
       </div>
     </div>
