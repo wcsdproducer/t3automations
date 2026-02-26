@@ -76,9 +76,9 @@ export function useDoc<T = any>(
           path: memoizedDocRef.path,
         })
         
-        setError(contextualError)
-        setData(null)
-        setIsLoading(false)
+        setError(contextualError);
+        setData(null);
+        setIsLoading(false);
       }
     );
 
@@ -89,7 +89,7 @@ export function useDoc<T = any>(
     const err = new Error(
       `DocumentReference provided to useDoc was not memoized. This will cause infinite loops. Please wrap the ref creation in useMemoFirebase.`
     );
-    console.error(err);
+    console.error(err); // Log the error instead of throwing it
     return { data: null, isLoading: false, error: err };
   }
 

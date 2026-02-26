@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useActionState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle } from 'lucide-react';
 import { handleContactForm } from '@/app/actions';
-import { useFormStatus } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import TranslatedText from '@/components/TranslatedText';
 
@@ -29,7 +29,7 @@ function SubmitButton() {
 }
 
 export default function ContactPage() {
-  const [state, formAction] = useActionState(handleContactForm, initialState);
+  const [state, formAction] = useFormState(handleContactForm, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 
