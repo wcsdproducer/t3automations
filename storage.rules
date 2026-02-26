@@ -10,14 +10,14 @@ service firebase.storage {
      * @path /Clients/{userId}/{allPaths=**}
      *
      * @example_allow
-     * // User 'user-123' uploads to their own knowledge base:
-     * // /Clients/user-123/agents/agent-abc/knowledgeBase/doc.pdf
+     * // User 'user-123' uploads a file:
+     * // /Clients/user-123/some-file.pdf
      * // The {userId} wildcard matches 'user-123'.
      * // The rule `request.auth.uid == userId` passes.
      *
      * @example_deny
      * // User 'user-123' attempts to access another user's files:
-     * // /Clients/user-456/agents/agent-xyz/knowledgeBase/doc.pdf
+     * // /Clients/user-456/some-file.pdf
      * // The {userId} wildcard matches 'user-456'.
      * // The rule `request.auth.uid == userId` fails.
      */
