@@ -104,34 +104,31 @@ export default function TopicsPage() {
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add Topic</DialogTitle>
-                    <DialogDescription>
-                        Adding a description about the topic can improve the accuracy of topic assignments by the AI.
-                    </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="topic-name" className="text-right">
+                    <div className="space-y-2">
+                        <Label htmlFor="topic-name">
                             Topic Name
                         </Label>
                         <Input 
                             id="topic-name" 
                             value={topicName}
                             onChange={(e) => setTopicName(e.target.value)}
-                            className="col-span-3" 
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="topic-description" className="text-right">
-                            Topic Description
+                    <div className="space-y-2">
+                        <Label htmlFor="topic-description">
+                            Topic Description (optional)
                         </Label>
                         <Input 
                             id="topic-description" 
                             value={topicDescription}
                             onChange={(e) => setTopicDescription(e.target.value)}
-                            className="col-span-3"
-                            placeholder="(optional)"
                         />
                     </div>
+                    <p className="text-sm text-muted-foreground pt-2">
+                        Adding a description about the topic can improve the accuracy of topic assignments by the AI.
+                    </p>
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
@@ -172,5 +169,3 @@ export default function TopicsPage() {
     </main>
   );
 }
-
-    
