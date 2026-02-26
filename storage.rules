@@ -8,24 +8,24 @@ service firebase.storage {
     // ----------------------------------------------------------------------
 
     /**
-     * @description Enforces that users can only upload files to their own
-     *              dedicated folder within the 'knowledgeBase' directory. This
-     *              is the core of the multi-tenant security for file uploads.
-     * @path /knowledgeBase/{userId}/{allPaths=**}
+     * @description Enforces that users can only read or write files within their
+     *              own dedicated folder inside the 'knowledgeBase' directory. This rule
+     *              is the core of the multi-tenant security for file storage.
+     * @path /knowledgeBase/{userId}/{fileName}
      *
      * @example_allow
      * // A user with UID 'user-123' uploads a file to:
      * // /knowledgeBase/user-123/document.pdf
-     * // The {userId} wildcard becomes 'user-123'.
+     * // The {userId} wildcard matches 'user-123'.
      * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-123'`, which is true.
      *
      * @example_deny
      * // A user with UID 'user-123' tries to upload to another user's folder:
      * // /knowledgeBase/user-456/document.pdf
-     * // The {userId} wildcard becomes 'user-456'.
+     * // The {userId} wildcard matches 'user-456'.
      * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-456'`, which is false.
      */
-    match /knowledgeBase/{userId}/{allPaths=**} {
+    match /knowledgeBase/{userId}/{fileName} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
