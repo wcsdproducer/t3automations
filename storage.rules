@@ -1,0 +1,14 @@
+
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Rules for knowledge base uploads
+    // This rule allows a user to write to a path inside the knowledgeBase
+    // directory, but only if the path is prefixed with their own user ID.
+    // This ensures users can only upload files to their own folder.
+    match /knowledgeBase/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
