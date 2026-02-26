@@ -78,9 +78,9 @@ export default function KnowledgeBasePage() {
       setIsTextUploadOpen(false);
       setTextName('');
       setTextContent('');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast({ variant: "destructive", title: "Error", description: "Failed to upload text." });
+      toast({ variant: "destructive", title: "Error", description: error.message || "Failed to upload text." });
     }
   };
 
@@ -117,9 +117,9 @@ export default function KnowledgeBasePage() {
       toast({ title: "URL Uploaded", description: "The URL has been added to the knowledge base." });
       setIsUrlUploadOpen(false);
       setUrl('');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast({ variant: "destructive", title: "Error", description: "Failed to upload URL." });
+      toast({ variant: "destructive", title: "Error", description: error.message || "Failed to upload URL." });
     }
   };
 
@@ -167,9 +167,9 @@ export default function KnowledgeBasePage() {
         toast({ title: "File Uploaded", description: "The file has been added to the knowledge base." });
         setIsFileUploadOpen(false);
         setFile(null);
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
-        toast({ variant: "destructive", title: "Upload Failed", description: "Could not upload file." });
+        toast({ variant: "destructive", title: "Upload Failed", description: error.message || "Could not upload file." });
     } finally {
         setIsUploading(false);
     }
@@ -181,8 +181,8 @@ export default function KnowledgeBasePage() {
     try {
       await deleteDoc(docRef);
       toast({ title: 'Item deleted', description: 'The knowledge base item has been removed.' });
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete item.' });
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to delete item.' });
     }
   };
   
