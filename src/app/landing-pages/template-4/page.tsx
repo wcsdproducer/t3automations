@@ -33,23 +33,21 @@ export default function LandingPageTemplate4() {
 
       <main>
         {/* Hero */}
-        <section className="relative h-screen flex items-center justify-center text-center text-white">
-             {heroImage && (
-                <Image
-                    src={heroImage.imageUrl}
-                    alt={heroImage.description}
-                    data-ai-hint={heroImage.imageHint}
-                    fill
-                    className="object-cover"
-                    priority
-                />
-             )}
+        <section 
+          className="h-screen flex items-center justify-center text-center text-white relative"
+          style={{
+            backgroundImage: `url(${heroImage?.imageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          }}
+        >
              <div className="absolute inset-0 bg-black/40"></div>
-             <div className="relative z-10 px-6">
+             <div className="relative z-10 px-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
                 <h2 className="text-4xl md:text-6xl font-bold">Your Home, Spotlessly Clean.</h2>
                 <p className="text-lg md:text-xl mt-4 max-w-3xl mx-auto">The friendly, reliable cleaning service your neighborhood trusts.</p>
                 <a href="#contact">
-                    <Button size="lg" className="mt-8">Book Your Cleaning</Button>
+                    <Button size="lg" className="mt-8 transition-transform hover:scale-105">Book Your Cleaning</Button>
                 </a>
              </div>
         </section>
@@ -67,7 +65,7 @@ export default function LandingPageTemplate4() {
                     ].map(service => (
                         <div key={service.title} className="group">
                              {service.img && (
-                                <div className="aspect-video relative rounded-lg overflow-hidden">
+                                <div className="aspect-video relative rounded-lg overflow-hidden shadow-lg">
                                     <Image src={service.img.imageUrl} alt={service.img.description} data-ai-hint={service.img.imageHint} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                                 </div>
                              )}
@@ -82,8 +80,8 @@ export default function LandingPageTemplate4() {
         <section id="about" className="py-16 md:py-24 px-6">
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
             {heroImage && (
-              <div className="relative aspect-video rounded-lg overflow-hidden">
-                  <Image src={heroImage.imageUrl} alt={heroImage.description} data-ai-hint={heroImage.imageHint} fill className="object-cover" />
+              <div className="relative aspect-video rounded-lg overflow-hidden group">
+                  <Image src={heroImage.imageUrl} alt={heroImage.description} data-ai-hint={heroImage.imageHint} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
             )}
             <div>
@@ -103,7 +101,7 @@ export default function LandingPageTemplate4() {
             <div className="container mx-auto max-w-4xl text-center">
                 <h3 className="text-3xl font-bold">Kind Words From Our Customers</h3>
                 <div className="mt-12">
-                     <div className="p-8 rounded-lg bg-background">
+                     <div className="p-8 rounded-lg bg-background transition-shadow hover:shadow-xl">
                          <div className="flex text-yellow-400 mb-4 justify-center"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                         <p className="text-xl italic text-muted-foreground">"SparkleClean is the best! We've used them for years. They are always on time, professional, and our house has never looked better. It's such a relief to come home to a clean house."</p>
                         <p className="font-semibold mt-6">- The Chen Family</p>

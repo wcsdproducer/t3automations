@@ -30,7 +30,7 @@ export default function LandingPageTemplate3() {
         {/* Hero Section */}
         <section className="h-screen bg-muted">
             <div className="container mx-auto px-4 h-full grid md:grid-cols-2 gap-12 items-center">
-                <div>
+                <div className="opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
                     <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
                     <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
                     <h2 className="text-3xl md:text-5xl font-extrabold text-muted-foreground">We'll Fix Your AC Fast.</h2>
@@ -40,18 +40,18 @@ export default function LandingPageTemplate3() {
                         <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Upfront, Honest Pricing</span></li>
                     </ul>
                      <a href="#contact">
-                        <Button type="submit" className="w-full md:w-auto !mt-8" size="lg">GET MY FREE QUOTE NOW</Button>
+                        <Button type="submit" className="w-full md:w-auto !mt-8 transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
                      </a>
                 </div>
                 {heroImage && (
-                <div className="relative mt-6 rounded-lg overflow-hidden shadow-2xl">
+                <div className="relative mt-6 rounded-lg overflow-hidden shadow-2xl group">
                     <Image
                         src={heroImage.imageUrl}
                         alt={heroImage.description}
                         data-ai-hint={heroImage.imageHint}
                         width={600}
                         height={400}
-                        className="w-full"
+                        className="w-full transition-transform duration-500 group-hover:scale-105"
                         priority
                     />
                 </div>
@@ -65,17 +65,17 @@ export default function LandingPageTemplate3() {
                 <h3 className="text-3xl font-bold">Complete HVAC Services</h3>
                 <p className="text-muted-foreground mt-2">Keeping you comfortable all year round.</p>
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="p-6 border rounded-lg flex flex-col items-center">
+                <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <Thermometer className="h-10 w-10 mx-auto text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">AC & Furnace Repair</h4>
                     <p className="mt-2 text-muted-foreground">Fast, reliable repairs to get your system back up and running.</p>
                 </div>
-                <div className="p-6 border rounded-lg flex flex-col items-center">
+                <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <Wrench className="h-10 w-10 mx-auto text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">System Maintenance</h4>
                     <p className="mt-2 text-muted-foreground">Preventative tune-ups to ensure efficiency and extend your system's life.</p>
                 </div>
-                <div className="p-6 border rounded-lg flex flex-col items-center">
+                <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <Shield className="h-10 w-10 mx-auto text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">New System Installation</h4>
                     <p className="mt-2 text-muted-foreground">High-efficiency heating and cooling solutions tailored to your home.</p>
@@ -88,8 +88,8 @@ export default function LandingPageTemplate3() {
         <section id="about" className="bg-muted py-16 md:py-24 px-4">
             <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
                  {aboutImage && (
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover" />
+                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden group">
+                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     </div>
                 )}
                 <div>
@@ -104,12 +104,12 @@ export default function LandingPageTemplate3() {
             <div className="container mx-auto text-center">
                 <h3 className="text-3xl font-bold">Our Customers Feel the Difference</h3>
                  <div className="mt-12 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <div className="p-6 border rounded-lg">
+                    <div className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
                         <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                         <p className="italic">"Our AC went out on the hottest day of the year. CoolBreeze was here within an hour and had us cool again in no time. Lifesavers!"</p>
                         <p className="font-semibold mt-4">- Jenny T.</p>
                     </div>
-                    <div className="p-6 border rounded-lg">
+                    <div className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
                         <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                         <p className="italic">"Honest pricing and great service. They explained everything clearly and didn't try to upsell me. I'll be using them for all my HVAC needs."</p>
                         <p className="font-semibold mt-4">- David R.</p>

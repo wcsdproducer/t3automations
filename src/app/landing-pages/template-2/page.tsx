@@ -35,19 +35,17 @@ export default function LandingPageTemplate2() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative h-screen flex items-end p-8 md:p-12 text-white">
-          {heroImage && (
-            <Image
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              data-ai-hint={heroImage.imageHint}
-              fill
-              className="object-cover"
-              priority
-            />
-          )}
+        <section 
+          className="h-screen flex items-end p-8 md:p-12 text-white relative"
+          style={{
+            backgroundImage: `url(${heroImage?.imageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          }}
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="relative z-10 max-w-3xl">
+          <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <h2 className="text-4xl md:text-6xl font-bold">Exquisite Home Renovations</h2>
             <p className="mt-4 text-lg md:text-xl">We bring your vision to life with unparalleled craftsmanship and design.</p>
           </div>
@@ -59,17 +57,17 @@ export default function LandingPageTemplate2() {
             <h3 className="text-3xl font-bold">Our Signature Services</h3>
             <p className="text-muted-foreground mt-2">Crafting beautiful and functional spaces.</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div className="p-6">
+                <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
                     <Brush className="h-10 w-10 text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">Interior Design & Remodeling</h4>
                     <p className="mt-2 text-muted-foreground">Full-service design and construction for kitchens, bathrooms, and entire homes.</p>
                 </div>
-                <div className="p-6">
+                <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
                     <Hammer className="h-10 w-10 text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">Custom Cabinetry & Millwork</h4>
                     <p className="mt-2 text-muted-foreground">Bespoke woodworking solutions to add character and functionality to your space.</p>
                 </div>
-                <div className="p-6">
+                <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
                     <Building className="h-10 w-10 text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">Exterior & Landscape Design</h4>
                     <p className="mt-2 text-muted-foreground">Enhancing curb appeal and creating beautiful outdoor living areas.</p>
@@ -79,7 +77,7 @@ export default function LandingPageTemplate2() {
               {galleryImages.map((image, i) => image && (
                 <div key={i} className="aspect-square relative rounded-lg overflow-hidden group">
                   <Image src={image.imageUrl} alt={image.description} data-ai-hint={image.imageHint} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                   <div className="absolute inset-0 bg-black/20"></div>
+                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                 </div>
               ))}
             </div>
@@ -90,8 +88,8 @@ export default function LandingPageTemplate2() {
         <section id="about" className="py-16 md:py-24 px-6 bg-background">
             <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
                 {aboutImage && (
-                    <div className="relative aspect-square rounded-lg overflow-hidden">
-                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover" />
+                    <div className="relative aspect-square rounded-lg overflow-hidden group">
+                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     </div>
                 )}
                 <div>
@@ -107,14 +105,14 @@ export default function LandingPageTemplate2() {
           <div className="container mx-auto max-w-4xl">
              <h3 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <Card>
+               <Card className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                  <CardContent className="p-6">
                   <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
                   <p className="text-muted-foreground">"LuxeFinish transformed our outdated kitchen into a modern masterpiece. The attention to detail was impeccable."</p>
                   <p className="font-semibold mt-4">- The Johnson Family</p>
                  </CardContent>
                </Card>
-                <Card>
+                <Card className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                  <CardContent className="p-6">
                   <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
                   <p className="text-muted-foreground">"Professional, timely, and the final result exceeded all our expectations. Highly recommend their services!"</p>

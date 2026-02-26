@@ -29,23 +29,21 @@ export default function LandingPageTemplate1() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center text-center text-white">
-          {heroImage && (
-            <Image
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              data-ai-hint={heroImage.imageHint}
-              fill
-              className="object-cover"
-              priority
-            />
-          )}
+        <section 
+          className="h-screen flex items-center justify-center text-center text-white relative"
+          style={{
+            backgroundImage: `url(${heroImage?.imageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          }}
+        >
           <div className="absolute inset-0 bg-black/50" />
-          <div className="relative z-10 p-4">
+          <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <h2 className="text-4xl md:text-6xl font-bold">Reliable Home Services, Done Right.</h2>
             <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">From leaky faucets to full renovations, our team of certified professionals is here to help.</p>
             <a href="#contact">
-                <Button size="lg" className="mt-8">Book Your Service Today</Button>
+                <Button size="lg" className="mt-8 transition-transform hover:scale-105">Book Your Service Today</Button>
             </a>
           </div>
         </section>
@@ -56,17 +54,17 @@ export default function LandingPageTemplate1() {
             <h3 className="text-3xl font-bold">Our Services</h3>
             <p className="text-muted-foreground mt-2">Quality you can trust, for every part of your home.</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="p-6 border rounded-lg flex flex-col items-center">
+              <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <Wrench className="h-10 w-10 mx-auto text-primary" />
                 <h4 className="mt-4 text-xl font-semibold">General Repairs</h4>
                 <p className="mt-2 text-muted-foreground">Fixing, maintaining, and improving your home with precision and care.</p>
               </div>
-              <div className="p-6 border rounded-lg flex flex-col items-center">
+              <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <ShieldCheck className="h-10 w-10 mx-auto text-primary" />
                 <h4 className="mt-4 text-xl font-semibold">Plumbing & Electrical</h4>
                 <p className="mt-2 text-muted-foreground">Safe and certified solutions for your most critical home systems.</p>
               </div>
-              <div className="p-6 border rounded-lg flex flex-col items-center">
+              <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <Smile className="h-10 w-10 mx-auto text-primary" />
                 <h4 className="mt-4 text-xl font-semibold">Painting & Remodeling</h4>
                 <p className="mt-2 text-muted-foreground">Transforming your space with a fresh look and expert craftsmanship.</p>
@@ -88,8 +86,8 @@ export default function LandingPageTemplate1() {
                     </ul>
                 </div>
                  {aboutImage && (
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover" />
+                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden group">
+                        <Image src={aboutImage.imageUrl} alt={aboutImage.description} data-ai-hint={aboutImage.imageHint} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     </div>
                 )}
             </div>
@@ -100,12 +98,12 @@ export default function LandingPageTemplate1() {
              <div className="container mx-auto max-w-4xl">
              <h3 className="text-3xl font-bold text-center mb-12">Trusted by Your Neighbors</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div className="border rounded-lg p-6">
+               <div className="border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:border-primary">
                   <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                   <p className="text-muted-foreground">"The ProHome team was fantastic. They were on time, professional, and did an amazing job on our bathroom remodel. We couldn't be happier with the results!"</p>
                   <p className="font-semibold mt-4">- Sarah J.</p>
                </div>
-                <div className="border rounded-lg p-6">
+                <div className="border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:border-primary">
                   <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                   <p className="text-muted-foreground">"I had an electrical issue that two other companies couldn't figure out. ProHome diagnosed and fixed it in under an hour. True professionals. Highly recommend."</p>
                   <p className="font-semibold mt-4">- Mike D.</p>
