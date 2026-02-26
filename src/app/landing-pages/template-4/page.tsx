@@ -4,13 +4,23 @@ import { Phone, CheckCircle, Star } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import React from 'react';
 
 export default function LandingPageTemplate4() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'lp4-hero');
+  const heroImages = [
+    PlaceHolderImages.find(img => img.id === 'lp4-hero-1'),
+    PlaceHolderImages.find(img => img.id === 'lp4-hero-2'),
+    PlaceHolderImages.find(img => img.id === 'lp4-hero-3'),
+  ].filter(Boolean);
   const service1 = PlaceHolderImages.find(img => img.id === 'lp4-service1');
   const service2 = PlaceHolderImages.find(img => img.id === 'lp4-service2');
   const service3 = PlaceHolderImages.find(img => img.id === 'lp4-service3');
-
+  
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
 
   return (
     <div className="bg-[#F8F5F2] text-[#4A3F35]">
@@ -33,15 +43,29 @@ export default function LandingPageTemplate4() {
 
       <main>
         {/* Hero */}
-        <section 
-          className="h-screen flex items-center justify-center text-center text-white relative"
-          style={{
-            backgroundImage: `url(${heroImage?.imageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-          }}
-        >
+        <section className="h-screen relative flex items-center justify-center text-center text-white">
+          <Carousel
+            plugins={[plugin.current]}
+            className="absolute inset-0 w-full h-full"
+            opts={{ loop: true }}
+          >
+            <CarouselContent>
+              {heroImages.map((image) => image && (
+                <CarouselItem key={image.id}>
+                  <div className="relative h-screen w-full">
+                    <Image
+                      src={image.imageUrl}
+                      alt={image.description}
+                      data-ai-hint={image.imageHint}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
              <div className="absolute inset-0 bg-black/40"></div>
              <div className="relative z-10 px-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
                 <h2 className="text-4xl md:text-6xl font-bold">Your Home, Spotlessly Clean.</h2>
@@ -79,11 +103,9 @@ export default function LandingPageTemplate4() {
         {/* About Us / Why Choose Us */}
         <section id="about" className="py-16 md:py-24 px-6">
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
-            {heroImage && (
-              <div className="relative aspect-video rounded-lg overflow-hidden group">
-                  <Image src={heroImage.imageUrl} alt={heroImage.description} data-ai-hint={heroImage.imageHint} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-              </div>
-            )}
+            <div className="relative aspect-video rounded-lg overflow-hidden group">
+                  <Image src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBjbGVhbmluZ3xlbnwwfHx8fDE3NzI5OTg5MDR8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Professional cleaner" data-ai-hint="professional cleaner" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+            </div>
             <div>
               <h3 className="text-3xl font-bold">Why Your Neighbors Choose Us</h3>
               <p className="mt-4 text-muted-foreground">We're not just a company; we're part of the community. We take pride in our work and treat every home like our own, using only the best products to ensure a safe and sparkling clean environment for your family and pets.</p>

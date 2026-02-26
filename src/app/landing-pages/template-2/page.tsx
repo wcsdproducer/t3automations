@@ -6,9 +6,11 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import React from 'react';
 
 export default function LandingPageTemplate2() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'lp2-hero');
   const aboutImage = PlaceHolderImages.find(img => img.id === 'lp2-about');
   const galleryImages = [
     PlaceHolderImages.find(img => img.id === 'lp2-gal1'),
@@ -16,6 +18,15 @@ export default function LandingPageTemplate2() {
     PlaceHolderImages.find(img => img.id === 'lp2-gal3'),
     PlaceHolderImages.find(img => img.id === 'lp2-gal4'),
   ];
+  const heroImages = [
+    PlaceHolderImages.find(img => img.id === 'lp2-hero-1'),
+    PlaceHolderImages.find(img => img.id === 'lp2-hero-2'),
+    PlaceHolderImages.find(img => img.id === 'lp2-hero-3'),
+  ].filter(Boolean);
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
 
   return (
     <div className="bg-background text-foreground">
@@ -35,15 +46,29 @@ export default function LandingPageTemplate2() {
 
       <main>
         {/* Hero Section */}
-        <section 
-          className="h-screen flex items-end p-8 md:p-12 text-white relative"
-          style={{
-            backgroundImage: `url(${heroImage?.imageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-          }}
-        >
+        <section className="h-screen relative flex items-end p-8 md:p-12 text-white">
+          <Carousel
+            plugins={[plugin.current]}
+            className="absolute inset-0 w-full h-full"
+            opts={{ loop: true }}
+          >
+            <CarouselContent>
+              {heroImages.map((image) => image && (
+                <CarouselItem key={image.id}>
+                  <div className="relative h-screen w-full">
+                    <Image
+                      src={image.imageUrl}
+                      alt={image.description}
+                      data-ai-hint={image.imageHint}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
           <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <h2 className="text-4xl md:text-6xl font-bold">Exquisite Home Renovations</h2>

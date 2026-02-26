@@ -5,11 +5,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { Wrench, ShieldCheck, Smile, Star, Phone, Mail, Clock } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import React from 'react';
 
 export default function LandingPageTemplate1() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'lp1-hero');
   const aboutImage = PlaceHolderImages.find(img => img.id === 'lp1-about');
+  const heroImages = [
+    PlaceHolderImages.find(img => img.id === 'lp1-hero-1'),
+    PlaceHolderImages.find(img => img.id === 'lp1-hero-2'),
+    PlaceHolderImages.find(img => img.id === 'lp1-hero-3'),
+  ].filter(Boolean);
 
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
 
   return (
     <div className="bg-background text-foreground">
@@ -29,15 +39,29 @@ export default function LandingPageTemplate1() {
 
       <main>
         {/* Hero Section */}
-        <section 
-          className="h-screen flex items-center justify-center text-center text-white relative"
-          style={{
-            backgroundImage: `url(${heroImage?.imageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-          }}
-        >
+        <section className="h-screen relative flex items-center justify-center text-center text-white">
+          <Carousel
+            plugins={[plugin.current]}
+            className="absolute inset-0 w-full h-full"
+            opts={{ loop: true }}
+          >
+            <CarouselContent>
+              {heroImages.map((image) => image && (
+                <CarouselItem key={image.id}>
+                  <div className="relative h-screen w-full">
+                    <Image
+                      src={image.imageUrl}
+                      alt={image.description}
+                      data-ai-hint={image.imageHint}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <h2 className="text-4xl md:text-6xl font-bold">Reliable Home Services, Done Right.</h2>

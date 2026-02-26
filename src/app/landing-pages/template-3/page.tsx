@@ -5,10 +5,21 @@ import { Check, Star, Wrench, Shield, Thermometer } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Textarea } from '@/components/ui/textarea';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import React from 'react';
 
 export default function LandingPageTemplate3() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'lp3-hero');
   const aboutImage = PlaceHolderImages.find(img => img.id === 'lp3-about');
+  const heroImages = [
+    PlaceHolderImages.find(img => img.id === 'lp3-hero-1'),
+    PlaceHolderImages.find(img => img.id === 'lp3-hero-2'),
+    PlaceHolderImages.find(img => img.id === 'lp3-hero-3'),
+  ].filter(Boolean);
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
   
   return (
     <div className="bg-background text-foreground">
@@ -28,34 +39,42 @@ export default function LandingPageTemplate3() {
 
       <main>
         {/* Hero Section */}
-        <section className="h-screen bg-muted">
-            <div className="container mx-auto px-4 h-full grid md:grid-cols-2 gap-12 items-center">
-                <div className="opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-                    <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
-                    <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-muted-foreground">We'll Fix Your AC Fast.</h2>
-                     <ul className="space-y-3 mt-6">
-                        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">24/7 Emergency Service</span></li>
-                        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Certified & Insured Technicians</span></li>
-                        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Upfront, Honest Pricing</span></li>
-                    </ul>
-                     <a href="#contact">
-                        <Button type="submit" className="w-full md:w-auto !mt-8 transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
-                     </a>
-                </div>
-                {heroImage && (
-                <div className="relative mt-6 rounded-lg overflow-hidden shadow-2xl group">
+        <section className="h-screen relative flex items-center justify-center text-center text-white">
+          <Carousel
+            plugins={[plugin.current]}
+            className="absolute inset-0 w-full h-full"
+            opts={{ loop: true }}
+          >
+            <CarouselContent>
+              {heroImages.map((image) => image && (
+                <CarouselItem key={image.id}>
+                  <div className="relative h-screen w-full">
                     <Image
-                        src={heroImage.imageUrl}
-                        alt={heroImage.description}
-                        data-ai-hint={heroImage.imageHint}
-                        width={600}
-                        height={400}
-                        className="w-full transition-transform duration-500 group-hover:scale-105"
-                        priority
+                      src={image.imageUrl}
+                      alt={image.description}
+                      data-ai-hint={image.imageHint}
+                      fill
+                      className="object-cover"
+                      priority
                     />
-                </div>
-                )}
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+          <div className="absolute inset-0 bg-black/60" />
+            <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+                <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
+                <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
+                <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">We'll Fix Your AC Fast.</h2>
+                  <ul className="space-y-3 mt-6 max-w-md mx-auto text-left">
+                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">24/7 Emergency Service</span></li>
+                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Certified & Insured Technicians</span></li>
+                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Upfront, Honest Pricing</span></li>
+                </ul>
+                  <a href="#contact">
+                    <Button type="submit" className="w-full md:w-auto !mt-8 transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
+                  </a>
             </div>
         </section>
 

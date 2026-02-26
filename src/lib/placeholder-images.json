@@ -31,10 +31,22 @@
       "imageHint": "ai booking graphic"
     },
     {
-      "id": "lp1-hero",
-      "description": "Professional handyman with tools",
-      "imageUrl": "https://images.unsplash.com/photo-1643730169312-7a68bedfc067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoYW5keW1hbiUyMHRvb2xzfGVufDB8fHx8MTc3MjA2NzI5MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "handyman tools"
+      "id": "lp1-hero-1",
+      "description": "Professional handyman doing plumbing work",
+      "imageUrl": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "handyman plumbing"
+    },
+    {
+      "id": "lp1-hero-2",
+      "description": "Professional handyman painting a wall",
+      "imageUrl": "https://images.unsplash.com/photo-1596495577884-21c6b3046757?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "handyman painting"
+    },
+    {
+      "id": "lp1-hero-3",
+      "description": "Professional electrician working on a circuit breaker",
+      "imageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "electrician working"
     },
     {
       "id": "lp1-about",
@@ -43,10 +55,22 @@
       "imageHint": "construction team"
     },
     {
-      "id": "lp2-hero",
+      "id": "lp2-hero-1",
       "description": "Modern kitchen renovation",
       "imageUrl": "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc3MjEwNDUyMHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "modern kitchen"
+    },
+    {
+      "id": "lp2-hero-2",
+      "description": "Luxurious modern living room",
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "luxury living room"
+    },
+    {
+      "id": "lp2-hero-3",
+      "description": "Beautifully renovated bathroom",
+      "imageUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "renovated bathroom"
     },
     {
       "id": "lp2-about",
@@ -79,10 +103,22 @@
       "imageHint": "home renovation"
     },
     {
-      "id": "lp3-hero",
+      "id": "lp3-hero-1",
+      "description": "Happy family in a cool living room",
+      "imageUrl": "https://images.unsplash.com/photo-1542360299-44ce3a13a758?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "happy family cool"
+    },
+    {
+      "id": "lp3-hero-2",
       "description": "HVAC technician working on an AC unit",
-      "imageUrl": "https://images.unsplash.com/photo-1662556153586-223039dc8152?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwdGVjaG5pY2lhbnxlbnwwfHx8fDE3NzIxNDQwNDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1615529328327-48d3f4733440?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "hvac technician"
+    },
+    {
+      "id": "lp3-hero-3",
+      "description": "Modern home interior with good air conditioning",
+      "imageUrl": "https://images.unsplash.com/photo-1567016432858-00a325381a18?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "modern home interior"
     },
     {
       "id": "lp3-about",
@@ -91,10 +127,22 @@
       "imageHint": "hvac van"
     },
     {
-      "id": "lp4-hero",
-      "description": "Bright and clean modern living room",
-      "imageUrl": "https://images.unsplash.com/photo-1618220179428-22790b461013?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzcyMjIxMzI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "id": "lp4-hero-1",
+      "description": "Person professionally cleaning a window",
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "professional cleaning"
+    },
+    {
+      "id": "lp4-hero-2",
+      "description": "A sparkling clean living room with a comfortable sofa",
+      "imageUrl": "https://images.unsplash.com/photo-1603712725038-193de2751741?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "clean living room"
+    },
+    {
+      "id": "lp4-hero-3",
+      "description": "A tidy and clean modern bedroom",
+      "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=2057&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "clean bedroom"
     },
     {
       "id": "lp4-service1",
