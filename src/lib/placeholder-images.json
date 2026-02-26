@@ -32,32 +32,32 @@
     },
     {
       "id": "lp1-hero-1",
-      "description": "Professional handyman doing plumbing work",
-      "imageUrl": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "Professional handyman doing plumbing work in a modern kitchen.",
+      "imageUrl": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "handyman plumbing"
     },
     {
       "id": "lp1-hero-2",
-      "description": "Professional handyman painting a wall",
-      "imageUrl": "https://images.unsplash.com/photo-1596495577884-21c6b3046757?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "handyman painting"
-    },
-    {
-      "id": "lp1-hero-3",
-      "description": "Professional electrician working on a circuit breaker",
-      "imageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "Professional electrician installing a new light fixture.",
+      "imageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "electrician working"
     },
     {
+      "id": "lp1-hero-3",
+      "description": "Professional handyman painting a wall with precision.",
+      "imageUrl": "https://images.unsplash.com/photo-1596495577884-21c6b3046757?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "handyman painting"
+    },
+    {
       "id": "lp1-hero-4",
-      "description": "Roofer installing shingles on a roof",
-      "imageUrl": "https://images.unsplash.com/photo-1555528552-03185b372036?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "roofer shingles"
+      "description": "A roofer carefully installing new shingles on a residential house.",
+      "imageUrl": "https://images.unsplash.com/photo-1555528552-03185b372036?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "roofer installing"
     },
     {
       "id": "lp1-hero-5",
-      "description": "Man installing laminate flooring",
-      "imageUrl": "https://images.unsplash.com/photo-1617094254452-de368a3ae410?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "A skilled worker installing new laminate flooring in a home.",
+      "imageUrl": "https://images.unsplash.com/photo-1617094254452-de368a3ae410?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "flooring installation"
     },
     {
@@ -68,33 +68,33 @@
     },
     {
       "id": "lp2-hero-1",
-      "description": "Modern kitchen renovation",
-      "imageUrl": "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc3MjEwNDUyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A beautiful, ultra-modern kitchen with marble countertops and sleek cabinets.",
+      "imageUrl": "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "modern kitchen"
     },
     {
       "id": "lp2-hero-2",
-      "description": "Luxurious modern living room",
-      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "luxury living room"
-    },
-    {
-      "id": "lp2-hero-3",
-      "description": "Beautifully renovated bathroom",
-      "imageUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "A luxurious, recently renovated bathroom with a freestanding tub and high-end fixtures.",
+      "imageUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "renovated bathroom"
     },
     {
+      "id": "lp2-hero-3",
+      "description": "A stylish and luxurious living room featuring custom shelving and a modern fireplace.",
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "luxury living room"
+    },
+    {
       "id": "lp2-hero-4",
-      "description": "Luxurious modern bedroom with large windows",
-      "imageUrl": "https://images.unsplash.com/photo-1560185012-9a80e145cbfd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "An elegant, modern bedroom with large windows and designer furniture.",
+      "imageUrl": "https://images.unsplash.com/photo-1560185012-9a80e145cbfd?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "luxury bedroom"
     },
     {
       "id": "lp2-hero-5",
-      "description": "Exterior of a modern luxury home at dusk",
-      "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "modern house exterior"
+      "description": "The stunning exterior of a modern luxury home at twilight.",
+      "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "modern house"
     },
     {
       "id": "lp2-about",
@@ -128,33 +128,33 @@
     },
     {
       "id": "lp3-hero-1",
-      "description": "Happy family in a cool living room",
-      "imageUrl": "https://images.unsplash.com/photo-1542360299-44ce3a13a758?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "happy family cool"
-    },
-    {
-      "id": "lp3-hero-2",
-      "description": "HVAC technician working on an AC unit",
-      "imageUrl": "https://images.unsplash.com/photo-1615529328327-48d3f4733440?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "A certified HVAC technician inspecting an outdoor AC unit.",
+      "imageUrl": "https://images.unsplash.com/photo-1615529328327-48d3f4733440?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "hvac technician"
     },
     {
+      "id": "lp3-hero-2",
+      "description": "A person adjusting a modern smart home thermostat for optimal temperature.",
+      "imageUrl": "https://images.unsplash.com/photo-1586948633390-3fedc8038f42?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "smart thermostat"
+    },
+    {
       "id": "lp3-hero-3",
-      "description": "Modern home interior with good air conditioning",
-      "imageUrl": "https://images.unsplash.com/photo-1567016432858-00a325381a18?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "modern home interior"
+      "description": "An HVAC technician performing maintenance on an outdoor air conditioning unit.",
+      "imageUrl": "https://images.unsplash.com/photo-1544991185-13b023153549?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "hvac maintenance"
     },
     {
       "id": "lp3-hero-4",
-      "description": "HVAC technician servicing an outdoor air conditioning unit",
-      "imageUrl": "https://images.unsplash.com/photo-1544991185-13b023153549?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "hvac outdoor unit"
+      "description": "A happy family relaxing in their cool and comfortable living room.",
+      "imageUrl": "https://images.unsplash.com/photo-1542360299-44ce3a13a758?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "happy family"
     },
     {
       "id": "lp3-hero-5",
-      "description": "Hand adjusting a modern smart home thermostat",
-      "imageUrl": "https://images.unsplash.com/photo-1586948633390-3fedc8038f42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "smart thermostat"
+      "description": "A professional HVAC technician in uniform with a service van in the background.",
+      "imageUrl": "https://images.unsplash.com/photo-1603227339794-279459341498?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "hvac professional"
     },
     {
       "id": "lp3-about",
@@ -164,33 +164,33 @@
     },
     {
       "id": "lp4-hero-1",
-      "description": "Person professionally cleaning a window",
-      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "description": "A professional cleaner meticulously wiping a window to a streak-free shine.",
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&h=1080&auto=format&fit=crop",
       "imageHint": "professional cleaning"
     },
     {
       "id": "lp4-hero-2",
-      "description": "A sparkling clean living room with a comfortable sofa",
-      "imageUrl": "https://images.unsplash.com/photo-1603712725038-193de2751741?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "clean living room"
+      "description": "A bright, sparkling clean kitchen with clutter-free countertops.",
+      "imageUrl": "https://images.unsplash.com/photo-1600585152220-0f8a2484ab34?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "clean kitchen"
     },
     {
       "id": "lp4-hero-3",
-      "description": "A tidy and clean modern bedroom",
-      "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=2057&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "clean bedroom"
+      "description": "A cleaner mopping a hardwood floor, leaving a glistening, clean surface.",
+      "imageUrl": "https://images.unsplash.com/photo-1587353349206-4f7f6f1a8e1d?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "mopping floor"
     },
     {
       "id": "lp4-hero-4",
-      "description": "Person cleaning a modern kitchen counter",
-      "imageUrl": "https://images.unsplash.com/photo-1600585152220-0f8a2484ab34?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "cleaning kitchen"
+      "description": "A tidy and comfortable living room after a professional cleaning service.",
+      "imageUrl": "https://images.unsplash.com/photo-1603712725038-193de2751741?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "clean living room"
     },
     {
       "id": "lp4-hero-5",
-      "description": "Person mopping a shiny clean floor",
-      "imageUrl": "https://images.unsplash.com/photo-1587353349206-4f7f6f1a8e1d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "imageHint": "mopping floor"
+      "description": "A serene and spotless bedroom, professionally cleaned and organized.",
+      "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageHint": "clean bedroom"
     },
     {
       "id": "lp4-service1",
