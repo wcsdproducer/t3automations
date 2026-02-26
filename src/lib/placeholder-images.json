@@ -37,10 +37,22 @@
       "imageHint": "handyman tools"
     },
     {
+      "id": "lp1-about",
+      "description": "Team of diverse construction workers smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjB0ZWFtfGVufDB8fHx8MTc3MjIyMDc3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "construction team"
+    },
+    {
       "id": "lp2-hero",
       "description": "Modern kitchen renovation",
       "imageUrl": "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc3MjEwNDUyMHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "modern kitchen"
+    },
+    {
+      "id": "lp2-about",
+      "description": "Team of architects reviewing blueprints in an office",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcmNoaXRlY3QlMjB0ZWFtfGVufDB8fHx8MTc3MjIyMTAxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "architect team"
     },
     {
       "id": "lp2-gal1",
@@ -73,10 +85,34 @@
       "imageHint": "hvac technician"
     },
     {
+      "id": "lp3-about",
+      "description": "HVAC service van parked in a suburban neighborhood",
+      "imageUrl": "https://images.unsplash.com/photo-1701211329093-99d9486c4784?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwdmFufGVufDB8fHx8MTc3MjIyMTIzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hvac van"
+    },
+    {
       "id": "lp4-hero",
-      "description": "Team of happy cleaners",
-      "imageUrl": "https://images.unsplash.com/photo-1758599668337-58bfa42683ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjbGVhbmluZyUyMHRlYW18ZW58MHx8fHwxNzcyMDI4ODkwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "cleaning team"
+      "description": "Bright and clean modern living room",
+      "imageUrl": "https://images.unsplash.com/photo-1618220179428-22790b461013?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzcyMjIxMzI0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean living room"
+    },
+    {
+      "id": "lp4-service1",
+      "description": "A freshly cleaned modern kitchen with sparkling countertops.",
+      "imageUrl": "https://images.unsplash.com/photo-1600585152220-0f8a2484ab34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzcyMjIxMzcxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean kitchen"
+    },
+    {
+      "id": "lp4-service2",
+      "description": "A spotless modern bathroom with clean tiles and glass.",
+      "imageUrl": "https://images.unsplash.com/photo-1582994254569-c2b6a03165dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc3MjIyMTM5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean bathroom"
+    },
+    {
+      "id": "lp4-service3",
+      "description": "An empty, clean room with packed moving boxes.",
+      "imageUrl": "https://images.unsplash.com/photo-1576995853123-5a1d3b4b83d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb3ZlJTIwb3V0JTIwY2xlYW5pbmd8ZW58MHx8fHwxNzcyMjIxNDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "move-out cleaning"
     }
   ]
 }
