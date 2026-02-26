@@ -6,7 +6,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import {
   MoreHorizontal,
-  Plus,
   Search,
   Settings,
   Shield,
@@ -151,10 +150,6 @@ export default function DashboardPage() {
               <SidebarNavLink href={`/dashboard/${userIdSlug}/phonenumbers`}>
                 <Phone className="h-4 w-4" />
                 Phone Numbers
-              </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/custom-menu`}>
-                <Plus className="h-4 w-4" />
-                Add Custom Menu
               </SidebarNavLink>
             </nav>
           </div>

@@ -13,7 +13,6 @@ import {
   LogOut,
   Megaphone,
   MessageSquare,
-  Plus,
   Shield,
   User as UserIcon,
   Users,
@@ -116,7 +115,6 @@ export default function AgentDetailLayout({ children }: { children: React.ReactN
     { href: `/dashboard/${userIdSlug}/agents/${agentId}/leads`, label: 'Leads', icon: <Users className="h-4 w-4" /> },
     { href: `/dashboard/${userIdSlug}/agents/${agentId}/campaigns`, label: 'Campaigns', icon: <Megaphone className="h-4 w-4" /> },
     { href: `/dashboard/${userIdSlug}/agents/${agentId}/settings`, label: 'Agent Settings', icon: <Cog className="h-4 w-4" /> },
-    { href: `/dashboard/${userIdSlug}/agents/${agentId}/custom-menu`, label: 'Add Custom Menu', icon: <Plus className="h-4 w-4" /> },
   ];
 
   // The analytics page is the root page for an agent, so its href is just the agentId.
