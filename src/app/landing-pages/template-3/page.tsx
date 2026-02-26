@@ -19,6 +19,8 @@ function TemplateContent() {
     PlaceHolderImages.find(img => img.id === 'lp3-hero-1'),
     PlaceHolderImages.find(img => img.id === 'lp3-hero-2'),
     PlaceHolderImages.find(img => img.id === 'lp3-hero-3'),
+    PlaceHolderImages.find(img => img.id === 'lp3-hero-4'),
+    PlaceHolderImages.find(img => img.id === 'lp3-hero-5'),
   ].filter((img): img is ImagePlaceholder => !!img);
   const singleHeroImage = heroImages[0];
   
@@ -195,3 +197,5 @@ export default function LandingPageTemplate3() {
       </Suspense>
   )
 }
+
+    
