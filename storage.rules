@@ -27,9 +27,9 @@ service firebase.storage {
     /**
      * @description This rule makes all files under the 'Site Media' folder publicly readable.
      *              This is used for public assets like landing page images.
-     * @path /Site Media/{allPaths=**}
+     * @path /'Site Media'/{allPaths=**}
      */
-    match /Site Media/{allPaths=**} {
+    match /'Site Media'/{allPaths=**} {
       allow read;
       allow write: if false; // Explicitly deny public writes
     }
