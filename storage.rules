@@ -3,24 +3,25 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     /**
-     * @description Enforces that users can only read or write files within their
-     *              own dedicated folder structure for a specific agent. This rule is
-     *              the core of the multi-tenant security for file storage.
-     * @path /Clients/{userId}/agents/{agentId}/knowledgeBase/{fileName}
+     * @description This rule secures the multi-tenant storage structure. It grants a
+     *              user read and write access to all files and folders within their own
+     *              directory, identified by their UID, under the top-level 'Clients' folder.
+     *              This is a robust, recursive rule that ensures user data privacy.
+     * @path /Clients/{userId}/{allPaths=**}
      *
      * @example_allow
-     * // A user with UID 'user-123' who owns agent 'agent-abc' uploads a file to:
-     * // /Clients/user-123/agents/agent-abc/knowledgeBase/document.pdf
+     * // User 'user-123' uploads to their own knowledge base:
+     * // /Clients/user-123/agents/agent-abc/knowledgeBase/doc.pdf
      * // The {userId} wildcard matches 'user-123'.
-     * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-123'`, which is true.
+     * // The rule `request.auth.uid == userId` passes.
      *
      * @example_deny
-     * // A user with UID 'user-123' tries to upload to another user's folder:
-     * // /Clients/user-456/agents/agent-xyz/knowledgeBase/document.pdf
+     * // User 'user-123' attempts to access another user's files:
+     * // /Clients/user-456/agents/agent-xyz/knowledgeBase/doc.pdf
      * // The {userId} wildcard matches 'user-456'.
-     * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-456'`, which is false.
+     * // The rule `request.auth.uid == userId` fails.
      */
-    match /Clients/{userId}/agents/{agentId}/knowledgeBase/{fileName} {
+    match /Clients/{userId}/{allPaths=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
