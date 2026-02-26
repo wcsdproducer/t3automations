@@ -7,16 +7,31 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function KnowledgeBasePage() {
   return (
     <main className="flex flex-1 flex-col">
       <div className="flex items-center justify-between gap-4 p-4 lg:p-6 border-b">
         <h1 className="text-lg font-semibold md:text-2xl">Knowledge Base (0)</h1>
-        <Button>
-          <Upload className="mr-2 h-4 w-4" />
-          Upload
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button>
+              <Upload className="mr-2 h-4 w-4" />
+              Upload
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>File</DropdownMenuItem>
+            <DropdownMenuItem>URL</DropdownMenuItem>
+            <DropdownMenuItem>Text</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="flex flex-col flex-1">
         <div className="p-4 border-b">
