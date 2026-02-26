@@ -352,7 +352,7 @@ export default function KnowledgeBasePage() {
                 )}
                 <Input id="file-upload" type="file" className="hidden" onChange={handleFileSelect} />
             </label>
-            <p className="text-sm text-muted-foreground mt-2">Maximum size: 50 MB</p>
+            <p className="text-sm text-muted-foreground mt-2">Maximum file size: 50 MB</p>
           </div>
           <DialogFooter>
             <DialogClose asChild>
