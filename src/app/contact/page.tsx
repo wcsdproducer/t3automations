@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle } from 'lucide-react';
 import { handleContactForm } from '@/app/actions';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import TranslatedText from '@/components/TranslatedText';
 
@@ -29,7 +30,7 @@ function SubmitButton() {
 }
 
 export default function ContactPage() {
-  const [state, formAction] = useFormState(handleContactForm, initialState);
+  const [state, formAction] = useActionState(handleContactForm, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   const { toast } = useToast();
 

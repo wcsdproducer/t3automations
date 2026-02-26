@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import type { IntelligentCallTriageOutput } from '@/ai/flows/intelligent-call-triage';
 import { Bot, CheckCircle, HelpCircle } from 'lucide-react';
 import React from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
@@ -27,7 +28,7 @@ function SubmitButton() {
 }
 
 export default function AnsweringService() {
-  const [state, formAction] = useFormState(handleCallTriage, initialState);
+  const [state, formAction] = useActionState(handleCallTriage, initialState);
   const { toast } = useToast();
 
   React.useEffect(() => {
