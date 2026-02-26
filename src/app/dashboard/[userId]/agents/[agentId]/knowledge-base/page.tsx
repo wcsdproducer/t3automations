@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 export default function KnowledgeBasePage() {
   const [isTextUploadOpen, setIsTextUploadOpen] = useState(false);
   const [isUrlUploadOpen, setIsUrlUploadOpen] = useState(false);
+  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
 
   return (
     <>
@@ -41,7 +42,7 @@ export default function KnowledgeBasePage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>File</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setIsFileUploadOpen(true)}>File</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setIsUrlUploadOpen(true)}>URL</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setIsTextUploadOpen(true)}>
                 Text
@@ -103,6 +104,27 @@ export default function KnowledgeBasePage() {
               <Button type="button" variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="button" onClick={() => setIsUrlUploadOpen(false)}>Upload</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isFileUploadOpen} onOpenChange={setIsFileUploadOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Upload File</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg">
+                <p className="text-muted-foreground">Drop file here or</p>
+                <Button variant="outline" className="mt-2">Browse</Button>
+            </div>
+            <p className="text-sm text-muted-foreground mt-2">Maximum size: 50 MB</p>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="button" onClick={() => setIsFileUploadOpen(false)}>Upload</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
