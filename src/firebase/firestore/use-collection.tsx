@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -100,10 +99,6 @@ export function useCollection<T = any>(
         setError(contextualError)
         setData(null)
         setIsLoading(false)
-
-        // DO NOT trigger global error propagation in a listener, it can cause infinite loops.
-        // The error is returned by the hook and should be handled by the component.
-        // errorEmitter.emit('permission-error', contextualError);
       }
     );
 
