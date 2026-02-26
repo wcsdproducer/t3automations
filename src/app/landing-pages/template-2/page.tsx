@@ -43,17 +43,10 @@ function TemplateContent() {
   const renderHero = () => {
     if (heroEffect === 'parallax' && singleHeroImage) {
       return (
-        <section className="h-screen relative flex items-end p-8 md:p-12 text-white overflow-hidden">
-          <div className="fixed top-0 left-0 w-full h-full -z-10">
-            <Image
-                src={singleHeroImage.imageUrl}
-                alt={singleHeroImage.description}
-                data-ai-hint={singleHeroImage.imageHint}
-                fill
-                className="object-cover"
-                priority
-            />
-          </div>
+        <section
+          className="h-screen relative flex items-end p-8 md:p-12 text-white bg-cover bg-center bg-fixed"
+          style={{ backgroundImage: `url(${singleHeroImage.imageUrl})` }}
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
           {heroContent}
         </section>
