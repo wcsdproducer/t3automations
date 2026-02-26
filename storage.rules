@@ -2,10 +2,6 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // ----------------------------------------------------------------------
-    // Knowledge Base Security Rules
-    // ----------------------------------------------------------------------
-
     /**
      * @description Enforces that users can only read or write files within their
      *              own dedicated folder structure for a specific agent. This rule is

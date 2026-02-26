@@ -30,6 +30,7 @@ import { format } from 'date-fns';
 
 export default function KnowledgeBasePage() {
   const params = useParams();
+  const userId = params.userId as string;
   const agentId = params.agentId as string;
   const [isTextUploadOpen, setIsTextUploadOpen] = useState(false);
   const [isUrlUploadOpen, setIsUrlUploadOpen] = useState(false);
