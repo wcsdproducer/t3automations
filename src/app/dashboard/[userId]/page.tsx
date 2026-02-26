@@ -159,15 +159,7 @@ export default function DashboardPage() {
             </nav>
           </div>
           <div className="mt-auto p-4">
-            <nav>
-                <a href="/" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
-                    <LogOut className="h-4 w-4" />
-                    Exit Preview
-                </a>
-            </nav>
-            <div className="mt-4">
-              <UserProfileDropdown />
-            </div>
+            <UserProfileDropdown />
           </div>
         </div>
       </div>
