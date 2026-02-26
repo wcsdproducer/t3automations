@@ -42,6 +42,13 @@
           "type": "string",
           "description": "The visual effect for the hero section of the landing page. Defaults to 'slideshow'.",
           "enum": ["slideshow", "parallax"]
+        },
+        "service": {
+          "type": "string",
+          "description": "The primary service offered by the business.",
+          "enum": [
+            "Plumbing", "HVAC", "Electrician", "Landscaping", "Pest Control", "House Cleaning", "Roofing", "Handyman", "Painting", "Window Cleaning", "Tree Service", "Garage Door Repair", "Carpet Cleaning", "Appliance Repair", "Remodeling", "Flooring", "Fencing", "Deck & Patio", "Pool Service", "Pressure Washing", "Home Security", "Locksmith", "Junk Removal", "Moving", "Siding", "Insulation", "Septic Service", "Water Heater", "Foundation Repair", "Solar Panel Installation"
+          ]
         }
       },
       "required": [

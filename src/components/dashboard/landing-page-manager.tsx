@@ -20,6 +20,17 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Separator } from '@/components/ui/separator';
+
+const homeServices = [
+    "Plumbing", "HVAC", "Electrician", "Landscaping", "Pest Control", 
+    "House Cleaning", "Roofing", "Handyman", "Painting", "Window Cleaning", 
+    "Tree Service", "Garage Door Repair", "Carpet Cleaning", "Appliance Repair", 
+    "Remodeling", "Flooring", "Fencing", "Deck & Patio", "Pool Service", 
+    "Pressure Washing", "Home Security", "Locksmith", "Junk Removal", 
+    "Moving", "Siding", "Insulation", "Septic Service", "Water Heater", 
+    "Foundation Repair", "Solar Panel Installation"
+];
 
 export function LandingPageManager() {
   const { user } = useUser();
@@ -35,6 +46,7 @@ export function LandingPageManager() {
 
   const [selectedTemplate, setSelectedTemplate] = useState('template-1');
   const [heroEffect, setHeroEffect] = useState('slideshow');
+  const [service, setService] = useState('');
 
   useEffect(() => {
     if (businessProfile) {
@@ -43,6 +55,9 @@ export function LandingPageManager() {
       }
       if (businessProfile.heroEffect) {
         setHeroEffect(businessProfile.heroEffect);
+      }
+      if (businessProfile.service) {
+        setService(businessProfile.service);
       }
     }
   }, [businessProfile]);
@@ -68,6 +83,18 @@ export function LandingPageManager() {
     toast({
       title: 'Site Preference Updated',
       description: `Hero section effect set to ${effect}.`,
+    });
+  };
+
+  const handleServiceChange = (selectedService: string) => {
+    setService(selectedService);
+    if (!user || !firestore || !businessProfileRef) return;
+
+    setDocumentNonBlocking(businessProfileRef, { service: selectedService }, { merge: true });
+
+    toast({
+      title: 'Site Preference Updated',
+      description: `Primary service set to ${selectedService}.`,
     });
   };
 
@@ -112,6 +139,18 @@ export function LandingPageManager() {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Service Category</h4>
+                    <Select value={service} onValueChange={handleServiceChange}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a service" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {homeServices.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                  </div>
+                  <Separator />
                   <h4 className="font-medium">Hero Section Effect</h4>
                   <RadioGroup value={heroEffect} onValueChange={handleHeroEffectChange}>
                     <div className="flex items-center space-x-2">
