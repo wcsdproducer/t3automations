@@ -230,6 +230,35 @@
         "deliveryMethod",
         "timestamp"
       ]
+    },
+    "Topic": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Topic",
+      "type": "object",
+      "description": "Represents a topic or category for call classification.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Topic entity."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the topic."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the topic."
+        }
+      },
+      "required": [
+        "id",
+        "businessProfileId",
+        "name"
+      ]
     }
   },
   "auth": {
@@ -360,8 +389,30 @@
             }
           ]
         }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/topics/{topicId}",
+        "definition": {
+          "entityName": "Topic",
+          "schema": {
+            "$ref": "#/backend/entities/Topic"
+          },
+          "description": "Stores topics for call classification for each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "topicId",
+              "description": "The unique identifier for the topic."
+            }
+          ]
+        }
       }
     ],
     "reasoning": "The Firestore data structure is designed to support the Virtual Receptionist AI application, focusing on secure and efficient data access. BusinessProfiles are the central entity, with other entities related to them via subcollections. This approach enables easy querying and management of data related to a specific business. Specifically, Authorization Independence is ensured by storing the BusinessProfile ID within each subcollection document, removing the need for `get()` calls in security rules. Each document within the BusinessProfile's subcollections includes the `businessProfileId` which enables flat reads to verify access. Segregation is implemented by storing data with different access requirements (e.g., CallLogs, Appointments) in separate subcollections under the BusinessProfile. The data structure also facilitates QAPs by enabling secure list operations within each business profile's subcollections."
   }
 }
+
+    
