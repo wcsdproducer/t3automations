@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function KnowledgeBasePage() {
   const [isTextUploadOpen, setIsTextUploadOpen] = useState(false);
+  const [isUrlUploadOpen, setIsUrlUploadOpen] = useState(false);
 
   return (
     <>
@@ -41,7 +42,7 @@ export default function KnowledgeBasePage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>File</DropdownMenuItem>
-              <DropdownMenuItem>URL</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setIsUrlUploadOpen(true)}>URL</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setIsTextUploadOpen(true)}>
                 Text
               </DropdownMenuItem>
@@ -85,6 +86,23 @@ export default function KnowledgeBasePage() {
               <Button type="button" variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="button" onClick={() => setIsTextUploadOpen(false)}>Upload</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isUrlUploadOpen} onOpenChange={setIsUrlUploadOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Upload URL</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <Input id="url" placeholder="https://example.com/about" />
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="button" onClick={() => setIsUrlUploadOpen(false)}>Upload</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
