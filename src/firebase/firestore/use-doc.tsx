@@ -8,7 +8,6 @@ import {
   FirestoreError,
   DocumentSnapshot,
 } from 'firebase/firestore';
-import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /** Utility type to add an 'id' field to a given type T. */
@@ -39,7 +38,7 @@ export interface UseDocResult<T> {
  * @returns {UseDocResult<T>} Object with data, isLoading, error.
  */
 export function useDoc<T = any>(
-  memoizedDocRef: DocumentReference<DocumentData> | null | undefined,
+  memoizedDocRef: (DocumentReference<DocumentData> & {__memo?: boolean}) | null | undefined,
 ): UseDocResult<T> {
   type StateDataType = WithId<T> | null;
 
@@ -85,6 +84,14 @@ export function useDoc<T = any>(
 
     return () => unsubscribe();
   }, [memoizedDocRef]); // Re-run if the memoizedDocRef changes.
+
+  if (memoizedDocRef && !memoizedDocRef.__memo) {
+    const err = new Error(
+      `DocumentReference provided to useDoc was not memoized. This will cause infinite loops. Please wrap the ref creation in useMemoFirebase.`
+    );
+    console.error(err);
+    return { data: null, isLoading: false, error: err };
+  }
 
   return { data, isLoading, error };
 }

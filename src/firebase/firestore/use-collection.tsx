@@ -9,7 +9,6 @@ import {
   QuerySnapshot,
   CollectionReference,
 } from 'firebase/firestore';
-import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /** Utility type to add an 'id' field to a given type T. */
@@ -104,8 +103,14 @@ export function useCollection<T = any>(
 
     return () => unsubscribe();
   }, [memoizedTargetRefOrQuery]); // Re-run if the target query/reference changes.
-  if(memoizedTargetRefOrQuery && !memoizedTargetRefOrQuery.__memo) {
-    throw new Error(memoizedTargetRefOrQuery + ' was not properly memoized using useMemoFirebase');
+  
+  if (memoizedTargetRefOrQuery && !memoizedTargetRefOrQuery.__memo) {
+    const err = new Error(
+      `Query/Reference provided to useCollection was not memoized. This will cause infinite loops. Please wrap the query/reference creation in useMemoFirebase.`
+    );
+    console.error(err);
+    return { data: null, isLoading: false, error: err };
   }
+
   return { data, isLoading, error };
 }
