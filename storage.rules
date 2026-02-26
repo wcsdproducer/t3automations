@@ -1,4 +1,3 @@
-
 rules_version = '2';
 
 service firebase.storage {
@@ -9,23 +8,23 @@ service firebase.storage {
 
     /**
      * @description Enforces that users can only read or write files within their
-     *              own dedicated folder inside the 'knowledgeBase' directory. This rule
-     *              is the core of the multi-tenant security for file storage.
-     * @path /knowledgeBase/{userId}/{fileName}
+     *              own dedicated folder structure for a specific agent. This rule is
+     *              the core of the multi-tenant security for file storage.
+     * @path /clients/{userId}/agents/{agentId}/knowledgeBase/{fileName}
      *
      * @example_allow
-     * // A user with UID 'user-123' uploads a file to:
-     * // /knowledgeBase/user-123/document.pdf
+     * // A user with UID 'user-123' who owns agent 'agent-abc' uploads a file to:
+     * // /clients/user-123/agents/agent-abc/knowledgeBase/document.pdf
      * // The {userId} wildcard matches 'user-123'.
      * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-123'`, which is true.
      *
      * @example_deny
      * // A user with UID 'user-123' tries to upload to another user's folder:
-     * // /knowledgeBase/user-456/document.pdf
+     * // /clients/user-456/agents/agent-xyz/knowledgeBase/document.pdf
      * // The {userId} wildcard matches 'user-456'.
      * // The rule `request.auth.uid == userId` becomes `'user-123' == 'user-456'`, which is false.
      */
-    match /knowledgeBase/{userId}/{fileName} {
+    match /clients/{userId}/agents/{agentId}/knowledgeBase/{fileName} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }

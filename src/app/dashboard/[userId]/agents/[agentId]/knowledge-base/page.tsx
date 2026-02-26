@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { useParams } from 'next/navigation';
 import { Search, Upload, File as FileIcon, Link as LinkIcon, FileText, Trash2, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +29,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { format } from 'date-fns';
 
 export default function KnowledgeBasePage() {
+  const params = useParams();
+  const agentId = params.agentId as string;
   const [isTextUploadOpen, setIsTextUploadOpen] = useState(false);
   const [isUrlUploadOpen, setIsUrlUploadOpen] = useState(false);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
@@ -145,7 +148,7 @@ export default function KnowledgeBasePage() {
 
     setIsUploading(true);
     
-    const filePath = `knowledgeBase/${user.uid}/${crypto.randomUUID()}-${file.name}`;
+    const filePath = `clients/${user.uid}/agents/${agentId}/knowledgeBase/${crypto.randomUUID()}-${file.name}`;
     const fileStorageRef = storageRef(storage, filePath);
 
     try {
