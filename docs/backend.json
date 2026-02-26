@@ -306,6 +306,40 @@
         "businessProfileId",
         "name"
       ]
+    },
+    "KnowledgeBaseItem": {
+      "title": "KnowledgeBaseItem",
+      "type": "object",
+      "description": "Represents an item in a business's knowledge base.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the knowledge base item."
+        },
+        "businessProfileId": {
+          "type": "string",
+          "description": "Reference to BusinessProfile."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the knowledge base item."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the item.",
+          "enum": ["file", "url", "text"]
+        },
+        "content": {
+          "type": "string",
+          "description": "The content of the item (URL for files/links, or raw text)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the item was created.",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "businessProfileId", "name", "type", "content", "createdAt"]
     }
   },
   "auth": {
@@ -473,6 +507,26 @@
             {
               "name": "leadId",
               "description": "The unique identifier for the lead."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/businessProfiles/{businessProfileId}/knowledgeBase/{knowledgeBaseId}",
+        "definition": {
+          "entityName": "KnowledgeBaseItem",
+          "schema": {
+            "$ref": "#/backend/entities/KnowledgeBaseItem"
+          },
+          "description": "Stores knowledge base items for each business. Includes denormalized 'businessProfileId' for authorization independence.",
+          "params": [
+            {
+              "name": "businessProfileId",
+              "description": "The unique identifier for the business profile."
+            },
+            {
+              "name": "knowledgeBaseId",
+              "description": "The unique identifier for the knowledge base item."
             }
           ]
         }

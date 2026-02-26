@@ -238,6 +238,17 @@ service cloud.firestore {
         allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
         allow delete: if isExistingOwner(businessProfileId);
       }
+
+      // --------------------------------------------------------------------
+      // Knowledge Base Subcollection
+      // --------------------------------------------------------------------
+      match /knowledgeBase/{knowledgeBaseId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, knowledgeBaseId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
     }
   }
 }
