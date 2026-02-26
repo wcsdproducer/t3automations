@@ -42,8 +42,8 @@ export default function CampaignsPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-h-[70vh]">
-                <ScrollArea className="pr-6">
-                    <div className="space-y-6">
+                <ScrollArea>
+                    <div className="space-y-6 pr-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="campaign-name">Campaign Name</Label>
