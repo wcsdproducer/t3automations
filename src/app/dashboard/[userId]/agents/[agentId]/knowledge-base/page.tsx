@@ -1,8 +1,7 @@
-
 'use client';
 
-import React, { useState } from 'react';
-import { Search, Upload, File as FileIcon } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Search, Upload, File as FileIcon, Link as LinkIcon, FileText, Trash2, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -21,10 +20,12 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser, useFirestore, useStorage } from '@/firebase';
+import { useUser, useFirestore, useStorage, useCollection, useMemoFirebase } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, collection } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { format } from 'date-fns';
 
 export default function KnowledgeBasePage() {
   const [isTextUploadOpen, setIsTextUploadOpen] = useState(false);
@@ -41,6 +42,14 @@ export default function KnowledgeBasePage() {
   const firestore = useFirestore();
   const storage = useStorage();
   const { toast } = useToast();
+
+  const knowledgeBaseQuery = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return collection(firestore, `businessProfiles/${user.uid}/knowledgeBase`);
+  }, [user, firestore]);
+
+  const { data: knowledgeBaseItems, isLoading } = useCollection(knowledgeBaseQuery);
+
 
   const handleTextUpload = async () => {
     if (!user || !firestore) {
@@ -166,11 +175,36 @@ export default function KnowledgeBasePage() {
     }
   };
 
+  const handleDelete = async (itemId: string) => {
+    if (!user || !firestore) return;
+    const docRef = doc(firestore, `businessProfiles/${user.uid}/knowledgeBase`, itemId);
+    try {
+      await deleteDoc(docRef);
+      toast({ title: 'Item deleted', description: 'The knowledge base item has been removed.' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete item.' });
+    }
+  };
+  
+  const renderIcon = (type: string) => {
+    switch (type) {
+      case 'file':
+        return <FileIcon className="h-5 w-5 text-muted-foreground" />;
+      case 'url':
+        return <LinkIcon className="h-5 w-5 text-muted-foreground" />;
+      case 'text':
+        return <FileText className="h-5 w-5 text-muted-foreground" />;
+      default:
+        return <FileIcon className="h-5 w-5 text-muted-foreground" />;
+    }
+  };
+
+
   return (
     <>
       <main className="flex flex-1 flex-col">
         <div className="flex items-center justify-between gap-4 p-4 lg:p-6 border-b">
-          <h1 className="text-lg font-semibold md:text-2xl">Knowledge Base (0)</h1>
+          <h1 className="text-lg font-semibold md:text-2xl">Knowledge Base ({knowledgeBaseItems?.length || 0})</h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button>
@@ -198,9 +232,62 @@ export default function KnowledgeBasePage() {
               />
             </div>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <p className="text-muted-foreground">No Data Sources Available</p>
-          </div>
+          {isLoading ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <p className="text-muted-foreground">Loading...</p>
+            </div>
+          ) : knowledgeBaseItems && knowledgeBaseItems.length > 0 ? (
+            <div className="flex-1 overflow-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[50px]">Type</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Source</TableHead>
+                    <TableHead>Date Added</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {knowledgeBaseItems.map((item: any) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{renderIcon(item.type)}</TableCell>
+                      <TableCell className="font-medium">{item.name}</TableCell>
+                      <TableCell className="max-w-xs truncate text-muted-foreground">
+                        {item.type === 'url' ? (
+                          <a href={item.content} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            {item.content}
+                          </a>
+                        ) : (
+                          item.content
+                        )}
+                      </TableCell>
+                      <TableCell>{format(new Date(item.createdAt), 'PPP')}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleDelete(item.id)} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <p className="text-muted-foreground">No Data Sources Available</p>
+            </div>
+          )}
         </div>
       </main>
 
