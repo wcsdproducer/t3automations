@@ -37,6 +37,11 @@
           "type": "string",
           "description": "The identifier for the user's selected default landing page template.",
           "enum": ["template-1", "template-2", "template-3", "template-4"]
+        },
+        "heroEffect": {
+          "type": "string",
+          "description": "The visual effect for the hero section of the landing page. Defaults to 'slideshow'.",
+          "enum": ["slideshow", "parallax"]
         }
       },
       "required": [

@@ -3,23 +3,94 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Check, Star, Wrench, Shield, Thermometer } from 'lucide-react';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function LandingPageTemplate3() {
+function TemplateContent() {
+  const searchParams = useSearchParams();
+  const heroEffect = searchParams.get('heroEffect') || 'slideshow';
+
   const aboutImage = PlaceHolderImages.find(img => img.id === 'lp3-about');
   const heroImages = [
     PlaceHolderImages.find(img => img.id === 'lp3-hero-1'),
     PlaceHolderImages.find(img => img.id === 'lp3-hero-2'),
     PlaceHolderImages.find(img => img.id === 'lp3-hero-3'),
-  ].filter(Boolean);
-
+  ].filter((img): img is ImagePlaceholder => !!img);
+  const singleHeroImage = heroImages[0];
+  
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
+
+  const heroContent = (
+    <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+        <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
+        <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
+        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">We'll Fix Your AC Fast.</h2>
+          <ul className="space-y-3 mt-6 max-w-md mx-auto text-left">
+            <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">24/7 Emergency Service</span></li>
+            <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Certified & Insured Technicians</span></li>
+            <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Upfront, Honest Pricing</span></li>
+        </ul>
+          <a href="#contact">
+            <Button type="submit" className="w-full md:w-auto !mt-8 transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
+          </a>
+    </div>
+  );
+
+  const renderHero = () => {
+    if (heroEffect === 'parallax' && singleHeroImage) {
+      return (
+        <section className="h-screen relative flex items-center justify-center text-center text-white overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full -z-10">
+            <Image
+                src={singleHeroImage.imageUrl}
+                alt={singleHeroImage.description}
+                data-ai-hint={singleHeroImage.imageHint}
+                fill
+                className="object-cover"
+                priority
+            />
+          </div>
+          <div className="absolute inset-0 bg-black/60" />
+          {heroContent}
+        </section>
+      );
+    }
+
+    return (
+      <section className="h-screen relative flex items-center justify-center text-center text-white">
+        <Carousel
+          plugins={[plugin.current]}
+          className="absolute inset-0 w-full h-full"
+          opts={{ loop: true }}
+        >
+          <CarouselContent>
+            {heroImages.map((image) => (
+              <CarouselItem key={image.id}>
+                <div className="relative h-screen w-full">
+                  <Image
+                    src={image.imageUrl}
+                    alt={image.description}
+                    data-ai-hint={image.imageHint}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        <div className="absolute inset-0 bg-black/60" />
+        {heroContent}
+      </section>
+    );
+  }
   
   return (
     <div className="bg-background text-foreground">
@@ -38,45 +109,7 @@ export default function LandingPageTemplate3() {
         </header>
 
       <main>
-        {/* Hero Section */}
-        <section className="h-screen relative flex items-center justify-center text-center text-white">
-          <Carousel
-            plugins={[plugin.current]}
-            className="absolute inset-0 w-full h-full"
-            opts={{ loop: true }}
-          >
-            <CarouselContent>
-              {heroImages.map((image) => image && (
-                <CarouselItem key={image.id}>
-                  <div className="relative h-screen w-full">
-                    <Image
-                      src={image.imageUrl}
-                      alt={image.description}
-                      data-ai-hint={image.imageHint}
-                      fill
-                      className="object-cover"
-                      priority
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <div className="absolute inset-0 bg-black/60" />
-            <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-                <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
-                <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
-                <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">We'll Fix Your AC Fast.</h2>
-                  <ul className="space-y-3 mt-6 max-w-md mx-auto text-left">
-                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">24/7 Emergency Service</span></li>
-                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Certified & Insured Technicians</span></li>
-                    <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Upfront, Honest Pricing</span></li>
-                </ul>
-                  <a href="#contact">
-                    <Button type="submit" className="w-full md:w-auto !mt-8 transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
-                  </a>
-            </div>
-        </section>
+        {renderHero()}
 
         {/* Services Section */}
         <section id="services" className="py-16 md:py-24 px-4">
@@ -160,4 +193,12 @@ export default function LandingPageTemplate3() {
       </footer>
     </div>
   );
+}
+
+export default function LandingPageTemplate3() {
+  return (
+      <Suspense fallback={<div className="h-screen w-full flex items-center justify-center">Loading...</div>}>
+          <TemplateContent />
+      </Suspense>
+  )
 }

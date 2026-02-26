@@ -6,8 +6,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Settings } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export function LandingPageManager() {
   const { user } = useUser();
@@ -22,10 +34,16 @@ export function LandingPageManager() {
   const { data: businessProfile, isLoading } = useDoc(businessProfileRef);
 
   const [selectedTemplate, setSelectedTemplate] = useState('template-1');
+  const [heroEffect, setHeroEffect] = useState('slideshow');
 
   useEffect(() => {
-    if (businessProfile?.defaultLandingPage) {
-      setSelectedTemplate(businessProfile.defaultLandingPage);
+    if (businessProfile) {
+      if (businessProfile.defaultLandingPage) {
+        setSelectedTemplate(businessProfile.defaultLandingPage);
+      }
+      if (businessProfile.heroEffect) {
+        setHeroEffect(businessProfile.heroEffect);
+      }
     }
   }, [businessProfile]);
 
@@ -41,7 +59,19 @@ export function LandingPageManager() {
     });
   };
 
-  const landingPageUrl = `/landing-pages/${selectedTemplate}`;
+  const handleHeroEffectChange = (effect: string) => {
+    setHeroEffect(effect);
+    if (!user || !firestore || !businessProfileRef) return;
+
+    setDocumentNonBlocking(businessProfileRef, { heroEffect: effect }, { merge: true });
+
+    toast({
+      title: 'Site Preference Updated',
+      description: `Hero section effect set to ${effect}.`,
+    });
+  };
+
+  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}`;
 
   if (isLoading) {
     return <p>Loading landing page settings...</p>;
@@ -67,6 +97,40 @@ export function LandingPageManager() {
                 <SelectItem value="template-4">Friendly Local</SelectItem>
               </SelectContent>
             </Select>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Site Preferences
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Site Preferences</DialogTitle>
+                  <DialogDescription>
+                    Customize the look and feel of your landing page.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <h4 className="font-medium">Hero Section Effect</h4>
+                  <RadioGroup value={heroEffect} onValueChange={handleHeroEffectChange}>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="slideshow" id="slideshow" />
+                      <Label htmlFor="slideshow">Slide Show</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="parallax" id="parallax" />
+                      <Label htmlFor="parallax">Parallax Effect</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button>Done</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full">
                 View Live Page <ExternalLink className="ml-2 h-4 w-4" />

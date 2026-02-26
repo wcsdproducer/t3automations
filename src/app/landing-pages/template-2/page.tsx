@@ -3,14 +3,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, Brush, Hammer, Building } from 'lucide-react';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function LandingPageTemplate2() {
+function TemplateContent() {
+  const searchParams = useSearchParams();
+  const heroEffect = searchParams.get('heroEffect') || 'slideshow';
+
   const aboutImage = PlaceHolderImages.find(img => img.id === 'lp2-about');
   const galleryImages = [
     PlaceHolderImages.find(img => img.id === 'lp2-gal1'),
@@ -22,11 +26,69 @@ export default function LandingPageTemplate2() {
     PlaceHolderImages.find(img => img.id === 'lp2-hero-1'),
     PlaceHolderImages.find(img => img.id === 'lp2-hero-2'),
     PlaceHolderImages.find(img => img.id === 'lp2-hero-3'),
-  ].filter(Boolean);
+  ].filter((img): img is ImagePlaceholder => !!img);
+  const singleHeroImage = heroImages[0];
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
+
+  const heroContent = (
+    <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+      <h2 className="text-4xl md:text-6xl font-bold">Exquisite Home Renovations</h2>
+      <p className="mt-4 text-lg md:text-xl">We bring your vision to life with unparalleled craftsmanship and design.</p>
+    </div>
+  );
+
+  const renderHero = () => {
+    if (heroEffect === 'parallax' && singleHeroImage) {
+      return (
+        <section className="h-screen relative flex items-end p-8 md:p-12 text-white overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full -z-10">
+            <Image
+                src={singleHeroImage.imageUrl}
+                alt={singleHeroImage.description}
+                data-ai-hint={singleHeroImage.imageHint}
+                fill
+                className="object-cover"
+                priority
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          {heroContent}
+        </section>
+      );
+    }
+    
+    return (
+      <section className="h-screen relative flex items-end p-8 md:p-12 text-white">
+        <Carousel
+          plugins={[plugin.current]}
+          className="absolute inset-0 w-full h-full"
+          opts={{ loop: true }}
+        >
+          <CarouselContent>
+            {heroImages.map((image) => (
+              <CarouselItem key={image.id}>
+                <div className="relative h-screen w-full">
+                  <Image
+                    src={image.imageUrl}
+                    alt={image.description}
+                    data-ai-hint={image.imageHint}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+        {heroContent}
+      </section>
+    );
+  }
 
   return (
     <div className="bg-background text-foreground">
@@ -45,36 +107,7 @@ export default function LandingPageTemplate2() {
       </header>
 
       <main>
-        {/* Hero Section */}
-        <section className="h-screen relative flex items-end p-8 md:p-12 text-white">
-          <Carousel
-            plugins={[plugin.current]}
-            className="absolute inset-0 w-full h-full"
-            opts={{ loop: true }}
-          >
-            <CarouselContent>
-              {heroImages.map((image) => image && (
-                <CarouselItem key={image.id}>
-                  <div className="relative h-screen w-full">
-                    <Image
-                      src={image.imageUrl}
-                      alt={image.description}
-                      data-ai-hint={image.imageHint}
-                      fill
-                      className="object-cover"
-                      priority
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-          <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-            <h2 className="text-4xl md:text-6xl font-bold">Exquisite Home Renovations</h2>
-            <p className="mt-4 text-lg md:text-xl">We bring your vision to life with unparalleled craftsmanship and design.</p>
-          </div>
-        </section>
+        {renderHero()}
 
         {/* Services Section */}
         <section id="services" className="py-16 md:py-24 px-6 bg-secondary">
@@ -172,4 +205,12 @@ export default function LandingPageTemplate2() {
       </footer>
     </div>
   );
+}
+
+export default function LandingPageTemplate2() {
+    return (
+        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center">Loading...</div>}>
+            <TemplateContent />
+        </Suspense>
+    )
 }
