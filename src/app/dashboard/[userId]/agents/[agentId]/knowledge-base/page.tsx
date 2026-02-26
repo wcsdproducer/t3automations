@@ -149,7 +149,7 @@ export default function KnowledgeBasePage() {
 
     setIsUploading(true);
     
-    const filePath = `clients/${user.uid}/agents/${agentId}/knowledgeBase/${crypto.randomUUID()}-${file.name}`;
+    const filePath = `Clients/${user.uid}/agents/${agentId}/knowledgeBase/${crypto.randomUUID()}-${file.name}`;
     const fileStorageRef = storageRef(storage, filePath);
 
     try {
