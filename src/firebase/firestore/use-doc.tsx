@@ -82,8 +82,9 @@ export function useDoc<T = any>(
         setData(null)
         setIsLoading(false)
 
-        // trigger global error propagation
-        errorEmitter.emit('permission-error', contextualError);
+        // DO NOT trigger global error propagation in a listener, it can cause infinite loops.
+        // The error is returned by the hook and should be handled by the component.
+        // errorEmitter.emit('permission-error', contextualError);
       }
     );
 
@@ -92,4 +93,3 @@ export function useDoc<T = any>(
 
   return { data, isLoading, error };
 }
-
