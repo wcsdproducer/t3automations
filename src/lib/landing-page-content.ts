@@ -53,7 +53,6 @@ function findImagesByHints(hints: string[]): ImagePlaceholder[] {
 
     // Ensure we have at least 5 unique images for the carousel
     if (images.length < 5) {
-        const needed = 5 - images.length;
         for (let i = 0; i < PlaceHolderImages.length && images.length < 5; i++) {
             const fallbackImg = PlaceHolderImages[i];
             if (!usedIds.has(fallbackImg.id)) {
@@ -133,6 +132,64 @@ export function getContentForService(service: string) {
                 hero: hvacImages.hero,
                 about: hvacImages.about || findImageByHint('hvac van'),
                 gallery: hvacImages.gallery,
+            }
+        };
+    }
+    
+    if (serviceName === "Plumbing") {
+        const allPlumbingHeroImages = PlaceHolderImages.filter(img => img.id.startsWith('plumbing-hero'));
+        const allPlumbingGalleryImages = PlaceHolderImages.filter(img => img.id.startsWith('plumbing-gallery'));
+        const aboutImage = PlaceHolderImages.find(img => img.id === 'plumbing-about');
+
+        const shuffledHero = shuffle(allPlumbingHeroImages);
+        const shuffledGallery = shuffle(allPlumbingGalleryImages);
+
+        const plumbingImages = {
+            hero: shuffledHero.slice(0, 5),
+            about: aboutImage,
+            gallery: shuffledGallery.slice(0, 4),
+        }
+
+        return {
+            companyName: `Plumbing Pros`,
+            hero: {
+                title: `Leaky Pipes? We're On It.`,
+                subtitle: `Your trusted experts for all plumbing needs, available 24/7.`,
+                cta: "Get a Free Estimate",
+            },
+            services: {
+                title: `Comprehensive Plumbing Solutions`,
+                subtitle: "From minor drips to major emergencies, we handle it all.",
+                items: [
+                    { title: `Emergency Leak Repair`, description: "Fast response to stop water damage in its tracks." },
+                    { title: "Drain Cleaning", description: "Clear any clog with our professional-grade equipment." },
+                    { title: "Fixture Installation", description: "Upgrade your kitchen or bath with new faucets, sinks, and toilets." },
+                ]
+            },
+            about: {
+                title: `Your Neighborhood Plumbing Experts`,
+                body: `For over 10 years, Plumbing Pros has provided reliable and affordable plumbing services. Our licensed and insured team is committed to quality workmanship and customer satisfaction.`,
+                points: [
+                    "24/7 Emergency Service",
+                    "Licensed & Insured Plumbers",
+                    "Upfront, Flat-Rate Pricing",
+                ]
+            },
+            reviews: {
+                title: `What Our Customers Are Saying`,
+                items: [
+                    { quote: `Had a burst pipe at 2 AM. The plumber from Plumbing Pros was here in 30 minutes and fixed it. Absolutely saved us!`, author: "- Emily R." },
+                    { quote: `They installed a new water heater for us. The process was smooth, professional, and the price was fair. I'd recommend them to anyone.`, author: "- David C." }
+                ]
+            },
+            contact: {
+                title: "Have a Plumbing Issue?",
+                subtitle: `Don't let a small leak become a big problem. Contact us now for fast service!`,
+            },
+            images: {
+                hero: plumbingImages.hero,
+                about: plumbingImages.about || findImageByHint('plumbing work'),
+                gallery: plumbingImages.gallery,
             }
         };
     }

@@ -169,6 +169,66 @@
       "imageHint": "hvac gallery"
     },
     {
+      "id": "plumbing-hero-1",
+      "description": "Plumbing hero image 1",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-1.jpg?alt=media",
+      "imageHint": "plumbing hero"
+    },
+    {
+      "id": "plumbing-hero-2",
+      "description": "Plumbing hero image 2",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-2.jpg?alt=media",
+      "imageHint": "plumbing hero"
+    },
+    {
+      "id": "plumbing-hero-3",
+      "description": "Plumbing hero image 3",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-3.jpg?alt=media",
+      "imageHint": "plumbing hero"
+    },
+    {
+      "id": "plumbing-hero-4",
+      "description": "Plumbing hero image 4",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-4.jpg?alt=media",
+      "imageHint": "plumbing hero"
+    },
+    {
+      "id": "plumbing-hero-5",
+      "description": "Plumbing hero image 5",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-5.jpg?alt=media",
+      "imageHint": "plumbing hero"
+    },
+    {
+      "id": "plumbing-about",
+      "description": "Plumbing about image",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fabout.jpg?alt=media",
+      "imageHint": "plumbing about"
+    },
+    {
+      "id": "plumbing-gallery-1",
+      "description": "Plumbing gallery image 1",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-1.jpg?alt=media",
+      "imageHint": "plumbing gallery"
+    },
+    {
+      "id": "plumbing-gallery-2",
+      "description": "Plumbing gallery image 2",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-2.jpg?alt=media",
+      "imageHint": "plumbing gallery"
+    },
+    {
+      "id": "plumbing-gallery-3",
+      "description": "Plumbing gallery image 3",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-3.jpg?alt=media",
+      "imageHint": "plumbing gallery"
+    },
+    {
+      "id": "plumbing-gallery-4",
+      "description": "Plumbing gallery image 4",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-4.jpg?alt=media",
+      "imageHint": "plumbing gallery"
+    },
+    {
       "id": "lp3-hero-1",
       "description": "A certified HVAC technician inspecting an outdoor AC unit.",
       "imageUrl": "https://images.unsplash.com/photo-1615529328327-48d3f4733440?q=80&w=1920&h=1080&auto=format&fit=crop",
