@@ -56,6 +56,8 @@ export default function SignupPage() {
           businessName,
           contactEmail: email,
           phoneNumber,
+          service: 'HVAC Maintenance & Repair',
+          defaultLandingPage: 'template-3',
         };
         setDocumentNonBlocking(businessProfileRef, businessProfileData, {});
         // The onAuthStateChanged listener will handle the redirect to the dashboard

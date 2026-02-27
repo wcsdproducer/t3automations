@@ -46,6 +46,8 @@ export function initiateGoogleSignIn(auth: Auth, firestore: Firestore, onError?:
             businessName: user.displayName || 'New Business', // Default value
             contactEmail: user.email,
             phoneNumber: user.phoneNumber || '', // Default value
+            service: 'HVAC Maintenance & Repair',
+            defaultLandingPage: 'template-3',
           };
           // This is a non-blocking call
           setDocumentNonBlocking(businessProfileRef, businessProfileData, {});

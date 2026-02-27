@@ -68,9 +68,9 @@ export function LandingPageManager() {
 
   const { data: businessProfile, isLoading } = useDoc(businessProfileRef);
 
-  const [selectedTemplate, setSelectedTemplate] = useState('template-1');
+  const [selectedTemplate, setSelectedTemplate] = useState('template-3');
   const [heroEffect, setHeroEffect] = useState('slideshow');
-  const [service, setService] = useState('');
+  const [service, setService] = useState('HVAC Maintenance & Repair');
 
   useEffect(() => {
     if (businessProfile) {
@@ -212,5 +212,3 @@ export function LandingPageManager() {
     </div>
   );
 }
-
-    
