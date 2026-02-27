@@ -16,6 +16,7 @@ function TemplateContent() {
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'House Cleaning (Maid Services)';
   const phoneParam = searchParams.get('phone') || '(000) 000-0000';
+  const logoUrl = searchParams.get('logo');
   
   const [content, setContent] = useState<any>(null);
 
@@ -107,7 +108,10 @@ function TemplateContent() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-primary">{content.companyName}</h1>
+            <div className="flex items-center gap-3">
+              {logoUrl && <Image src={logoUrl} alt={`${content.companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
+              <h1 className="text-2xl font-bold text-primary">{content.companyName}</h1>
+            </div>
             <nav className="hidden md:flex gap-4 items-center text-sm font-medium">
                 <a href="#services" className="hover:text-primary transition-colors">Services</a>
                 <a href="#about" className="hover:text-primary transition-colors">Why Us</a>
@@ -115,7 +119,7 @@ function TemplateContent() {
                  <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
             </nav>
             <div className="flex items-center gap-6">
-                <a href={`tel:${phone}`} className="hidden md:flex items-center gap-2 font-semibold">
+                <a href={`tel:${phone}`} className="flex items-center gap-2 font-semibold">
                     <Phone className="h-5 w-5" />
                     <span>{phone}</span>
                 </a>
