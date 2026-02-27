@@ -9,7 +9,7 @@
     {
       "id": "testimonial-steven-forester",
       "description": "Portrait of Steven Forester, owner of Vertical Solutions LLC",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2Funnamed.jpg?alt=media&token=4a034d9b-ad3a-4ed3-895f-6eddde033de5",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2Funnamed.jpg?alt=media&token=4a034d9b-ad3a-4ed3-895f-6eddde033de5",
       "imageHint": "man portrait"
     },
     {
@@ -93,7 +93,7 @@
     {
       "id": "lp2-gal2",
       "description": "Home renovation project 2",
-      "imageUrl": "https://images.unsplash.com/photo-1571843439991-dd2b8e051966?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8aG9tZSUyMHJlbm92YXRpb258ZW58MHx8fHwxNzcyMTI1NDg4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1571843439991-dd2b8e051966?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxb3x8aG9tZSUyMHJlbm92YXRpb258ZW58MHx8fHwxNzcyMTI1NDg4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "home renovation"
     },
     {
@@ -111,121 +111,121 @@
     {
       "id": "hvac-hero-1",
       "description": "HVAC hero image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-1.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-1.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
       "imageHint": "hvac hero"
     },
     {
       "id": "hvac-hero-2",
       "description": "HVAC hero image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-2.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-2.jpg?alt=media&token=8e9c0c1b-2b2a-4f5c-89c0-fe3f69b1886c",
       "imageHint": "hvac hero"
     },
     {
       "id": "hvac-hero-3",
       "description": "HVAC hero image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-3.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-3.jpg?alt=media&token=0f7d5c5a-3e8f-4b0a-8d7e-9d8c3b2a0c1b",
       "imageHint": "hvac hero"
     },
     {
       "id": "hvac-hero-4",
       "description": "HVAC hero image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-4.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-4.jpg?alt=media&token=4b2b1a0a-1b1a-4c9b-8d1e-2e3d4f5a6b7c",
       "imageHint": "hvac hero"
     },
     {
       "id": "hvac-hero-5",
       "description": "HVAC hero image 5",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-5.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-5.jpg?alt=media&token=8e9c0c1b-2b2a-4f5c-89c0-fe3f69b1886c",
       "imageHint": "hvac hero"
     },
     {
       "id": "hvac-about",
       "description": "HVAC about image",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fabout.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fabout.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
       "imageHint": "hvac about"
     },
     {
       "id": "hvac-gallery-1",
       "description": "HVAC gallery image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-1.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-1.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-2",
       "description": "HVAC gallery image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-2.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-2.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-3",
       "description": "HVAC gallery image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-3.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-3.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-4",
       "description": "HVAC gallery image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-4.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-4.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
       "imageHint": "hvac gallery"
     },
     {
       "id": "plumbing-hero-1",
       "description": "Plumbing hero image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-1.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-1.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
       "imageHint": "plumbing hero"
     },
     {
       "id": "plumbing-hero-2",
       "description": "Plumbing hero image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-2.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-2.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
       "imageHint": "plumbing hero"
     },
     {
       "id": "plumbing-hero-3",
       "description": "Plumbing hero image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-3.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-3.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
       "imageHint": "plumbing hero"
     },
     {
       "id": "plumbing-hero-4",
       "description": "Plumbing hero image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-4.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-4.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
       "imageHint": "plumbing hero"
     },
     {
       "id": "plumbing-hero-5",
       "description": "Plumbing hero image 5",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-5.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-5.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
       "imageHint": "plumbing hero"
     },
     {
       "id": "plumbing-about",
       "description": "Plumbing about image",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fabout.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fabout.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
       "imageHint": "plumbing about"
     },
     {
       "id": "plumbing-gallery-1",
       "description": "Plumbing gallery image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-1.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-1.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-2",
       "description": "Plumbing gallery image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-2.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-2.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-3",
       "description": "Plumbing gallery image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-3.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-3.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-4",
       "description": "Plumbing gallery image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-4.jpg?alt=media",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-4.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
       "imageHint": "plumbing gallery"
     },
     {
