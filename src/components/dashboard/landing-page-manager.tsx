@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { doc } from 'firebase/firestore';
@@ -23,13 +24,36 @@ import { Label } from "@/components/ui/label";
 import { Separator } from '@/components/ui/separator';
 
 const homeServices = [
-    "Plumbing", "HVAC", "Electrician", "Landscaping", "Pest Control", 
-    "House Cleaning", "Roofing", "Handyman", "Painting", "Window Cleaning", 
-    "Tree Service", "Garage Door Repair", "Carpet Cleaning", "Appliance Repair", 
-    "Remodeling", "Flooring", "Fencing", "Deck & Patio", "Pool Service", 
-    "Pressure Washing", "Home Security", "Locksmith", "Junk Removal", 
-    "Moving", "Siding", "Insulation", "Septic Service", "Water Heater", 
-    "Foundation Repair", "Solar Panel Installation"
+    "HVAC Maintenance & Repair",
+    "Plumbing",
+    "Electrical Services",
+    "Roofing Repair & Replacement",
+    "Appliance Repair",
+    "Gutter Cleaning & Repair",
+    "Siding & Exterior Repair",
+    "Garage Door Services",
+    "Lawn Care & Mowing",
+    "Landscaping & Garden Design",
+    "Tree Services",
+    "Pressure Washing",
+    "Pest Control",
+    "Pool Maintenance & Cleaning",
+    "Fence Installation & Repair",
+    "Snow Removal",
+    "House Cleaning (Maid Services)",
+    "Carpet & Upholstery Cleaning",
+    "Interior & Exterior Painting",
+    "Handyman Services",
+    "Drywall Repair & Installation",
+    "Flooring Installation",
+    "Window Washing",
+    "Furniture Assembly",
+    "Smart Home Installation",
+    "Solar Panel Installation",
+    "Home Security Monitoring",
+    "Senior Home Modifications",
+    "Air Duct & Vent Cleaning",
+    "Junk Removal & Moving"
 ];
 
 export function LandingPageManager() {
@@ -188,3 +212,5 @@ export function LandingPageManager() {
     </div>
   );
 }
+
+    
