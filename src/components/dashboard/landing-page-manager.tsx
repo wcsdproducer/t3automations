@@ -144,7 +144,7 @@ export function LandingPageManager() {
   };
 
 
-  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}&service=${encodeURIComponent(service)}&phone=${encodeURIComponent(businessProfile?.phoneNumber || '(000) 000-0000')}&logo=${encodeURIComponent(businessProfile?.logoUrl || '')}`;
+  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}&service=${encodeURIComponent(service)}&phone=${encodeURIComponent(businessProfile?.phoneNumber || '(000) 000-0000')}&logo=${encodeURIComponent(businessProfile?.logoUrl || '')}&companyName=${encodeURIComponent(businessProfile?.businessName || '')}`;
 
   if (isLoading) {
     return <p>Loading landing page settings...</p>;

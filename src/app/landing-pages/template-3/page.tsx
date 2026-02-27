@@ -18,6 +18,7 @@ function TemplateContent() {
   const service = searchParams.get('service') || 'HVAC Maintenance & Repair';
   const phoneParam = searchParams.get('phone') || '(000) 000-0000';
   const logoUrl = searchParams.get('logo');
+  const companyNameParam = searchParams.get('companyName');
 
   const [content, setContent] = useState<any>(null);
 
@@ -46,6 +47,7 @@ function TemplateContent() {
     return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
   }
 
+  const companyName = companyNameParam || content.companyName;
   const aboutImage = content.images.about;
   const heroImages = content.images.hero;
   const singleHeroImage = heroImages[0];
@@ -114,8 +116,8 @@ function TemplateContent() {
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                    {logoUrl && <Image src={logoUrl} alt={`${content.companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
-                    <h1 className="text-xl md:text-2xl font-bold text-primary">{content.companyName}</h1>
+                    {logoUrl && <Image src={logoUrl} alt={`${companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
+                    <h1 className="text-xl md:text-2xl font-bold text-primary">{companyName}</h1>
                 </div>
                 <nav className="hidden md:flex gap-6 items-center">
                     <a href="#services" className="text-sm font-medium hover:text-primary transition-colors">Services</a>
@@ -224,7 +226,7 @@ function TemplateContent() {
       </main>
       
       <footer className="py-6 text-center text-muted-foreground">
-        <p>{content.companyName} &copy; {new Date().getFullYear()}</p>
+        <p>{companyName} &copy; {new Date().getFullYear()}</p>
       </footer>
     </div>
   );

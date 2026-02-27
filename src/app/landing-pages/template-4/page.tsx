@@ -17,6 +17,7 @@ function TemplateContent() {
   const service = searchParams.get('service') || 'House Cleaning (Maid Services)';
   const phoneParam = searchParams.get('phone') || '(000) 000-0000';
   const logoUrl = searchParams.get('logo');
+  const companyNameParam = searchParams.get('companyName');
   
   const [content, setContent] = useState<any>(null);
 
@@ -44,7 +45,8 @@ function TemplateContent() {
   if (!content) {
     return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
   }
-
+  
+  const companyName = companyNameParam || content.companyName;
   const heroImages = content.images.hero;
   const singleHeroImage = heroImages[0];
   const galleryImages = content.images.gallery;
@@ -109,8 +111,8 @@ function TemplateContent() {
       <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-3">
-              {logoUrl && <Image src={logoUrl} alt={`${content.companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
-              <h1 className="text-2xl font-bold text-primary">{content.companyName}</h1>
+              {logoUrl && <Image src={logoUrl} alt={`${companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
+              <h1 className="text-2xl font-bold text-primary">{companyName}</h1>
             </div>
             <nav className="hidden md:flex gap-4 items-center text-sm font-medium">
                 <a href="#services" className="hover:text-primary transition-colors">Services</a>
@@ -217,7 +219,7 @@ function TemplateContent() {
 
        {/* Footer */}
       <footer className="py-8 px-6 text-center text-muted-foreground bg-white border-t">
-        <p>&copy; {new Date().getFullYear()} {content.companyName}. Serving our local community with pride.</p>
+        <p>&copy; {new Date().getFullYear()} {companyName}. Serving our local community with pride.</p>
       </footer>
     </div>
   );
