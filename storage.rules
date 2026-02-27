@@ -2,12 +2,10 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // WARNING: INSECURE - DO NOT USE IN PRODUCTION
-    // This rule allows anyone on the internet to read, write, and delete
-    // any file in your storage bucket. It is provided for temporary
-    // debugging only.
+    // This rule allows any authenticated user to read and write files.
+    // This is a secure default for most applications.
     match /{allPaths=**} {
-      allow read, write;
+      allow read, write: if request.auth != null;
     }
   }
 }
