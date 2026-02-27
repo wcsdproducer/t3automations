@@ -16,13 +16,26 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'Handyman Services';
-  const phone = searchParams.get('phone') || '(000) 000-0000';
+  const phoneParam = searchParams.get('phone') || '(000) 000-0000';
   
   const [content, setContent] = useState<any>(null);
 
   useEffect(() => {
     setContent(getContentForService(service));
   }, [service]);
+
+  const formatPhoneNumber = (value: string) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+  };
+
+  const phone = formatPhoneNumber(phoneParam);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })
