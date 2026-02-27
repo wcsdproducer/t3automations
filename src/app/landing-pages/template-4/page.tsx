@@ -5,7 +5,7 @@ import { Phone, CheckCircle, Star } from 'lucide-react';
 import Image from 'next/image';
 import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -100,9 +100,9 @@ function TemplateContent() {
                 <a href="#reviews" className="hover:text-primary transition-colors">Reviews</a>
                  <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
             </nav>
-            <a href="tel:1-800-123-4567" className="hidden md:flex items-center gap-2 font-semibold">
+            <a href="tel:(555) 123-4567" className="hidden md:flex items-center gap-2 font-semibold">
                 <Phone className="h-5 w-5" />
-                <span>1-800-123-4567</span>
+                <span>(555) 123-4567</span>
             </a>
         </div>
       </header>

@@ -2,12 +2,12 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, Brush, Hammer, Building } from 'lucide-react';
+import { Star, Brush, Hammer, Building, Phone } from 'lucide-react';
 import Image from 'next/image';
 import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -98,9 +98,15 @@ function TemplateContent() {
             <a href="#reviews" className="text-sm font-medium text-white hover:text-primary transition-colors">Reviews</a>
             <a href="#contact" className="text-sm font-medium text-white hover:text-primary transition-colors">Contact</a>
         </nav>
-        <a href="#contact">
-            <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black">Contact Us</Button>
-        </a>
+        <div className="flex items-center gap-6">
+            <a href="tel:(555) 123-4567" className="hidden md:flex items-center gap-2 font-semibold text-white">
+                <Phone className="h-5 w-5" />
+                <span>(555) 123-4567</span>
+            </a>
+            <a href="#contact">
+                <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black">Contact Us</Button>
+            </a>
+        </div>
       </header>
 
       <main>
