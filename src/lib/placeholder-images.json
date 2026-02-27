@@ -45,61 +45,61 @@
     {
       "id": "hvac-hero-1",
       "description": "HVAC hero image 1",
-      "imageUrl": "https://images.unsplash.com/photo-1662556153586-223039dc8152?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwdGVjaG5pY2lhbnxlbnwwfHx8fDE3NzIxNDQwNDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%201.jpeg?alt=media&token=a9c0e886-a07e-4938-91da-2cc15fdc9ae3",
       "imageHint": "hvac technician"
     },
     {
       "id": "hvac-hero-2",
       "description": "HVAC hero image 2",
-      "imageUrl": "https://images.unsplash.com/photo-1655194827229-a1d3192b533e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzbWFydCUyMHRoZXJtb3N0YXR8ZW58MHx8fHwxNzcyMTA4NDgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%202.jpeg?alt=media&token=db1b4604-0c3b-4bbf-be79-7fcfa0d6e71b",
       "imageHint": "smart thermostat"
     },
     {
       "id": "hvac-hero-3",
       "description": "HVAC hero image 3",
-      "imageUrl": "https://images.unsplash.com/photo-1759646827242-cf09e30709aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxodmFjJTIwbWFpbnRlbmFuY2V8ZW58MHx8fHwxNzcyMTYwODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%203.jpeg?alt=media&token=71eec710-7e25-4dfa-8085-f4abcc78a3fd",
       "imageHint": "hvac maintenance"
     },
     {
       "id": "hvac-hero-4",
       "description": "HVAC hero image 4",
-      "imageUrl": "https://images.unsplash.com/photo-1548705085-101177834f47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoYXBweSUyMGZhbWlseXxlbnwwfHx8fDE3NzIxNjA4Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%204.jpeg?alt=media&token=fa8920bb-a663-4914-bee5-2f71f54d1822",
       "imageHint": "happy family"
     },
     {
       "id": "hvac-hero-5",
       "description": "HVAC hero image 5",
-      "imageUrl": "https://images.unsplash.com/photo-1764604937098-b3f56d45fd3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwcHJvZmVzc2lvbmFsfGVufDB8fHx8MTc3MjE2MDg3OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%205.jpeg?alt=media&token=3c0c503d-56ab-4e2d-9ca2-b8c5ca70ed2b",
       "imageHint": "hvac professional"
     },
     {
       "id": "hvac-about",
       "description": "HVAC about image",
-      "imageUrl": "https://picsum.photos/seed/hvacAbout/800/600",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%206.jpeg?alt=media&token=d16ab17e-daaf-4e3f-9266-4bff4ad73292",
       "imageHint": "hvac van"
     },
     {
       "id": "hvac-gallery-1",
       "description": "HVAC gallery image 1",
-      "imageUrl": "https://picsum.photos/seed/hvacGal1/600/400",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%207.jpeg?alt=media&token=522e5b5a-bfe7-443a-a8e7-5151e72f0213",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-2",
       "description": "HVAC gallery image 2",
-      "imageUrl": "https://picsum.photos/seed/hvacGal2/600/400",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%208.jpeg?alt=media&token=417b259c-6721-4679-9b95-f82197a93210",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-3",
       "description": "HVAC gallery image 3",
-      "imageUrl": "https://picsum.photos/seed/hvacGal3/600/400",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%201.jpeg?alt=media&token=a9c0e886-a07e-4938-91da-2cc15fdc9ae3",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-4",
       "description": "HVAC gallery image 4",
-      "imageUrl": "https://picsum.photos/seed/hvacGal4/600/400",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.firebasestorage.app/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2FHVAC%20Maintenance%20%26%20Repair%202.jpeg?alt=media&token=db1b4604-0c3b-4bbf-be79-7fcfa0d6e71b",
       "imageHint": "hvac gallery"
     },
     {
