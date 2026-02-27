@@ -6,17 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink, Settings } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from '@/components/ui/separator';
@@ -84,13 +75,14 @@ export function LandingPageManager() {
 
   const { data: businessProfile, isLoading } = useDoc(businessProfileRef);
 
+  // State for the live preview
   const [selectedTemplate, setSelectedTemplate] = useState('template-3');
   const [heroEffect, setHeroEffect] = useState('slideshow');
   const [service, setService] = useState('HVAC Maintenance & Repair');
   
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [tempService, setTempService] = useState(service);
-  const [tempHeroEffect, setTempHeroEffect] = useState(heroEffect);
+  // Draft state for the form controls
+  const [draftService, setDraftService] = useState(service);
+  const [draftHeroEffect, setDraftHeroEffect] = useState(heroEffect);
 
 
   useEffect(() => {
@@ -99,41 +91,39 @@ export function LandingPageManager() {
       const savedTemplate = businessProfile.defaultLandingPage || getTemplateForService(savedService);
       const savedHeroEffect = businessProfile.heroEffect || 'slideshow';
 
+      // Live state
       setSelectedTemplate(savedTemplate);
       setHeroEffect(savedHeroEffect);
       setService(savedService);
+
+      // Draft state for controls
+      setDraftService(savedService);
+      setDraftHeroEffect(savedHeroEffect);
     }
   }, [businessProfile]);
-  
-  const handleOpenDialog = () => {
-    setTempService(service);
-    setTempHeroEffect(heroEffect);
-    setIsDialogOpen(true);
-  }
 
   const handleApplyChanges = () => {
     if (!user || !firestore || !businessProfileRef) return;
 
-    const newTemplate = getTemplateForService(tempService);
+    const newTemplate = getTemplateForService(draftService);
 
     const updates = {
-      service: tempService,
-      heroEffect: tempHeroEffect,
+      service: draftService,
+      heroEffect: draftHeroEffect,
       defaultLandingPage: newTemplate,
     };
 
     setDocumentNonBlocking(businessProfileRef, updates, { merge: true });
 
-    setService(tempService);
-    setHeroEffect(tempHeroEffect);
+    // Update live state to reflect changes in preview
+    setService(draftService);
+    setHeroEffect(draftHeroEffect);
     setSelectedTemplate(newTemplate);
 
     toast({
       title: 'Site Preferences Applied',
-      description: 'Your landing page has been updated to match your selections.',
+      description: 'Your landing page preview has been updated.',
     });
-
-    setIsDialogOpen(false);
   };
   
   const handleScrollToDns = () => {
@@ -165,6 +155,43 @@ export function LandingPageManager() {
             </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
+            <h3 className="text-lg font-semibold">Site Preferences</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
+              <div className="space-y-2">
+                <Label>Service Category</Label>
+                <p className="text-sm text-muted-foreground">This will also change your page template to match the service.</p>
+                <Select value={draftService} onValueChange={setDraftService}>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {homeServices.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Hero Section Effect</Label>
+                 <p className="text-sm text-muted-foreground">Choose the visual style for the top of your page.</p>
+                <RadioGroup value={draftHeroEffect} onValueChange={setDraftHeroEffect} className="flex gap-4 pt-2">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="slideshow" id="slideshow" />
+                      <Label htmlFor="slideshow">Slide Show</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="parallax" id="parallax" />
+                      <Label htmlFor="parallax">Parallax Effect</Label>
+                    </div>
+                </RadioGroup>
+              </div>
+              <div>
+                <Button onClick={handleApplyChanges} className="w-full lg:w-auto">Apply Changes</Button>
+              </div>
+            </div>
+          </div>
+          
+          <Separator />
+
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <Select onValueChange={setSelectedTemplate} value={selectedTemplate}>
               <SelectTrigger className="w-full sm:w-[280px]">
@@ -177,52 +204,7 @@ export function LandingPageManager() {
                 <SelectItem value="template-4">Friendly Local</SelectItem>
               </SelectContent>
             </Select>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" onClick={handleOpenDialog}>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Site Preferences
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Site Preferences</DialogTitle>
-                  <DialogDescription>
-                    Customize the look and feel of your landing page.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Service Category</h4>
-                    <p className="text-sm text-muted-foreground">This will also change your page template to match the service.</p>
-                    <Select value={tempService} onValueChange={setTempService}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {homeServices.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                  </div>
-                  <Separator />
-                  <h4 className="font-medium">Hero Section Effect</h4>
-                  <RadioGroup value={tempHeroEffect} onValueChange={setTempHeroEffect}>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="slideshow" id="slideshow" />
-                      <Label htmlFor="slideshow">Slide Show</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="parallax" id="parallax" />
-                      <Label htmlFor="parallax">Parallax Effect</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                  <Button onClick={handleApplyChanges}>Apply Changes</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            
             <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full">
                 View Live Page <ExternalLink className="ml-2 h-4 w-4" />
