@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/sections/header';
 import Footer from '@/components/sections/footer';
@@ -15,6 +15,12 @@ function PlanPageContent() {
   const searchParams = useSearchParams();
   const answersParam = searchParams.get('answers');
   const answers: Record<number, string | string[]> = answersParam ? JSON.parse(answersParam) : {};
+  const [generatedDate, setGeneratedDate] = useState('');
+
+  useEffect(() => {
+    setGeneratedDate(new Date().toLocaleDateString());
+  }, []);
+
 
   const getPersonalizedPlan = () => {
     const plan: {title: string, description: string}[] = [];
@@ -207,7 +213,7 @@ function PlanPageContent() {
                 <div className="text-center mb-8">
                     <T3LogoText className="text-primary text-3xl" />
                     <h1 className="text-2xl font-bold mt-4"><TranslatedText>Your Immediate Implementation Plan</TranslatedText></h1>
-                    <p className="text-muted-foreground"><TranslatedText>Generated on</TranslatedText>: {new Date().toLocaleDateString()}</p>
+                    <p className="text-muted-foreground"><TranslatedText>Generated on</TranslatedText>: {generatedDate}</p>
                 </div>
                 
                 <div className="mb-8">
