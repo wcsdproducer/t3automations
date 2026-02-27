@@ -16,6 +16,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -95,9 +96,9 @@ export function LandingPageManager() {
 
   useEffect(() => {
     if (businessProfile) {
-      const savedTemplate = businessProfile.defaultLandingPage || 'template-3';
-      const savedHeroEffect = businessProfile.heroEffect || 'slideshow';
       const savedService = businessProfile.service || 'HVAC Maintenance & Repair';
+      const savedTemplate = businessProfile.defaultLandingPage || getTemplateForService(savedService);
+      const savedHeroEffect = businessProfile.heroEffect || 'slideshow';
 
       setSelectedTemplate(savedTemplate);
       setHeroEffect(savedHeroEffect);
