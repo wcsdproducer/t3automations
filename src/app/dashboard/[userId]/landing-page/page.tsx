@@ -1,4 +1,3 @@
-
 'use client';
 import { LandingPageManager } from '@/components/dashboard/landing-page-manager';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -72,7 +71,9 @@ export default function LandingPageDashboardPage() {
   return (
     <>
       <LandingPageManager />
-      <DnsRecords />
+      <div id="dns-records">
+        <DnsRecords />
+      </div>
     </>
   );
 }

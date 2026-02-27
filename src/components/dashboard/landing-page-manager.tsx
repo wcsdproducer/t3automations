@@ -136,6 +136,13 @@ export function LandingPageManager() {
 
     setIsDialogOpen(false);
   };
+  
+  const handleScrollToDns = () => {
+    const dnsSection = document.getElementById('dns-records');
+    if (dnsSection) {
+      dnsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
 
   const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}&service=${encodeURIComponent(service)}`;
@@ -148,8 +155,15 @@ export function LandingPageManager() {
     <div className="mt-6">
       <Card>
         <CardHeader>
-          <CardTitle>Landing Page Management</CardTitle>
-          <CardDescription>Select a default landing page template for your business. View a live preview below.</CardDescription>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div>
+                    <CardTitle>Landing Page Management</CardTitle>
+                    <CardDescription>Select a default landing page template for your business. View a live preview below.</CardDescription>
+                </div>
+                <Button variant="outline" onClick={handleScrollToDns} className="mt-4 sm:mt-0 shrink-0">
+                  Add Your Own Domain
+                </Button>
+            </div>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
