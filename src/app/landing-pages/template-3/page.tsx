@@ -109,9 +109,6 @@ function TemplateContent() {
                         <Phone className="h-5 w-5" />
                         <span>(555) 123-4567</span>
                     </a>
-                    <a href="#contact">
-                        <Button>Get a Free Quote</Button>
-                    </a>
                 </div>
             </div>
         </header>

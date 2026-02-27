@@ -103,9 +103,6 @@ function TemplateContent() {
                 <Phone className="h-5 w-5" />
                 <span>(555) 123-4567</span>
             </a>
-            <a href="#contact">
-                <Button variant="outline" className="text-white border-white hover:bg-white hover:text-black">Contact Us</Button>
-            </a>
         </div>
       </header>
 
