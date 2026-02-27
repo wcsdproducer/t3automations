@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -149,7 +150,7 @@ export default function KnowledgeBasePage() {
 
     setIsUploading(true);
     
-    const filePath = `Clients/${user.uid}/agents/${agentId}/knowledgeBase/${crypto.randomUUID()}-${file.name}`;
+    const filePath = `businessProfiles/${user.uid}/knowledgeBase/files/${crypto.randomUUID()}-${file.name}`;
     const fileStorageRef = storageRef(storage, filePath);
 
     try {
