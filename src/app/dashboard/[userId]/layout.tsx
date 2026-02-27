@@ -46,6 +46,8 @@ const UserProfileDropdown = () => {
   const { user } = useUser();
   const auth = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const userIdSlug = params.userId as string;
 
   const handleSignOut = async () => {
     try {
@@ -82,7 +84,7 @@ const UserProfileDropdown = () => {
           <UserIcon className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(`/dashboard/${userIdSlug}/settings`)}>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
@@ -135,6 +137,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
                 <LayoutGrid className="h-4 w-4" />
                 Agents
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
+                <Settings className="h-4 w-4" />
+                Company Details
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/workflows`}>
                 <Workflow className="h-4 w-4" />
