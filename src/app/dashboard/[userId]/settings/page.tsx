@@ -1,8 +1,10 @@
+
 'use client';
 
-import React, { useEffect } from 'react';
-import { useUser, useFirestore, useDoc, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { useUser, useFirestore, useDoc, useMemoFirebase, useStorage } from '@/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,13 +12,15 @@ import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Image from 'next/image';
 
 const profileSchema = z.object({
   businessName: z.string().min(2, 'Business name is required.'),
   contactEmail: z.string().email('Invalid email address.'),
   phoneNumber: z.string().min(10, 'Invalid phone number.'),
   websiteUrl: z.string().url('Invalid URL.').optional().or(z.literal('')),
+  logoUrl: z.string().url().optional().or(z.literal('')),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -35,7 +39,11 @@ const formatPhoneNumber = (value: string) => {
 export default function SettingsPage() {
   const { user } = useUser();
   const firestore = useFirestore();
+  const storage = useStorage();
   const { toast } = useToast();
+
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   const businessProfileRef = useMemoFirebase(() => {
     if (!user || !firestore) return null;
@@ -51,6 +59,7 @@ export default function SettingsPage() {
       contactEmail: '',
       phoneNumber: '',
       websiteUrl: '',
+      logoUrl: '',
     },
   });
 
@@ -60,22 +69,47 @@ export default function SettingsPage() {
         ...businessProfile,
         phoneNumber: formatPhoneNumber(businessProfile.phoneNumber),
         websiteUrl: businessProfile.websiteUrl || '',
+        logoUrl: businessProfile.logoUrl || '',
       });
+      setLogoPreview(businessProfile.logoUrl || null);
     }
   }, [businessProfile, form]);
   
-  const onSubmit = (data: ProfileFormValues) => {
-    if (!businessProfileRef) return;
-    const updateData = {
-        ...data,
-        phoneNumber: data.phoneNumber.replace(/[^\d]/g, ''),
-        websiteUrl: data.websiteUrl || ''
-    };
-    setDocumentNonBlocking(businessProfileRef, updateData, { merge: true });
-    toast({
-      title: 'Success!',
-      description: 'Your company details have been updated.',
-    });
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (!businessProfileRef || !user || !storage) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not save details. Please try again.' });
+        return;
+    }
+
+    try {
+        let logoUrlToSave = data.logoUrl || '';
+
+        if (logoFile) {
+            const filePath = `businessProfiles/${user.uid}/logos/${crypto.randomUUID()}-${logoFile.name}`;
+            const fileStorageRef = storageRef(storage, filePath);
+            await uploadBytes(fileStorageRef, logoFile);
+            logoUrlToSave = await getDownloadURL(fileStorageRef);
+        }
+        
+        const updateData = {
+            ...data,
+            phoneNumber: data.phoneNumber.replace(/[^\d]/g, ''),
+            websiteUrl: data.websiteUrl || '',
+            logoUrl: logoUrlToSave,
+        };
+
+        await setDoc(businessProfileRef, updateData, { merge: true });
+
+        toast({
+          title: 'Success!',
+          description: 'Your company details have been updated.',
+        });
+        
+        setLogoFile(null);
+    } catch (error: any) {
+        console.error("Error updating profile:", error);
+        toast({ variant: "destructive", title: "Save Failed", description: error.message || "Could not save company details." });
+    }
   };
 
   if (isLoading) {
@@ -154,6 +188,51 @@ export default function SettingsPage() {
                   </FormItem>
                 )}
               />
+
+              <FormItem>
+                <FormLabel>Company Logo</FormLabel>
+                {logoPreview && (
+                    <div className="mt-2 flex items-center gap-4">
+                        <Image src={logoPreview} alt="Logo preview" width={100} height={100} className="rounded-md object-contain border p-2 bg-muted/20" />
+                        <Button 
+                            variant="outline" 
+                            size="sm"
+                            type="button"
+                            onClick={() => {
+                                setLogoPreview(null);
+                                setLogoFile(null);
+                                form.setValue('logoUrl', '');
+                            }}
+                        >
+                            Remove
+                        </Button>
+                    </div>
+                )}
+                <FormControl>
+                    <Input 
+                        type="file" 
+                        accept="image/png, image/jpeg, image/gif, image/svg+xml"
+                        className="mt-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                                if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                                    toast({ variant: 'destructive', title: 'File too large', description: 'Logo image must be less than 2MB.' });
+                                    return;
+                                }
+                                setLogoFile(file);
+                                setLogoPreview(URL.createObjectURL(file));
+                                form.setValue('logoUrl', URL.createObjectURL(file)); // to have a value to save
+                            }
+                        }}
+                    />
+                </FormControl>
+                <FormDescription>
+                    Upload your company logo (PNG, JPG, GIF, SVG). Max 2MB.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+
               <Button type="submit" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
               </Button>
@@ -164,3 +243,5 @@ export default function SettingsPage() {
     </>
   );
 }
+
+    
