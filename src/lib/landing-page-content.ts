@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 
 // A map to associate services with specific image hints for hero sections
@@ -68,6 +69,61 @@ function findImagesByHints(hints: string[]): ImagePlaceholder[] {
 export function getContentForService(service: string) {
     const defaultService = "Handyman Services";
     const serviceName = service || defaultService;
+
+    if (serviceName === "HVAC Maintenance & Repair") {
+        const hvacImages = {
+            hero: [
+                'hvac-hero-1', 'hvac-hero-2', 'hvac-hero-3', 'hvac-hero-4', 'hvac-hero-5'
+            ].map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean) as ImagePlaceholder[],
+            about: PlaceHolderImages.find(img => img.id === 'hvac-about'),
+            gallery: [
+                'hvac-gallery-1', 'hvac-gallery-2', 'hvac-gallery-3', 'hvac-gallery-4'
+            ].map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean) as ImagePlaceholder[],
+        }
+
+        return {
+            companyName: `HVAC Pros`,
+            hero: {
+                title: `Your Comfort is Our Priority.`,
+                subtitle: `24/7 Emergency HVAC Maintenance & Repair.`,
+                cta: "Get Your Free Quote Now",
+            },
+            services: {
+                title: `Our HVAC Services`,
+                subtitle: "Keeping your home comfortable all year round.",
+                items: [
+                    { title: `Emergency Repair`, description: "Fast, reliable repairs to get your system back up and running, anytime." },
+                    { title: "System Maintenance", description: "Preventative tune-ups to ensure efficiency and extend your system's life." },
+                    { title: "New System Installation", description: "High-efficiency solutions tailored to your home and budget." },
+                ]
+            },
+            about: {
+                title: `Your Trusted HVAC Experts`,
+                body: `For over 20 years, HVAC Pros has been the leading provider of heating, ventilation, and air conditioning services. Our certified technicians are dedicated to ensuring your home's comfort and safety.`,
+                points: [
+                    "24/7 Emergency Service",
+                    "Certified & Insured Technicians",
+                    "Upfront, Honest Pricing",
+                ]
+            },
+            reviews: {
+                title: `What Our Customers Are Saying`,
+                items: [
+                    { quote: `Our AC went out on the hottest day of the year. HVAC Pros had a technician here within an hour and fixed it fast. Lifesavers!`, author: "- Mark T." },
+                    { quote: `The team that installed our new furnace was professional, clean, and incredibly efficient. The new system works perfectly. Highly recommend!`, author: "- Jessica L." }
+                ]
+            },
+            contact: {
+                title: "Need HVAC Help?",
+                subtitle: `Don't wait! Contact us now for a free, no-obligation estimate.`,
+            },
+            images: {
+                hero: hvacImages.hero,
+                about: hvacImages.about || findImageByHint('hvac van'),
+                gallery: hvacImages.gallery,
+            }
+        };
+    }
 
     const content = {
         companyName: `${serviceName.replace(/ & /g, ' and ')} Pros`,
