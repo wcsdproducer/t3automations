@@ -3,25 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Check, Star, Wrench, Shield, Thermometer } from 'lucide-react';
 import Image from 'next/image';
-import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
+import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { getContentForService } from '@/lib/landing-page-content';
 
 function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
-
-  const aboutImage = PlaceHolderImages.find(img => img.id === 'lp3-about');
-  const heroImages = [
-    PlaceHolderImages.find(img => img.id === 'lp3-hero-1'),
-    PlaceHolderImages.find(img => img.id === 'lp3-hero-2'),
-    PlaceHolderImages.find(img => img.id === 'lp3-hero-3'),
-    PlaceHolderImages.find(img => img.id === 'lp3-hero-4'),
-    PlaceHolderImages.find(img => img.id === 'lp3-hero-5'),
-  ].filter((img): img is ImagePlaceholder => !!img);
+  const service = searchParams.get('service') || 'HVAC Maintenance & Repair';
+  const content = getContentForService(service);
+  
+  const aboutImage = content.images.about;
+  const heroImages = content.images.hero;
   const singleHeroImage = heroImages[0];
   
   const plugin = React.useRef(
@@ -30,9 +27,9 @@ function TemplateContent() {
 
   const heroContent = (
     <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-        <p className="text-primary font-semibold">24/7 EMERGENCY HVAC REPAIR</p>
-        <h1 className="text-4xl md:text-6xl font-extrabold mt-2">Don't Sweat It!</h1>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">We'll Fix Your AC Fast.</h2>
+        <p className="text-primary font-semibold">24/7 EMERGENCY REPAIR</p>
+        <h1 className="text-4xl md:text-6xl font-extrabold mt-2">{content.hero.title}</h1>
+        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">{content.hero.subtitle}</h2>
           <ul className="space-y-3 mt-6 max-w-md mx-auto text-left">
             <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">24/7 Emergency Service</span></li>
             <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /> <span className="font-medium">Certified & Insured Technicians</span></li>
@@ -91,7 +88,7 @@ function TemplateContent() {
     <div className="bg-background text-foreground">
         <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b">
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-                <h1 className="text-xl md:text-2xl font-bold text-primary">CoolBreeze HVAC</h1>
+                <h1 className="text-xl md:text-2xl font-bold text-primary">{content.companyName}</h1>
                 <nav className="hidden md:flex gap-6 items-center">
                     <a href="#services" className="text-sm font-medium hover:text-primary transition-colors">Services</a>
                     <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">Why Us</a>
@@ -109,8 +106,8 @@ function TemplateContent() {
         {/* Services Section */}
         <section id="services" className="py-16 md:py-24 px-4">
              <div className="container mx-auto text-center">
-                <h3 className="text-3xl font-bold">Complete HVAC Services</h3>
-                <p className="text-muted-foreground mt-2">Keeping you comfortable all year round.</p>
+                <h3 className="text-3xl font-bold">{content.services.title}</h3>
+                <p className="text-muted-foreground mt-2">{content.services.subtitle}</p>
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <Thermometer className="h-10 w-10 mx-auto text-primary" />
@@ -125,7 +122,7 @@ function TemplateContent() {
                 <div className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                     <Shield className="h-10 w-10 mx-auto text-primary" />
                     <h4 className="mt-4 text-xl font-semibold">New System Installation</h4>
-                    <p className="mt-2 text-muted-foreground">High-efficiency heating and cooling solutions tailored to your home.</p>
+                    <p className="mt-2 text-muted-foreground">High-efficiency solutions tailored to your home.</p>
                 </div>
                 </div>
             </div>
@@ -140,8 +137,8 @@ function TemplateContent() {
                     </div>
                 )}
                 <div>
-                    <h3 className="text-3xl font-bold">Why Choose CoolBreeze?</h3>
-                    <p className="mt-4 text-muted-foreground">We're a family-owned business dedicated to honest service and quality workmanship. When your HVAC system fails, you need a team you can trust to be there quickly and get the job done right the first time. That's our promise to you.</p>
+                    <h3 className="text-3xl font-bold">{content.about.title}</h3>
+                    <p className="mt-4 text-muted-foreground">{content.about.body}</p>
                 </div>
             </div>
         </section>
@@ -149,18 +146,15 @@ function TemplateContent() {
         {/* Google Reviews Section */}
         <section id="reviews" className="py-16 md:py-24 px-4">
             <div className="container mx-auto text-center">
-                <h3 className="text-3xl font-bold">Our Customers Feel the Difference</h3>
+                <h3 className="text-3xl font-bold">{content.reviews.title}</h3>
                  <div className="mt-12 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <div className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
-                        <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
-                        <p className="italic">"Our AC went out on the hottest day of the year. CoolBreeze was here within an hour and had us cool again in no time. Lifesavers!"</p>
-                        <p className="font-semibold mt-4">- Jenny T.</p>
-                    </div>
-                    <div className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
-                        <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
-                        <p className="italic">"Honest pricing and great service. They explained everything clearly and didn't try to upsell me. I'll be using them for all my HVAC needs."</p>
-                        <p className="font-semibold mt-4">- David R.</p>
-                    </div>
+                    {content.reviews.items.map((review, index) => (
+                      <div key={index} className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
+                          <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
+                          <p className="italic">"{review.quote}"</p>
+                          <p className="font-semibold mt-4">{review.author}</p>
+                      </div>
+                    ))}
                  </div>
             </div>
         </section>
@@ -169,8 +163,8 @@ function TemplateContent() {
         <section id="contact" className="bg-primary text-primary-foreground py-16 md:py-24">
             <div className="container mx-auto px-4">
                  <div className="bg-muted text-foreground p-8 rounded-lg shadow-lg max-w-lg mx-auto">
-                    <h3 className="text-2xl font-bold text-center">Get Your Free Repair Quote Now!</h3>
-                    <p className="text-center text-muted-foreground mt-2">Fill out the form below for an instant callback.</p>
+                    <h3 className="text-2xl font-bold text-center">{content.contact.title}</h3>
+                    <p className="text-center text-muted-foreground mt-2">{content.contact.subtitle}</p>
                     <form className="mt-6 space-y-4">
                     <Input placeholder="Name" required />
                     <Input type="tel" placeholder="Phone Number" required />
@@ -184,7 +178,7 @@ function TemplateContent() {
       </main>
       
       <footer className="py-6 text-center text-muted-foreground">
-        <p>CoolBreeze HVAC &copy; {new Date().getFullYear()}</p>
+        <p>{content.companyName} &copy; {new Date().getFullYear()}</p>
       </footer>
     </div>
   );
@@ -197,5 +191,3 @@ export default function LandingPageTemplate3() {
       </Suspense>
   )
 }
-
-    

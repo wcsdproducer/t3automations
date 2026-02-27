@@ -3,32 +3,24 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, Brush, Hammer, Building } from 'lucide-react';
 import Image from 'next/image';
-import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
+import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { getContentForService } from '@/lib/landing-page-content';
 
 function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
+  const service = searchParams.get('service') || 'Handyman Services';
+  const content = getContentForService(service);
 
-  const aboutImage = PlaceHolderImages.find(img => img.id === 'lp2-about');
-  const galleryImages = [
-    PlaceHolderImages.find(img => img.id === 'lp2-gal1'),
-    PlaceHolderImages.find(img => img.id === 'lp2-gal2'),
-    PlaceHolderImages.find(img => img.id === 'lp2-gal3'),
-    PlaceHolderImages.find(img => img.id === 'lp2-gal4'),
-  ];
-  const heroImages = [
-    PlaceHolderImages.find(img => img.id === 'lp2-hero-1'),
-    PlaceHolderImages.find(img => img.id === 'lp2-hero-2'),
-    PlaceHolderImages.find(img => img.id === 'lp2-hero-3'),
-    PlaceHolderImages.find(img => img.id === 'lp2-hero-4'),
-    PlaceHolderImages.find(img => img.id === 'lp2-hero-5'),
-  ].filter((img): img is ImagePlaceholder => !!img);
+  const aboutImage = content.images.about;
+  const galleryImages = content.images.gallery;
+  const heroImages = content.images.hero;
   const singleHeroImage = heroImages[0];
 
   const plugin = React.useRef(
@@ -37,8 +29,8 @@ function TemplateContent() {
 
   const heroContent = (
     <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-      <h2 className="text-4xl md:text-6xl font-bold">Exquisite Home Renovations</h2>
-      <p className="mt-4 text-lg md:text-xl">We bring your vision to life with unparalleled craftsmanship and design.</p>
+      <h2 className="text-4xl md:text-6xl font-bold">{content.hero.title}</h2>
+      <p className="mt-4 text-lg md:text-xl">{content.hero.subtitle}</p>
     </div>
   );
 
@@ -89,7 +81,7 @@ function TemplateContent() {
     <div className="bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-50 p-6 flex justify-between items-center bg-background/30 backdrop-blur-md transition-colors duration-300">
-        <h1 className="text-2xl font-bold text-white tracking-wider">LuxeFinish</h1>
+        <h1 className="text-2xl font-bold text-white tracking-wider">{content.companyName}</h1>
         <nav className="hidden md:flex gap-6 items-center">
             <a href="#services" className="text-sm font-medium text-white hover:text-primary transition-colors">Services</a>
             <a href="#about" className="text-sm font-medium text-white hover:text-primary transition-colors">About Us</a>
@@ -107,8 +99,8 @@ function TemplateContent() {
         {/* Services Section */}
         <section id="services" className="py-16 md:py-24 px-6 bg-secondary">
           <div className="container mx-auto text-center">
-            <h3 className="text-3xl font-bold">Our Signature Services</h3>
-            <p className="text-muted-foreground mt-2">Crafting beautiful and functional spaces.</p>
+            <h3 className="text-3xl font-bold">{content.services.title}</h3>
+            <p className="text-muted-foreground mt-2">{content.services.subtitle}</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
                     <Brush className="h-10 w-10 text-primary" />
@@ -146,8 +138,8 @@ function TemplateContent() {
                     </div>
                 )}
                 <div>
-                    <h3 className="text-3xl font-bold">The LuxeFinish Difference</h3>
-                    <p className="mt-4 text-muted-foreground">LuxeFinish was founded on the principle of artistry in construction. We believe every renovation is an opportunity to create something truly special. Our team of designers, architects, and master craftsmen work in harmony to deliver a seamless experience and a final product that exceeds every expectation.</p>
+                    <h3 className="text-3xl font-bold">{content.about.title}</h3>
+                    <p className="mt-4 text-muted-foreground">{content.about.body}</p>
                 </div>
             </div>
         </section>
@@ -156,22 +148,17 @@ function TemplateContent() {
         {/* Google Reviews Section */}
         <section id="reviews" className="py-16 md:py-24 px-6 bg-secondary">
           <div className="container mx-auto max-w-4xl">
-             <h3 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h3>
+             <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <Card className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                 <CardContent className="p-6">
-                  <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
-                  <p className="text-muted-foreground">"LuxeFinish transformed our outdated kitchen into a modern masterpiece. The attention to detail was impeccable."</p>
-                  <p className="font-semibold mt-4">- The Johnson Family</p>
-                 </CardContent>
-               </Card>
-                <Card className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                 <CardContent className="p-6">
-                  <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
-                  <p className="text-muted-foreground">"Professional, timely, and the final result exceeded all our expectations. Highly recommend their services!"</p>
-                  <p className="font-semibold mt-4">- Mark & Sarah Lee</p>
-                 </CardContent>
-               </Card>
+               {content.reviews.items.map((review, index) => (
+                  <Card key={index} className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                    <CardContent className="p-6">
+                      <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
+                      <p className="text-muted-foreground">"{review.quote}"</p>
+                      <p className="font-semibold mt-4">{review.author}</p>
+                    </CardContent>
+                  </Card>
+               ))}
              </div>
           </div>
         </section>
@@ -179,8 +166,8 @@ function TemplateContent() {
          {/* Contact Section */}
         <section id="contact" className="py-16 md:py-24 px-6">
             <div className="container mx-auto max-w-2xl text-center">
-                <h3 className="text-3xl font-bold">Start Your Transformation</h3>
-                <p className="text-muted-foreground mt-2">Contact us today for a consultation on your next project.</p>
+                <h3 className="text-3xl font-bold">{content.contact.title}</h3>
+                <p className="text-muted-foreground mt-2">{content.contact.subtitle}</p>
                 <form className="mt-8 space-y-4 text-left">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Input placeholder="First Name" />
@@ -196,7 +183,7 @@ function TemplateContent() {
 
        {/* Footer */}
        <footer className="py-8 px-6 text-center text-muted-foreground bg-secondary">
-        <p>&copy; {new Date().getFullYear()} LuxeFinish. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} {content.companyName}. All Rights Reserved.</p>
       </footer>
     </div>
   );
@@ -209,5 +196,3 @@ export default function LandingPageTemplate2() {
         </Suspense>
     )
 }
-
-    

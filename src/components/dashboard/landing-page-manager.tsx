@@ -56,7 +56,7 @@ const homeServices = [
 ];
 
 const getTemplateForService = (service: string): string => {
-    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing"];
+    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing", "Junk Removal & Moving", "Air Duct & Vent Cleaning", "Pressure Washing"];
     const hvacServices = ["HVAC Maintenance & Repair", "Solar Panel Installation"];
     const luxuryRemodelServices = ["Landscaping & Garden Design", "Interior & Exterior Painting", "Flooring Installation", "Drywall Repair & Installation", "Appliance Repair"];
     
@@ -138,7 +138,7 @@ export function LandingPageManager() {
   };
 
 
-  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}`;
+  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}&service=${encodeURIComponent(service)}`;
 
   if (isLoading) {
     return <p>Loading landing page settings...</p>;
