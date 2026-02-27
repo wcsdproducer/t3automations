@@ -186,7 +186,7 @@ export default function KnowledgeBasePage() {
     try {
       await deleteDoc(docRef);
       toast({ title: 'Item deleted', description: 'The knowledge base item has been removed.' });
-    } catch (error: any) => {
+    } catch (error: any) {
       toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to delete item.' });
     }
   };
