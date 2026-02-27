@@ -158,18 +158,31 @@ function TemplateContent() {
         {/* Google Reviews Section */}
         <section id="reviews" className="py-16 md:py-24 px-6 bg-secondary">
           <div className="container mx-auto max-w-4xl">
-             <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {content.reviews.items.map((review: any, index: number) => (
-                  <Card key={index} className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                    <CardContent className="p-6">
-                      <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
-                      <p className="text-muted-foreground">"{review.quote}"</p>
-                      <p className="font-semibold mt-4">{review.author}</p>
-                    </CardContent>
-                  </Card>
-               ))}
-             </div>
+            <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[plugin.current]}
+              className="w-full"
+            >
+              <CarouselContent>
+                {content.reviews.items.map((review: any, index: number) => (
+                  <CarouselItem key={index} className="md:basis-1/2">
+                    <div className="p-1 h-full">
+                      <Card className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
+                        <CardContent className="p-6 flex flex-col flex-grow">
+                          <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>
+                          <p className="text-muted-foreground flex-grow">"{review.quote}"</p>
+                          <p className="font-semibold mt-4">{review.author}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
           </div>
         </section>
 

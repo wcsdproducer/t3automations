@@ -152,16 +152,33 @@ function TemplateContent() {
         
         {/* Google Reviews Section */}
         <section id="reviews" className="bg-white py-16 md:py-24 px-6">
-            <div className="container mx-auto max-w-4xl text-center">
-                <h3 className="text-3xl font-bold">{content.reviews.title}</h3>
-                <div className="mt-12">
-                     <div className="p-8 rounded-lg bg-background transition-shadow hover:shadow-xl">
-                         <div className="flex text-yellow-400 mb-4 justify-center"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
-                        <p className="text-xl italic text-muted-foreground">"{content.reviews.items[0].quote}"</p>
-                        <p className="font-semibold mt-6">{content.reviews.items[0].author}</p>
-                    </div>
-                </div>
+          <div className="container mx-auto max-w-4xl text-center">
+            <h3 className="text-3xl font-bold">{content.reviews.title}</h3>
+            <div className="mt-12">
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                plugins={[plugin.current]}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {content.reviews.items.map((review: any, index: number) => (
+                    <CarouselItem key={index}>
+                      <div className="p-1">
+                        <div className="p-8 rounded-lg bg-background transition-shadow hover:shadow-xl">
+                          <div className="flex text-yellow-400 mb-4 justify-center"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
+                          <p className="text-xl italic text-muted-foreground">"{review.quote}"</p>
+                          <p className="font-semibold mt-6">{review.author}</p>
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
             </div>
+          </div>
         </section>
 
          {/* Call to Action / Contact */}

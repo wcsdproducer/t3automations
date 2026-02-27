@@ -24,7 +24,7 @@ function TemplateContent() {
   }, [service]);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })
   );
 
   if (!content) {
@@ -152,17 +152,32 @@ function TemplateContent() {
         
         {/* Google Reviews Section */}
         <section id="reviews" className="py-16 md:py-24 px-6">
-             <div className="container mx-auto max-w-4xl">
-             <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="container mx-auto max-w-4xl">
+            <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              plugins={[plugin.current]}
+              className="w-full"
+            >
+              <CarouselContent>
                 {content.reviews.items.map((review: any, index: number) => (
-                  <div key={index} className="border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:border-primary">
-                    <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
-                    <p className="text-muted-foreground">"{review.quote}"</p>
-                    <p className="font-semibold mt-4">{review.author}</p>
-                  </div>
+                  <CarouselItem key={index}>
+                    <div className="p-1 h-full">
+                      <div className="border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:border-primary h-full flex flex-col justify-between">
+                        <div>
+                          <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
+                          <p className="text-muted-foreground">"{review.quote}"</p>
+                        </div>
+                        <p className="font-semibold mt-4">{review.author}</p>
+                      </div>
+                    </div>
+                  </CarouselItem>
                 ))}
-             </div>
+              </CarouselContent>
+            </Carousel>
           </div>
         </section>
 
