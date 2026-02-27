@@ -138,10 +138,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <LayoutGrid className="h-4 w-4" />
                 Agents
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
-                <Settings className="h-4 w-4" />
-                Company Details
-              </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/workflows`}>
                 <Workflow className="h-4 w-4" />
                 Workflows
@@ -153,6 +149,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
                 <LayoutTemplate className="h-4 w-4" />
                 Landing Page
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
+                <Settings className="h-4 w-4" />
+                Company Details
               </SidebarNavLink>
             </nav>
           </div>
