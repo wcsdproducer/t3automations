@@ -45,7 +45,10 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (businessProfile) {
-      form.reset(businessProfile);
+      form.reset({
+        ...businessProfile,
+        websiteUrl: businessProfile.websiteUrl || '',
+      });
     }
   }, [businessProfile, form]);
   
