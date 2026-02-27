@@ -195,9 +195,6 @@ function TemplateContent() {
               <Textarea placeholder="Tell us about your project..." />
               <Button type="submit" className="w-full">Submit Request</Button>
             </form>
-             <div className="mt-8 text-muted-foreground">
-                <p className="flex items-center justify-center gap-2"><Phone className="h-5 w-5 text-primary" /> (555) 123-4567</p>
-            </div>
           </div>
         </section>
       </main>
