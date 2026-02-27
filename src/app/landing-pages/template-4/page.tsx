@@ -152,7 +152,7 @@ function TemplateContent() {
         
         {/* Google Reviews Section */}
         <section id="reviews" className="bg-white py-16 md:py-24 px-6">
-          <div className="container mx-auto max-w-4xl text-center">
+          <div className="container mx-auto max-w-6xl text-center">
             <h3 className="text-3xl font-bold">{content.reviews.title}</h3>
             <div className="mt-12">
               <Carousel
@@ -165,7 +165,7 @@ function TemplateContent() {
               >
                 <CarouselContent>
                   {content.reviews.items.map((review: any, index: number) => (
-                    <CarouselItem key={index}>
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                       <div className="p-1">
                         <div className="p-8 rounded-lg bg-background transition-shadow hover:shadow-xl">
                           <div className="flex text-yellow-400 mb-4 justify-center"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
