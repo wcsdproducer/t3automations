@@ -21,6 +21,17 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
+const formatPhoneNumber = (value: string) => {
+  if (!value) return value;
+  const phoneNumber = value.replace(/[^\d]/g, '');
+  const phoneNumberLength = phoneNumber.length;
+  if (phoneNumberLength < 4) return phoneNumber;
+  if (phoneNumberLength < 7) {
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+  }
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+};
+
 export default function SettingsPage() {
   const { user } = useUser();
   const firestore = useFirestore();
@@ -47,6 +58,7 @@ export default function SettingsPage() {
     if (businessProfile) {
       form.reset({
         ...businessProfile,
+        phoneNumber: formatPhoneNumber(businessProfile.phoneNumber),
         websiteUrl: businessProfile.websiteUrl || '',
       });
     }
@@ -56,6 +68,7 @@ export default function SettingsPage() {
     if (!businessProfileRef) return;
     const updateData = {
         ...data,
+        phoneNumber: data.phoneNumber.replace(/[^\d]/g, ''),
         websiteUrl: data.websiteUrl || ''
     };
     setDocumentNonBlocking(businessProfileRef, updateData, { merge: true });
@@ -68,17 +81,6 @@ export default function SettingsPage() {
   if (isLoading) {
     return <p>Loading company details...</p>;
   }
-
-  const formatPhoneNumber = (value: string) => {
-    if (!value) return value;
-    const phoneNumber = value.replace(/[^\d]/g, '');
-    const phoneNumberLength = phoneNumber.length;
-    if (phoneNumberLength < 4) return phoneNumber;
-    if (phoneNumberLength < 7) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-  };
   
   return (
     <>
