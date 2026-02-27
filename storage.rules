@@ -2,36 +2,10 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    /**
-     * @description This rule secures the multi-tenant storage structure for the knowledge base.
-     *              It grants a user read and write access ONLY to the knowledge base files
-     *              associated with their agents.
-     * @path /Clients/{userId}/agents/{agentId}/knowledgeBase/{allPaths=**}
-     *
-     * @example_allow
-     * // User 'user-123' uploads a file for their agent 'agent-abc':
-     * // path: /Clients/user-123/agents/agent-abc/knowledgeBase/some-file.pdf
-     * // The {userId} wildcard matches 'user-123'.
-     * // The rule `request.auth.uid == userId` passes.
-     *
-     * @example_deny
-     * // User 'user-123' attempts to access another user's files:
-     * // path: /Clients/user-456/agents/agent-xyz/knowledgeBase/some-file.pdf
-     * // The {userId} wildcard matches 'user-456'.
-     * // The rule `request.auth.uid == userId` fails.
-     */
-    match /Clients/{userId}/agents/{agentId}/knowledgeBase/{allPaths=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    /**
-     * @description This rule makes all files under the 'Site Media' folder publicly readable.
-     *              This is used for public assets like landing page images.
-     * @path /'Site Media'/{allPaths=**}
-     */
-    match /'Site Media'/{allPaths=**} {
-      allow read;
-      allow write: if false; // Explicitly deny public writes
+    // Development rule: Allows any authenticated user to read and write any file.
+    // WARNING: This is insecure and should not be used in production.
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
     }
   }
 }
