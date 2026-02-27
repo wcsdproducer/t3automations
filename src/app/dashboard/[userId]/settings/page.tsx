@@ -54,7 +54,11 @@ export default function SettingsPage() {
   
   const onSubmit = (data: ProfileFormValues) => {
     if (!businessProfileRef) return;
-    setDocumentNonBlocking(businessProfileRef, data, { merge: true });
+    const updateData = {
+        ...data,
+        websiteUrl: data.websiteUrl || ''
+    };
+    setDocumentNonBlocking(businessProfileRef, updateData, { merge: true });
     toast({
       title: 'Success!',
       description: 'Your company details have been updated.',
@@ -64,6 +68,17 @@ export default function SettingsPage() {
   if (isLoading) {
     return <p>Loading company details...</p>;
   }
+
+  const formatPhoneNumber = (value: string) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+  };
   
   return (
     <>
@@ -111,7 +126,14 @@ export default function SettingsPage() {
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="(123) 456-7890" {...field} />
+                      <Input 
+                        placeholder="(123) 456-7890" 
+                        {...field}
+                        onChange={(e) => {
+                            const formatted = formatPhoneNumber(e.target.value);
+                            field.onChange(formatted);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +146,7 @@ export default function SettingsPage() {
                   <FormItem>
                     <FormLabel>Website URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://yourbusiness.com" {...field} />
+                      <Input placeholder="https://yourbusiness.com" {...field} value={field.value ?? ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
