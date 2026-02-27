@@ -83,6 +83,7 @@ export function LandingPageManager() {
   // Draft state for the form controls
   const [draftService, setDraftService] = useState(service);
   const [draftHeroEffect, setDraftHeroEffect] = useState(heroEffect);
+  const [draftTemplate, setDraftTemplate] = useState(selectedTemplate);
 
 
   useEffect(() => {
@@ -99,18 +100,17 @@ export function LandingPageManager() {
       // Draft state for controls
       setDraftService(savedService);
       setDraftHeroEffect(savedHeroEffect);
+      setDraftTemplate(savedTemplate);
     }
   }, [businessProfile]);
 
   const handleApplyChanges = () => {
     if (!user || !firestore || !businessProfileRef) return;
 
-    const newTemplate = getTemplateForService(draftService);
-
     const updates = {
       service: draftService,
       heroEffect: draftHeroEffect,
-      defaultLandingPage: newTemplate,
+      defaultLandingPage: draftTemplate,
     };
 
     setDocumentNonBlocking(businessProfileRef, updates, { merge: true });
@@ -118,7 +118,7 @@ export function LandingPageManager() {
     // Update live state to reflect changes in preview
     setService(draftService);
     setHeroEffect(draftHeroEffect);
-    setSelectedTemplate(newTemplate);
+    setSelectedTemplate(draftTemplate);
 
     toast({
       title: 'Site Preferences Applied',
@@ -157,10 +157,26 @@ export function LandingPageManager() {
         <CardContent className="space-y-6">
           <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
             <h3 className="text-lg font-semibold">Site Preferences</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+              <div className="space-y-2">
+                <Label>Template Style</Label>
+                <p className="text-sm text-muted-foreground min-h-[40px]">Choose the overall look and feel for your page.</p>
+                <Select value={draftTemplate} onValueChange={setDraftTemplate}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="template-1">Classic Professional</SelectItem>
+                    <SelectItem value="template-2">Modern Visual</SelectItem>
+                    <SelectItem value="template-3">Direct Response</SelectItem>
+                    <SelectItem value="template-4">Friendly Local</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label>Service Category</Label>
-                <p className="text-sm text-muted-foreground">This will also change your page template to match the service.</p>
+                <p className="text-sm text-muted-foreground min-h-[40px]">This will provide relevant content for your page.</p>
                 <Select value={draftService} onValueChange={setDraftService}>
                     <SelectTrigger>
                         <SelectValue placeholder="Select a service" />
@@ -170,9 +186,10 @@ export function LandingPageManager() {
                     </SelectContent>
                 </Select>
               </div>
+
               <div className="space-y-2">
                 <Label>Hero Section Effect</Label>
-                 <p className="text-sm text-muted-foreground">Choose the visual style for the top of your page.</p>
+                 <p className="text-sm text-muted-foreground min-h-[40px]">Choose the visual style for the top of your page.</p>
                 <RadioGroup value={draftHeroEffect} onValueChange={setDraftHeroEffect} className="flex gap-4 pt-2">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="slideshow" id="slideshow" />
@@ -184,8 +201,9 @@ export function LandingPageManager() {
                     </div>
                 </RadioGroup>
               </div>
+
               <div>
-                <Button onClick={handleApplyChanges} className="w-full lg:w-auto">Apply Changes</Button>
+                <Button onClick={handleApplyChanges} className="w-full">Apply Changes</Button>
               </div>
             </div>
           </div>
@@ -193,18 +211,6 @@ export function LandingPageManager() {
           <Separator />
 
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Select onValueChange={setSelectedTemplate} value={selectedTemplate}>
-              <SelectTrigger className="w-full sm:w-[280px]">
-                <SelectValue placeholder="Select a template" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="template-1">Classic Professional</SelectItem>
-                <SelectItem value="template-2">Modern Visual</SelectItem>
-                <SelectItem value="template-3">Direct Response</SelectItem>
-                <SelectItem value="template-4">Friendly Local</SelectItem>
-              </SelectContent>
-            </Select>
-            
             <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full">
                 View Live Page <ExternalLink className="ml-2 h-4 w-4" />
