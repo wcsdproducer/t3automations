@@ -56,7 +56,7 @@ const homeServices = [
 ];
 
 const getTemplateForService = (service: string): string => {
-    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing", "Gutter Cleaning & Repair", "Pressure Washing", "Junk Removal & Moving", "Air Duct & Vent Cleaning"];
+    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing"];
     const hvacServices = ["HVAC Maintenance & Repair", "Solar Panel Installation"];
     const luxuryRemodelServices = ["Landscaping & Garden Design", "Interior & Exterior Painting", "Flooring Installation", "Drywall Repair & Installation", "Appliance Repair"];
     
