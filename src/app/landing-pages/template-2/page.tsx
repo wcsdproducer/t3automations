@@ -17,6 +17,7 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'Handyman Services';
+  const phone = searchParams.get('phone') || '(000) 000-0000';
   
   const [content, setContent] = useState<any>(null);
 
@@ -99,9 +100,9 @@ function TemplateContent() {
             <a href="#contact" className="text-sm font-medium text-white hover:text-primary transition-colors">Contact</a>
         </nav>
         <div className="flex items-center gap-6">
-            <a href="tel:(555) 123-4567" className="hidden md:flex items-center gap-2 font-semibold text-white">
+            <a href={`tel:${phone}`} className="hidden md:flex items-center gap-2 font-semibold text-white">
                 <Phone className="h-5 w-5" />
-                <span>(555) 123-4567</span>
+                <span>{phone}</span>
             </a>
         </div>
       </header>
