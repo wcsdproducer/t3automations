@@ -189,8 +189,15 @@ export function LandingPageManager() {
 
               <div className="space-y-2">
                 <Label>Hero Section Effect</Label>
-                 <p className="text-sm text-muted-foreground min-h-[40px]">Choose the visual style for the top of your page.</p>
-                <RadioGroup value={draftHeroEffect} onValueChange={setDraftHeroEffect} className="flex gap-4 pt-2">
+                <p className="text-sm text-muted-foreground min-h-[40px]">
+                  Choose the visual style for the top of your page.
+                </p>
+                <div className="flex h-10 items-center">
+                  <RadioGroup
+                    value={draftHeroEffect}
+                    onValueChange={setDraftHeroEffect}
+                    className="flex gap-4"
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="slideshow" id="slideshow" />
                       <Label htmlFor="slideshow">Slide Show</Label>
@@ -199,7 +206,8 @@ export function LandingPageManager() {
                       <RadioGroupItem value="parallax" id="parallax" />
                       <Label htmlFor="parallax">Parallax Effect</Label>
                     </div>
-                </RadioGroup>
+                  </RadioGroup>
+                </div>
               </div>
 
               <div>
