@@ -121,7 +121,10 @@ export function getContentForService(service: string) {
                 title: `What Our Customers Are Saying`,
                 items: [
                     { quote: `Our AC went out on the hottest day of the year. HVAC Pros had a technician here within an hour and fixed it fast. Lifesavers!`, author: "- Mark T." },
-                    { quote: `The team that installed our new furnace was professional, clean, and incredibly efficient. The new system works perfectly. Highly recommend!`, author: "- Jessica L." }
+                    { quote: `The team that installed our new furnace was professional, clean, and incredibly efficient. The new system works perfectly. Highly recommend!`, author: "- Jessica L." },
+                    { quote: `I've used them for annual maintenance for years. Always reliable and they keep my system running smoothly. Great service.`, author: "- David P." },
+                    { quote: `Honest pricing and excellent work. They explained everything clearly and didn't try to upsell me. I'll be a customer for life.`, author: "- Maria G." },
+                    { quote: `Fast, friendly, and knowledgeable. Fixed my heater on a cold winter night. Can't thank them enough!`, author: "- Chris B." }
                 ]
             },
             contact: {
@@ -179,7 +182,10 @@ export function getContentForService(service: string) {
                 title: `What Our Customers Are Saying`,
                 items: [
                     { quote: `Had a burst pipe at 2 AM. The plumber from Plumbing Pros was here in 30 minutes and fixed it. Absolutely saved us!`, author: "- Emily R." },
-                    { quote: `They installed a new water heater for us. The process was smooth, professional, and the price was fair. I'd recommend them to anyone.`, author: "- David C." }
+                    { quote: `They installed a new water heater for us. The process was smooth, professional, and the price was fair. I'd recommend them to anyone.`, author: "- David C." },
+                    { quote: `Cleared a tough clog that I couldn't fix myself. The plumber was friendly and got the job done quickly. Very impressed.`, author: "- Samantha K." },
+                    { quote: `We had our whole house re-piped. It was a big job, but they handled it with professionalism and kept the disruption to a minimum.`, author: "- Brian W." },
+                    { quote: `Finally, a plumber that shows up on time and does what they say they'll do. Will definitely use them again for any plumbing needs.`, author: "- Jennifer A." }
                 ]
             },
             contact: {
@@ -223,7 +229,10 @@ export function getContentForService(service: string) {
             title: `Trusted by Your Neighbors for ${serviceName}`,
             items: [
                 { quote: `The team was fantastic. They were on time, professional, and did an amazing job with our ${serviceName.toLowerCase()}. We couldn't be happier!`, author: "- Sarah J." },
-                { quote: `I had an issue that two other companies couldn't figure out. They diagnosed and fixed it in under an hour. True professionals.`, author: "- Mike D." }
+                { quote: `I had an issue that two other companies couldn't figure out. They diagnosed and fixed it in under an hour. True professionals.`, author: "- Mike D." },
+                { quote: `Highly recommend! The quality of their work is top-notch, and their customer service is excellent. A pleasure to work with.`, author: "- Kevin S." },
+                { quote: `From the first call to the finished job, everything was seamless. They exceeded my expectations.`, author: "- Amanda P." },
+                { quote: `Fair pricing and incredible attention to detail. They really care about the work they do.`, author: "- Jason R." }
             ]
         },
         contact: {
