@@ -16,8 +16,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -56,6 +54,24 @@ const homeServices = [
     "Junk Removal & Moving"
 ];
 
+const getTemplateForService = (service: string): string => {
+    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing", "Gutter Cleaning & Repair", "Pressure Washing", "Junk Removal & Moving", "Air Duct & Vent Cleaning"];
+    const hvacServices = ["HVAC Maintenance & Repair", "Solar Panel Installation"];
+    const luxuryRemodelServices = ["Landscaping & Garden Design", "Interior & Exterior Painting", "Flooring Installation", "Drywall Repair & Installation", "Appliance Repair"];
+    
+    if (cleaningServices.includes(service)) {
+        return 'template-4'; // Friendly local service theme
+    }
+    if (hvacServices.includes(service)) {
+        return 'template-3'; // Direct response theme
+    }
+    if (luxuryRemodelServices.includes(service)) {
+        return 'template-2'; // Modern visual theme for remodels
+    }
+    return 'template-1'; // Classic professional theme for other trades
+};
+
+
 export function LandingPageManager() {
   const { user } = useUser();
   const firestore = useFirestore();
@@ -71,50 +87,55 @@ export function LandingPageManager() {
   const [selectedTemplate, setSelectedTemplate] = useState('template-3');
   const [heroEffect, setHeroEffect] = useState('slideshow');
   const [service, setService] = useState('HVAC Maintenance & Repair');
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [tempService, setTempService] = useState(service);
+  const [tempHeroEffect, setTempHeroEffect] = useState(heroEffect);
+
 
   useEffect(() => {
     if (businessProfile) {
-      setSelectedTemplate(businessProfile.defaultLandingPage || 'template-3');
-      setHeroEffect(businessProfile.heroEffect || 'slideshow');
-      setService(businessProfile.service || 'HVAC Maintenance & Repair');
+      const savedTemplate = businessProfile.defaultLandingPage || 'template-3';
+      const savedHeroEffect = businessProfile.heroEffect || 'slideshow';
+      const savedService = businessProfile.service || 'HVAC Maintenance & Repair';
+
+      setSelectedTemplate(savedTemplate);
+      setHeroEffect(savedHeroEffect);
+      setService(savedService);
     }
   }, [businessProfile]);
+  
+  const handleOpenDialog = () => {
+    setTempService(service);
+    setTempHeroEffect(heroEffect);
+    setIsDialogOpen(true);
+  }
 
-  const handleTemplateChange = (templateId: string) => {
-    setSelectedTemplate(templateId);
+  const handleApplyChanges = () => {
     if (!user || !firestore || !businessProfileRef) return;
 
-    setDocumentNonBlocking(businessProfileRef, { defaultLandingPage: templateId }, { merge: true });
+    const newTemplate = getTemplateForService(tempService);
+
+    const updates = {
+      service: tempService,
+      heroEffect: tempHeroEffect,
+      defaultLandingPage: newTemplate,
+    };
+
+    setDocumentNonBlocking(businessProfileRef, updates, { merge: true });
+
+    setService(tempService);
+    setHeroEffect(tempHeroEffect);
+    setSelectedTemplate(newTemplate);
 
     toast({
-      title: 'Landing Page Updated',
-      description: `Your default landing page is now ${templateId.replace('-', ' ')}.`,
+      title: 'Site Preferences Applied',
+      description: 'Your landing page has been updated to match your selections.',
     });
+
+    setIsDialogOpen(false);
   };
 
-  const handleHeroEffectChange = (effect: string) => {
-    setHeroEffect(effect);
-    if (!user || !firestore || !businessProfileRef) return;
-
-    setDocumentNonBlocking(businessProfileRef, { heroEffect: effect }, { merge: true });
-
-    toast({
-      title: 'Site Preference Updated',
-      description: `Hero section effect set to ${effect}.`,
-    });
-  };
-
-  const handleServiceChange = (selectedService: string) => {
-    setService(selectedService);
-    if (!user || !firestore || !businessProfileRef) return;
-
-    setDocumentNonBlocking(businessProfileRef, { service: selectedService }, { merge: true });
-
-    toast({
-      title: 'Site Preference Updated',
-      description: `Primary service set to ${selectedService}.`,
-    });
-  };
 
   const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}`;
 
@@ -131,7 +152,7 @@ export function LandingPageManager() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Select onValueChange={handleTemplateChange} value={selectedTemplate}>
+            <Select onValueChange={setSelectedTemplate} value={selectedTemplate}>
               <SelectTrigger className="w-full sm:w-[280px]">
                 <SelectValue placeholder="Select a template" />
               </SelectTrigger>
@@ -142,9 +163,9 @@ export function LandingPageManager() {
                 <SelectItem value="template-4">Friendly Local</SelectItem>
               </SelectContent>
             </Select>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" onClick={handleOpenDialog}>
                   <Settings className="mr-2 h-4 w-4" />
                   Site Preferences
                 </Button>
@@ -159,7 +180,8 @@ export function LandingPageManager() {
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
                     <h4 className="font-medium">Service Category</h4>
-                    <Select value={service} onValueChange={handleServiceChange}>
+                    <p className="text-sm text-muted-foreground">This will also change your page template to match the service.</p>
+                    <Select value={tempService} onValueChange={setTempService}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
@@ -170,7 +192,7 @@ export function LandingPageManager() {
                   </div>
                   <Separator />
                   <h4 className="font-medium">Hero Section Effect</h4>
-                  <RadioGroup value={heroEffect} onValueChange={handleHeroEffectChange}>
+                  <RadioGroup value={tempHeroEffect} onValueChange={setTempHeroEffect}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="slideshow" id="slideshow" />
                       <Label htmlFor="slideshow">Slide Show</Label>
@@ -182,9 +204,8 @@ export function LandingPageManager() {
                   </RadioGroup>
                 </div>
                 <DialogFooter>
-                  <DialogClose asChild>
-                    <Button>Done</Button>
-                  </DialogClose>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                  <Button onClick={handleApplyChanges}>Apply Changes</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
