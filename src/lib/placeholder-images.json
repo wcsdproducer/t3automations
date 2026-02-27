@@ -1,436 +1,214 @@
 {
   "placeholderImages": [
     {
-      "id": "hero",
-      "description": "A man laying wood flooring in a house under construction.",
-      "imageUrl": "https://images.unsplash.com/photo-1599694824341-398d24b6182c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBsYXlpbmclMjB3b29kJTIwZmxvb3J8ZW58MHx8fHwxNzE1MTk0NTYwfDA&ixlib=rb-4.0.3&q=80&w=1080",
-      "imageHint": "man laying wood floor"
-    },
-    {
       "id": "testimonial-steven-forester",
       "description": "Portrait of Steven Forester, owner of Vertical Solutions LLC",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2Funnamed.jpg?alt=media&token=4a034d9b-ad3a-4ed3-895f-6eddde033de5",
+      "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzIwNTE5NTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "man portrait"
-    },
-    {
-      "id": "lp1-hero-1",
-      "description": "Professional handyman doing plumbing work in a modern kitchen.",
-      "imageUrl": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "handyman plumbing"
-    },
-    {
-      "id": "lp1-hero-2",
-      "description": "Professional electrician installing a new light fixture.",
-      "imageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "electrician working"
-    },
-    {
-      "id": "lp1-hero-3",
-      "description": "Professional handyman painting a wall with precision.",
-      "imageUrl": "https://images.unsplash.com/photo-1596495577884-21c6b3046757?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "handyman painting"
-    },
-    {
-      "id": "lp1-hero-4",
-      "description": "A roofer carefully installing new shingles on a residential house.",
-      "imageUrl": "https://images.unsplash.com/photo-1555528552-03185b372036?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "roofer installing"
-    },
-    {
-      "id": "lp1-hero-5",
-      "description": "A skilled worker installing new laminate flooring in a home.",
-      "imageUrl": "https://images.unsplash.com/photo-1617094254452-de368a3ae410?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "flooring installation"
     },
     {
       "id": "lp1-about",
       "description": "Team of diverse construction workers smiling",
-      "imageUrl": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb25zdHJ1Y3Rpb24lMjB0ZWFtfGVufDB8fHx8MTc3MjIyMDc3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb25zdHJ1Y3Rpb24lMjB0ZWFtfGVufDB8fHx8MTc3MjA1NTg1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "construction team"
-    },
-    {
-      "id": "lp2-hero-1",
-      "description": "A beautiful, ultra-modern kitchen with marble countertops and sleek cabinets.",
-      "imageUrl": "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "modern kitchen"
-    },
-    {
-      "id": "lp2-hero-2",
-      "description": "A luxurious, recently renovated bathroom with a freestanding tub and high-end fixtures.",
-      "imageUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "renovated bathroom"
-    },
-    {
-      "id": "lp2-hero-3",
-      "description": "A stylish and luxurious living room featuring custom shelving and a modern fireplace.",
-      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "luxury living"
-    },
-    {
-      "id": "lp2-hero-4",
-      "description": "An elegant, modern bedroom with large windows and designer furniture.",
-      "imageUrl": "https://images.unsplash.com/photo-1560185012-9a80e145cbfd?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "luxury bedroom"
-    },
-    {
-      "id": "lp2-hero-5",
-      "description": "The stunning exterior of a modern luxury home at twilight.",
-      "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "modern house"
     },
     {
       "id": "lp2-about",
       "description": "Team of architects reviewing blueprints in an office",
-      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcmNoaXRlY3QlMjB0ZWFtfGVufDB8fHx8MTc3MjIyMTAxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1759922378275-32d7ca8bbcca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcmNoaXRlY3QlMjB0ZWFtfGVufDB8fHx8MTc3MjE2MDg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "architect team"
     },
     {
       "id": "lp2-gal1",
       "description": "Home renovation project 1",
-      "imageUrl": "https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1573168710465-7f7da9a23a15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "home renovation"
     },
     {
       "id": "lp2-gal2",
       "description": "Home renovation project 2",
-      "imageUrl": "https://images.unsplash.com/photo-1571843439991-dd2b8e051966?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxb3x8aG9tZSUyMHJlbm92YXRpb258ZW58MHx8fHwxNzcyMTI1NDg4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1731168273756-e02cae42265b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "home renovation"
     },
     {
       "id": "lp2-gal3",
       "description": "Home renovation project 3",
-      "imageUrl": "https://images.unsplash.com/photo-1482731215275-a1f151646268?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1696846911635-83b97e53fb65?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "home renovation"
     },
     {
       "id": "lp2-gal4",
       "description": "Home renovation project 4",
-      "imageUrl": "https://images.unsplash.com/photo-1505798577917-a65157d3320a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1731168273756-e02cae42265b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxob21lJTIwcmVub3ZhdGlvbnxlbnwwfHx8fDE3NzIxMjU0ODh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "home renovation"
     },
     {
       "id": "hvac-hero-1",
       "description": "HVAC hero image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-1.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
-      "imageHint": "hvac hero"
+      "imageUrl": "https://images.unsplash.com/photo-1662556153586-223039dc8152?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwdGVjaG5pY2lhbnxlbnwwfHx8fDE3NzIxNDQwNDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hvac technician"
     },
     {
       "id": "hvac-hero-2",
       "description": "HVAC hero image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-2.jpg?alt=media&token=8e9c0c1b-2b2a-4f5c-89c0-fe3f69b1886c",
-      "imageHint": "hvac hero"
+      "imageUrl": "https://images.unsplash.com/photo-1655194827229-a1d3192b533e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzbWFydCUyMHRoZXJtb3N0YXR8ZW58MHx8fHwxNzcyMTA4NDgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smart thermostat"
     },
     {
       "id": "hvac-hero-3",
       "description": "HVAC hero image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-3.jpg?alt=media&token=0f7d5c5a-3e8f-4b0a-8d7e-9d8c3b2a0c1b",
-      "imageHint": "hvac hero"
+      "imageUrl": "https://images.unsplash.com/photo-1759646827242-cf09e30709aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxodmFjJTIwbWFpbnRlbmFuY2V8ZW58MHx8fHwxNzcyMTYwODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hvac maintenance"
     },
     {
       "id": "hvac-hero-4",
       "description": "HVAC hero image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-4.jpg?alt=media&token=4b2b1a0a-1b1a-4c9b-8d1e-2e3d4f5a6b7c",
-      "imageHint": "hvac hero"
+      "imageUrl": "https://images.unsplash.com/photo-1548705085-101177834f47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoYXBweSUyMGZhbWlseXxlbnwwfHx8fDE3NzIxNjA4Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "happy family"
     },
     {
       "id": "hvac-hero-5",
       "description": "HVAC hero image 5",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fhero-5.jpg?alt=media&token=8e9c0c1b-2b2a-4f5c-89c0-fe3f69b1886c",
-      "imageHint": "hvac hero"
+      "imageUrl": "https://images.unsplash.com/photo-1764604937098-b3f56d45fd3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwcHJvZmVzc2lvbmFsfGVufDB8fHx8MTc3MjE2MDg3OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hvac professional"
     },
     {
       "id": "hvac-about",
       "description": "HVAC about image",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fabout.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
-      "imageHint": "hvac about"
+      "imageUrl": "https://picsum.photos/seed/hvacAbout/800/600",
+      "imageHint": "hvac van"
     },
     {
       "id": "hvac-gallery-1",
       "description": "HVAC gallery image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-1.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
+      "imageUrl": "https://picsum.photos/seed/hvacGal1/600/400",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-2",
       "description": "HVAC gallery image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-2.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
+      "imageUrl": "https://picsum.photos/seed/hvacGal2/600/400",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-3",
       "description": "HVAC gallery image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-3.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
+      "imageUrl": "https://picsum.photos/seed/hvacGal3/600/400",
       "imageHint": "hvac gallery"
     },
     {
       "id": "hvac-gallery-4",
       "description": "HVAC gallery image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FHVAC%20Maintenance%20%26%20Repair%2Fgallery-4.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
+      "imageUrl": "https://picsum.photos/seed/hvacGal4/600/400",
       "imageHint": "hvac gallery"
     },
     {
       "id": "plumbing-hero-1",
       "description": "Plumbing hero image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-1.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
-      "imageHint": "plumbing hero"
+      "imageUrl": "https://images.unsplash.com/photo-1771122453274-d3270e73cf94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoYW5keW1hbiUyMHBsdW1iaW5nfGVufDB8fHx8MTc3MjE2MDg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "handyman plumbing"
     },
     {
       "id": "plumbing-hero-2",
       "description": "Plumbing hero image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-2.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
-      "imageHint": "plumbing hero"
+      "imageUrl": "https://images.unsplash.com/photo-1578611709914-0dda0b55f9b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwbHVtYmluZyUyMHdvcmt8ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumbing work"
     },
     {
       "id": "plumbing-hero-3",
       "description": "Plumbing hero image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-3.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
-      "imageHint": "plumbing hero"
+      "imageUrl": "https://images.unsplash.com/photo-1758448018619-4cbe2250b9ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc3MjE2MDg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean bathroom"
     },
     {
       "id": "plumbing-hero-4",
       "description": "Plumbing hero image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-4.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
-      "imageHint": "plumbing hero"
+      "imageUrl": "https://images.unsplash.com/photo-1713527555117-85e0129fd90c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGx1bWJpbmclMjB0b29sc3xlbnwwfHx8fDE3NzIxNjA4Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumbing tools"
     },
     {
       "id": "plumbing-hero-5",
       "description": "Plumbing hero image 5",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fhero-5.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
-      "imageHint": "plumbing hero"
+      "imageUrl": "https://images.unsplash.com/photo-1599615381612-7bcc78cfd851?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxraXRjaGVuJTIwc2lua3xlbnwwfHx8fDE3NzIwOTEzNDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kitchen sink"
     },
     {
       "id": "plumbing-about",
       "description": "Plumbing about image",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fabout.jpg?alt=media&token=f22d8612-8a88-4c24-994b-d989040c670a",
-      "imageHint": "plumbing about"
+      "imageUrl": "https://images.unsplash.com/photo-1751486403890-793880b12adb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwbHVtYmluZyUyMHdvcmt8ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "plumbing work"
     },
     {
       "id": "plumbing-gallery-1",
       "description": "Plumbing gallery image 1",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-1.jpg?alt=media&token=1b4f0834-0c0a-4e46-b16d-f189262e892c",
+      "imageUrl": "https://images.unsplash.com/photo-1666021676501-7aa887fd5d1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGx1bWJpbmclMjBnYWxsZXJ5fGVufDB8fHx8MTc3MjE2MDg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-2",
       "description": "Plumbing gallery image 2",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-2.jpg?alt=media&token=0a3e9723-9b99-4d35-a05c-e098151d781b",
+      "imageUrl": "https://images.unsplash.com/photo-1768884919681-0bb3e1b24489?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwbHVtYmluZyUyMGdhbGxlcnl8ZW58MHx8fHwxNzcyMTYwODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-3",
       "description": "Plumbing gallery image 3",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-3.jpg?alt=media&token=e11c7501-7977-4b13-883a-c878939b56f9",
+      "imageUrl": "https://images.unsplash.com/photo-1518201660989-894b770d6e3c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwbHVtYmluZyUyMGdhbGxlcnl8ZW58MHx8fHwxNzcyMTYwODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "plumbing gallery"
     },
     {
       "id": "plumbing-gallery-4",
       "description": "Plumbing gallery image 4",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1410114603-9e1f6.appspot.com/o/Site%20Media%2FService%20Category%20Default%20Images%2FPlumbing%2Fgallery-4.jpg?alt=media&token=3e4e4f5a-5b5a-4e8c-8d1e-9f0a1b2c3d4e",
+      "imageUrl": "https://images.unsplash.com/photo-1765277789190-22f77c5e7046?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwbHVtYmluZyUyMGdhbGxlcnl8ZW58MHx8fHwxNzcyMTYwODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "plumbing gallery"
     },
     {
-      "id": "lp3-hero-1",
-      "description": "A certified HVAC technician inspecting an outdoor AC unit.",
-      "imageUrl": "https://images.unsplash.com/photo-1615529328327-48d3f4733440?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "hvac technician"
-    },
-    {
-      "id": "lp3-hero-2",
-      "description": "A person adjusting a modern smart home thermostat for optimal temperature.",
-      "imageUrl": "https://images.unsplash.com/photo-1586948633390-3fedc8038f42?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "smart thermostat"
-    },
-    {
-      "id": "lp3-hero-3",
-      "description": "An HVAC technician performing maintenance on an outdoor air conditioning unit.",
-      "imageUrl": "https://images.unsplash.com/photo-1544991185-13b023153549?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "hvac maintenance"
-    },
-    {
-      "id": "lp3-hero-4",
-      "description": "A happy family relaxing in their cool and comfortable living room.",
-      "imageUrl": "https://images.unsplash.com/photo-1542360299-44ce3a13a758?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "happy family"
-    },
-    {
-      "id": "lp3-hero-5",
-      "description": "A professional HVAC technician in uniform with a service van in the background.",
-      "imageUrl": "https://images.unsplash.com/photo-1603227339794-279459341498?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "hvac professional"
-    },
-    {
-      "id": "lp3-about",
-      "description": "HVAC service van parked in a suburban neighborhood",
-      "imageUrl": "https://images.unsplash.com/photo-1701211329093-99d9486c4784?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxodmFjJTIwdmFufGVufDB8fHx8MTc3MjIyMTIzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "hvac van"
-    },
-    {
-      "id": "lp4-hero-1",
+      "id": "cleaning-hero-1",
       "description": "A professional cleaner meticulously wiping a window to a streak-free shine.",
-      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageUrl": "https://images.unsplash.com/photo-1504827274833-7db1774520e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBjbGVhbmluZ3xlbnwwfHx8fDE3NzIxNjA4Nzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "professional cleaning"
     },
     {
-      "id": "lp4-hero-2",
+      "id": "cleaning-hero-2",
       "description": "A bright, sparkling clean kitchen with clutter-free countertops.",
-      "imageUrl": "https://images.unsplash.com/photo-1600585152220-0f8a2484ab34?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageUrl": "https://images.unsplash.com/photo-1556037843-347ddff9f4b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "clean kitchen"
     },
     {
-      "id": "lp4-hero-3",
+      "id": "cleaning-hero-3",
       "description": "A cleaner mopping a hardwood floor, leaving a glistening, clean surface.",
-      "imageUrl": "https://images.unsplash.com/photo-1587353349206-4f7f6f1a8e1d?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageUrl": "https://images.unsplash.com/photo-1762500824773-c171c77c29c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtb3BwaW5nJTIwZmxvb3J8ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "mopping floor"
     },
     {
-      "id": "lp4-hero-4",
+      "id": "cleaning-hero-4",
       "description": "A tidy and comfortable living room after a professional cleaning service.",
-      "imageUrl": "https://images.unsplash.com/photo-1603712725038-193de2751741?q=80&w=1920&h=1080&auto=format&fit=crop",
+      "imageUrl": "https://images.unsplash.com/photo-1559918080-6d0657ceaf61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2xlYW4lMjBsaXZpbmd8ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "clean living"
     },
     {
-      "id": "lp4-hero-5",
-      "description": "A serene and spotless bedroom, professionally cleaned and organized.",
-      "imageUrl": "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1920&h=1080&auto=format&fit=crop",
-      "imageHint": "clean bedroom"
+      "id": "cleaning-about",
+      "description": "A team of professional cleaners with their equipment.",
+      "imageUrl": "https://images.unsplash.com/photo-1758599668508-d8ec9eca1be3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjbGVhbmluZyUyMHRlYW18ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cleaning team"
     },
     {
-      "id": "lp4-service1",
+      "id": "cleaning-gal1",
       "description": "A freshly cleaned modern kitchen with sparkling countertops.",
-      "imageUrl": "https://images.unsplash.com/photo-1600585152220-0f8a2484ab34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzcyMjIxMzcxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1593136573819-c3b57b8caf29?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzcyMTYwODc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "clean kitchen"
     },
     {
-      "id": "lp4-service2",
+      "id": "cleaning-gal2",
       "description": "A spotless modern bathroom with clean tiles and glass.",
-      "imageUrl": "https://images.unsplash.com/photo-1582994254569-c2b6a03165dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc3MjIyMTM5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1721564130821-5ac091ee399c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc3MjE2MDg3OHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "clean bathroom"
     },
     {
-      "id": "lp4-service3",
+      "id": "cleaning-gal3",
       "description": "An empty, clean room with packed moving boxes.",
-      "imageUrl": "https://images.unsplash.com/photo-1576995853123-5a1d3b4b83d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb3ZlJTIwb3V0JTIwY2xlYW5pbmd8ZW58MHx8fHwxNzcyMjIxNDMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1758273705792-a2887e079e83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtb3ZlLW91dCUyMGNsZWFuaW5nfGVufDB8fHx8MTc3MjE2MDg3OXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "move-out cleaning"
-    },
-    {
-      "id": "gutter-cleaning",
-      "description": "A person on a ladder cleaning gutters of a house.",
-      "imageUrl": "https://images.unsplash.com/photo-1556137805-b67cc1d7d328?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxndXR0ZXIlMjBjbGVhbmluZ3xlbnwwfHx8fDE3NzIxNTQxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "gutter cleaning"
-    },
-    {
-      "id": "siding-repair",
-      "description": "A worker repairing the siding on a suburban home.",
-      "imageUrl": "https://images.unsplash.com/photo-1761959166803-ed952543eeae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzaWRpbmclMjByZXBhaXJ8ZW58MHx8fHwxNzcyMTU0MTk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "siding repair"
-    },
-    {
-      "id": "garage-door",
-      "description": "A modern garage door on a suburban house.",
-      "imageUrl": "https://images.unsplash.com/photo-1541737949652-27149c8e786d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnYXJhZ2UlMjBkb29yfGVufDB8fHx8MTc3MjE1NDE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "garage door"
-    },
-    {
-      "id": "lawn-mowing",
-      "description": "A person mowing a lush green lawn.",
-      "imageUrl": "https://images.unsplash.com/photo-1641317430847-243b44c07125?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXduJTIwbW93aW5nfGVufDB8fHx8MTc3MjE1NDE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "lawn mowing"
-    },
-    {
-      "id": "landscaping-garden",
-      "description": "A beautifully landscaped garden with flowers and shrubs.",
-      "imageUrl": "https://images.unsplash.com/photo-1759509474971-0f1f35a29efd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsYW5kc2NhcGluZyUyMGdhcmRlbnxlbnwwfHx8fDE3NzIxMjQ2OTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "landscaping garden"
-    },
-    {
-      "id": "tree-trimming",
-      "description": "An arborist trimming branches from a large tree.",
-      "imageUrl": "https://images.unsplash.com/photo-1754322449005-bdc38c631682?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx0cmVlJTIwdHJpbW1pbmd8ZW58MHx8fHwxNzcyMTU0MTk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "tree trimming"
-    },
-    {
-      "id": "pressure-washing",
-      "description": "A person pressure washing a dirty driveway, making it look new.",
-      "imageUrl": "https://images.unsplash.com/photo-1718152521364-b9655b8a7926?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwcmVzc3VyZSUyMHdhc2hpbmd8ZW58MHx8fHwxNzcyMTU0MTk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "pressure washing"
-    },
-    {
-      "id": "pest-control",
-      "description": "An exterminator spraying for pests around a house.",
-      "imageUrl": "https://images.unsplash.com/photo-1581578405048-b6f813432ca4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXN0JTIwY29udHJvbHxlbnwwfHx8fDE3NzIxNTQxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "pest control"
-    },
-    {
-      "id": "pool-cleaning",
-      "description": "A person cleaning a sparkling blue swimming pool.",
-      "imageUrl": "https://images.unsplash.com/photo-1621245700087-a8617f91cdbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwb29sJTIwY2xlYW5pbmd8ZW58MHx8fHwxNzcyMTU0MjAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "pool cleaning"
-    },
-    {
-      "id": "fence-installation",
-      "description": "Workers installing a new wooden fence in a backyard.",
-      "imageUrl": "https://images.unsplash.com/photo-1530328881134-8c525cc57036?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmZW5jZSUyMGluc3RhbGxhdGlvbnxlbnwwfHx8fDE3NzIxNTQyMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "fence installation"
-    },
-    {
-      "id": "snow-removal",
-      "description": "A snow plow clearing a driveway after a heavy snowfall.",
-      "imageUrl": "https://images.unsplash.com/photo-1629818571630-5523061def62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbm93JTIwcmVtb3ZhbHxlbnwwfHx8fDE3NzIxNTQyMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "snow removal"
-    },
-    {
-      "id": "furniture-assembly",
-      "description": "A person assembling a flat-pack furniture item with tools.",
-      "imageUrl": "https://images.unsplash.com/photo-1681731059898-72407df8431a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmdXJuaXR1cmUlMjBhc3NlbWJseXxlbnwwfHx8fDE3NzIxNTQyMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "furniture assembly"
-    },
-    {
-      "id": "smart-home",
-      "description": "A hand holding a smartphone controlling various smart home devices.",
-      "imageUrl": "https://images.unsplash.com/photo-1666401565408-9b6b0741f0d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzbWFydCUyMGhvbWV8ZW58MHx8fHwxNzcyMDMyMDcyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "smart home"
-    },
-    {
-      "id": "solar-panel-installation",
-      "description": "Workers installing solar panels on a residential roof.",
-      "imageUrl": "https://images.unsplash.com/photo-1660330589257-813305a4a383?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzb2xhciUyMHBhbmVsfGVufDB8fHx8MTc3MjEzMjAyMHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "solar panel"
-    },
-    {
-      "id": "home-security",
-      "description": "A home security camera mounted on the exterior of a house.",
-      "imageUrl": "https://images.unsplash.com/photo-1737442886747-9fb768b96ed2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxob21lJTIwc2VjdXJpdHl8ZW58MHx8fHwxNzcyMTU0MjAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "home security"
-    },
-    {
-      "id": "senior-home-safety",
-      "description": "A grab bar installed in a shower for senior safety.",
-      "imageUrl": "https://images.unsplash.com/photo-1762647460856-6b610c50b575?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzZW5pb3IlMjBzYWZldHl8ZW58MHx8fHwxNzcyMTU0MjAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "senior safety"
-    },
-    {
-      "id": "air-duct-cleaning",
-      "description": "A professional cleaning an air duct with a specialized vacuum.",
-      "imageUrl": "https://images.unsplash.com/photo-1757562593192-e15aa89e7876?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHhhaXIlMjBkdWN0fGVufDB8fHx8MTc3MjE1NDE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "air duct"
-    },
-    {
-      "id": "junk-removal",
-      "description": "Workers loading old furniture and junk into a truck.",
-      "imageUrl": "https://images.unsplash.com/photo-1615088258876-39b30635a799?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxqdW5rJTIwcmVtb3ZhbHxlbnwwfHx8fDE3NzIxNTQxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "junk removal"
-    },
-    {
-      "id": "appliance-repair",
-      "description": "A technician repairing a washing machine.",
-      "imageUrl": "https://images.unsplash.com/photo-1768051579338-3dc694863efc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YXBwbGlhbmNlJTIwcmVwYWlyfGVufDB8fHx8MTc3MjEyMzI5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "appliance repair"
-    },
-    {
-      "id": "handyman-tools",
-      "description": "A collection of various handyman tools on a workbench.",
-      "imageUrl": "https://images.unsplash.com/photo-1765519313320-22b0865e9c32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoYW5keW1hbiUyMHRvb2xzfGVufDB8fHx8MTc3MjA2NzI5MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "handyman tools"
     }
   ]
 }
