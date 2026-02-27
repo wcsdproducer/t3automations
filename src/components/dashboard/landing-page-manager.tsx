@@ -74,15 +74,9 @@ export function LandingPageManager() {
 
   useEffect(() => {
     if (businessProfile) {
-      if (businessProfile.defaultLandingPage) {
-        setSelectedTemplate(businessProfile.defaultLandingPage);
-      }
-      if (businessProfile.heroEffect) {
-        setHeroEffect(businessProfile.heroEffect);
-      }
-      if (businessProfile.service) {
-        setService(businessProfile.service);
-      }
+      setSelectedTemplate(businessProfile.defaultLandingPage || 'template-3');
+      setHeroEffect(businessProfile.heroEffect || 'slideshow');
+      setService(businessProfile.service || 'HVAC Maintenance & Repair');
     }
   }, [businessProfile]);
 
