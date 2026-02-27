@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getContentForService } from '@/lib/landing-page-content';
 
@@ -16,16 +17,25 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'Handyman Services';
-  const content = getContentForService(service);
+  
+  const [content, setContent] = useState<any>(null);
 
-  const aboutImage = content.images.about;
-  const galleryImages = content.images.gallery;
-  const heroImages = content.images.hero;
-  const singleHeroImage = heroImages[0];
+  useEffect(() => {
+    setContent(getContentForService(service));
+  }, [service]);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
+
+  if (!content) {
+    return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
+  }
+  
+  const aboutImage = content.images.about;
+  const galleryImages = content.images.gallery;
+  const heroImages = content.images.hero;
+  const singleHeroImage = heroImages[0];
 
   const heroContent = (
     <div className="relative z-10 max-w-3xl opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
@@ -55,7 +65,7 @@ function TemplateContent() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {heroImages.map((image) => (
+            {heroImages.map((image: ImagePlaceholder) => (
               <CarouselItem key={image.id}>
                 <div className="relative h-screen w-full">
                   <Image
@@ -119,7 +129,7 @@ function TemplateContent() {
                 </div>
             </div>
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-              {galleryImages.map((image, i) => image && (
+              {galleryImages.map((image: ImagePlaceholder, i: number) => image && (
                 <div key={i} className="aspect-square relative rounded-lg overflow-hidden group">
                   <Image src={image.imageUrl} alt={image.description} data-ai-hint={image.imageHint} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
@@ -150,7 +160,7 @@ function TemplateContent() {
           <div className="container mx-auto max-w-4xl">
              <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {content.reviews.items.map((review, index) => (
+               {content.reviews.items.map((review: any, index: number) => (
                   <Card key={index} className="transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                     <CardContent className="p-6">
                       <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> <Star fill="currentColor"/> </div>

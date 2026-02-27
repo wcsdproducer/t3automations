@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +8,7 @@ import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Textarea } from '@/components/ui/textarea';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getContentForService } from '@/lib/landing-page-content';
 
@@ -15,16 +16,25 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'HVAC Maintenance & Repair';
-  const content = getContentForService(service);
-  
-  const aboutImage = content.images.about;
-  const heroImages = content.images.hero;
-  const singleHeroImage = heroImages[0];
+
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    setContent(getContentForService(service));
+  }, [service]);
   
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
 
+  if (!content) {
+    return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
+  }
+
+  const aboutImage = content.images.about;
+  const heroImages = content.images.hero;
+  const singleHeroImage = heroImages[0];
+  
   const heroContent = (
     <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
         <p className="text-primary font-semibold">24/7 EMERGENCY REPAIR</p>
@@ -62,7 +72,7 @@ function TemplateContent() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {heroImages.map((image) => (
+            {heroImages.map((image: ImagePlaceholder) => (
               <CarouselItem key={image.id}>
                 <div className="relative h-screen w-full">
                   <Image
@@ -148,7 +158,7 @@ function TemplateContent() {
             <div className="container mx-auto text-center">
                 <h3 className="text-3xl font-bold">{content.reviews.title}</h3>
                  <div className="mt-12 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    {content.reviews.items.map((review, index) => (
+                    {content.reviews.items.map((review: any, index: number) => (
                       <div key={index} className="p-6 border rounded-lg transition-all duration-300 hover:shadow-lg hover:border-primary">
                           <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                           <p className="italic">"{review.quote}"</p>

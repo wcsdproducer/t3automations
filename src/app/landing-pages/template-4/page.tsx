@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Phone, CheckCircle, Star } from 'lucide-react';
@@ -6,7 +7,7 @@ import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getContentForService } from '@/lib/landing-page-content';
 
@@ -14,17 +15,26 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'House Cleaning (Maid Services)';
-  const content = getContentForService(service);
+  
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    setContent(getContentForService(service));
+  }, [service]);
+  
+  const plugin = React.useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  if (!content) {
+    return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
+  }
 
   const heroImages = content.images.hero;
   const singleHeroImage = heroImages[0];
   const galleryImages = content.images.gallery;
   const aboutImage = content.images.about;
   
-  const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
-
   const heroContent = (
     <div className="relative z-10 px-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
        <h2 className="text-4xl md:text-6xl font-bold">{content.hero.title}</h2>
@@ -56,7 +66,7 @@ function TemplateContent() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {heroImages.map((image) => (
+            {heroImages.map((image: ImagePlaceholder) => (
               <CarouselItem key={image.id}>
                 <div className="relative h-screen w-full">
                   <Image
@@ -106,7 +116,7 @@ function TemplateContent() {
                 <h3 className="text-3xl font-bold">{content.services.title}</h3>
                 <p className="mt-2 text-muted-foreground">{content.services.subtitle}</p>
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {galleryImages.slice(0, 3).map((serviceImg, index) => (
+                    {galleryImages.slice(0, 3).map((serviceImg: ImagePlaceholder, index: number) => (
                         <div key={index} className="group">
                              {serviceImg && (
                                 <div className="aspect-video relative rounded-lg overflow-hidden shadow-lg">
@@ -132,7 +142,7 @@ function TemplateContent() {
               <h3 className="text-3xl font-bold">{content.about.title}</h3>
               <p className="mt-4 text-muted-foreground">{content.about.body}</p>
               <ul className="mt-6 space-y-4">
-                {content.about.points.map((point, index) => (
+                {content.about.points.map((point: string, index: number) => (
                   <li key={index} className="font-medium flex items-center gap-2"><CheckCircle className="h-5 w-5 text-green-600" /> {point}</li>
                 ))}
               </ul>

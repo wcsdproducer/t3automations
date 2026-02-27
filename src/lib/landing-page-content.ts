@@ -65,20 +65,32 @@ function findImagesByHints(hints: string[]): ImagePlaceholder[] {
     return images.slice(0, 5);
 }
 
+function shuffle<T>(array: T[]): T[] {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
 
 export function getContentForService(service: string) {
     const defaultService = "Handyman Services";
     const serviceName = service || defaultService;
 
     if (serviceName === "HVAC Maintenance & Repair") {
+        const allHvacHeroImages = PlaceHolderImages.filter(img => img.id.startsWith('hvac-hero'));
+        const allHvacGalleryImages = PlaceHolderImages.filter(img => img.id.startsWith('hvac-gallery'));
+        const aboutImage = PlaceHolderImages.find(img => img.id === 'hvac-about');
+
+        const shuffledHero = shuffle(allHvacHeroImages);
+        const shuffledGallery = shuffle(allHvacGalleryImages);
+
         const hvacImages = {
-            hero: [
-                'hvac-hero-1', 'hvac-hero-2', 'hvac-hero-3', 'hvac-hero-4', 'hvac-hero-5'
-            ].map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean) as ImagePlaceholder[],
-            about: PlaceHolderImages.find(img => img.id === 'hvac-about'),
-            gallery: [
-                'hvac-gallery-1', 'hvac-gallery-2', 'hvac-gallery-3', 'hvac-gallery-4'
-            ].map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean) as ImagePlaceholder[],
+            hero: shuffledHero.slice(0, 5),
+            about: aboutImage,
+            gallery: shuffledGallery.slice(0, 4),
         }
 
         return {

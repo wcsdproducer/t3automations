@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +8,7 @@ import Image from 'next/image';
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getContentForService } from '@/lib/landing-page-content';
 
@@ -15,15 +16,24 @@ function TemplateContent() {
   const searchParams = useSearchParams();
   const heroEffect = searchParams.get('heroEffect') || 'slideshow';
   const service = searchParams.get('service') || 'Handyman Services';
-  const content = getContentForService(service);
+  
+  const [content, setContent] = useState<any>(null);
 
-  const aboutImage = content.images.about;
-  const heroImages = content.images.hero;
-  const singleHeroImage = heroImages[0];
+  useEffect(() => {
+    setContent(getContentForService(service));
+  }, [service]);
 
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
+
+  if (!content) {
+    return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
+  }
+  
+  const aboutImage = content.images.about;
+  const heroImages = content.images.hero;
+  const singleHeroImage = heroImages[0];
 
   const heroContent = (
     <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
@@ -56,7 +66,7 @@ function TemplateContent() {
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {heroImages.map((image) => (
+            {heroImages.map((image: ImagePlaceholder) => (
               <CarouselItem key={image.id}>
                 <div className="relative h-screen w-full">
                   <Image
@@ -109,7 +119,7 @@ function TemplateContent() {
             <h3 className="text-3xl font-bold">{content.services.title}</h3>
             <p className="text-muted-foreground mt-2">{content.services.subtitle}</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-              {content.services.items.map((item, index) => (
+              {content.services.items.map((item: any, index: number) => (
                 <div key={index} className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                   {serviceIcons[item.title as keyof typeof serviceIcons] || <Wrench className="h-10 w-10 mx-auto text-primary" />}
                   <h4 className="mt-4 text-xl font-semibold">{item.title.replace(`${service}`, '')}</h4>
@@ -127,7 +137,7 @@ function TemplateContent() {
                     <h3 className="text-3xl font-bold">{content.about.title}</h3>
                     <p className="mt-4 text-muted-foreground">{content.about.body}</p>
                     <ul className="mt-6 space-y-2">
-                      {content.about.points.map((point, index) => (
+                      {content.about.points.map((point: string, index: number) => (
                         <li key={index} className="flex items-center gap-3"><Wrench className="h-5 w-5 text-primary" /> {point}</li>
                       ))}
                     </ul>
@@ -145,7 +155,7 @@ function TemplateContent() {
              <div className="container mx-auto max-w-4xl">
              <h3 className="text-3xl font-bold text-center mb-12">{content.reviews.title}</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {content.reviews.items.map((review, index) => (
+                {content.reviews.items.map((review: any, index: number) => (
                   <div key={index} className="border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:border-primary">
                     <div className="flex text-yellow-400 mb-2"> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> <Star fill="currentColor" /> </div>
                     <p className="text-muted-foreground">"{review.quote}"</p>
