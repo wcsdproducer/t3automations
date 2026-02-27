@@ -149,9 +149,16 @@ export function LandingPageManager() {
                     <CardTitle>Landing Page Management</CardTitle>
                     <CardDescription>Select a default landing page template for your business. View a live preview below.</CardDescription>
                 </div>
-                <Button variant="outline" onClick={handleScrollToDns} className="mt-4 sm:mt-0 shrink-0">
-                  Add Your Own Domain
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 shrink-0">
+                  <Button variant="outline" onClick={handleScrollToDns}>
+                    Add Your Own Domain
+                  </Button>
+                  <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full sm:w-auto">
+                        View Live Page <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
             </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -218,13 +225,6 @@ export function LandingPageManager() {
           
           <Separator />
 
-          <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button variant="outline" className="w-full">
-                View Live Page <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
           <div className="aspect-[16/9] w-full bg-muted rounded-md overflow-hidden border">
             <iframe
               src={landingPageUrl}
