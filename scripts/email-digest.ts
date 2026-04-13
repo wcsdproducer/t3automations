@@ -243,114 +243,131 @@ interface ClassifiedEmail {
   oneLineSummary: string;
 }
 
-async function classifyEmails(emails: EmailSummary[]): Promise<ClassifiedEmail[]> {
-  if (emails.length === 0) return [];
-
-  console.log(`🤖 Classifying ${emails.length} emails with Gemini...`);
-
-  // Build email descriptions for the prompt
-  const emailDescriptions = emails.map((e, i) => (
-    `--- Email ${i + 1} ---
+async function classifyBatch(batch: EmailSummary[], startIndex: number): Promise<Array<{
+  index: number; category: string; relevanceScore: number; reason: string; oneLineSummary: string;
+}>> {
+  const emailDescriptions = batch.map((e, i) => (
+    `--- Email ${startIndex + i} ---
 From: ${e.from}
 Subject: ${e.subject}
 Date: ${e.date}
 Snippet: ${e.snippet}
-Body Preview: ${e.body.slice(0, 500)}
 ---`
   )).join("\n\n");
 
   const prompt = `You are an executive email assistant for John Freeman, CEO of T3kniQ (an AI Automations Agency).
 
-Classify each of the following ${emails.length} emails into ONE category:
+Classify each email into ONE category:
+- **important**: Direct business comms, client emails, partner emails, legal/financial matters, domain/hosting alerts, replies to things John sent, invoices, contracts.
+- **actionable**: Requires action but not urgent — meeting invites, service notifications, account security, project updates.
+- **informational**: Worth knowing but no action needed — newsletters John subscribed to, GitHub notifs, deploy status, analytics.
+- **noise**: Marketing spam, promos, subscription emails, social media notifications, cold outreach, automated digests.
 
-- **important**: Direct business communications, client emails, partner emails, legal/financial matters, domain/hosting alerts, replies to things John sent, invoices, contracts, or anything requiring personal attention.
-- **actionable**: Requires action but not urgent — meeting invites, service notifications, account security alerts, project updates.
-- **informational**: Worth knowing but no action needed — industry newsletters from sources John chose, GitHub notifications, deployment status, analytics reports.
-- **noise**: Marketing spam, promotional offers, subscription emails, social media notifications, cold outreach from strangers, automated digests, unsubscribe-worthy content.
+Return a JSON array:
+[{"index":0,"category":"important","relevanceScore":95,"reason":"brief reason","oneLineSummary":"one line"}]
 
-For each email, provide:
-1. category (one of the four above)
-2. relevanceScore (0-100, how important this is to John)
-3. reason (brief explanation)
-4. oneLineSummary (concise summary of the email content)
+Keep reason and oneLineSummary SHORT (under 80 chars each).
 
-Respond in valid JSON format as an array of objects:
-[
-  {
-    "index": 0,
-    "category": "important",
-    "relevanceScore": 95,
-    "reason": "Client follow-up about project deliverable",
-    "oneLineSummary": "Bob from AcmeCo asking about the website launch date"
-  },
-  ...
-]
-
-Here are the emails:
+Emails:
 
 ${emailDescriptions}`;
 
-  try {
-    const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseMimeType: "application/json",
-            maxOutputTokens: 4000,
-            temperature: 0.3,
-          },
-        }),
-      }
-    );
-
-    if (!resp.ok) {
-      const errText = await resp.text();
-      throw new Error(`Gemini API error: ${resp.status} ${errText.slice(0, 200)}`);
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          maxOutputTokens: 8192,
+          temperature: 0.2,
+        },
+      }),
     }
+  );
 
-    const data = await resp.json() as any;
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) throw new Error("Empty Gemini response");
-
-    const classifications = JSON.parse(text) as Array<{
-      index: number;
-      category: string;
-      relevanceScore: number;
-      reason: string;
-      oneLineSummary: string;
-    }>;
-
-    return classifications.map(c => {
-      const email = emails[c.index];
-      return {
-        id: email.id,
-        from: email.from,
-        subject: email.subject,
-        date: email.date,
-        category: c.category as any,
-        relevanceScore: c.relevanceScore,
-        reason: c.reason,
-        oneLineSummary: c.oneLineSummary,
-      };
-    });
-  } catch (err: any) {
-    console.error("❌ Classification error:", err.message);
-    // Fallback: return all as informational
-    return emails.map(e => ({
-      id: e.id,
-      from: e.from,
-      subject: e.subject,
-      date: e.date,
-      category: "informational" as const,
-      relevanceScore: 50,
-      reason: "Classification failed — review manually",
-      oneLineSummary: e.snippet,
-    }));
+  if (!resp.ok) {
+    const errText = await resp.text();
+    throw new Error(`Gemini API ${resp.status}: ${errText.slice(0, 200)}`);
   }
+
+  const data = await resp.json() as any;
+  let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  if (!text) throw new Error("Empty Gemini response");
+
+  // Resilient JSON parsing — handle truncated output
+  try {
+    return JSON.parse(text);
+  } catch {
+    // Try to repair: extract all complete JSON objects from the array
+    const objects: any[] = [];
+    const regex = /\{[^{}]*"index"\s*:\s*(\d+)[^{}]*\}/g;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      try {
+        objects.push(JSON.parse(match[0]));
+      } catch { /* skip malformed */ }
+    }
+    if (objects.length > 0) {
+      console.log(`   ⚠️ Repaired truncated JSON: recovered ${objects.length}/${batch.length} classifications`);
+      return objects;
+    }
+    throw new Error("Could not parse Gemini JSON response");
+  }
+}
+
+async function classifyEmails(emails: EmailSummary[]): Promise<ClassifiedEmail[]> {
+  if (emails.length === 0) return [];
+
+  console.log(`🤖 Classifying ${emails.length} emails with Gemini...`);
+
+  const BATCH_SIZE = 10;
+  const allClassifications: Array<{
+    index: number; category: string; relevanceScore: number; reason: string; oneLineSummary: string;
+  }> = [];
+
+  for (let i = 0; i < emails.length; i += BATCH_SIZE) {
+    const batch = emails.slice(i, i + BATCH_SIZE);
+    const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+    const totalBatches = Math.ceil(emails.length / BATCH_SIZE);
+    console.log(`   Batch ${batchNum}/${totalBatches} (${batch.length} emails)...`);
+
+    try {
+      const results = await classifyBatch(batch, i);
+      // Remap indices to global
+      for (const r of results) {
+        allClassifications.push({ ...r, index: r.index + i });
+      }
+    } catch (err: any) {
+      console.error(`   ❌ Batch ${batchNum} failed: ${err.message}`);
+      // Fallback for this batch
+      for (let j = 0; j < batch.length; j++) {
+        allClassifications.push({
+          index: i + j,
+          category: "informational",
+          relevanceScore: 50,
+          reason: "Classification failed — review manually",
+          oneLineSummary: batch[j].snippet.slice(0, 80),
+        });
+      }
+    }
+  }
+
+  return allClassifications.map(c => {
+    const email = emails[c.index] || emails[0];
+    return {
+      id: email.id,
+      from: email.from,
+      subject: email.subject,
+      date: email.date,
+      category: (c.category as any) || "informational",
+      relevanceScore: c.relevanceScore || 50,
+      reason: c.reason || "",
+      oneLineSummary: c.oneLineSummary || email.snippet,
+    };
+  });
 }
 
 // ──────────────────────────────────────────────
