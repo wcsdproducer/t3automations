@@ -255,22 +255,21 @@ service cloud.firestore {
     // T3kniQ Agency Leads (Top-Level)
     // ----------------------------------------------------------------------
     match /t3kniq_leads/{leadId} {
-      allow create: if true; // Public tools can capture leads
-      allow read, update, delete: if isSignedIn(); // Admin dashboard can view/manage
+      allow create, read, update, delete: if true;
     }
 
     // ----------------------------------------------------------------------
     // T3kniQ CRM Clients (Top-Level)
     // ----------------------------------------------------------------------
     match /clients/{clientId} {
-      allow create, read, update, delete: if isSignedIn();
+      allow create, read, update, delete: if true;
     }
 
     // ----------------------------------------------------------------------
     // T3kniQ Pipeline Deals (Top-Level)
     // ----------------------------------------------------------------------
     match /deals/{dealId} {
-      allow create, read, update, delete: if isSignedIn();
+      allow create, read, update, delete: if true;
     }
   } // END of match /databases/{database}/documents
 } // END of service cloud.firestore
