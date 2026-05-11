@@ -7,7 +7,7 @@ import { signOut } from 'firebase/auth';
 import {
   Settings,
   Shield,
-  Workflow,
+  Globe,
   LogOut,
   User as UserIcon,
   Phone,
@@ -138,17 +138,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <LayoutGrid className="h-4 w-4" />
                 Agents
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/workflows`}>
-                <Workflow className="h-4 w-4" />
-                Workflows
-              </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/phonenumbers`}>
                 <Phone className="h-4 w-4" />
                 Phone Numbers
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/page-editor`}>
                 <LayoutTemplate className="h-4 w-4" />
-                Landing Page
+                Landing Page Editor
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/domains`}>
+                <Globe className="h-4 w-4" />
+                Domain Management
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
                 <Settings className="h-4 w-4" />

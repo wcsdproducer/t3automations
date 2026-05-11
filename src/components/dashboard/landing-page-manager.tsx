@@ -6,68 +6,175 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Type, Palette } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Font Pairs
+// ─────────────────────────────────────────────────────────────────────────────
+const FONT_PAIRS = [
+  { id: 'modern-corporate', name: 'Modern Corporate', heading: 'Inter', body: 'Roboto' },
+  { id: 'bold-creative',    name: 'Bold Creative',    heading: 'Montserrat', body: 'Raleway' },
+  { id: 'elegant-luxury',  name: 'Elegant Luxury',   heading: 'Playfair Display', body: 'Lato' },
+  { id: 'friendly-local',  name: 'Friendly Local',   heading: 'Nunito', body: 'Source Sans Pro' },
+  { id: 'tech-forward',    name: 'Tech Forward',      heading: 'Space Grotesk', body: 'IBM Plex Sans' },
+  { id: 'classic-serif',   name: 'Classic Serif',    heading: 'Merriweather', body: 'Open Sans' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Color Palettes — each has 4 swatch colors shown in a 2×2 grid
+// ─────────────────────────────────────────────────────────────────────────────
+const COLOR_PALETTES = [
+  {
+    id: 'luxury-purple',
+    name: 'Luxury Purple',
+    colors: ['#7C3AED', '#D97706', '#1E1B4B', '#EC4899'],
+  },
+  {
+    id: 'deep-midnight',
+    name: 'Modern Dark',
+    colors: ['#1F2937', '#111827', '#06B6D4', '#3B82F6'],
+  },
+  {
+    id: 'professional-blue',
+    name: 'Professional Blue',
+    colors: ['#2563EB', '#F8FAFC', '#60A5FA', '#1E3A5F'],
+  },
+  {
+    id: 'sunny-yellow',
+    name: 'Sunny Yellow',
+    colors: ['#F59E0B', '#FFFFFF', '#FB923C', '#E5E7EB'],
+  },
+  {
+    id: 'earthy-green',
+    name: 'Earthy Green',
+    colors: ['#16A34A', '#F8FAFC', '#15803D', '#1A2E1A'],
+  },
+  {
+    id: 'vibrant-coral',
+    name: 'Vibrant Coral',
+    colors: ['#EF4444', '#F8FAFC', '#F97316', '#991B1B'],
+  },
+  {
+    id: 'soft-pastel',
+    name: 'Soft Pastel',
+    colors: ['#BAE6FD', '#FBCFE8', '#F8FAFC', '#E0F2FE'],
+  },
+  {
+    id: 'clean-minimal',
+    name: 'Clean & Minimal',
+    colors: ['#F1F5F9', '#1E293B', '#FFFFFF', '#EF4444'],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service list
+// ─────────────────────────────────────────────────────────────────────────────
 const homeServices = [
-    "HVAC Maintenance & Repair",
-    "Plumbing",
-    "Electrical Services",
-    "Roofing Repair & Replacement",
-    "Appliance Repair",
-    "Gutter Cleaning & Repair",
-    "Siding & Exterior Repair",
-    "Garage Door Services",
-    "Lawn Care & Mowing",
-    "Landscaping & Garden Design",
-    "Tree Services",
-    "Pressure Washing",
-    "Pest Control",
-    "Pool Maintenance & Cleaning",
-    "Fence Installation & Repair",
-    "Snow Removal",
-    "House Cleaning (Maid Services)",
-    "Carpet & Upholstery Cleaning",
-    "Interior & Exterior Painting",
-    "Handyman Services",
-    "Drywall Repair & Installation",
-    "Flooring Installation",
-    "Window Washing",
-    "Furniture Assembly",
-    "Smart Home Installation",
-    "Solar Panel Installation",
-    "Home Security Monitoring",
-    "Senior Home Modifications",
-    "Air Duct & Vent Cleaning",
-    "Junk Removal & Moving"
+  'HVAC Maintenance & Repair',
+  'Plumbing',
+  'Electrical Services',
+  'Roofing Repair & Replacement',
+  'Appliance Repair',
+  'Gutter Cleaning & Repair',
+  'Siding & Exterior Repair',
+  'Garage Door Services',
+  'Lawn Care & Mowing',
+  'Landscaping & Garden Design',
+  'Tree Services',
+  'Pressure Washing',
+  'Pest Control',
+  'Pool Maintenance & Cleaning',
+  'Fence Installation & Repair',
+  'Snow Removal',
+  'House Cleaning (Maid Services)',
+  'Carpet & Upholstery Cleaning',
+  'Interior & Exterior Painting',
+  'Handyman Services',
+  'Drywall Repair & Installation',
+  'Flooring Installation',
+  'Window Washing',
+  'Furniture Assembly',
+  'Smart Home Installation',
+  'Solar Panel Installation',
+  'Home Security Monitoring',
+  'Senior Home Modifications',
+  'Air Duct & Vent Cleaning',
+  'Junk Removal & Moving',
 ];
 
 const getTemplateForService = (service: string): string => {
-    const cleaningServices = ["House Cleaning (Maid Services)", "Carpet & Upholstery Cleaning", "Window Washing", "Junk Removal & Moving", "Air Duct & Vent Cleaning", "Pressure Washing"];
-    const hvacServices = ["HVAC Maintenance & Repair", "Solar Panel Installation"];
-    const luxuryRemodelServices = ["Landscaping & Garden Design", "Interior & Exterior Painting", "Flooring Installation", "Drywall Repair & Installation", "Appliance Repair"];
-    
-    if (cleaningServices.includes(service)) {
-        return 'template-4'; // Friendly local service theme
-    }
-    if (hvacServices.includes(service)) {
-        return 'template-3'; // Direct response theme
-    }
-    if (luxuryRemodelServices.includes(service)) {
-        return 'template-2'; // Modern visual theme for remodels
-    }
-    return 'template-1'; // Classic professional theme for other trades
+  const cleaningServices = [
+    'House Cleaning (Maid Services)',
+    'Carpet & Upholstery Cleaning',
+    'Window Washing',
+    'Junk Removal & Moving',
+    'Air Duct & Vent Cleaning',
+    'Pressure Washing',
+  ];
+  const hvacServices = ['HVAC Maintenance & Repair', 'Solar Panel Installation'];
+  const luxuryRemodelServices = [
+    'Landscaping & Garden Design',
+    'Interior & Exterior Painting',
+    'Flooring Installation',
+    'Drywall Repair & Installation',
+    'Appliance Repair',
+  ];
+
+  if (cleaningServices.includes(service)) return 'template-4';
+  if (hvacServices.includes(service)) return 'template-3';
+  if (luxuryRemodelServices.includes(service)) return 'template-2';
+  return 'template-1';
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Color Palette Swatch Component
+// ─────────────────────────────────────────────────────────────────────────────
+function PaletteSwatch({
+  palette,
+  isSelected,
+  onClick,
+}: {
+  palette: (typeof COLOR_PALETTES)[0];
+  isSelected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={palette.name}
+      className={cn(
+        'flex flex-col items-center gap-1.5 rounded-lg p-1.5 transition-all focus:outline-none focus:ring-2 focus:ring-primary',
+        isSelected
+          ? 'ring-2 ring-primary ring-offset-1 ring-offset-background'
+          : 'hover:ring-2 hover:ring-border hover:ring-offset-1'
+      )}
+    >
+      <div className="grid grid-cols-2 gap-0.5 w-14 h-14 rounded-md overflow-hidden border border-border">
+        {palette.colors.map((color, i) => (
+          <div key={i} style={{ backgroundColor: color }} className="w-full h-full" />
+        ))}
+      </div>
+      <span className="text-xs text-muted-foreground text-center leading-tight max-w-[60px]">
+        {palette.name}
+      </span>
+    </button>
+  );
+}
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Component
+// ─────────────────────────────────────────────────────────────────────────────
 export function LandingPageManager() {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
-  
+
   const businessProfileRef = useMemoFirebase(() => {
     if (!user || !firestore) return null;
     return doc(firestore, `businessProfiles/${user.uid}`);
@@ -75,165 +182,229 @@ export function LandingPageManager() {
 
   const { data: businessProfile, isLoading } = useDoc(businessProfileRef);
 
-  // State for the live preview
+  // Live preview state (what the iframe shows)
   const [selectedTemplate, setSelectedTemplate] = useState('template-3');
-  const [heroEffect, setHeroEffect] = useState('slideshow');
-  const [service, setService] = useState('HVAC Maintenance & Repair');
-  
-  // Draft state for the form controls
-  const [draftService, setDraftService] = useState(service);
-  const [draftHeroEffect, setDraftHeroEffect] = useState(heroEffect);
-  const [draftTemplate, setDraftTemplate] = useState(selectedTemplate);
+  const [heroEffect, setHeroEffect]             = useState('slideshow');
+  const [service, setService]                   = useState('HVAC Maintenance & Repair');
+  const [fontPair, setFontPair]                 = useState('modern-corporate');
+  const [colorPalette, setColorPalette]         = useState('deep-midnight');
 
+  // Draft state (what the controls show, before Publish)
+  const [draftTemplate, setDraftTemplate]       = useState(selectedTemplate);
+  const [draftHeroEffect, setDraftHeroEffect]   = useState(heroEffect);
+  const [draftService, setDraftService]         = useState(service);
+  const [draftFontPair, setDraftFontPair]       = useState(fontPair);
+  const [draftColorPalette, setDraftColorPalette] = useState(colorPalette);
 
   useEffect(() => {
     if (businessProfile) {
-      const savedService = businessProfile.service || 'HVAC Maintenance & Repair';
-      const savedTemplate = businessProfile.defaultLandingPage || getTemplateForService(savedService);
-      const savedHeroEffect = businessProfile.heroEffect || 'slideshow';
+      const savedService      = businessProfile.service              || 'HVAC Maintenance & Repair';
+      const savedTemplate     = businessProfile.defaultLandingPage   || getTemplateForService(savedService);
+      const savedHeroEffect   = businessProfile.heroEffect           || 'slideshow';
+      const savedFontPair     = businessProfile.fontPair             || 'modern-corporate';
+      const savedColorPalette = businessProfile.colorPalette         || 'deep-midnight';
 
-      // Live state
       setSelectedTemplate(savedTemplate);
       setHeroEffect(savedHeroEffect);
       setService(savedService);
+      setFontPair(savedFontPair);
+      setColorPalette(savedColorPalette);
 
-      // Draft state for controls
-      setDraftService(savedService);
-      setDraftHeroEffect(savedHeroEffect);
       setDraftTemplate(savedTemplate);
+      setDraftHeroEffect(savedHeroEffect);
+      setDraftService(savedService);
+      setDraftFontPair(savedFontPair);
+      setDraftColorPalette(savedColorPalette);
     }
   }, [businessProfile]);
 
-  const handleApplyChanges = () => {
+  // ── Publish (saves + updates live preview) ──────────────────────────────
+  const handlePublish = () => {
     if (!user || !firestore || !businessProfileRef) return;
 
-    const updates = {
-      service: draftService,
-      heroEffect: draftHeroEffect,
-      defaultLandingPage: draftTemplate,
-    };
+    setDocumentNonBlocking(
+      businessProfileRef,
+      {
+        service:            draftService,
+        heroEffect:         draftHeroEffect,
+        defaultLandingPage: draftTemplate,
+        fontPair:           draftFontPair,
+        colorPalette:       draftColorPalette,
+      },
+      { merge: true }
+    );
 
-    setDocumentNonBlocking(businessProfileRef, updates, { merge: true });
-
-    // Update live state to reflect changes in preview
+    // Apply draft → live so preview updates
     setService(draftService);
     setHeroEffect(draftHeroEffect);
     setSelectedTemplate(draftTemplate);
+    setFontPair(draftFontPair);
+    setColorPalette(draftColorPalette);
 
     toast({
-      title: 'Site Preferences Applied',
-      description: 'Your landing page preview has been updated.',
+      title: '✅ Published!',
+      description: 'Your landing page has been updated.',
     });
   };
-  
-  const handleScrollToDns = () => {
-    const dnsSection = document.getElementById('dns-records');
-    if (dnsSection) {
-      dnsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
+  // ── Preview URL ──────────────────────────────────────────────────────────
+  const phone       = businessProfile?.phoneNumber  || '(000) 000-0000';
+  const logo        = businessProfile?.logoUrl       || '';
+  const companyName = businessProfile?.businessName  || '';
 
-  const landingPageUrl = `/landing-pages/${selectedTemplate}?heroEffect=${heroEffect}&service=${encodeURIComponent(service)}&phone=${encodeURIComponent(businessProfile?.phoneNumber || '(000) 000-0000')}&logo=${encodeURIComponent(businessProfile?.logoUrl || '')}&companyName=${encodeURIComponent(businessProfile?.businessName || '')}`;
+  const previewUrl = `/landing-pages/${selectedTemplate}`
+    + `?heroEffect=${heroEffect}`
+    + `&service=${encodeURIComponent(service)}`
+    + `&phone=${encodeURIComponent(phone)}`
+    + `&logo=${encodeURIComponent(logo)}`
+    + `&companyName=${encodeURIComponent(companyName)}`
+    + `&fontPair=${fontPair}`
+    + `&colorPalette=${colorPalette}`;
 
   if (isLoading) {
-    return <p>Loading landing page settings...</p>;
+    return <p className="text-muted-foreground animate-pulse">Loading landing page settings…</p>;
   }
 
   return (
-    <div className="mt-6">
+    <div className="space-y-6">
+      {/* ── Header ── */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Landing Page Editor</h2>
+          <p className="text-muted-foreground text-sm mt-1">
+            Select a default landing page template for your business. View a live preview below.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href={previewUrl} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm">
+              Open Preview <ExternalLink className="ml-2 h-3.5 w-3.5" />
+            </Button>
+          </Link>
+          <Button
+            onClick={handlePublish}
+            size="sm"
+            className="bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            Publish
+          </Button>
+        </div>
+      </div>
+
+      {/* ── Site Preferences Card ── */}
       <Card>
-        <CardHeader>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div>
-                    <CardTitle>Landing Page Management</CardTitle>
-                    <CardDescription>Select a default landing page template for your business. View a live preview below.</CardDescription>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 shrink-0">
-                  <Button variant="outline" onClick={handleScrollToDns}>
-                    Add Your Own Domain
-                  </Button>
-                  <Link href={landingPageUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="w-full sm:w-auto">
-                        View Live Page <ExternalLink className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-            </div>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base">Site Preferences</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
-            <h3 className="text-lg font-semibold">Site Preferences</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-              <div className="space-y-2">
-                <Label>Template Style</Label>
-                <p className="text-sm text-muted-foreground min-h-[40px]">Choose the overall look and feel for your page.</p>
-                <Select value={draftTemplate} onValueChange={setDraftTemplate}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a template" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="template-1">Classic Professional</SelectItem>
-                    <SelectItem value="template-2">Modern Visual</SelectItem>
-                    <SelectItem value="template-3">Direct Response</SelectItem>
-                    <SelectItem value="template-4">Friendly Local</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
-              <div className="space-y-2">
-                <Label>Service Category</Label>
-                <p className="text-sm text-muted-foreground min-h-[40px]">This will provide relevant content for your page.</p>
-                <Select value={draftService} onValueChange={setDraftService}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {homeServices.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                    </SelectContent>
-                </Select>
-              </div>
+          {/* Row 1: Template | Service | Hero Effect */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <Label>Template Style</Label>
+              <Select value={draftTemplate} onValueChange={setDraftTemplate}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a template" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="template-1">Classic Professional</SelectItem>
+                  <SelectItem value="template-2">Modern Visual</SelectItem>
+                  <SelectItem value="template-3">Direct Response</SelectItem>
+                  <SelectItem value="template-4">Friendly Local</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-              <div className="space-y-2">
-                <Label>Hero Section Effect</Label>
-                <p className="text-sm text-muted-foreground min-h-[40px]">
-                  Choose the visual style for the top of your page.
-                </p>
-                <div className="flex h-10 items-center">
-                  <RadioGroup
-                    value={draftHeroEffect}
-                    onValueChange={setDraftHeroEffect}
-                    className="flex gap-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="slideshow" id="slideshow" />
-                      <Label htmlFor="slideshow">Slide Show</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="parallax" id="parallax" />
-                      <Label htmlFor="parallax">Parallax Effect</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label>Service Category</Label>
+              <Select value={draftService} onValueChange={setDraftService}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a service" />
+                </SelectTrigger>
+                <SelectContent>
+                  {homeServices.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-              <div>
-                <Button onClick={handleApplyChanges} className="w-full">Apply Changes</Button>
+            <div className="space-y-2">
+              <Label>Hero Section Effect</Label>
+              <div className="flex h-10 items-center">
+                <RadioGroup
+                  value={draftHeroEffect}
+                  onValueChange={setDraftHeroEffect}
+                  className="flex gap-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="slideshow" id="slideshow" />
+                    <Label htmlFor="slideshow">Slide Show</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="parallax" id="parallax" />
+                    <Label htmlFor="parallax">Parallax Effect</Label>
+                  </div>
+                </RadioGroup>
               </div>
             </div>
           </div>
-          
+
           <Separator />
 
-          <div className="aspect-[16/9] w-full bg-muted rounded-md overflow-hidden border">
-            <iframe
-              src={landingPageUrl}
-              className="w-full h-full"
-              title="Landing Page Preview"
-            />
+          {/* Row 2: Font Pairing | Color Palettes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            {/* Font Pairing */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Type className="h-4 w-4 text-muted-foreground" />
+                <Label>Font Pairing</Label>
+              </div>
+              <Select value={draftFontPair} onValueChange={setDraftFontPair}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a font pair" />
+                </SelectTrigger>
+                <SelectContent>
+                  {FONT_PAIRS.map((fp) => (
+                    <SelectItem key={fp.id} value={fp.id}>
+                      {fp.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Color Palettes */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Palette className="h-4 w-4 text-muted-foreground" />
+                <Label>Color Palettes</Label>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {COLOR_PALETTES.map((palette) => (
+                  <PaletteSwatch
+                    key={palette.id}
+                    palette={palette}
+                    isSelected={draftColorPalette === palette.id}
+                    onClick={() => setDraftColorPalette(palette.id)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* ── Live Preview ── */}
+      <div className="aspect-[16/9] w-full bg-muted rounded-lg overflow-hidden border">
+        <iframe
+          key={previewUrl}
+          src={previewUrl}
+          className="w-full h-full"
+          title="Landing Page Preview"
+        />
+      </div>
     </div>
   );
 }
