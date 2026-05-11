@@ -132,8 +132,36 @@ export function CustomDomainManager() {
             {domains.some((d: any) => d.status === 'pending') && (
               <Alert>
                 <AlertTitle>DNS Configuration Required</AlertTitle>
-                <AlertDescription>
-                  Your domain is pending. Please configure the DNS records below in your domain registrar to verify ownership and route traffic.
+                <AlertDescription className="space-y-4 mt-2">
+                  <p>Your domain is pending. Please configure the DNS records below in your domain registrar to verify ownership and route traffic.</p>
+                  
+                  <div className="bg-muted p-3 rounded-md text-sm font-mono space-y-2">
+                    <div className="grid grid-cols-[80px_1fr] gap-2">
+                      <span className="font-semibold text-muted-foreground">Type</span>
+                      <span>A</span>
+                      
+                      <span className="font-semibold text-muted-foreground">Name</span>
+                      <span>@</span>
+                      
+                      <span className="font-semibold text-muted-foreground">Value</span>
+                      <span>35.219.200.10</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted p-3 rounded-md text-sm font-mono space-y-2">
+                    <div className="grid grid-cols-[80px_1fr] gap-2">
+                      <span className="font-semibold text-muted-foreground">Type</span>
+                      <span>A</span>
+                      
+                      <span className="font-semibold text-muted-foreground">Name</span>
+                      <span>@</span>
+                      
+                      <span className="font-semibold text-muted-foreground">Value</span>
+                      <span>35.219.200.6</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mt-2">Note: Remove any other A or CNAME records on this domain or subdomain. Changes can take up to 24 hours to propagate.</p>
                 </AlertDescription>
               </Alert>
             )}
