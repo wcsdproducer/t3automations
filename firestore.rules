@@ -249,12 +249,34 @@ service cloud.firestore {
         allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
         allow delete: if isExistingOwner(businessProfileId);
       }
+
+      // --------------------------------------------------------------------
+      // Agents Subcollection
+      // --------------------------------------------------------------------
+      match /agents/{agentId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, agentId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+
+      // --------------------------------------------------------------------
+      // Custom Domains Subcollection
+      // --------------------------------------------------------------------
+      match /customDomains/{domainId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, domainId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
     } // END of match /businessProfiles/{businessProfileId}
 
     // ----------------------------------------------------------------------
     // T3 Automations Agency Leads (Top-Level)
     // ----------------------------------------------------------------------
-    match /t3kniq_leads/{leadId} {
+    match /t3automations_leads/{leadId} {
       allow create, read, update, delete: if true;
     }
 
@@ -271,5 +293,25 @@ service cloud.firestore {
     match /deals/{dealId} {
       allow create, read, update, delete: if true;
     }
+    // ----------------------------------------------------------------------
+    // Agency Global Config (Top-Level)
+    // READ: Any authenticated user can read global config (fontPairs, categories,
+    //       templates, etc.) needed by the Landing Page Editor and other UI tools.
+    // WRITE: Restricted — only writable via Admin SDK on the server.
+    //
+    // Example paths:
+    //   /agency/default/fontPairs/{pairId}
+    //   /agency/default/categories/{categoryId}
+    // ----------------------------------------------------------------------
+    match /agency/{agencyId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+
+      match /{subcollection}/{docId} {
+        allow read: if isSignedIn();
+        allow write: if false;
+      }
+    }
+
   } // END of match /databases/{database}/documents
 } // END of service cloud.firestore

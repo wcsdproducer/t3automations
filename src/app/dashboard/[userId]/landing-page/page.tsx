@@ -1,5 +1,6 @@
 'use client';
 import { LandingPageManager } from '@/components/dashboard/landing-page-manager';
+import { CustomDomainManager } from '@/components/dashboard/custom-domain-manager';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -8,11 +9,14 @@ import { useToast } from '@/hooks/use-toast';
 
 const DnsRecords = () => {
   const { toast } = useToast();
+  // These records are provided to you in the Firebase App Hosting Console when you register your domain.
+  // The A record IP and TXT/CNAME values are unique per domain — the values below are examples.
+  // Visit: https://console.firebase.google.com/project/studio-1410114603-9e1f6/apphosting → Studio backend → Settings → Domains
   const records = [
-    { type: 'A', name: '@', value: '151.101.1.195', purpose: 'Points your root domain to our servers.' },
-    { type: 'A', name: '@', value: '151.101.65.195', purpose: 'Provides redundancy for your root domain.' },
-    { type: 'CNAME', name: 'www', value: 'your-domain.com.', purpose: 'Redirects the "www" subdomain to your root domain.' },
-    { type: 'TXT', name: '@', value: 'google-site-verification=...', purpose: 'Example for verifying domain ownership with services like Google.' },
+    { type: 'A', name: '@', value: '35.219.200.4', purpose: 'Points your root domain to Firebase App Hosting servers.' },
+    { type: 'A', name: 'www', value: '35.219.200.4', purpose: 'Points the www subdomain to Firebase App Hosting servers.' },
+    { type: 'TXT', name: '@', value: 'fah-claim=<your-unique-token>', purpose: 'Verifies ownership of your domain with Firebase App Hosting.' },
+    { type: 'CNAME', name: '_acme-challenge_<unique-id>', value: '<unique-id>.9.authorize.certificatemanager.goog.', purpose: 'Required for Firebase to provision a free SSL certificate for your domain.' },
   ];
 
   const copyToClipboard = (text: string) => {
@@ -59,18 +63,18 @@ const DnsRecords = () => {
           </TableBody>
         </Table>
         <p className="text-sm text-muted-foreground mt-4">
-          Note: DNS changes can take up to 48 hours to propagate. Your domain provider's support can assist you with adding these records. Replace "your-domain.com." with your actual domain name.
+          Note: DNS changes can take up to 48 hours to propagate. Your domain provider's support can assist you with adding these records. Replace "t3automations.com." with your actual domain name if applicable.
         </p>
       </CardContent>
     </Card>
   );
 };
 
-
 export default function LandingPageDashboardPage() {
   return (
     <>
       <LandingPageManager />
+      <CustomDomainManager />
       <div id="dns-records">
         <DnsRecords />
       </div>
