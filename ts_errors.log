@@ -1,0 +1,5 @@
+src/components/dashboard/custom-domain-manager.tsx(52,13): error TS2554: Expected 3 arguments, but got 2.
+src/components/ui/calendar.tsx(57,9): error TS2353: Object literal may only specify known properties, and 'IconLeft' does not exist in type 'Partial<CustomComponents>'.
+src/components/ui/calendar.tsx(57,22): error TS7031: Binding element 'className' implicitly has an 'any' type.
+src/components/ui/calendar.tsx(60,23): error TS7031: Binding element 'className' implicitly has an 'any' type.
+src/firebase/provider.tsx(8,10): error TS2305: Module '"firebase/storage"' has no exported member 'Storage'.

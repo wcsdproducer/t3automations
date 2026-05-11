@@ -23,7 +23,7 @@ import * as path from "path";
 
 const APIFY_TOKEN = process.env.APIFY_TOKEN!;
 const FIREBASE_PROJECT_ID = "studio-1410114603-9e1f6";
-const FIRESTORE_COLLECTION = "t3kniq_leads";
+const FIRESTORE_COLLECTION = "t3automations_leads";
 
 // Apify actor for Google Maps with contact details
 const APIFY_ACTOR = "lukaskrivka/google-maps-with-contact-details";

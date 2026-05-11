@@ -55,7 +55,7 @@ export function CustomDomainManager() {
         domain: domain,
         status: 'pending',
         createdAt: new Date().toISOString(),
-      });
+      }, { merge: true });
       
       setDomainInput('');
       toast({

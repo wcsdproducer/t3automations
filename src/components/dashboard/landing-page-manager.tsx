@@ -6,12 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink, Type, Palette } from 'lucide-react';
+import { ExternalLink, Type, Palette, Globe, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Font Pairs
@@ -188,6 +189,9 @@ export function LandingPageManager() {
   const [service, setService]                   = useState('HVAC Maintenance & Repair');
   const [fontPair, setFontPair]                 = useState('modern-corporate');
   const [colorPalette, setColorPalette]         = useState('deep-midnight');
+  const [published, setPublished]               = useState(false);
+  const [copied, setCopied]                     = useState(false);
+  const [showPublishConfirm, setShowPublishConfirm] = useState(false);
 
   // Draft state (what the controls show, before Publish)
   const [draftTemplate, setDraftTemplate]       = useState(selectedTemplate);
@@ -215,11 +219,22 @@ export function LandingPageManager() {
       setDraftService(savedService);
       setDraftFontPair(savedFontPair);
       setDraftColorPalette(savedColorPalette);
+
+      // If profile exists with data, page has been published before
+      if (businessProfile.defaultLandingPage) setPublished(true);
     }
   }, [businessProfile]);
 
   // ── Publish (saves + updates live preview) ──────────────────────────────
-  const handlePublish = () => {
+  const handlePublishClick = () => {
+    if (published) {
+      setShowPublishConfirm(true);
+    } else {
+      executePublish();
+    }
+  };
+
+  const executePublish = () => {
     if (!user || !firestore || !businessProfileRef) return;
 
     setDocumentNonBlocking(
@@ -240,11 +255,23 @@ export function LandingPageManager() {
     setSelectedTemplate(draftTemplate);
     setFontPair(draftFontPair);
     setColorPalette(draftColorPalette);
+    setPublished(true);
+    setShowPublishConfirm(false);
 
     toast({
       title: '✅ Published!',
-      description: 'Your landing page has been updated.',
+      description: 'Your landing page is now live.',
     });
+  };
+
+  // ── URLs ────────────────────────────────────────────────────────────────
+  const freeUrl = user ? `${typeof window !== 'undefined' ? window.location.origin : 'https://t3automations.com'}/pages/${user.uid}` : '';
+  const customDomain = businessProfile?.customDomain || null;
+
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(customDomain ? `https://${customDomain}` : freeUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   // ── Preview URL ──────────────────────────────────────────────────────────
@@ -272,17 +299,17 @@ export function LandingPageManager() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Landing Page Editor</h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Select a default landing page template for your business. View a live preview below.
+            Customize and publish your landing page.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <Link href={previewUrl} target="_blank" rel="noopener noreferrer">
+          <Link href={freeUrl || previewUrl} target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm">
               Open Preview <ExternalLink className="ml-2 h-3.5 w-3.5" />
             </Button>
           </Link>
           <Button
-            onClick={handlePublish}
+            onClick={handlePublishClick}
             size="sm"
             className="bg-orange-500 hover:bg-orange-600 text-white"
           >
@@ -290,6 +317,27 @@ export function LandingPageManager() {
           </Button>
         </div>
       </div>
+
+      {/* ── Published URL Banner ── */}
+      {published && freeUrl && (
+        <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/50">
+          <Globe className="h-4 w-4 text-green-500 shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-muted-foreground">Your page is live at</p>
+            <Link
+              href={customDomain ? `https://${customDomain}` : freeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-primary truncate hover:underline"
+            >
+              {customDomain ? `https://${customDomain}` : freeUrl}
+            </Link>
+          </div>
+          <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={handleCopyUrl}>
+            {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
+          </Button>
+        </div>
+      )}
 
       {/* ── Site Preferences Card ── */}
       <Card>
@@ -405,6 +453,24 @@ export function LandingPageManager() {
           title="Landing Page Preview"
         />
       </div>
+
+      {/* ── Confirm Publish Dialog ── */}
+      <AlertDialog open={showPublishConfirm} onOpenChange={setShowPublishConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Overwrite live page?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your landing page is already live. Do you want to overwrite it with these new settings?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction onClick={executePublish} className="bg-orange-500 hover:bg-orange-600 text-white">
+              Yes, overwrite
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -28,7 +28,7 @@ import * as path from "path";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
 const FIREBASE_PROJECT_ID = "studio-1410114603-9e1f6";
-const FIRESTORE_COLLECTION = "t3kniq_leads";
+const FIRESTORE_COLLECTION = "t3automations_leads";
 const CAMPAIGN = "tampa-bay-services-2026-04";
 
 // ──────────────────────────────────────────────

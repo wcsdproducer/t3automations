@@ -1,0 +1,11 @@
+{
+  "authorizedDomains": [
+    "6000-firebase-studio-1765121025902.cluster-aww2nevvpncqwrdjf3yxmum6me.cloudworkstations.dev",
+    "9000-firebase-studio-1765121025902.cluster-aww2nevvpncqwrdjf3yxmum6me.cloudworkstations.dev",
+    "localhost",
+    "studio-1410114603-9e1f6.firebaseapp.com",
+    "studio-1410114603-9e1f6.web.app",
+    "t3automations.com",
+    "www.t3automations.com"
+  ]
+}
