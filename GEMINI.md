@@ -39,7 +39,7 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 
 ---
 
-# T3kniQ — Agent Instructions
+# T3 Automations — Agent Instructions
 
 > ## ⚡ AUTONOMOUS MODE — CRITICAL — READ FIRST
 >

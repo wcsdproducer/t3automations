@@ -41,11 +41,11 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 
 Read this entire file before starting any task.
 
-# T3kniQ — Agent Instructions
+# T3 Automations — Agent Instructions
 
 ## Project Identity
 
-**T3kniQ** is an AI Automations Agency website and web app. It showcases AI automation services, captures leads, manages clients, and provides a business automation starter package experience.
+**T3 Automations** is an AI Automations Agency website and web app. It showcases AI automation services, captures leads, manages clients, and provides a business automation starter package experience.
 
 - **Stack**: Next.js 15 + TypeScript + Tailwind CSS + shadcn/ui + Genkit + Firebase
 - **Firebase Project**: `studio-1410114603-9e1f6`
@@ -99,7 +99,7 @@ git push                 # Triggers Firebase App Hosting deploy
 ## Owner
 
 - **Jack Freeman** (John Freeman / wcsdproducer)
-- T3kniQ is the AI Automations Agency — highest revenue priority
+- T3 Automations is the AI Automations Agency — highest revenue priority
 
 ## Command Execution
 

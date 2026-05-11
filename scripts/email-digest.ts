@@ -1,8 +1,8 @@
 #!/usr/bin/env npx tsx
 /**
- * T3kniQ Email Digest — Gmail → AI Filter → Telegram
+ * T3 Automations Email Digest — Gmail → AI Filter → Telegram
  *
- * Checks john@t3kniq.com for important emails, filters out noise,
+ * Checks john@t3automations.com for important emails, filters out noise,
  * and sends a beautifully formatted summary to Telegram.
  *
  * Setup (one-time):
@@ -255,7 +255,7 @@ Snippet: ${e.snippet}
 ---`
   )).join("\n\n");
 
-  const prompt = `You are an executive email assistant for John Freeman, CEO of T3kniQ (an AI Automations Agency).
+  const prompt = `You are an executive email assistant for John Freeman, CEO of T3 Automations (an AI Automations Agency).
 
 Classify each email into ONE category:
 - **important**: Direct business comms, client emails, partner emails, legal/financial matters, domain/hosting alerts, replies to things John sent, invoices, contracts.

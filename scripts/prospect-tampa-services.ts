@@ -1,9 +1,9 @@
 #!/usr/bin/env npx tsx
 /**
- * T3kniQ Lead Prospecting — Tampa Bay Local Services
+ * T3 Automations Lead Prospecting — Tampa Bay Local Services
  *
  * Scrapes, audits, and scores local service businesses
- * from search engine data, then populates the T3kniQ CRM (Firestore).
+ * from search engine data, then populates the T3 Automations CRM (Firestore).
  *
  * Features:
  * - Website audit (SSL, mobile-friendliness, tech stack detection)
@@ -326,7 +326,7 @@ async function auditWebsite(url: string): Promise<WebsiteAudit> {
 // ──────────────────────────────────────────────
 
 async function generateScorecard(lead: RawLead, audit: WebsiteAudit): Promise<AIScorecard> {
-  const prompt = `You are an AI marketing consultant for T3kniQ, an AI Automations Agency. Analyze this local business and generate a marketing opportunity scorecard.
+  const prompt = `You are an AI marketing consultant for T3 Automations, an AI Automations Agency. Analyze this local business and generate a marketing opportunity scorecard.
 
 BUSINESS:
 - Name: ${lead.businessName}
@@ -358,7 +358,7 @@ Respond ONLY with valid JSON (no markdown, no explanation):
   "onlinePresenceScore": <0-100 based on overall digital footprint>,
   "aiOpportunityScore": <0-100 chance they need AI automation services>,
   "weaknesses": ["<weakness 1>", "<weakness 2>", ...],
-  "opportunities": ["<service T3kniQ could sell>", ...],
+  "opportunities": ["<service T3 Automations could sell>", ...],
   "recommendedServices": ["AI Voice Agent", "Website Redesign", "SEO", "Social Media Management", "Chatbot", "Review Management", "Paid Ads", "Email Marketing"],
   "outreachAngle": "<1-2 sentence personalized pitch angle for outreach>",
   "priority": "high" | "medium" | "low"
@@ -611,7 +611,7 @@ function printSummary(leads: CRMLead[]) {
   }
 
   console.log("\n╔══════════════════════════════════════════════╗");
-  console.log("║  📊 T3kniQ Lead Prospecting Report           ║");
+  console.log("║  📊 T3 Automations Lead Prospecting Report           ║");
   console.log("║  📍 Tampa Bay Local Services                  ║");
   console.log("╚══════════════════════════════════════════════╝");
   console.log(`  Total leads:         ${leads.length}`);
@@ -654,7 +654,7 @@ async function main() {
   const auditOnly = args.includes("--audit-only");
 
   console.log("╔══════════════════════════════════════════════════╗");
-  console.log("║  🔍 T3kniQ Lead Prospecting Pipeline             ║");
+  console.log("║  🔍 T3 Automations Lead Prospecting Pipeline             ║");
   console.log("║  📍 Tampa Bay Local Services                      ║");
   console.log("║  🎯 AI Audit + Scorecard + CRM                   ║");
   console.log("╚══════════════════════════════════════════════════╝");

@@ -1,9 +1,9 @@
 #!/usr/bin/env npx tsx
 /**
- * T3kniQ Lead Scraping Campaign — Tampa Bay Contractors
+ * T3 Automations Lead Scraping Campaign — Tampa Bay Contractors
  *
  * Uses Apify's Google Maps Email Extractor to find local contractors
- * in the Tampa Bay area, then populates the T3kniQ CRM (Firestore)
+ * in the Tampa Bay area, then populates the T3 Automations CRM (Firestore)
  * with qualified leads for websites and AI voice agent services.
  *
  * Usage:
@@ -451,7 +451,7 @@ function printSummary(leads: CRMLead[]) {
   const hasPhone = leads.filter(l => l.phone.length > 0);
 
   console.log("═══════════════════════════════════════════");
-  console.log("  📊 T3kniQ Lead Campaign Summary");
+  console.log("  📊 T3 Automations Lead Campaign Summary");
   console.log("═══════════════════════════════════════════");
   console.log(`  Total leads:         ${leads.length}`);
   console.log(`  🔴 High priority:    ${high.length}`);
@@ -486,7 +486,7 @@ async function main() {
   const skipScrape = args.includes("--skip-scrape");
 
   console.log("╔══════════════════════════════════════════════╗");
-  console.log("║  🕷️  T3kniQ Lead Scraping Campaign           ║");
+  console.log("║  🕷️  T3 Automations Lead Scraping Campaign           ║");
   console.log("║  📍 Tampa Bay Contractors                    ║");
   console.log("║  🎯 Websites & AI Voice Agents               ║");
   console.log("╚══════════════════════════════════════════════╝");

@@ -252,21 +252,21 @@ service cloud.firestore {
     } // END of match /businessProfiles/{businessProfileId}
 
     // ----------------------------------------------------------------------
-    // T3kniQ Agency Leads (Top-Level)
+    // T3 Automations Agency Leads (Top-Level)
     // ----------------------------------------------------------------------
     match /t3kniq_leads/{leadId} {
       allow create, read, update, delete: if true;
     }
 
     // ----------------------------------------------------------------------
-    // T3kniQ CRM Clients (Top-Level)
+    // T3 Automations CRM Clients (Top-Level)
     // ----------------------------------------------------------------------
     match /clients/{clientId} {
       allow create, read, update, delete: if true;
     }
 
     // ----------------------------------------------------------------------
-    // T3kniQ Pipeline Deals (Top-Level)
+    // T3 Automations Pipeline Deals (Top-Level)
     // ----------------------------------------------------------------------
     match /deals/{dealId} {
       allow create, read, update, delete: if true;
