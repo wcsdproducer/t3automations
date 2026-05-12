@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, CheckCircle2, Globe, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Loader2, CheckCircle2, Globe, AlertTriangle, RefreshCw, ShieldCheck } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 // ── Status config ──────────────────────────────────────────────────────────────
-type DomainStatus = 'pending' | 'active' | 'misconfigured';
+type DomainStatus = 'pending' | 'active' | 'misconfigured' | 'provisioning';
 
 const STATUS_CONFIG: Record<DomainStatus, {
   label: string;
@@ -35,6 +35,12 @@ const STATUS_CONFIG: Record<DomainStatus, {
     badgeClass: 'bg-green-500/15 text-green-400 border-green-500/30',
     icon: <CheckCircle2 className="h-5 w-5" />,
     iconBg: 'bg-green-500/15 text-green-400',
+  },
+  provisioning: {
+    label: 'Provisioning SSL',
+    badgeClass: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+    icon: <ShieldCheck className="h-5 w-5" />,
+    iconBg: 'bg-blue-500/15 text-blue-400',
   },
   pending: {
     label: 'Pending DNS',
@@ -128,12 +134,7 @@ export function CustomDomainManager() {
       const cfg = getStatusConfig(data.status);
       toast({
         title: `${domain} — ${cfg.label}`,
-        description:
-          data.status === 'active'
-            ? 'Your domain is correctly pointing to Firebase App Hosting.'
-            : data.status === 'misconfigured'
-            ? `DNS is resolving to ${data.resolvedIps.join(', ')} instead of Firebase IPs.`
-            : 'DNS records not detected yet. It can take up to 48 hours to propagate.',
+        description: data.detail,
       });
     } catch (err: any) {
       toast({ title: 'Status check failed', description: err.message, variant: 'destructive' });

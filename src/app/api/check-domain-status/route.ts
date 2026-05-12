@@ -14,7 +14,6 @@ function getAdminFirestore() {
 }
 
 async function lookupARecords(domain: string): Promise<string[]> {
-  // Use Cloudflare DNS-over-HTTPS for reliable resolution
   const res = await fetch(
     `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=A`,
     { headers: { Accept: 'application/dns-json' }, next: { revalidate: 0 } }
@@ -22,9 +21,39 @@ async function lookupARecords(domain: string): Promise<string[]> {
   if (!res.ok) return [];
   const data = await res.json();
   return (data.Answer ?? [])
-    .filter((r: any) => r.type === 1) // type 1 = A record
+    .filter((r: any) => r.type === 1)
     .map((r: any) => r.data as string);
 }
+
+/**
+ * Attempts an actual HTTPS request to the domain.
+ * Returns true only if we get a valid HTTP response (SSL handshake succeeded).
+ */
+async function checkHttpsReachable(domain: string): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
+    const res = await fetch(`https://${domain}/`, {
+      method: 'HEAD',
+      redirect: 'follow',
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeout);
+    // Any HTTP status means SSL handshake succeeded and Firebase is responding
+    return res.status > 0;
+  } catch {
+    // SSL_ERROR, timeout, connection refused — cert not ready
+    return false;
+  }
+}
+
+// Status priority:
+//   1. No A records at all                       → "pending"
+//   2. A records exist but don't point to Firebase → "misconfigured"
+//   3. A records correct but HTTPS fails (no cert) → "provisioning"
+//   4. A records correct AND HTTPS works           → "active"
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,19 +63,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing domain or userId' }, { status: 400 });
     }
 
-    // Resolve the root domain A records
+    // Step 1: Resolve DNS
     const aRecords = await lookupARecords(domain);
-
-    // Check if any of the resolved IPs match Firebase App Hosting
     const isPointing = aRecords.some((ip) => FIREBASE_IPS.has(ip));
 
-    // Determine new status
-    const newStatus: 'active' | 'pending' | 'misconfigured' =
-      aRecords.length === 0
-        ? 'pending'          // DNS not propagated yet
-        : isPointing
-          ? 'active'         // Correctly pointing at Firebase
-          : 'misconfigured'; // Pointing somewhere else
+    let newStatus: 'active' | 'pending' | 'misconfigured' | 'provisioning';
+    let detail: string;
+
+    if (aRecords.length === 0) {
+      // DNS not propagated at all
+      newStatus = 'pending';
+      detail = 'DNS records not detected yet. Propagation can take up to 48 hours.';
+    } else if (!isPointing) {
+      // DNS exists but wrong IPs
+      newStatus = 'misconfigured';
+      detail = `DNS resolves to ${aRecords.join(', ')} instead of Firebase App Hosting IPs.`;
+    } else {
+      // DNS is correct — now check if HTTPS actually works (SSL cert provisioned)
+      const httpsOk = await checkHttpsReachable(domain);
+
+      if (httpsOk) {
+        newStatus = 'active';
+        detail = 'Domain is live and serving over HTTPS.';
+      } else {
+        newStatus = 'provisioning';
+        detail = 'DNS is correctly configured. SSL certificate is being provisioned by Firebase — this usually takes 15 minutes to a few hours.';
+      }
+    }
 
     // Update Firestore
     const db = getAdminFirestore();
@@ -54,7 +97,7 @@ export async function POST(req: NextRequest) {
       .doc(`businessProfiles/${userId}/customDomains/${domain}`)
       .set({ status: newStatus, lastCheckedAt: new Date().toISOString() }, { merge: true });
 
-    return NextResponse.json({ status: newStatus, resolvedIps: aRecords });
+    return NextResponse.json({ status: newStatus, detail, resolvedIps: aRecords });
   } catch (err: any) {
     console.error('check-domain-status error:', err);
     return NextResponse.json({ error: err.message ?? 'Internal error' }, { status: 500 });
