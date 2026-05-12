@@ -6,6 +6,7 @@
  * at the route level and passes down as props.
  */
 export interface TemplateProps {
+  businessProfileId?: string;
   heroEffect?: string;
   service?: string;
   phone?: string;
@@ -18,8 +19,9 @@ export interface TemplateProps {
 /**
  * Build TemplateProps from a Firestore businessProfile document.
  */
-export function profileToTemplateProps(profile: Record<string, any>): TemplateProps {
+export function profileToTemplateProps(profile: Record<string, any>, id?: string): TemplateProps {
   return {
+    businessProfileId: id || profile.id || '',
     heroEffect:   profile.heroEffect   || 'slideshow',
     service:      profile.service      || 'Handyman Services',
     phone:        profile.phoneNumber  || '',

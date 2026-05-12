@@ -11,7 +11,11 @@ import Autoplay from 'embla-carousel-autoplay';
 import React, { useState, useEffect, useRef } from 'react';
 import { getContentForService } from '@/lib/landing-page-content';
 import type { TemplateProps } from '@/lib/template-props';
-
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { submitLead } from '@/app/actions/leads';
+import { useToast } from '@/hooks/use-toast';
 function formatPhone(value: string) {
   if (!value) return value;
   const d = value.replace(/\D/g, '');
@@ -21,6 +25,7 @@ function formatPhone(value: string) {
 }
 
 export function Template2Content({
+  businessProfileId,
   heroEffect = 'slideshow',
   service = 'Handyman Services',
   phone: phoneProp = '(000) 000-0000',
@@ -29,6 +34,37 @@ export function Template2Content({
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const contactSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email'),
+    notes: z.string().optional(),
+  });
+
+  type ContactFormValues = z.infer<typeof contactSchema>;
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: '', email: '', notes: '' },
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    if (!businessProfileId) {
+      toast({ title: 'Error', description: 'Could not submit request. Missing profile.', variant: 'destructive' });
+      return;
+    }
+    setIsSubmitting(true);
+    const res = await submitLead({ ...data, businessProfileId, phone: '' });
+    setIsSubmitting(false);
+    if (res.success) {
+      toast({ title: 'Success', description: 'Your request has been submitted. We will be in touch shortly!' });
+      form.reset();
+    } else {
+      toast({ title: 'Error', description: res.error || 'Failed to submit request', variant: 'destructive' });
+    }
+  };
 
   useEffect(() => { setContent(getContentForService(service)); }, [service]);
 
@@ -175,14 +211,22 @@ export function Template2Content({
           <div className="container mx-auto max-w-2xl text-center">
             <h3 className="text-3xl font-bold">{content.contact.title}</h3>
             <p className="text-muted-foreground mt-2">{content.contact.subtitle}</p>
-            <form className="mt-8 space-y-4 text-left">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input placeholder="First Name" />
-                <Input placeholder="Last Name" />
+            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4 text-left">
+              <div>
+                <Input placeholder="Full Name" {...form.register('name')} />
+                {form.formState.errors.name && <p className="text-sm text-destructive mt-1">{form.formState.errors.name.message}</p>}
               </div>
-              <Input type="email" placeholder="Email Address" />
-              <Textarea placeholder="Tell us about your dream project..." />
-              <Button type="submit" className="w-full">Schedule Consultation</Button>
+              <div>
+                <Input type="email" placeholder="Email Address" {...form.register('email')} />
+                {form.formState.errors.email && <p className="text-sm text-destructive mt-1">{form.formState.errors.email.message}</p>}
+              </div>
+              <div>
+                <Textarea placeholder="Tell us about your dream project..." {...form.register('notes')} />
+                {form.formState.errors.notes && <p className="text-sm text-destructive mt-1">{form.formState.errors.notes.message}</p>}
+              </div>
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Schedule Consultation'}
+              </Button>
             </form>
           </div>
         </section>

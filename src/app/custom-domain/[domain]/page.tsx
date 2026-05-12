@@ -63,7 +63,7 @@ export default async function CustomDomainPage({
   if (!profileDoc.exists) return notFound();
 
   const profile = profileDoc.data() || {};
-  const templateProps = profileToTemplateProps(profile);
+  const templateProps = profileToTemplateProps(profile, businessProfileId);
   const template = profile.defaultLandingPage || 'template-1';
 
   // 3. Render the correct template with real data

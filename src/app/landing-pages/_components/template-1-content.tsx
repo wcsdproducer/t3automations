@@ -10,6 +10,11 @@ import Autoplay from 'embla-carousel-autoplay';
 import React, { useState, useEffect, useRef } from 'react';
 import { getContentForService } from '@/lib/landing-page-content';
 import type { TemplateProps } from '@/lib/template-props';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { submitLead } from '@/app/actions/leads';
+import { useToast } from '@/hooks/use-toast';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -20,6 +25,7 @@ function formatPhone(value: string) {
 }
 
 export function Template1Content({
+  businessProfileId,
   heroEffect = 'slideshow',
   service = 'Handyman Services',
   phone: phoneProp = '(000) 000-0000',
@@ -28,6 +34,37 @@ export function Template1Content({
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }));
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const contactSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email'),
+    notes: z.string().optional(),
+  });
+
+  type ContactFormValues = z.infer<typeof contactSchema>;
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: '', email: '', notes: '' },
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    if (!businessProfileId) {
+      toast({ title: 'Error', description: 'Could not submit request. Missing profile.', variant: 'destructive' });
+      return;
+    }
+    setIsSubmitting(true);
+    const res = await submitLead({ ...data, businessProfileId, phone: '' });
+    setIsSubmitting(false);
+    if (res.success) {
+      toast({ title: 'Success', description: 'Your request has been submitted. We will be in touch shortly!' });
+      form.reset();
+    } else {
+      toast({ title: 'Error', description: res.error || 'Failed to submit request', variant: 'destructive' });
+    }
+  };
 
   useEffect(() => { setContent(getContentForService(service)); }, [service]);
 
@@ -169,11 +206,22 @@ export function Template1Content({
           <div className="container mx-auto max-w-2xl text-center">
             <h3 className="text-3xl font-bold">{content.contact.title}</h3>
             <p className="text-muted-foreground mt-2">{content.contact.subtitle}</p>
-            <form className="mt-8 space-y-4 text-left">
-              <Input placeholder="Your Name" />
-              <Input type="email" placeholder="Your Email" />
-              <Textarea placeholder="Tell us about your project..." />
-              <Button type="submit" className="w-full">Submit Request</Button>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4 text-left">
+              <div>
+                <Input placeholder="Your Name" {...form.register('name')} />
+                {form.formState.errors.name && <p className="text-sm text-destructive mt-1">{form.formState.errors.name.message}</p>}
+              </div>
+              <div>
+                <Input type="email" placeholder="Your Email" {...form.register('email')} />
+                {form.formState.errors.email && <p className="text-sm text-destructive mt-1">{form.formState.errors.email.message}</p>}
+              </div>
+              <div>
+                <Textarea placeholder="Tell us about your project..." {...form.register('notes')} />
+                {form.formState.errors.notes && <p className="text-sm text-destructive mt-1">{form.formState.errors.notes.message}</p>}
+              </div>
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit Request'}
+              </Button>
             </form>
           </div>
         </section>

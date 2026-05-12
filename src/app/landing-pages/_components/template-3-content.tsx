@@ -10,6 +10,11 @@ import Autoplay from 'embla-carousel-autoplay';
 import React, { useState, useEffect, useRef } from 'react';
 import { getContentForService } from '@/lib/landing-page-content';
 import type { TemplateProps } from '@/lib/template-props';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { submitLead } from '@/app/actions/leads';
+import { useToast } from '@/hooks/use-toast';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -20,6 +25,7 @@ function formatPhone(value: string) {
 }
 
 export function Template3Content({
+  businessProfileId,
   heroEffect = 'slideshow',
   service = 'HVAC Maintenance & Repair',
   phone: phoneProp = '(000) 000-0000',
@@ -28,6 +34,38 @@ export function Template3Content({
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }));
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const contactSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email'),
+    phone: z.string().optional(),
+    notes: z.string().optional(),
+  });
+
+  type ContactFormValues = z.infer<typeof contactSchema>;
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: '', email: '', phone: '', notes: '' },
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    if (!businessProfileId) {
+      toast({ title: 'Error', description: 'Could not submit request. Missing profile.', variant: 'destructive' });
+      return;
+    }
+    setIsSubmitting(true);
+    const res = await submitLead({ ...data, businessProfileId });
+    setIsSubmitting(false);
+    if (res.success) {
+      toast({ title: 'Success', description: 'Your request has been submitted. We will be in touch shortly!' });
+      form.reset();
+    } else {
+      toast({ title: 'Error', description: res.error || 'Failed to submit request', variant: 'destructive' });
+    }
+  };
 
   useEffect(() => { setContent(getContentForService(service)); }, [service]);
 
@@ -168,11 +206,25 @@ export function Template3Content({
             <div className="bg-muted text-foreground p-8 rounded-lg shadow-lg max-w-lg mx-auto">
               <h3 className="text-2xl font-bold text-center">{content.contact.title}</h3>
               <p className="text-center text-muted-foreground mt-2">{content.contact.subtitle}</p>
-              <form className="mt-6 space-y-4">
-                <Input placeholder="Name" required />
-                <Input type="tel" placeholder="Phone Number" required />
-                <Textarea placeholder="Briefly describe the issue..." required />
-                <Button type="submit" className="w-full !mt-6" size="lg">GET MY FREE QUOTE</Button>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
+                <div>
+                  <Input placeholder="Name" {...form.register('name')} />
+                  {form.formState.errors.name && <p className="text-sm text-destructive mt-1 text-left">{form.formState.errors.name.message}</p>}
+                </div>
+                <div>
+                  <Input type="email" placeholder="Email Address" {...form.register('email')} />
+                  {form.formState.errors.email && <p className="text-sm text-destructive mt-1 text-left">{form.formState.errors.email.message}</p>}
+                </div>
+                <div>
+                  <Input type="tel" placeholder="Phone Number" {...form.register('phone')} />
+                </div>
+                <div>
+                  <Textarea placeholder="Briefly describe the issue..." {...form.register('notes')} />
+                  {form.formState.errors.notes && <p className="text-sm text-destructive mt-1 text-left">{form.formState.errors.notes.message}</p>}
+                </div>
+                <Button type="submit" className="w-full !mt-6" size="lg" disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'GET MY FREE QUOTE'}
+                </Button>
                 <p className="text-xs text-center text-muted-foreground pt-2">We respect your privacy. No spam, ever.</p>
               </form>
             </div>
