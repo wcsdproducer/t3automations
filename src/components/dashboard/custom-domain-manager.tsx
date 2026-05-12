@@ -7,16 +7,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, CheckCircle2, Globe } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Loader2, CheckCircle2, Globe } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export function CustomDomainManager() {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
-  
+
   const [domainInput, setDomainInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [domainToRemove, setDomainToRemove] = useState<string | null>(null);
 
   // Memoized so useCollection doesn't get a new ref on every render (infinite loop fix)
   const customDomainsRef = useMemoFirebase(() => {
@@ -29,15 +40,11 @@ export function CustomDomainManager() {
   const handleAddDomain = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !firestore) return;
-    
-    // Basic domain validation
+
     let domain = domainInput.trim().toLowerCase();
-    
-    // Remove http/https
     domain = domain.replace(/^https?:\/\//, '');
-    // Remove trailing slashes
     domain = domain.replace(/\/.*$/, '');
-    
+
     if (!domain || !domain.includes('.')) {
       toast({
         title: 'Invalid Domain',
@@ -48,7 +55,7 @@ export function CustomDomainManager() {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const docRef = doc(firestore, `businessProfiles/${user.uid}/customDomains/${domain}`);
       await setDocumentNonBlocking(docRef, {
@@ -58,7 +65,7 @@ export function CustomDomainManager() {
         status: 'pending',
         createdAt: new Date().toISOString(),
       }, { merge: true });
-      
+
       setDomainInput('');
       toast({
         title: 'Domain Added',
@@ -76,11 +83,11 @@ export function CustomDomainManager() {
     }
   };
 
-  const handleDeleteDomain = async (domainId: string) => {
-    if (!user || !firestore) return;
-    
+  const handleConfirmRemove = async () => {
+    if (!user || !firestore || !domainToRemove) return;
+
     try {
-      const docRef = doc(firestore, `businessProfiles/${user.uid}/customDomains/${domainId}`);
+      const docRef = doc(firestore, `businessProfiles/${user.uid}/customDomains/${domainToRemove}`);
       await deleteDoc(docRef);
       toast({
         title: 'Domain Removed',
@@ -93,6 +100,8 @@ export function CustomDomainManager() {
         description: 'Failed to remove custom domain.',
         variant: 'destructive',
       });
+    } finally {
+      setDomainToRemove(null);
     }
   };
 
@@ -101,62 +110,90 @@ export function CustomDomainManager() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Custom Domains</CardTitle>
-        <CardDescription>
-          Connect a custom domain to host your landing page directly on your own URL.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        
-        {domains && domains.length > 0 ? (
-          <div className="space-y-4">
-            <h3 className="text-sm font-medium">Your Connected Domains</h3>
-            <div className="grid gap-4">
-              {domains.map((d: any) => (
-                <div key={d.id} className="flex items-center justify-between p-4 border rounded-lg bg-card">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-full ${d.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
-                      {d.status === 'active' ? <CheckCircle2 className="h-5 w-5" /> : <Globe className="h-5 w-5" />}
-                    </div>
-                    <div>
-                      <p className="font-medium text-lg">{d.domain}</p>
-                      <p className="text-sm text-muted-foreground capitalize">Status: {d.status}</p>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => handleDeleteDomain(d.id)} className="text-destructive">
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-            {domains.some((d: any) => d.status === 'pending') && (
-              <Alert>
-                <AlertTitle>DNS Configuration Required</AlertTitle>
-                <AlertDescription>
-                  Your domain is pending verification. Add the DNS records in the table below at your domain registrar to verify ownership and route traffic.
-                </AlertDescription>
-              </Alert>
-            )}
-          </div>
-        ) : (
-          <form onSubmit={handleAddDomain} className="flex flex-col sm:flex-row gap-3">
-            <Input 
-              placeholder="e.g., aisalesrep.online" 
-              value={domainInput}
-              onChange={(e) => setDomainInput(e.target.value)}
-              className="flex-1"
-              disabled={isSubmitting}
-            />
-            <Button type="submit" disabled={isSubmitting || !domainInput}>
-              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Add Domain
-            </Button>
-          </form>
-        )}
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Custom Domains</CardTitle>
+          <CardDescription>
+            Connect a custom domain to host your landing page directly on your own URL.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
 
-      </CardContent>
-    </Card>
+          {domains && domains.length > 0 ? (
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Your Connected Domains</h3>
+              <div className="grid gap-4">
+                {domains.map((d: any) => (
+                  <div key={d.id} className="flex items-center justify-between p-4 border rounded-lg bg-card">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-full ${d.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
+                        {d.status === 'active' ? <CheckCircle2 className="h-5 w-5" /> : <Globe className="h-5 w-5" />}
+                      </div>
+                      <div>
+                        <p className="font-medium text-lg">{d.domain}</p>
+                        <p className="text-sm text-muted-foreground capitalize">Status: {d.status}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
+                      onClick={() => setDomainToRemove(d.id)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              {domains.some((d: any) => d.status === 'pending') && (
+                <Alert>
+                  <AlertTitle>DNS Configuration Required</AlertTitle>
+                  <AlertDescription>
+                    Your domain is pending verification. Add the DNS records in the table below at your domain registrar to verify ownership and route traffic.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+          ) : (
+            <form onSubmit={handleAddDomain} className="flex flex-col sm:flex-row gap-3">
+              <Input
+                placeholder="e.g., aisalesrep.online"
+                value={domainInput}
+                onChange={(e) => setDomainInput(e.target.value)}
+                className="flex-1"
+                disabled={isSubmitting}
+              />
+              <Button type="submit" disabled={isSubmitting || !domainInput}>
+                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Add Domain
+              </Button>
+            </form>
+          )}
+
+        </CardContent>
+      </Card>
+
+      {/* Confirmation dialog */}
+      <AlertDialog open={!!domainToRemove} onOpenChange={(open) => { if (!open) setDomainToRemove(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Custom Domain</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove <strong>{domainToRemove}</strong>? Your landing page will no longer be accessible at this domain. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleConfirmRemove}
+            >
+              Remove Domain
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
