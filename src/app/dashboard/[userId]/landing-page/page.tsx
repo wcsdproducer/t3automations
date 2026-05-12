@@ -13,8 +13,10 @@ const DnsRecords = () => {
   // The A record IP and TXT/CNAME values are unique per domain — the values below are examples.
   // Visit: https://console.firebase.google.com/project/studio-1410114603-9e1f6/apphosting → Studio backend → Settings → Domains
   const records = [
-    { type: 'A', name: '@', value: '35.219.200.4', purpose: 'Points your root domain to Firebase App Hosting servers.' },
-    { type: 'A', name: 'www', value: '35.219.200.4', purpose: 'Points the www subdomain to Firebase App Hosting servers.' },
+    { type: 'A', name: '@', value: '35.219.200.10', purpose: 'Points your root domain to Firebase App Hosting servers.' },
+    { type: 'A', name: '@', value: '35.219.200.6', purpose: 'Points your root domain to Firebase App Hosting servers.' },
+    { type: 'A', name: 'www', value: '35.219.200.10', purpose: 'Points the www subdomain to Firebase App Hosting servers.' },
+    { type: 'A', name: 'www', value: '35.219.200.6', purpose: 'Points the www subdomain to Firebase App Hosting servers.' },
     { type: 'TXT', name: '@', value: 'fah-claim=<your-unique-token>', purpose: 'Verifies ownership of your domain with Firebase App Hosting.' },
     { type: 'CNAME', name: '_acme-challenge_<unique-id>', value: '<unique-id>.9.authorize.certificatemanager.goog.', purpose: 'Required for Firebase to provision a free SSL certificate for your domain.' },
   ];

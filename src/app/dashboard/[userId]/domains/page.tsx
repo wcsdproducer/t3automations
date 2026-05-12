@@ -19,13 +19,25 @@ const DnsRecords = () => {
     {
       type: 'A',
       name: '@',
-      value: '35.219.200.4',
+      value: '35.219.200.10',
+      purpose: 'Points your root domain to Firebase App Hosting servers.',
+    },
+    {
+      type: 'A',
+      name: '@',
+      value: '35.219.200.6',
       purpose: 'Points your root domain to Firebase App Hosting servers.',
     },
     {
       type: 'A',
       name: 'www',
-      value: '35.219.200.4',
+      value: '35.219.200.10',
+      purpose: 'Points the www subdomain to Firebase App Hosting servers.',
+    },
+    {
+      type: 'A',
+      name: 'www',
+      value: '35.219.200.6',
       purpose: 'Points the www subdomain to Firebase App Hosting servers.',
     },
     {
