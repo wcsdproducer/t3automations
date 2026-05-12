@@ -62,7 +62,7 @@ export function CustomDomainManager() {
       setDomainInput('');
       toast({
         title: 'Domain Added',
-        description: `${domain} has been added to your profile. Please configure your DNS settings.`,
+        description: `${domain} has been added. Configure the DNS records below to complete setup.`,
       });
     } catch (error) {
       console.error('Error adding domain', error);
@@ -101,7 +101,7 @@ export function CustomDomainManager() {
   }
 
   return (
-    <Card className="mt-6">
+    <Card>
       <CardHeader>
         <CardTitle>Custom Domains</CardTitle>
         <CardDescription>
@@ -134,36 +134,8 @@ export function CustomDomainManager() {
             {domains.some((d: any) => d.status === 'pending') && (
               <Alert>
                 <AlertTitle>DNS Configuration Required</AlertTitle>
-                <AlertDescription className="space-y-4 mt-2">
-                  <p>Your domain is pending. Please configure the DNS records below in your domain registrar to verify ownership and route traffic.</p>
-                  
-                  <div className="bg-muted p-3 rounded-md text-sm font-mono space-y-2">
-                    <div className="grid grid-cols-[80px_1fr] gap-2">
-                      <span className="font-semibold text-muted-foreground">Type</span>
-                      <span>A</span>
-                      
-                      <span className="font-semibold text-muted-foreground">Name</span>
-                      <span>@</span>
-                      
-                      <span className="font-semibold text-muted-foreground">Value</span>
-                      <span>35.219.200.10</span>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-muted p-3 rounded-md text-sm font-mono space-y-2">
-                    <div className="grid grid-cols-[80px_1fr] gap-2">
-                      <span className="font-semibold text-muted-foreground">Type</span>
-                      <span>A</span>
-                      
-                      <span className="font-semibold text-muted-foreground">Name</span>
-                      <span>@</span>
-                      
-                      <span className="font-semibold text-muted-foreground">Value</span>
-                      <span>35.219.200.6</span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mt-2">Note: Remove any other A or CNAME records on this domain or subdomain. Changes can take up to 24 hours to propagate.</p>
+                <AlertDescription>
+                  Your domain is pending verification. Add the DNS records in the table below at your domain registrar to verify ownership and route traffic.
                 </AlertDescription>
               </Alert>
             )}
