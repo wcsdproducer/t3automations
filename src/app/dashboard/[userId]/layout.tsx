@@ -138,11 +138,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <LayoutGrid className="h-4 w-4" />
                 Agents
               </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/leads`}>
+                <UserIcon className="h-4 w-4" />
+                Leads
+              </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/phonenumbers`}>
                 <Phone className="h-4 w-4" />
                 Phone Numbers
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/page-editor`}>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
                 <LayoutTemplate className="h-4 w-4" />
                 Landing Page Editor
               </SidebarNavLink>
