@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser, useFirestore, useCollection, setDocumentNonBlocking } from '@/firebase';
+import { useUser, useFirestore, useCollection, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
 import { collection, doc, deleteDoc } from 'firebase/firestore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -52,9 +52,11 @@ export function LeadsManager() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const leadsRef = user && firestore
-    ? collection(firestore, `businessProfiles/${user.uid}/leads`)
-    : null;
+  // Memoized so useCollection gets a stable ref — prevents infinite re-render loop
+  const leadsRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return collection(firestore, `businessProfiles/${user.uid}/leads`);
+  }, [user, firestore]);
 
   const { data: leads, isLoading } = useCollection(leadsRef);
 
