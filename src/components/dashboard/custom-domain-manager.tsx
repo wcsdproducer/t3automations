@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useUser, useFirestore, setDocumentNonBlocking, useCollection } from '@/firebase';
+import { useState } from 'react';
+import { useUser, useFirestore, setDocumentNonBlocking, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, doc, deleteDoc } from 'firebase/firestore';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -18,9 +18,11 @@ export function CustomDomainManager() {
   const [domainInput, setDomainInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const customDomainsRef = user && firestore 
-    ? collection(firestore, `businessProfiles/${user.uid}/customDomains`) 
-    : null;
+  // Memoized so useCollection doesn't get a new ref on every render (infinite loop fix)
+  const customDomainsRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return collection(firestore, `businessProfiles/${user.uid}/customDomains`);
+  }, [user, firestore]);
 
   const { data: domains, isLoading } = useCollection(customDomainsRef);
 
