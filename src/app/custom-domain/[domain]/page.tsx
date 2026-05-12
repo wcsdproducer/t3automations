@@ -17,6 +17,10 @@ export default async function CustomDomainPage({
 
   if (!domain) return notFound();
 
+  const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, ''); // Remove port if any
+
+  console.log(`[custom-domain] Resolving domain: "${cleanDomain}" (Original: "${domain}")`);
+
   // 1. Look up which business owns this custom domain
   let businessProfileId: string | null = null;
 
@@ -24,7 +28,7 @@ export default async function CustomDomainPage({
     const snap = await admin
       .firestore()
       .collectionGroup('customDomains')
-      .where('id', '==', domain)
+      .where('id', '==', cleanDomain)
       .limit(1)
       .get();
 
