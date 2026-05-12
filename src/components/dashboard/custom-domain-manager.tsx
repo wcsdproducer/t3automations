@@ -180,63 +180,46 @@ export function CustomDomainManager() {
                   const cfg = getStatusConfig(d.status);
                   const isChecking = checkingDomain === d.id;
                   return (
-                    <div key={d.id} className="border rounded-xl bg-card overflow-hidden">
-                      {/* Top row — domain info */}
-                      <div className="flex items-center gap-4 px-5 py-4">
-                        <div className={`p-2.5 rounded-lg ${cfg.iconBg}`}>
-                          {cfg.icon}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-base truncate">{d.domain}</p>
-                          <Badge variant="outline" className={`text-xs font-medium mt-1 ${cfg.badgeClass}`}>
-                            {cfg.label}
-                          </Badge>
-                        </div>
+                    <div key={d.id} className="flex items-center gap-4 px-5 py-4 border rounded-xl bg-card">
+                      <div className={`p-2 rounded-lg shrink-0 ${cfg.iconBg}`}>
+                        {cfg.icon}
                       </div>
-
-                      {/* Bottom row — actions */}
-                      <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-border/50 bg-muted/30">
-                        <span className="text-xs text-muted-foreground">
-                          {d.lastCheckedAt
-                            ? `Last checked ${new Date(d.lastCheckedAt).toLocaleTimeString()}`
-                            : 'Not yet checked'}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleCheckStatus(d.id)}
-                            disabled={isChecking}
-                            className="h-8"
-                          >
-                            {isChecking
-                              ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                              : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
-                            {isChecking ? 'Checking…' : 'Check Status'}
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="h-8"
-                            onClick={() => setDomainToRemove(d.id)}
-                          >
-                            Remove
-                          </Button>
-                        </div>
+                      <p className="font-semibold text-base truncate">{d.domain}</p>
+                      <Badge variant="outline" className={`text-xs font-medium shrink-0 ${cfg.badgeClass}`}>
+                        {cfg.label}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {d.lastCheckedAt
+                          ? `Checked ${new Date(d.lastCheckedAt).toLocaleTimeString()}`
+                          : ''}
+                      </span>
+                      <div className="flex items-center gap-2 ml-auto shrink-0">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleCheckStatus(d.id)}
+                          disabled={isChecking}
+                          className="h-8"
+                        >
+                          {isChecking
+                            ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                            : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
+                          {isChecking ? 'Checking…' : 'Check Status'}
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="h-8"
+                          onClick={() => setDomainToRemove(d.id)}
+                        >
+                          Remove
+                        </Button>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              {domains.some((d: any) => d.status !== 'active') && (
-                <Alert>
-                  <AlertTitle>DNS Configuration Required</AlertTitle>
-                  <AlertDescription>
-                    One or more domains are not yet active. Add the DNS records in the table below at your domain registrar, then click <strong>Check Status</strong> to verify.
-                  </AlertDescription>
-                </Alert>
-              )}
             </div>
           ) : (
             <form onSubmit={handleAddDomain} className="flex flex-col sm:flex-row gap-3">

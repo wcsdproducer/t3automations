@@ -6,6 +6,8 @@ import { Template2Content } from '@/app/landing-pages/_components/template-2-con
 import { Template3Content } from '@/app/landing-pages/_components/template-3-content';
 import { Template4Content } from '@/app/landing-pages/_components/template-4-content';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CustomDomainPage({
   params,
 }: {

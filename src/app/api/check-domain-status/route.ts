@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 
 // Firebase App Hosting A record IPs
-const FIREBASE_IPS = new Set(['35.219.200.10', '35.219.200.6']);
+const FIREBASE_IPS = new Set(['35.219.200.4']);
 
 // Initialize Firebase Admin if not already done
 function getAdminFirestore() {
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     } else if (!isPointing) {
       // DNS exists but wrong IPs
       newStatus = 'misconfigured';
-      detail = `DNS resolves to ${aRecords.join(', ')} instead of Firebase App Hosting IPs.`;
+      detail = `DNS resolves to ${aRecords.join(', ')} instead of the expected hosting IPs.`;
     } else {
       // DNS is correct — now check if HTTPS actually works (SSL cert provisioned)
       const httpsOk = await checkHttpsReachable(domain);

@@ -19,39 +19,21 @@ const DnsRecords = () => {
     {
       type: 'A',
       name: '@',
-      value: '35.219.200.10',
-      purpose: 'Points your root domain to Firebase App Hosting servers.',
-    },
-    {
-      type: 'A',
-      name: '@',
-      value: '35.219.200.6',
-      purpose: 'Points your root domain to Firebase App Hosting servers.',
+      value: '35.219.200.4',
+      purpose: 'Points your root domain to our hosting servers.',
     },
     {
       type: 'A',
       name: 'www',
-      value: '35.219.200.10',
-      purpose: 'Points the www subdomain to Firebase App Hosting servers.',
-    },
-    {
-      type: 'A',
-      name: 'www',
-      value: '35.219.200.6',
-      purpose: 'Points the www subdomain to Firebase App Hosting servers.',
+      value: '35.219.200.4',
+      purpose: 'Points the www subdomain to our hosting servers.',
     },
     {
       type: 'TXT',
       name: '@',
-      value: 'fah-claim=<your-unique-token>',
-      purpose: 'Verifies ownership of your domain with Firebase App Hosting.',
-    },
-    {
-      type: 'CNAME',
-      name: '_acme-challenge_<unique-id>',
-      value: '<unique-id>.9.authorize.certificatemanager.goog.',
-      purpose: 'Required for Firebase to provision a free SSL certificate for your domain.',
-    },
+      value: 'fah-claim=002-02-21ed7fd1-4793-4b5e-83f0-c232085d9cc4',
+      purpose: 'Verifies ownership of your domain.',
+    }
   ];
 
   const copyToClipboard = (text: string) => {
@@ -64,16 +46,7 @@ const DnsRecords = () => {
       <CardHeader>
         <CardTitle>DNS Records for Custom Domain</CardTitle>
         <CardDescription>
-          Add these records at your domain registrar after registering your domain in{' '}
-          <a
-            href="https://console.firebase.google.com/project/studio-1410114603-9e1f6/apphosting"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-primary"
-          >
-            Firebase App Hosting
-          </a>
-          . The exact TXT and CNAME values are provided there — the placeholders below show the format.
+          Add these records at your domain registrar to connect your custom domain.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -90,19 +63,20 @@ const DnsRecords = () => {
           <TableBody>
             {records.map((record, index) => (
               <TableRow key={index}>
-                <TableCell className="font-mono text-xs">{record.type}</TableCell>
-                <TableCell className="font-mono text-xs">{record.name}</TableCell>
-                <TableCell className="font-mono text-xs">{record.value}</TableCell>
-                <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
+                <TableCell className="font-mono text-xs py-2">{record.type}</TableCell>
+                <TableCell className="font-mono text-xs py-2">{record.name}</TableCell>
+                <TableCell className="font-mono text-xs py-2">{record.value}</TableCell>
+                <TableCell className="text-muted-foreground text-sm hidden md:table-cell py-2">
                   {record.purpose}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right py-2">
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="h-7 w-7"
                     onClick={() => copyToClipboard(record.value)}
                   >
-                    <Copy className="h-4 w-4" />
+                    <Copy className="h-3.5 w-3.5" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -110,8 +84,8 @@ const DnsRecords = () => {
           </TableBody>
         </Table>
         <p className="text-sm text-muted-foreground mt-4">
-          DNS changes can take up to 48 hours to propagate globally. Firebase automatically
-          provisions and renews your SSL certificate once the TXT and CNAME records verify.
+          DNS changes can take up to 48 hours to propagate globally. Your SSL certificate will be
+          automatically provisioned and renewed once the TXT and CNAME records verify.
         </p>
       </CardContent>
     </Card>
