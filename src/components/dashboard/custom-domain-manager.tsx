@@ -136,9 +136,8 @@ export function CustomDomainManager() {
                       </div>
                     </div>
                     <Button
-                      variant="outline"
+                      variant="destructive"
                       size="sm"
-                      className="text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => setDomainToRemove(d.id)}
                     >
                       Remove
