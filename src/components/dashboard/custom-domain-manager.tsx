@@ -180,44 +180,49 @@ export function CustomDomainManager() {
                   const cfg = getStatusConfig(d.status);
                   const isChecking = checkingDomain === d.id;
                   return (
-                    <div key={d.id} className="flex items-center justify-between p-4 border rounded-lg bg-card">
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-full ${cfg.iconBg}`}>
+                    <div key={d.id} className="border rounded-xl bg-card overflow-hidden">
+                      {/* Top row — domain info */}
+                      <div className="flex items-center gap-4 px-5 py-4">
+                        <div className={`p-2.5 rounded-lg ${cfg.iconBg}`}>
                           {cfg.icon}
                         </div>
-                        <div>
-                          <p className="font-medium text-base">{d.domain}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <Badge variant="outline" className={`text-xs font-medium ${cfg.badgeClass}`}>
-                              {cfg.label}
-                            </Badge>
-                            {d.lastCheckedAt && (
-                              <span className="text-xs text-muted-foreground">
-                                Checked {new Date(d.lastCheckedAt).toLocaleTimeString()}
-                              </span>
-                            )}
-                          </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-base truncate">{d.domain}</p>
+                          <Badge variant="outline" className={`text-xs font-medium mt-1 ${cfg.badgeClass}`}>
+                            {cfg.label}
+                          </Badge>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCheckStatus(d.id)}
-                          disabled={isChecking}
-                        >
-                          {isChecking
-                            ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                            : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
-                          {isChecking ? 'Checking…' : 'Check Status'}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setDomainToRemove(d.id)}
-                        >
-                          Remove
-                        </Button>
+
+                      {/* Bottom row — actions */}
+                      <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-border/50 bg-muted/30">
+                        <span className="text-xs text-muted-foreground">
+                          {d.lastCheckedAt
+                            ? `Last checked ${new Date(d.lastCheckedAt).toLocaleTimeString()}`
+                            : 'Not yet checked'}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleCheckStatus(d.id)}
+                            disabled={isChecking}
+                            className="h-8"
+                          >
+                            {isChecking
+                              ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                              : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
+                            {isChecking ? 'Checking…' : 'Check Status'}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="h-8"
+                            onClick={() => setDomainToRemove(d.id)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   );
