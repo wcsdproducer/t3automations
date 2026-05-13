@@ -9,6 +9,24 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2, Edit2, Plus, Phone, Mail, FileText, User } from 'lucide-react';
 import { Lead, LeadStatus, LeadSource } from '@/types/crm';
+
+const formatPhoneNumber = (phone: string | undefined | null) => {
+  if (!phone) return '';
+  const cleaned = ('' + phone).replace(/\D/g, '');
+  
+  if (cleaned.length === 11 && cleaned.startsWith('1')) {
+    const match = cleaned.match(/^1(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return `+1 (${match[1]}) ${match[2]}-${match[3]}`;
+    }
+  }
+  
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return `(${match[1]}) ${match[2]}-${match[3]}`;
+  }
+  return phone;
+};
 import {
   Table,
   TableBody,
@@ -194,7 +212,7 @@ export function LeadsManager() {
                       <div className="flex flex-col gap-1 text-sm text-muted-foreground">
                         {lead.phone && (
                           <span className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" /> {lead.phone}
+                            <Phone className="h-3 w-3" /> {formatPhoneNumber(lead.phone)}
                           </span>
                         )}
                         {lead.email && (
@@ -287,7 +305,7 @@ export function LeadsManager() {
                   <label className="text-sm font-medium">Phone</label>
                   <Input 
                     value={formData.phone || ''} 
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                    onChange={(e) => setFormData({ ...formData, phone: formatPhoneNumber(e.target.value) })} 
                     placeholder="+1 (555) 000-0000" 
                   />
                 </div>

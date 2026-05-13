@@ -14,6 +14,7 @@ function PreviewWrapper() {
       companyName={searchParams.get('companyName') || ''}
       fontPair={searchParams.get('fontPair') || 'modern-corporate'}
       colorPalette={searchParams.get('colorPalette') || 'deep-midnight'}
+      bookingUrl={searchParams.get('bookingUrl') || ''}
     />
   );
 }

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth, useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc } from 'firebase/firestore';
+import { doc, collection } from 'firebase/firestore';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { initiateGoogleSignIn } from '@/firebase/non-blocking-login';
@@ -60,6 +60,13 @@ export default function SignupPage() {
           defaultLandingPage: 'template-3',
         };
         setDocumentNonBlocking(businessProfileRef, businessProfileData, {});
+
+        const agentRef = doc(collection(firestore, 'businessProfiles', newUser.uid, 'agents'));
+        setDocumentNonBlocking(agentRef, {
+          name: 'Default Agent',
+          voiceId: 'cjVigY5qzO86Huf0OWa1',
+          status: 'active'
+        }, {});
         // The onAuthStateChanged listener will handle the redirect to the dashboard
       }
     } catch (err: any) {

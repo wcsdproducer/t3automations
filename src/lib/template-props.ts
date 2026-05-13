@@ -14,6 +14,7 @@ export interface TemplateProps {
   companyName?: string;
   fontPair?: string;
   colorPalette?: string;
+  bookingUrl?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ export function profileToTemplateProps(profile: Record<string, any>, id?: string
     companyName:  profile.businessName || '',
     fontPair:     profile.fontPair     || 'modern-corporate',
     colorPalette: profile.colorPalette || 'deep-midnight',
+    bookingUrl:   profile.bookingUrl   || '',
   };
 }
 
@@ -49,5 +51,6 @@ export function searchParamsToTemplateProps(
     companyName:  get('companyName')  || '',
     fontPair:     get('fontPair')     || 'modern-corporate',
     colorPalette: get('colorPalette') || 'deep-midnight',
+    bookingUrl:   get('bookingUrl')   || '',
   };
 }

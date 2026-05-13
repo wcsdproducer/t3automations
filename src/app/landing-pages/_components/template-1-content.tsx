@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Wrench, ShieldCheck, Smile, Star, Phone } from 'lucide-react';
 import Image from 'next/image';
 import { type ImagePlaceholder } from '@/lib/placeholder-images';
@@ -31,6 +32,7 @@ export function Template1Content({
   phone: phoneProp = '(000) 000-0000',
   logoUrl = '',
   companyName: companyNameProp = '',
+  bookingUrl = '',
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }));
@@ -40,14 +42,18 @@ export function Template1Content({
   const contactSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     email: z.string().email('Invalid email'),
+    phone: z.string().min(1, 'Phone number is required'),
     notes: z.string().optional(),
+    consent: z.boolean().refine(val => val === true, {
+      message: "You must agree to receive SMS communications.",
+    }),
   });
 
   type ContactFormValues = z.infer<typeof contactSchema>;
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: '', email: '', notes: '' },
+    defaultValues: { name: '', email: '', phone: '', notes: '', consent: false },
   });
 
   const onSubmit = async (data: ContactFormValues) => {
@@ -56,7 +62,7 @@ export function Template1Content({
       return;
     }
     setIsSubmitting(true);
-    const res = await submitLead({ ...data, businessProfileId, phone: '' });
+    const res = await submitLead({ ...data, businessProfileId });
     setIsSubmitting(false);
     if (res.success) {
       toast({ title: 'Success', description: 'Your request has been submitted. We will be in touch shortly!' });
@@ -80,9 +86,16 @@ export function Template1Content({
     <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
       <h2 className="text-4xl md:text-6xl font-bold">{content.hero.title}</h2>
       <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">{content.hero.subtitle}</p>
-      <a href="#contact">
-        <Button size="lg" className="mt-8 transition-transform hover:scale-105">{content.hero.cta}</Button>
-      </a>
+      <div className="flex justify-center gap-4 mt-8">
+        <a href="#contact">
+          <Button size="lg" className="transition-transform hover:scale-105">{content.hero.cta}</Button>
+        </a>
+        {bookingUrl && (
+          <a href={bookingUrl} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white transition-transform hover:scale-105">Book Appointment</Button>
+          </a>
+        )}
+      </div>
     </div>
   );
 
@@ -216,10 +229,32 @@ export function Template1Content({
                 {form.formState.errors.email && <p className="text-sm text-destructive mt-1">{form.formState.errors.email.message}</p>}
               </div>
               <div>
+                <Input type="tel" placeholder="Phone Number" {...form.register('phone')} />
+                {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
+              </div>
+              <div>
                 <Textarea placeholder="Tell us about your project..." {...form.register('notes')} />
                 {form.formState.errors.notes && <p className="text-sm text-destructive mt-1">{form.formState.errors.notes.message}</p>}
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
+              
+              <div className="flex items-start space-x-2 text-left mt-4 bg-background p-4 rounded-md border">
+                <Checkbox 
+                  id="consent" 
+                  checked={form.watch('consent')} 
+                  onCheckedChange={(checked) => form.setValue('consent', checked as boolean, { shouldValidate: true })} 
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <label htmlFor="consent" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    I agree to receive SMS text messages from {companyName}.
+                  </label>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    By checking this box, you consent to receive SMS messages regarding your inquiry. Message and data rates may apply. Reply STOP to opt-out. See our <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="underline text-primary">Privacy Policy</a> and <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="underline text-primary">Terms of Service</a>.
+                  </p>
+                </div>
+              </div>
+              {form.formState.errors.consent && <p className="text-sm text-destructive mt-1 text-left">{form.formState.errors.consent.message}</p>}
+
+              <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
                 {isSubmitting ? 'Submitting...' : 'Submit Request'}
               </Button>
             </form>
@@ -229,6 +264,10 @@ export function Template1Content({
 
       <footer className="py-8 px-6 text-center text-muted-foreground border-t">
         <p>&copy; {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
+        <div className="mt-4 flex justify-center gap-4 text-sm">
+          <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline">Privacy Policy</a>
+          <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline">Terms of Service</a>
+        </div>
       </footer>
     </div>
   );

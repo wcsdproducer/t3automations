@@ -89,7 +89,7 @@ service cloud.firestore {
      * On Update: Enforces immutability of foreign and primary keys for a subcollection document.
      */
     function isImmutableSubDoc() {
-       return request.resource.data.businessProfileId == resource.data.businessProfileId && request.resource.data.id == resource.data.id;
+       return request.resource.data.get('businessProfileId', null) == resource.data.get('businessProfileId', null) && request.resource.data.get('id', null) == resource.data.get('id', null);
     }
 
     // ----------------------------------------------------------------------
@@ -251,6 +251,17 @@ service cloud.firestore {
       }
 
       // --------------------------------------------------------------------
+      // Phone Numbers Subcollection
+      // --------------------------------------------------------------------
+      match /phoneNumbers/{phoneNumberId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, phoneNumberId);
+        allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+
+      // --------------------------------------------------------------------
       // Agents Subcollection
       // --------------------------------------------------------------------
       match /agents/{agentId} {
@@ -259,6 +270,14 @@ service cloud.firestore {
         allow create: if isOwner(businessProfileId) && isValidSubDocCreate(businessProfileId, agentId);
         allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
         allow delete: if isExistingOwner(businessProfileId);
+
+        match /conversations/{conversationId} {
+          allow get: if isOwner(businessProfileId);
+          allow list: if isOwner(businessProfileId);
+          allow create: if isOwner(businessProfileId);
+          allow update: if isExistingOwner(businessProfileId);
+          allow delete: if isExistingOwner(businessProfileId);
+        }
       }
 
       // --------------------------------------------------------------------

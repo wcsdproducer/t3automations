@@ -13,6 +13,12 @@ import {
   Phone,
   LayoutGrid,
   LayoutTemplate,
+  Book,
+  BarChart,
+  MessageSquare,
+  Megaphone,
+  Cog,
+  Users
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -129,22 +135,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
-              <span className="">Agents</span>
+              <span className="">T3 Automations</span>
             </Link>
           </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+          <div className="flex-1 overflow-y-auto">
+            <nav className="grid items-start px-2 text-sm font-medium lg:px-4 py-4 space-y-1">
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
-                <LayoutGrid className="h-4 w-4" />
-                Agents
+                <BarChart className="h-4 w-4" />
+                Analytics
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/conversations`}>
+                <MessageSquare className="h-4 w-4" />
+                Conversations
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/leads`}>
-                <UserIcon className="h-4 w-4" />
+                <Users className="h-4 w-4" />
                 Leads
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/phonenumbers`}>
-                <Phone className="h-4 w-4" />
-                Phone Numbers
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/campaigns`}>
+                <Megaphone className="h-4 w-4" />
+                Campaigns
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/calendar`}>
+                <Book className="h-4 w-4" />
+                Calendar & Booking
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
                 <LayoutTemplate className="h-4 w-4" />
@@ -154,13 +168,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Globe className="h-4 w-4" />
                 Domain Management
               </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/agent-settings`}>
+                <Cog className="h-4 w-4" />
+                Agent Settings
+              </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
                 <Settings className="h-4 w-4" />
                 Company Details
               </SidebarNavLink>
             </nav>
           </div>
-          <div className="mt-auto p-4">
+          <div className="mt-auto p-4 border-t">
             <UserProfileDropdown />
           </div>
         </div>
