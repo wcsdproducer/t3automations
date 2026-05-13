@@ -40,9 +40,9 @@ export async function POST(req: Request) {
         }
       }
     } else if (called_number) {
-      // Fallback: try by called_number if twilioPhoneNumber matches
+      // Fallback: try by called_number if telnyxPhoneNumber matches
       const agentsByPhoneSnapshot = await adminDb.collectionGroup('agents')
-        .where('twilioPhoneNumber', '==', called_number)
+        .where('telnyxPhoneNumber', '==', called_number)
         .limit(1)
         .get();
 

@@ -59,7 +59,7 @@ export default function Header() {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-4">
-            {isClient && <LanguageSelector />}
+            <LanguageSelector />
             <Link href="/login">
               <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">
                 <TranslatedText>Client Login</TranslatedText>

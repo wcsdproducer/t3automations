@@ -1,0 +1,39 @@
+{
+  "name": "book_calendar",
+  "description": "Book a calendar appointment for a service. This tool creates a lead and schedules an appointment.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The full name of the person booking the appointment."
+      },
+      "email": {
+        "type": "string",
+        "description": "The email address of the person booking. Optional, but recommended."
+      },
+      "phone": {
+        "type": "string",
+        "description": "The phone number of the person booking."
+      },
+      "date": {
+        "type": "string",
+        "description": "The date for the appointment in YYYY-MM-DD format."
+      },
+      "time": {
+        "type": "string",
+        "description": "The time for the appointment in HH:MM format."
+      },
+      "service": {
+        "type": "string",
+        "description": "The name or type of service they want to book."
+      }
+    },
+    "required": [
+      "name",
+      "phone",
+      "date",
+      "time"
+    ]
+  }
+}

@@ -24,6 +24,7 @@ export default function middleware(req: NextRequest) {
   // to /custom-domain/[hostname] for landing-page serving.
   const rootDomains = [
         'localhost:9002',
+        'localhost:9003',
         'localhost:3000',
         'studio--studio-1410114603-9e1f6.us-central1.hosted.app',
         't3automations.com',

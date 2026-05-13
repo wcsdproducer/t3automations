@@ -71,6 +71,55 @@ const mockVoices = [
   }
 ];
 
+const defaultPromptPlaceholder = `1. BOTNAME: [Enter bot's name, e.g., "Alex"]
+2. COMPANY: [Enter business name, e.g., "Bright Smiles Dental"]
+3. BUSINESSTYPE: [Enter business type, e.g., "dental clinic"]
+4. MISSION: [Enter business mission, e.g., "providing exceptional dental care with a smile"]
+5. SERVICES: [Enter services offered, e.g., "teeth cleaning, fillings, orthodontics, and whitening"]
+6. PERSONALITY: [Enter bot's personality, e.g., "friendly, upbeat, and caring"]
+7. TONE: [Enter tone of voice, e.g., "warm, professional, and approachable"]
+8. FEELING: [Enter desired caller emotion, e.g., "valued, confident, and cared for"]
+9. GOODVIBE: [Enter positive vibe for call ending, e.g., "wonderful"]
+
+Placeholder Substitution Instruction:
+Before processing this prompt, replace all placeholders (e.g., {BOTNAME}, {COMPANY}) in the prompt body below with the corresponding values provided in the Placeholder Fields section above. For example, replace every instance of {BOTNAME} with the value entered for BOTNAME (e.g., "Alex"), {COMPANY} with the value entered for COMPANY (e.g., "Bright Smiles Dental"), and so on for all 9 placeholders. Ensure all replacements are applied consistently throughout the prompt to create a seamless, customized experience.
+
+Prompt: You are {BOTNAME}, an AI voice agent for {COMPANY}, a {BUSINESSTYPE} dedicated to {MISSION}. Your personality is {PERSONALITY}, and you use a {TONE} tone to ensure callers feel {FEELING}. Your primary objectives are to assist callers efficiently, book appointments accurately, handle edge cases professionally, and uphold {COMPANY}'s reputation.
+
+Core Instructions:
+1. Understanding Caller Intent:
+    * Actively listen to the caller's request. If they ask about {SERVICES}, provide concise details (e.g., "We offer {SERVICES} to meet your needs"). If they request an appointment, proceed to the booking process. If the intent is unclear, use the error handling protocol.
+2. Booking Appointments:
+    * Initiate Booking: Confirm intent with: "I’d be happy to book your appointment. What’s your name, please?"
+    * Collect Details: Gather the caller’s full name, preferred date and time, and contact information (phone or email). Ask: "What type of appointment would you like?"
+    * Verify Availability: Check {COMPANY}'s scheduling system for availability. Confirm with: "I’ve found an available slot on {DATE} at {TIME}. Does that work for you?"
+    * Handle Conflicts: If no slots are available, suggest alternatives: "That time is booked. Would another time work instead?" If no options suit, offer a waitlist: "I can add you to our waitlist and contact you if a slot opens. Would you prefer a phone call or email?"
+    * Confirm Appointment: Summarize details: "Your appointment is booked for {DATE} at {TIME}. You’ll receive a confirmation soon. Anything else I can help with?"
+    * Special Requests: If the caller has specific needs (e.g., accessibility), note them for the appointment.
+3. Ending Calls:
+    * Conclude every call politely: "Thank you for calling {COMPANY}, {CALLERNAME}. Have a {GOODVIBE} day!" If an appointment was booked, restate: "Your appointment is confirmed for {DATE} at {TIME}. We look forward to seeing you!"
+    * If no appointment was booked, reinforce value: "We’re here for you at {COMPANY}. Call back anytime!"
+    * If the call was unresolved, ensure a positive tone: "I hope I’ve helped today. Reach out if you need more assistance."
+4. Tone and Personality:
+    * Consistently embody {PERSONALITY} in all interactions (e.g., warm and engaging for "friendly," composed for "professional"). Tailor language to reflect {TONE}, ensuring callers feel {FEELING}.
+    * Example: For {PERSONALITY} = "cheerful," use phrases like "I’m thrilled to help you!" For {PERSONALITY} = "calm," use "I’m here to assist you smoothly."
+5. Error Handling:
+    * If the caller’s request is unclear, say: "I’m sorry, could you repeat that one more time, please?" Repeat up to twice, then escalate: "Let me connect you with a team member for better assistance."
+    * If the caller speaks an unsupported language, say: "I’m sorry, I’m unable to assist in that language. Would you like to continue in English, or should I arrange for a team member to help?"
+6. Prohibited Actions:
+    * Never share sensitive information (e.g., client data, internal policies) beyond {SERVICES}.
+    * Avoid unprofessional language, assumptions about the caller, or promises outside {COMPANY}'s policies.
+    * Do not confirm appointments without verifying availability.
+7. Fallback for Unsupported Requests:
+    * For requests beyond your capabilities (e.g., complex inquiries or technical issues), say: "That’s a great question! Let me connect you with a team member who can assist further." Simulate a transfer or offer: "Would you like a callback from our team?"
+8. Edge Cases:
+    * Irate Callers: Remain calm and {PERSONALITY}. Say: "I’m here to help resolve this. Can you share more details?" Escalate to a team member if needed.
+    * Cancellations: Confirm the appointment details, cancel in the system, and say: "Your appointment has been canceled. Can I book a new one for you?"
+    * No-Show Follow-Up: If prompted, offer to reschedule: "I see you missed an appointment. Would you like to reschedule?"
+    * Multiple Bookings: For group or multiple appointments, collect details for each and confirm individually.
+    * Urgent Requests: Prioritize emergency bookings and escalate if no slots are available.
+By following these instructions, you will deliver a seamless, {PERSONALITY}, and professional experience that aligns with {COMPANY}'s {MISSION}, ensuring callers feel {FEELING} while efficiently managing appointments and interactions.`;
+
 export default function AgentSettingsPage() {
   const params = useParams();
   const userId = params.userId as string;
@@ -79,7 +128,7 @@ export default function AgentSettingsPage() {
   const { toast } = useToast();
 
   const [agentName, setAgentName] = useState('');
-  const [systemPrompt, setSystemPrompt] = useState('');
+  const [systemPrompt, setSystemPrompt] = useState(defaultPromptPlaceholder);
   const [voiceId, setVoiceId] = useState('');
   const [elevenLabsAgentId, setElevenLabsAgentId] = useState('');
   const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('');
@@ -129,7 +178,7 @@ export default function AgentSettingsPage() {
   useEffect(() => {
     if (agent) {
       setAgentName(agent.name || '');
-      setSystemPrompt(agent.systemPrompt || '');
+      setSystemPrompt(agent.systemPrompt || defaultPromptPlaceholder);
       setVoiceId(agent.voiceId || 'cjVigY5qzO86Huf0OWa1'); // Default to Eric
       setElevenLabsAgentId(agent.elevenLabsAgentId || '');
       setTwilioPhoneNumber(agent.twilioPhoneNumber || '');
@@ -144,12 +193,46 @@ export default function AgentSettingsPage() {
     if (!db || !user) return;
     setIsSaving(true);
     try {
+      let newElevenLabsAgentId = elevenLabsAgentId;
+
+      const apiPayload = {
+        name: agentName,
+        systemPrompt,
+        voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
+        firstMessage: "Hello! How can I assist you today?"
+      };
+
+      if (newElevenLabsAgentId) {
+        const res = await fetch(`/api/elevenlabs/agents/${newElevenLabsAgentId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(apiPayload)
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Failed to update ElevenLabs Agent');
+        }
+      } else {
+        const res = await fetch(`/api/elevenlabs/agents`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(apiPayload)
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Failed to create ElevenLabs Agent');
+        }
+        const data = await res.json();
+        newElevenLabsAgentId = data.agent_id;
+        setElevenLabsAgentId(newElevenLabsAgentId);
+      }
+
       if (agentDocRef) {
         await updateDoc(agentDocRef, {
           name: agentName,
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
-          elevenLabsAgentId,
+          elevenLabsAgentId: newElevenLabsAgentId,
           twilioPhoneNumber,
           transcriberProvider,
           transcriberModel,
@@ -157,11 +240,14 @@ export default function AgentSettingsPage() {
           transcriberDenoising,
         });
       } else {
-        await addDoc(collection(db, `businessProfiles/${user.uid}/agents`), {
+        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        await setDoc(newDocRef, {
+          id: newDocRef.id,
+          businessProfileId: user.uid,
           name: agentName,
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
-          elevenLabsAgentId,
+          elevenLabsAgentId: newElevenLabsAgentId,
           twilioPhoneNumber,
           transcriberProvider,
           transcriberModel,
@@ -195,7 +281,10 @@ export default function AgentSettingsPage() {
           twilioPhoneNumber: phoneNumber,
         });
       } else {
-        await addDoc(collection(db, `businessProfiles/${user.uid}/agents`), {
+        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        await setDoc(newDocRef, {
+          id: newDocRef.id,
+          businessProfileId: user.uid,
           name: agentName,
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
@@ -207,6 +296,19 @@ export default function AgentSettingsPage() {
           transcriberDenoising,
         });
       }
+
+      if (elevenLabsAgentId) {
+        await fetch('/api/twilio/configure-sip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phoneNumber,
+            agentId: elevenLabsAgentId,
+            uid: user.uid
+          })
+        });
+      }
+
       toast({
         title: 'Success',
         description: `Number ${phoneNumber} assigned successfully`,
@@ -250,7 +352,7 @@ export default function AgentSettingsPage() {
     setIsPhoneNumbersLoading(true);
     try {
       const q = query(
-        collection(db, 'businessProfiles', user.uid, 'phoneNumber'),
+        collection(db, 'businessProfiles', user.uid, 'phoneNumbers'),
         orderBy('purchasedAt', 'desc')
       );
       const querySnapshot = await getDocs(q);
@@ -280,9 +382,31 @@ export default function AgentSettingsPage() {
     e.preventDefault();
     if (!user || !db || !textTitle || !textContent) return;
 
+    if (!elevenLabsAgentId) {
+      toast({ title: 'Error', description: 'Please create an ElevenLabs Agent first by saving General Settings.', variant: 'destructive' });
+      return;
+    }
+
     setIsSubmittingDoc(true);
     try {
       const docId = crypto.randomUUID();
+
+      // Sync to ElevenLabs
+      const formData = new FormData();
+      const blob = new Blob([textContent], { type: 'text/plain' });
+      formData.append('file', blob, `${textTitle}.txt`);
+      formData.append('name', textTitle);
+
+      const res = await fetch(`/api/elevenlabs/agents/${elevenLabsAgentId}/knowledge`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to sync knowledge to ElevenLabs agent');
+      }
+
       await setDoc(doc(db, 'businessProfiles', user.uid, 'knowledgeBase', docId), {
         id: docId,
         businessProfileId: user.uid,
@@ -291,13 +415,13 @@ export default function AgentSettingsPage() {
         sourceType: 'text',
         createdAt: Timestamp.now(),
       });
-      toast({ title: 'Success', description: 'Document added successfully' });
+      toast({ title: 'Success', description: 'Document added and synced to agent successfully' });
       setTextTitle('');
       setTextContent('');
       fetchDocuments();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding document:', error);
-      toast({ title: 'Error', description: 'Failed to add document', variant: 'destructive' });
+      toast({ title: 'Error', description: error.message || 'Failed to add document', variant: 'destructive' });
     } finally {
       setIsSubmittingDoc(false);
     }
@@ -307,44 +431,49 @@ export default function AgentSettingsPage() {
     e.preventDefault();
     if (!user || !db || !urlTitle || !urlLink) return;
 
+    if (!elevenLabsAgentId) {
+      toast({ title: 'Error', description: 'Please create an ElevenLabs Agent first by saving General Settings.', variant: 'destructive' });
+      return;
+    }
+
     setIsSubmittingDoc(true);
     try {
       const docId = crypto.randomUUID();
+      
+      // Sync to ElevenLabs
+      const formData = new FormData();
+      formData.append('url', urlLink);
+      formData.append('name', urlTitle);
+
+      const res = await fetch(`/api/elevenlabs/agents/${elevenLabsAgentId}/knowledge`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to sync URL to ElevenLabs agent');
+      }
+
       await setDoc(doc(db, 'businessProfiles', user.uid, 'knowledgeBase', docId), {
         id: docId,
         businessProfileId: user.uid,
         title: urlTitle,
-        content: 'Scraping in progress...', 
+        content: 'Synced to ElevenLabs agent successfully.', 
         sourceType: 'url',
         sourceUrl: urlLink,
         createdAt: Timestamp.now(),
-        status: 'scraping'
+        status: 'synced'
       });
 
-      // Call API to scrape
-      try {
-        const response = await fetch('/api/knowledge/scrape', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: urlLink, docId: docId, uid: user.uid })
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to scrape URL');
-        }
-        
-        toast({ title: 'Success', description: 'URL submitted for scraping' });
-      } catch (scrapeError) {
-        console.error('Scraping error:', scrapeError);
-        toast({ title: 'Error', description: 'Failed to scrape URL. It was saved as a reference.', variant: 'destructive' });
-      }
+      toast({ title: 'Success', description: 'URL submitted and synced to agent successfully' });
 
       setUrlTitle('');
       setUrlLink('');
       fetchDocuments();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding URL document:', error);
-      toast({ title: 'Error', description: 'Failed to add URL', variant: 'destructive' });
+      toast({ title: 'Error', description: error.message || 'Failed to add URL', variant: 'destructive' });
     } finally {
       setIsSubmittingDoc(false);
     }
@@ -439,7 +568,10 @@ export default function AgentSettingsPage() {
           voiceSimilarityBoost: voiceSettings.similarityBoost
         });
       } else {
-        await addDoc(collection(db, `businessProfiles/${user.uid}/agents`), {
+        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        await setDoc(newDocRef, {
+          id: newDocRef.id,
+          businessProfileId: user.uid,
           voiceId: editingVoice.voice_id,
           customVoiceName: voiceSettings.name,
           voiceStability: voiceSettings.stability,
@@ -508,7 +640,8 @@ export default function AgentSettingsPage() {
           );
           setVoices(sortedVoices);
         } else {
-          console.error('Failed to fetch voices');
+          const errorText = await res.text();
+          console.error('Failed to fetch voices:', res.status, errorText);
         }
       } catch (err) {
         console.error(err);
@@ -526,7 +659,12 @@ export default function AgentSettingsPage() {
       if (agentDocRef) {
         await updateDoc(agentDocRef, { voiceId: id });
       } else {
-        await addDoc(collection(db, `businessProfiles/${user.uid}/agents`), { voiceId: id });
+        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        await setDoc(newDocRef, { 
+          id: newDocRef.id,
+          businessProfileId: user.uid,
+          voiceId: id 
+        });
       }
       toast({
         title: 'Voice Updated',
@@ -567,7 +705,7 @@ export default function AgentSettingsPage() {
         <TabsList className="grid w-full grid-cols-6 lg:w-[800px] shrink-0">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="voice">Voice</TabsTrigger>
-          <TabsTrigger value="prompts">Prompts</TabsTrigger>
+          <TabsTrigger value="prompts">Prompt</TabsTrigger>
           <TabsTrigger value="transcriber">Transcriber</TabsTrigger>
           <TabsTrigger value="knowledge">Knowledge Base</TabsTrigger>
           <TabsTrigger value="phonenumbers">Phone Number</TabsTrigger>
@@ -779,32 +917,34 @@ export default function AgentSettingsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="prompts" className="mt-6 overflow-y-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle>Agent Prompts</CardTitle>
-              <CardDescription>
-                Define the behavior, personality, and script for your AI agent.
-              </CardDescription>
+        <TabsContent value="prompts" className="mt-6 flex-1 data-[state=active]:flex flex-col min-h-0">
+          <Card className="flex-1 flex flex-col min-h-0">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 shrink-0">
+              <div className="space-y-1">
+                <CardTitle>Agent Prompt</CardTitle>
+                <CardDescription>
+                  Define the behavior, personality, and script for your AI agent.
+                </CardDescription>
+              </div>
+              <Button onClick={handleSave} disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Prompt
+              </Button>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="systemPrompt">System Prompt</Label>
+            <CardContent className="flex-1 flex flex-col min-h-0 space-y-4 pb-6">
+              <div className="flex-1 flex flex-col space-y-2 min-h-0">
+                <Label htmlFor="systemPrompt" className="shrink-0 sr-only">System Prompt</Label>
                 <Textarea 
                   id="systemPrompt" 
                   value={systemPrompt}
                   onChange={(e) => setSystemPrompt(e.target.value)}
-                  placeholder="You are an AI sales assistant for..."
-                  rows={8} 
+                  placeholder={defaultPromptPlaceholder}
+                  className="flex-1 min-h-[500px] resize-none h-full"
                 />
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1 shrink-0">
                   This prompt guides how the AI will respond and behave during the call. You can use dynamic variables like {'{{business_name}}'}, {'{{booking_url}}'}, and {'{{service}}'} to inject your business details automatically.
                 </p>
               </div>
-              <Button className="mt-4" onClick={handleSave} disabled={isSaving}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Prompts
-              </Button>
             </CardContent>
           </Card>
         </TabsContent>

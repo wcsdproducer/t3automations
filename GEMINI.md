@@ -95,7 +95,9 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 | Hosting | Firebase App Hosting |
 | AI | Google Gemini (via Genkit) |
 | Voice Agent | ElevenLabs Conversational AI |
-| Telephony | Twilio (SIP bridge for ElevenLabs) |
+| Telephony | Telnyx (SIP bridge for ElevenLabs) |
+| Transcriber | Deepgram (via ElevenLabs config) |
+| Brain/LLM | Google Gemini (via ElevenLabs config) |
 
 ---
 
@@ -113,24 +115,26 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 
 ---
 
-## 🎙️ ElevenLabs Voice Agent Architecture
+## 🎙️ ElevenLabs Managed Voice Architecture (with Tool Calling)
 
 ### How Inbound Calls Work
-1. Customer dials Twilio number → Twilio routes to ElevenLabs agent via SIP
-2. ElevenLabs fires **personalization webhook** → our API returns business profile data (name, hours, services) as `dynamic_variables`
-3. Agent handles call using business-specific context
-4. After call ends → ElevenLabs fires **`post_call_transcription` webhook** with full transcript, summary, duration, and analysis
-5. Our webhook handler writes the conversation to Firestore + creates/updates a lead if caller is new
+1. Customer dials Telnyx number → Telnyx routes to ElevenLabs agent via SIP.
+2. ElevenLabs fires **personalization webhook** → our API looks up the caller ID in Firestore and returns context (e.g., "Returning customer: John, last appointment on May 1st") as `dynamic_variables`.
+3. Agent handles call using business-specific context, ElevenLabs internal RAG (synced from our Knowledge Base), and Gemini 1.5 Flash as the LLM.
+4. If user requests an action (e.g., "Book an appointment"), the agent triggers an **ElevenLabs Server Tool**, hitting our custom API (`/api/elevenlabs/tools/book-calendar`) mid-call.
+5. After call ends → ElevenLabs fires **`post_call_transcription` webhook** with full transcript, summary, duration, and analysis.
+6. Our webhook handler writes the conversation to Firestore + creates/updates a lead if caller is new.
 
 ### Webhook Endpoints (to build)
-- `POST /api/elevenlabs/personalization` — returns `dynamic_variables` for agent context
-- `POST /api/elevenlabs/post-call` — receives transcript, writes to Firestore conversations + leads
+- `POST /api/elevenlabs/personalization` — looks up caller ID, returns `dynamic_variables`.
+- `POST /api/elevenlabs/tools/*` — suite of API endpoints for calendar booking, rescheduling, and cancellation.
+- `POST /api/elevenlabs/post-call` — receives transcript, writes to Firestore conversations + leads.
 
 ### Agent Schema (Firestore)
 ```json
 {
   "elevenLabsAgentId": "string",
-  "twilioPhoneNumber": "+15551234567",
+  "telnyxPhoneNumber": "+15551234567",
   "name": "string",
   "systemPrompt": "string",
   "firstMessage": "string",
