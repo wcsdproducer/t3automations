@@ -7,10 +7,24 @@ import { Mic, MicOff, PhoneCall, PhoneOff } from 'lucide-react';
 
 interface ElevenLabsTestWidgetProps {
   agentId: string;
+  voiceId?: string;
+  systemPrompt?: string;
+  firstMessage?: string;
 }
 
-function TestWidgetUI({ agentId }: { agentId: string }) {
-  const { status, startSession, endSession, isSpeaking } = useConversation();
+function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLabsTestWidgetProps) {
+  const { status, startSession, endSession, isSpeaking } = useConversation({
+    onError: (err: any) => {
+      console.error('ElevenLabs onError:', err);
+      setError(typeof err === 'string' ? err : (err as any)?.message || 'Unknown error occurred');
+    },
+    onDisconnect: () => {
+      console.log('ElevenLabs onDisconnect');
+    },
+    onConnect: () => {
+      console.log('ElevenLabs onConnect');
+    }
+  });
   const [error, setError] = useState<string | null>(null);
 
   const handleStart = async () => {
@@ -18,8 +32,30 @@ function TestWidgetUI({ agentId }: { agentId: string }) {
     try {
       // Request microphone permission first
       await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      // Fetch WebSocket signed URL from our secure backend endpoint
+      const response = await fetch(`/api/elevenlabs/get-signed-url?agentId=${agentId}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Failed to get authorization for the agent');
+      }
+      const data = await response.json();
+
+      if (!data.signed_url) {
+        throw new Error('Invalid response from authorization endpoint');
+      }
+
       await startSession({
-        agentId: agentId,
+        signedUrl: data.signed_url,
+        overrides: {
+          agent: {
+            prompt: systemPrompt ? { prompt: systemPrompt } : undefined,
+            firstMessage: firstMessage,
+          },
+          tts: {
+            voiceId: voiceId,
+          }
+        }
       });
     } catch (err: any) {
       console.error('Failed to start conversation:', err);
@@ -112,10 +148,10 @@ function TestWidgetUI({ agentId }: { agentId: string }) {
   );
 }
 
-export function ElevenLabsTestWidget({ agentId }: ElevenLabsTestWidgetProps) {
+export function ElevenLabsTestWidget(props: ElevenLabsTestWidgetProps) {
   return (
     <ConversationProvider>
-      <TestWidgetUI agentId={agentId} />
+      <TestWidgetUI {...props} />
     </ConversationProvider>
   );
 }

@@ -7,10 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useUser, useFirestore, useCollection, useMemoFirebase, useDoc } from '@/firebase';
-import { doc, updateDoc, query, collection, addDoc, setDoc, getDocs, deleteDoc, Timestamp, orderBy } from 'firebase/firestore';
+import { doc, updateDoc, query, collection, addDoc, setDoc, getDocs, deleteDoc, Timestamp, orderBy, limit } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
 import { Loader2, Play, Pause, Plus, Pencil, ArrowLeft, Trash2, Link as LinkIcon, FileText, RefreshCw, Phone, Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ElevenLabsTestWidget } from '@/components/dashboard/ElevenLabsTestWidget';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
@@ -131,11 +132,8 @@ export default function AgentSettingsPage() {
   const [systemPrompt, setSystemPrompt] = useState(defaultPromptPlaceholder);
   const [voiceId, setVoiceId] = useState('');
   const [elevenLabsAgentId, setElevenLabsAgentId] = useState('');
-  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('');
-  const [transcriberProvider, setTranscriberProvider] = useState('deepgram');
-  const [transcriberModel, setTranscriberModel] = useState('nova-2');
-  const [transcriberConfidence, setTranscriberConfidence] = useState(0.40);
-  const [transcriberDenoising, setTranscriberDenoising] = useState(true);
+  const [telnyxPhoneNumber, setTelnyxPhoneNumber] = useState('');
+  const [firstMessage, setFirstMessage] = useState('Hello! How can I assist you today?');
   const [isSaving, setIsSaving] = useState(false);
 
   // Phone Number State
@@ -179,13 +177,10 @@ export default function AgentSettingsPage() {
     if (agent) {
       setAgentName(agent.name || '');
       setSystemPrompt(agent.systemPrompt || defaultPromptPlaceholder);
+      setFirstMessage(agent.firstMessage || 'Hello! How can I assist you today?');
       setVoiceId(agent.voiceId || 'cjVigY5qzO86Huf0OWa1'); // Default to Eric
       setElevenLabsAgentId(agent.elevenLabsAgentId || '');
-      setTwilioPhoneNumber(agent.twilioPhoneNumber || '');
-      setTranscriberProvider(agent.transcriberProvider || 'deepgram');
-      setTranscriberModel(agent.transcriberModel || 'nova-2');
-      setTranscriberConfidence(agent.transcriberConfidence !== undefined ? agent.transcriberConfidence : 0.40);
-      setTranscriberDenoising(agent.transcriberDenoising !== undefined ? agent.transcriberDenoising : true);
+      setTelnyxPhoneNumber(agent.telnyxPhoneNumber || agent.twilioPhoneNumber || '');
     }
   }, [agent]);
 
@@ -199,7 +194,7 @@ export default function AgentSettingsPage() {
         name: agentName,
         systemPrompt,
         voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
-        firstMessage: "Hello! How can I assist you today?"
+        firstMessage: firstMessage || "Hello! How can I assist you today?"
       };
 
       if (newElevenLabsAgentId) {
@@ -231,13 +226,10 @@ export default function AgentSettingsPage() {
         await updateDoc(agentDocRef, {
           name: agentName,
           systemPrompt,
+          firstMessage,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
           elevenLabsAgentId: newElevenLabsAgentId,
-          twilioPhoneNumber,
-          transcriberProvider,
-          transcriberModel,
-          transcriberConfidence,
-          transcriberDenoising,
+          telnyxPhoneNumber,
         });
       } else {
         const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
@@ -246,13 +238,10 @@ export default function AgentSettingsPage() {
           businessProfileId: user.uid,
           name: agentName,
           systemPrompt,
+          firstMessage,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
           elevenLabsAgentId: newElevenLabsAgentId,
-          twilioPhoneNumber,
-          transcriberProvider,
-          transcriberModel,
-          transcriberConfidence,
-          transcriberDenoising,
+          telnyxPhoneNumber,
         });
       }
       toast({
@@ -274,11 +263,11 @@ export default function AgentSettingsPage() {
   const handleAssignNumber = async (phoneNumber: string) => {
     if (!db || !user) return;
     setIsSaving(true);
-    setTwilioPhoneNumber(phoneNumber);
+    setTelnyxPhoneNumber(phoneNumber);
     try {
       if (agentDocRef) {
         await updateDoc(agentDocRef, {
-          twilioPhoneNumber: phoneNumber,
+          telnyxPhoneNumber: phoneNumber,
         });
       } else {
         const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
@@ -289,16 +278,12 @@ export default function AgentSettingsPage() {
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
           elevenLabsAgentId,
-          twilioPhoneNumber: phoneNumber,
-          transcriberProvider,
-          transcriberModel,
-          transcriberConfidence,
-          transcriberDenoising,
+          telnyxPhoneNumber: phoneNumber,
         });
       }
 
       if (elevenLabsAgentId) {
-        await fetch('/api/twilio/configure-sip', {
+        await fetch('/api/telnyx/configure-sip', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -353,7 +338,7 @@ export default function AgentSettingsPage() {
     try {
       const q = query(
         collection(db, 'businessProfiles', user.uid, 'phoneNumbers'),
-        orderBy('purchasedAt', 'desc')
+        limit(1)
       );
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
@@ -526,6 +511,7 @@ export default function AgentSettingsPage() {
         toast({ title: 'Success', description: `Number ${phoneNumber} purchased successfully!` });
         setAvailableNumbers([]);
         fetchPhoneNumber();
+        handleAssignNumber(phoneNumber);
       } else {
         toast({ title: 'Error', description: data.error || 'Failed to purchase number.', variant: 'destructive' });
       }
@@ -641,10 +627,15 @@ export default function AgentSettingsPage() {
           setVoices(sortedVoices);
         } else {
           const errorText = await res.text();
-          console.error('Failed to fetch voices:', res.status, errorText);
+          if (res.status === 401 && errorText.includes('missing_permissions')) {
+            console.warn('API key missing voices_read permission. Using fallback voice list or empty.');
+            // We can set some default voices or just leave it empty.
+          } else {
+            console.warn('Failed to fetch voices:', res.status, errorText);
+          }
         }
       } catch (err) {
-        console.error(err);
+        console.warn('Network error fetching voices:', err);
       } finally {
         setIsVoicesLoading(false);
       }
@@ -702,14 +693,33 @@ export default function AgentSettingsPage() {
       </div>
       
       <Tabs defaultValue="general" className="w-full flex-1 flex flex-col min-h-0">
-        <TabsList className="grid w-full grid-cols-6 lg:w-[800px] shrink-0">
+        <TabsList className="grid w-full grid-cols-7 lg:w-[900px] shrink-0">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="voice">Voice</TabsTrigger>
           <TabsTrigger value="prompts">Prompt</TabsTrigger>
-          <TabsTrigger value="transcriber">Transcriber</TabsTrigger>
           <TabsTrigger value="knowledge">Knowledge Base</TabsTrigger>
           <TabsTrigger value="phonenumbers">Phone Number</TabsTrigger>
+          <TabsTrigger value="test">Test</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="test" className="mt-6 overflow-y-auto">
+          <Card>
+            <CardHeader>
+              <CardTitle>Test Agent</CardTitle>
+              <CardDescription>
+                Make a live test call to verify your agent's knowledge and webhook functionality.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ElevenLabsTestWidget 
+                agentId={elevenLabsAgentId} 
+                voiceId={voiceId}
+                systemPrompt={systemPrompt}
+                firstMessage={firstMessage}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="general" className="mt-6 overflow-y-auto">
           <Card>
@@ -739,11 +749,11 @@ export default function AgentSettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="twilioPhoneNumber">Twilio/Telnyx Phone Number</Label>
+                <Label htmlFor="telnyxPhoneNumber">Telnyx Phone Number</Label>
                 <Input 
-                  id="twilioPhoneNumber" 
-                  value={twilioPhoneNumber} 
-                  onChange={(e) => setTwilioPhoneNumber(e.target.value)} 
+                  id="telnyxPhoneNumber" 
+                  value={telnyxPhoneNumber} 
+                  onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
                   placeholder="e.g. +1234567890"
                 />
               </div>
@@ -932,14 +942,26 @@ export default function AgentSettingsPage() {
               </Button>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col min-h-0 space-y-4 pb-6">
-              <div className="flex-1 flex flex-col space-y-2 min-h-0">
-                <Label htmlFor="systemPrompt" className="shrink-0 sr-only">System Prompt</Label>
+              <div className="space-y-2 shrink-0">
+                <Label htmlFor="firstMessage">First Message</Label>
+                <Input 
+                  id="firstMessage" 
+                  value={firstMessage}
+                  onChange={(e) => setFirstMessage(e.target.value)}
+                  placeholder="Hello! How can I assist you today?"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  This is the first message the agent will say when the call connects.
+                </p>
+              </div>
+              <div className="flex-1 flex flex-col space-y-2 min-h-0 pt-2 border-t">
+                <Label htmlFor="systemPrompt" className="shrink-0">System Prompt</Label>
                 <Textarea 
                   id="systemPrompt" 
                   value={systemPrompt}
                   onChange={(e) => setSystemPrompt(e.target.value)}
                   placeholder={defaultPromptPlaceholder}
-                  className="flex-1 min-h-[500px] resize-none h-full"
+                  className="flex-1 min-h-[400px] resize-none h-full"
                 />
                 <p className="text-xs text-muted-foreground mt-1 shrink-0">
                   This prompt guides how the AI will respond and behave during the call. You can use dynamic variables like {'{{business_name}}'}, {'{{booking_url}}'}, and {'{{service}}'} to inject your business details automatically.
@@ -949,72 +971,6 @@ export default function AgentSettingsPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="transcriber" className="mt-6 overflow-y-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle>Default Transcriber</CardTitle>
-              <CardDescription>
-                This section allows you to configure the default speech-to-text (STT) settings for the application.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="transcriberProvider">Provider</Label>
-                  <Select value={transcriberProvider} onValueChange={setTranscriberProvider}>
-                    <SelectTrigger id="transcriberProvider">
-                      <SelectValue placeholder="Select Provider" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="deepgram">Deepgram</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="transcriberModel">Model</Label>
-                  <Select value={transcriberModel} onValueChange={setTranscriberModel}>
-                    <SelectTrigger id="transcriberModel">
-                      <SelectValue placeholder="Select Model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="nova-2">Nova 2</SelectItem>
-                      <SelectItem value="nova-2-conversationalai">Nova 2 Conversational AI</SelectItem>
-                      <SelectItem value="nova-3">Nova 3</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <Label>Confidence Threshold ({transcriberConfidence.toFixed(2)})</Label>
-                </div>
-                <Slider 
-                  value={[transcriberConfidence]} 
-                  min={0} max={1} step={0.01} 
-                  onValueChange={(val) => setTranscriberConfidence(val[0])}
-                />
-                <p className="text-sm text-muted-foreground">
-                  Transcripts below this confidence score are filtered out.
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-3 mt-4">
-                <Switch 
-                  id="denoising" 
-                  checked={transcriberDenoising} 
-                  onCheckedChange={setTranscriberDenoising} 
-                />
-                <Label htmlFor="denoising" className="font-normal">Enable Background Denoising</Label>
-              </div>
-
-              <Button className="mt-8" onClick={handleSave} disabled={isSaving}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Transcriber Settings
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
         <TabsContent value="knowledge" className="mt-6 flex-1 min-h-0 data-[state=active]:flex flex-col">
           <div className="grid gap-6 md:grid-cols-2 flex-1 min-h-0 w-full">
             <Card className="flex flex-col h-full min-h-0">
@@ -1208,7 +1164,11 @@ export default function AgentSettingsPage() {
                         <div key={num.phone_number} className="flex items-center justify-between p-3 border rounded-md">
                           <div>
                             <p className="font-medium">{num.phone_number}</p>
-                            <p className="text-xs text-muted-foreground capitalize">{num.locality || 'Unknown'}, {num.administrative_area || 'US'}</p>
+                            <p className="text-xs text-muted-foreground capitalize">
+                              {num.region_information?.find((r: any) => r.region_type === 'location')?.region_name?.toLowerCase() || 'Unknown'}, 
+                              {' '}
+                              {num.region_information?.find((r: any) => r.region_type === 'state')?.region_name || 'US'}
+                            </p>
                           </div>
                           <Button 
                             size="sm" 
@@ -1250,10 +1210,10 @@ export default function AgentSettingsPage() {
                   <div className="flex items-center justify-between p-4 border rounded-md">
                     <div>
                       <p className="font-medium text-lg">{purchasedNumber.phoneNumber}</p>
-                      <p className="text-sm text-muted-foreground">Provider: <span className="capitalize">{purchasedNumber.provider}</span> | Status: <Badge variant="outline">{purchasedNumber.status}</Badge></p>
+                      <div className="text-sm text-muted-foreground">Provider: <span className="capitalize">{purchasedNumber.provider}</span> | Status: <Badge variant="outline">{purchasedNumber.status}</Badge></div>
                     </div>
                     <Button variant="outline" disabled={isSaving} onClick={() => handleAssignNumber(purchasedNumber.phoneNumber)}>
-                      {isSaving && twilioPhoneNumber === purchasedNumber.phoneNumber ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      {isSaving && telnyxPhoneNumber === purchasedNumber.phoneNumber ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Assign to Agent
                     </Button>
                   </div>
