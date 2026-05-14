@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     // Check Authorization
     const authHeader = req.headers.get('authorization');
     const expectedToken = process.env.ELEVENLABS_WEBHOOK_SECRET;
-    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+    if (!expectedToken || authHeader !== `Bearer ${expectedToken}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

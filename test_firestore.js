@@ -1,8 +1,2 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-
-const firebaseConfig = {
-  // Need to get this from somewhere, let me check firebase.json or .env
-};
-// Wait, I need the client config.
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccountKey.json'); // Wait, is there a service account or does it use application default credentials?

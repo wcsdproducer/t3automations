@@ -745,7 +745,7 @@ export default function AgentSettingsPage() {
                   id="elevenLabsAgentId" 
                   value={elevenLabsAgentId} 
                   onChange={(e) => setElevenLabsAgentId(e.target.value)} 
-                  placeholder="e.g. abcdef12345"
+                  placeholder="e.g. agent_9301krh2... (Optional: If using pre-configured agent)"
                 />
               </div>
               <div className="space-y-2">

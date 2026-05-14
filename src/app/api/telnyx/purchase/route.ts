@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     });
 
     // Save the number to Firestore for this user
-    await adminDb.collection('businessProfiles').doc(uid).collection('phoneNumber').doc(phoneNumber).set({
+    await adminDb.collection('businessProfiles').doc(uid).collection('phoneNumbers').doc(phoneNumber).set({
       phoneNumber,
       provider: 'telnyx',
       status: 'purchased',

@@ -45,18 +45,7 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
         throw new Error('Invalid response from authorization endpoint');
       }
 
-      await startSession({
-        signedUrl: data.signed_url,
-        overrides: {
-          agent: {
-            prompt: systemPrompt ? { prompt: systemPrompt } : undefined,
-            firstMessage: firstMessage,
-          },
-          tts: {
-            voiceId: voiceId,
-          }
-        }
-      });
+      await startSession({ signedUrl: data.signed_url });
     } catch (err: any) {
       console.error('Failed to start conversation:', err);
       setError(err.message || 'Failed to start the call. Check microphone permissions and agent status.');

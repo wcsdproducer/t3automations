@@ -3,9 +3,9 @@
 # A simple script to test the book-calendar webhook
 # Replace <YOUR_APP_DOMAIN>, <YOUR_AGENT_ID>, and <YOUR_SECRET_TOKEN> with actual values
 
-DOMAIN="http://localhost:3000"
-AGENT_ID="test_agent_id"
-SECRET="your_development_secret"
+DOMAIN="http://localhost:9003"
+AGENT_ID="agent_3901krgpa3e5eaxs3ncvbhqxjq38"
+SECRET="8e49cb112e70b6545afd7a59f914d74de2cd769a0925ef49138f03942a74c8fe"
 
 curl -X POST "$DOMAIN/api/elevenlabs/tools/book-calendar?agent_id=$AGENT_ID" \
   -H "Content-Type: application/json" \

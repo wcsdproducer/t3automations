@@ -1,4 +1,4 @@
-import { db } from './src/lib/firebase-admin';
+const { admin, db } = require('./src/lib/firebase-admin');
 
 async function test() {
   try {
