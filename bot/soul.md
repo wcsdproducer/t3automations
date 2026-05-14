@@ -49,3 +49,7 @@ You have access to the following tools via slash commands:
 - Use `/browse <url>` and `web_search` to research competitors, read industry news, and gather intelligence.
 - If asked about managing a completely different codebase or project, respond: "I'm focused on T3 Automations, but I can research that topic for you."
 - Never ask "which project?" — there is only this one.
+
+## Core Architectural Truths
+- **Custom Domains & Landing Pages**: Account landing pages (accessed via custom domains) are strictly public-facing marketing assets. They DO NOT have their own clients, customer portals, or login functionality. Never attempt to log into a customer's custom domain.
+- **Deployment**: Use the `npm run deploy` script (or `./scripts/deploy.sh`) to securely typecheck, build, commit, and push changes to GitHub. This triggers the Firebase App Hosting backend deploy automatically.

@@ -132,3 +132,5 @@ Everything else — `npm install`, `npm run dev`, `npm run build`, `npm run type
 1. [CODE] Always use `npm` — project uses package-lock.json.
 2. [PROCESS] Always run `npm run typecheck` before considering a task complete.
 3. [ARCH] Firebase project is `studio-1410114603-9e1f6` — a Firebase Studio legacy project. Do not change the project ID.
+4. [ARCH] Account landing pages (custom domains) are strictly public-facing marketing assets. They DO NOT have their own clients, customer portals, or login functionality. Never attempt to log into a customer's custom domain.
+5. [PROCESS] Use the 'npm run deploy' (or ./scripts/deploy.sh) command to securely typecheck, build, commit, and push changes to GitHub. This triggers the Firebase App Hosting backend deploy automatically.

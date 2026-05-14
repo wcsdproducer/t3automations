@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "bot": "tsx bot/index.ts"
+    "bot": "tsx bot/index.ts",
+    "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {
     "@deepgram/sdk": "^5.2.0",

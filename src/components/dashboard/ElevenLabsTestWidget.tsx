@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ConversationProvider, useConversation } from '@elevenlabs/react';
 import { Button } from '@/components/ui/button';
 import { Mic, MicOff, PhoneCall, PhoneOff } from 'lucide-react';
@@ -13,6 +13,18 @@ interface ElevenLabsTestWidgetProps {
 }
 
 function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLabsTestWidgetProps) {
+  const [error, setError] = useState<string | null>(null);
+  const [messages, setMessages] = useState<{ role: 'user' | 'agent'; message: string; id: string }[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const { status, startSession, endSession, isSpeaking } = useConversation({
     onError: (err: any) => {
       console.error('ElevenLabs onError:', err);
@@ -23,9 +35,21 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
     },
     onConnect: () => {
       console.log('ElevenLabs onConnect');
+      setMessages([]); // Clear messages on new connect
+    },
+    onMessage: (props: any) => {
+      console.log('ElevenLabs onMessage:', props);
+      let role = 'user';
+      if (props.role === 'agent' || props.role === 'ai' || props.source === 'ai') {
+        role = 'agent';
+      }
+      setMessages(prev => [...prev, { 
+        role: role as 'user' | 'agent', 
+        message: props.message, 
+        id: Date.now().toString() + Math.random().toString() 
+      }]);
     }
   });
-  const [error, setError] = useState<string | null>(null);
 
   const handleStart = async () => {
     setError(null);
@@ -69,7 +93,7 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
           </div>
         )}
 
-        <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-md">
           <div 
             className={`w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
               status === 'connected' 
@@ -86,9 +110,9 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
             )}
           </div>
 
-          <div className="text-sm font-medium uppercase tracking-wider">
+          <div className="text-sm font-medium uppercase tracking-wider text-center">
             {status === 'connected' ? (
-              <span className="text-primary flex items-center gap-2">
+              <span className="text-primary flex items-center gap-2 justify-center">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
@@ -102,13 +126,13 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
             )}
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center w-full">
             {status === 'connected' ? (
               <Button 
                 onClick={endSession} 
                 variant="destructive" 
                 size="lg"
-                className="rounded-full px-8 shadow-lg shadow-destructive/20 hover:shadow-destructive/40 transition-shadow"
+                className="rounded-full px-8 shadow-lg shadow-destructive/20 hover:shadow-destructive/40 transition-shadow w-full max-w-[200px]"
               >
                 <PhoneOff className="w-5 h-5 mr-2" />
                 End Test Call
@@ -118,7 +142,7 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
                 onClick={handleStart} 
                 size="lg"
                 disabled={status === 'connecting' || !agentId}
-                className="rounded-full px-8 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all text-white border-0"
+                className="rounded-full px-8 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all text-white border-0 w-full max-w-[200px]"
               >
                 <PhoneCall className="w-5 h-5 mr-2" />
                 {status === 'connecting' ? 'Connecting...' : 'Start Test Call'}
@@ -127,10 +151,43 @@ function TestWidgetUI({ agentId, voiceId, systemPrompt, firstMessage }: ElevenLa
           </div>
           
           {!agentId && (
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-muted-foreground mt-2 text-center">
               You must save your agent configuration first to test it.
             </p>
           )}
+
+          {/* Transcript UI */}
+          <div className="w-full mt-6 flex flex-col h-64 bg-white dark:bg-slate-950 border rounded-md shadow-inner overflow-hidden">
+            <div className="bg-slate-100 dark:bg-slate-900 border-b p-2 text-xs font-semibold text-center text-muted-foreground flex-shrink-0">
+              Live Transcript
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.length === 0 ? (
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground italic text-center">
+                  Waiting for conversation to start...
+                </div>
+              ) : (
+                messages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div 
+                      className={`max-w-[85%] rounded-lg px-4 py-2 text-sm ${
+                        msg.role === 'user' 
+                          ? 'bg-primary text-primary-foreground rounded-tr-none' 
+                          : 'bg-muted text-foreground rounded-tl-none'
+                      }`}
+                    >
+                      <span className="font-semibold text-[10px] uppercase tracking-wider opacity-70 block mb-1">
+                        {msg.role === 'user' ? 'You' : 'Agent'}
+                      </span>
+                      {msg.message}
+                    </div>
+                  </div>
+                ))
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

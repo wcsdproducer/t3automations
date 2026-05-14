@@ -204,6 +204,8 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 4. **Landing page CTA → Firestore:** Form submissions write to `businessProfiles/{uid}/leads`. Never use a third-party form service.
 5. **Secrets in `.env`:** All API keys in `.env` / `apphosting.yaml`. Never hardcode.
 6. **No mock data in production:** Agent analytics must read from real Firestore data before shipping.
+7. **Custom Domains are Public Marketing Only:** Account landing pages (accessed via custom domains) are strictly public-facing marketing assets. They DO NOT have their own clients, customer portals, or login functionality. Never attempt to log into a customer's custom domain.
+8. **Deployment Process:** Use the `npm run deploy` script (or `scripts/deploy.sh`) to securely typecheck, build, commit, and push changes to GitHub. This triggers the Firebase App Hosting backend deploy automatically.
 
 ---
 
