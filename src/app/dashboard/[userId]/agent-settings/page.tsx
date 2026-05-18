@@ -693,7 +693,7 @@ export default function AgentSettingsPage() {
       </div>
       
       <Tabs defaultValue="general" className="w-full flex-1 flex flex-col min-h-0">
-        <TabsList className="grid w-full grid-cols-7 lg:w-[900px] shrink-0">
+        <TabsList className="grid w-full grid-cols-6 lg:w-[900px] shrink-0">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="voice">Voice</TabsTrigger>
           <TabsTrigger value="prompts">Prompt</TabsTrigger>
