@@ -139,7 +139,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Shield className="h-6 w-6 text-primary" />
               <div className="flex flex-col">
                 <span className="">T3 Automations</span>
-                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase">v{pkg.version}</span>
+                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase mt-1">
+                  v{pkg.version} • ID: {user.uid.slice(-6)}
+                </span>
               </div>
             </Link>
           </div>
