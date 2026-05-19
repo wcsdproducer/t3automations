@@ -137,11 +137,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
-              <div className="flex flex-col">
               <div className="flex items-baseline gap-1.5">
-                  <span>T3 Automations</span>
-                  <span className="text-[10px] text-muted-foreground font-normal tracking-wide">v{pkg.version}</span>
-                </div>
+                <span>T3 Automations</span>
+                <span className="text-[10px] text-muted-foreground font-normal tracking-wide">v{pkg.version}</span>
+              </div>
             </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
