@@ -138,9 +138,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
               <div className="flex flex-col">
-                <span className="">T3 Automations</span>
-                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase mt-1">
-                  v{pkg.version} • ID: {user.uid.slice(-6)}
+                <div className="flex items-baseline gap-1.5">
+                  <span>T3 Automations</span>
+                  <span className="text-[10px] text-muted-foreground font-normal tracking-wide">v{pkg.version}</span>
+                </div>
+                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase">
+                  ID: {user.uid.slice(-6)}
                 </span>
               </div>
             </Link>
