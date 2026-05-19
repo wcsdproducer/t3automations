@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useUser, useFirestore } from '@/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, CheckCircle2, CreditCard } from 'lucide-react';
+import { Loader2, CheckCircle2, CreditCard, Plus, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +18,73 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+
+interface PaymentMethodInfo {
+  id: string;
+  brand: string;
+  last4: string;
+  expMonth: number;
+  expYear: number;
+}
+
+// ─── Payment Form Component (inside Elements provider) ───
+function PaymentForm({ 
+  onSuccess, 
+  onCancel 
+}: { 
+  onSuccess: (pmId: string) => void; 
+  onCancel: () => void; 
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    setIsProcessing(true);
+    setErrorMessage(null);
+
+    const { error, setupIntent } = await stripe.confirmSetup({
+      elements,
+      redirect: 'if_required',
+    });
+
+    if (error) {
+      setErrorMessage(error.message || 'An error occurred.');
+      setIsProcessing(false);
+    } else if (setupIntent && setupIntent.status === 'succeeded') {
+      const pmId = typeof setupIntent.payment_method === 'string' 
+        ? setupIntent.payment_method 
+        : setupIntent.payment_method?.id || '';
+      onSuccess(pmId);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PaymentElement />
+      {errorMessage && (
+        <p className="text-sm text-destructive">{errorMessage}</p>
+      )}
+      <div className="flex gap-2">
+        <Button type="submit" disabled={!stripe || isProcessing} className="flex-1">
+          {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+          Save Card
+        </Button>
+        <Button type="button" variant="outline" onClick={onCancel} disabled={isProcessing}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 export default function BillingPage() {
   const { user } = useUser();
@@ -27,6 +94,13 @@ export default function BillingPage() {
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const { toast } = useToast();
+
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodInfo | null>(null);
+  const [isLoadingPM, setIsLoadingPM] = useState(true);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [isCreatingIntent, setIsCreatingIntent] = useState(false);
 
   useEffect(() => {
     const success = searchParams.get('success');
@@ -66,6 +140,25 @@ export default function BillingPage() {
     fetchStatus();
   }, [user, db]);
 
+  // Fetch saved payment method
+  const fetchPaymentMethod = useCallback(async () => {
+    if (!user) return;
+    setIsLoadingPM(true);
+    try {
+      const res = await fetch(`/api/stripe/payment-method?userId=${user.uid}`);
+      const data = await res.json();
+      setPaymentMethod(data.paymentMethod || null);
+    } catch (error) {
+      console.error('Error fetching payment method:', error);
+    } finally {
+      setIsLoadingPM(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchPaymentMethod();
+  }, [fetchPaymentMethod]);
+
   const handleSubscribe = async () => {
     if (!user) return;
     setCheckoutLoading(true);
@@ -94,6 +187,79 @@ export default function BillingPage() {
       });
       setCheckoutLoading(false);
     }
+  };
+
+  const handleAddPaymentMethod = async () => {
+    if (!user) return;
+    setIsCreatingIntent(true);
+    try {
+      const res = await fetch('/api/stripe/setup-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.uid }),
+      });
+      const data = await res.json();
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+        setShowPaymentForm(true);
+      } else {
+        throw new Error(data.error || 'Failed to create setup intent');
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsCreatingIntent(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (paymentMethodId: string) => {
+    if (!user) return;
+    try {
+      // Attach and set as default
+      const res = await fetch('/api/stripe/payment-method', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          paymentMethodId,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPaymentMethod(data.paymentMethod);
+        setShowPaymentForm(false);
+        setClientSecret(null);
+        toast({
+          title: 'Card Saved',
+          description: `Card ending in ${data.paymentMethod.last4} has been saved.`,
+        });
+      } else {
+        throw new Error(data.error || 'Failed to save payment method');
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const brandDisplay = (brand: string) => {
+    const brands: Record<string, string> = {
+      visa: 'Visa',
+      mastercard: 'Mastercard',
+      amex: 'American Express',
+      discover: 'Discover',
+      diners: 'Diners Club',
+      jcb: 'JCB',
+      unionpay: 'UnionPay',
+    };
+    return brands[brand] || brand.charAt(0).toUpperCase() + brand.slice(1);
   };
 
   if (loading) {
@@ -201,27 +367,67 @@ export default function BillingPage() {
                   Payment Method
                 </CardTitle>
                 <CardDescription>
-                  Your default payment method used for monthly subscriptions.
+                  Your saved payment method for subscriptions and services.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                {isActive ? (
-                  <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 bg-background border rounded-md">
-                        <div className="font-bold text-lg text-primary tracking-widest italic">STRIPE</div>
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">Managed via Stripe Checkout</p>
-                        <p className="text-xs text-muted-foreground">Secure payment processing</p>
-                      </div>
-                    </div>
-                    <Badge variant="outline" className="text-green-500 border-green-500/50">Active</Badge>
+              <CardContent className="space-y-4">
+                {isLoadingPM ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
+                ) : showPaymentForm && clientSecret ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'night', variables: { colorPrimary: '#f97316' } } }}>
+                    <PaymentForm 
+                      onSuccess={handlePaymentSuccess}
+                      onCancel={() => { setShowPaymentForm(false); setClientSecret(null); }}
+                    />
+                  </Elements>
+                ) : paymentMethod ? (
+                  <>
+                    <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-background border rounded-md">
+                          <CreditCard className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground">
+                            {brandDisplay(paymentMethod.brand)} •••• {paymentMethod.last4}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Expires {String(paymentMethod.expMonth).padStart(2, '0')}/{paymentMethod.expYear}
+                          </p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-green-500 border-green-500/50">Default</Badge>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={handleAddPaymentMethod}
+                      disabled={isCreatingIntent}
+                    >
+                      {isCreatingIntent ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+                      Update Payment Method
+                    </Button>
+                  </>
                 ) : (
-                  <div className="text-center py-8 text-muted-foreground border rounded-lg border-dashed">
-                    <p>No active payment method.</p>
-                    <p className="text-xs mt-1">Upgrade to Pro to add a payment method via Stripe.</p>
+                  <div className="text-center py-6 space-y-3">
+                    <div className="mx-auto w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
+                      <CreditCard className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">No payment method on file</p>
+                      <p className="text-xs text-muted-foreground mt-1">Add a card to enable phone number purchases and subscriptions.</p>
+                    </div>
+                    <Button 
+                      onClick={handleAddPaymentMethod}
+                      disabled={isCreatingIntent}
+                      size="sm"
+                    >
+                      {isCreatingIntent ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+                      Add Payment Method
+                    </Button>
                   </div>
                 )}
               </CardContent>
