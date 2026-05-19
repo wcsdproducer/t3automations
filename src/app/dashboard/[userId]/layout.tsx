@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import pkg from '../../../../package.json';
 import { useUser, useAuth } from '@/firebase';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import { signOut } from 'firebase/auth';
@@ -136,7 +137,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
-              <span className="">T3 Automations</span>
+              <div className="flex flex-col">
+                <span className="">T3 Automations</span>
+                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase">v{pkg.version}</span>
+              </div>
             </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
