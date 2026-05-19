@@ -31,19 +31,28 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
+  ChartLegendContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, CartesianGrid, XAxis } from "recharts";
+import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis } from "recharts";
 import type { ChartConfig } from "@/components/ui/chart";
 import { Badge } from '@/components/ui/badge';
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const chartConfig = {
-  latest: {
-    label: "Latest",
+  calls: {
+    label: "Total Calls",
+    color: "hsl(var(--chart-5))",
+  },
+  answered: {
+    label: "Answered",
     color: "hsl(var(--chart-1))",
   },
-  previous: {
-    label: "Previous",
+  appointments: {
+    label: "Appointments Set",
+    color: "hsl(var(--chart-3))",
+  },
+  hangUps: {
+    label: "Hang Ups",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
@@ -74,36 +83,25 @@ export default function AgentAnalyticsPage() {
 
   const { data: callsData, isLoading: isCallsLoading } = useCollection(callsRef);
 
-  if (isAgentsLoading || isCallsLoading) {
+  const leadsRef = useMemoFirebase(() => {
+    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
+    return query(collection(firestore, `businessProfiles/${user.uid}/leads`), orderBy('createdAt', 'desc'));
+  }, [user, firestore, userIdSlug]);
+
+  const { data: leadsData, isLoading: isLeadsLoading } = useCollection(leadsRef);
+
+  if (isAgentsLoading || isCallsLoading || isLeadsLoading) {
     return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
   }
 
   const calls = (callsData || []) as CallLog[];
-
-  const dailyStats: Record<string, { calls: number, minutes: number }> = {};
-  let totalCalls = 0;
-  let totalMinutes = 0;
-  let leadsCaptured = 0;
-
-  calls.forEach(call => {
-    const dateObj = new Date(call.startedAt);
-    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    
-    if (!dailyStats[dateStr]) {
-      dailyStats[dateStr] = { calls: 0, minutes: 0 };
-    }
-    
-    dailyStats[dateStr].calls += 1;
-    dailyStats[dateStr].minutes += call.duration / 60;
-    
-    totalCalls += 1;
-    totalMinutes += call.duration / 60;
-    if (call.leadCaptured) {
-      leadsCaptured += 1;
-    }
-  });
-
-  const averageDuration = totalCalls > 0 ? Math.round(totalMinutes / totalCalls) : 0;
+  const leads = (leadsData || []) as any[];
+  const parseDate = (val: any) => {
+    if (!val) return new Date();
+    if (typeof val.toDate === 'function') return val.toDate();
+    if (val.seconds) return new Date(val.seconds * 1000);
+    return new Date(val);
+  };
 
   const numDays = period === 'last-30-days' ? 30 : period === 'last-90-days' ? 90 : 7;
   
@@ -116,6 +114,43 @@ export default function AgentAnalyticsPage() {
     dateRange.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
   }
 
+  const dailyStats: Record<string, { calls: number, minutes: number, answered: number, hangUps: number, appointments: number }> = {};
+  let totalCalls = 0;
+  let totalMinutes = 0;
+  let leadsCaptured = 0;
+
+  calls.forEach(call => {
+    const dateObj = parseDate(call.startedAt);
+    const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    
+    // Always calculate daily stats for the chart if it falls in our range (or just populate it)
+    if (dateRange.includes(dateStr)) {
+        if (!dailyStats[dateStr]) {
+            dailyStats[dateStr] = { calls: 0, minutes: 0, answered: 0, hangUps: 0, appointments: 0 };
+        }
+        
+        dailyStats[dateStr].calls += 1;
+        dailyStats[dateStr].minutes += call.duration / 60;
+        
+        if (call.outcome === 'answered') {
+            dailyStats[dateStr].answered += 1;
+        }
+        
+        totalCalls += 1;
+        totalMinutes += call.duration / 60;
+        if (call.leadCaptured) {
+            leadsCaptured += 1;
+            dailyStats[dateStr].appointments += 1;
+        } else {
+            dailyStats[dateStr].hangUps += 1;
+        }
+    }
+  });
+
+  const averageDuration = totalCalls > 0 ? Math.round(totalMinutes / totalCalls) : 0;
+
+
+
   const dynamicChartData = dateRange.map(date => ({
     date,
     latest: dailyStats[date] ? Math.round(dailyStats[date].minutes * 10) / 10 : 0,
@@ -124,23 +159,23 @@ export default function AgentAnalyticsPage() {
 
   const dynamicNumberChartData = dateRange.map(date => ({
     date,
-    latest: dailyStats[date] ? dailyStats[date].calls : 0,
-    previous: 0 
+    calls: dailyStats[date] ? dailyStats[date].calls : 0,
+    answered: dailyStats[date] ? dailyStats[date].answered : 0,
+    appointments: dailyStats[date] ? dailyStats[date].appointments : 0,
+    hangUps: dailyStats[date] ? dailyStats[date].hangUps : 0,
   }));
 
+  const appointmentsSet = leadsCaptured; // Proxy for now
+  const hangUps = totalCalls - appointmentsSet;
+
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-4 lg:p-4 h-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <h1 className="text-lg font-semibold md:text-2xl shrink-0">Analytics</h1>
-        <div className="flex items-center gap-2 ml-auto">
-          <Button variant="outline"><LayoutGrid className="mr-2 h-4 w-4" /> Template</Button>
-          <Button variant="outline"><Plus className="mr-2 h-4 w-4" /> Add Chart</Button>
-          <Button>Edit Layout</Button>
-        </div>
       </div>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px] h-8">
             <SelectValue placeholder="Select period" />
           </SelectTrigger>
           <SelectContent>
@@ -149,114 +184,113 @@ export default function AgentAnalyticsPage() {
             <SelectItem value="last-90-days">Last 90 days</SelectItem>
           </SelectContent>
         </Select>
-        <div className="text-sm text-muted-foreground flex items-center gap-2 shrink-0">
+        <div className="text-xs text-muted-foreground flex items-center gap-2 shrink-0">
           <span>Updated {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span>
-          <RefreshCw className="h-4 w-4" />
+          <RefreshCw className="h-3 w-3" />
         </div>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card>
-            <CardHeader className="pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-medium">Total Calls</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Total Calls</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div className="text-4xl font-bold">{totalCalls}</div>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{totalCalls}</div>
             </CardContent>
         </Card>
         <Card>
-            <CardHeader className="pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-medium">Total Call Minutes</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Total Call Minutes</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div className="text-4xl font-bold">{Math.round(totalMinutes)}</div>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{Math.round(totalMinutes)}</div>
             </CardContent>
         </Card>
         <Card>
-            <CardHeader className="pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-medium">Leads Captured</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Average Duration</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div className="text-4xl font-bold">{leadsCaptured}</div>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{averageDuration}m</div>
             </CardContent>
         </Card>
         <Card>
-            <CardHeader className="pb-2 flex-row items-center justify-between">
-                <CardTitle className="text-sm font-medium">Average Duration</CardTitle>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Hang Ups</CardTitle>
             </CardHeader>
-            <CardContent>
-                <div className="text-4xl font-bold">{averageDuration}m</div>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{hangUps}</div>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Appointments Set</CardTitle>
+            </CardHeader>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{appointmentsSet}</div>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="pb-2 pt-4 px-4 flex-row items-center justify-between">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Leads Captured</CardTitle>
+            </CardHeader>
+            <CardContent className="pb-4 px-4">
+                <div className="text-2xl font-bold">{leadsCaptured}</div>
             </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="flex flex-col gap-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Total Call Minutes</CardTitle>
-                    <CardDescription>The total number of minutes spent on calls each day</CardDescription>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
+        <div className="flex flex-col gap-4 h-full">
+            <Card className="flex flex-col flex-1 min-h-0">
+                <CardHeader className="py-3 px-4">
+                    <CardTitle className="text-base">Number of Calls</CardTitle>
+                    <CardDescription className="text-xs">Daily call volume breakdown by outcome</CardDescription>
                 </CardHeader>
-                <CardContent>
-                <ChartContainer config={chartConfig} className="min-h-[250px] w-full">
-                    <LineChart accessibilityLayer data={dynamicChartData} margin={{ top: 20, left: -10, right: 10, bottom: 0 }}>
+                <CardContent className="flex-1 min-h-0 pb-4 px-4">
+                <ChartContainer config={chartConfig} className="h-full w-full">
+                    <BarChart accessibilityLayer data={dynamicNumberChartData} margin={{ top: 10, left: -10, right: 10, bottom: 0 }}>
                     <CartesianGrid vertical={false} />
-                    <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+                    <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} fontSize={10} />
                     <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend />
-                    <Line dataKey="latest" type="monotone" stroke="var(--color-latest)" strokeWidth={2} dot={false} />
-                    <Line dataKey="previous" type="monotone" stroke="var(--color-previous)" strokeWidth={2} dot={false} />
-                    </LineChart>
+                    <ChartLegend content={<ChartLegendContent className="w-full flex-wrap justify-between px-4" />} />
+                    <Bar dataKey="calls" fill="var(--color-calls)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="answered" fill="var(--color-answered)" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="appointments" stackId="a" fill="var(--color-appointments)" radius={[0, 0, 4, 4]} />
+                    <Bar dataKey="hangUps" stackId="a" fill="var(--color-hangUps)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
                 </ChartContainer>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Reason Call Ended</CardTitle>
-                    <CardDescription>Calls aggregated by outcome</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                    {totalCalls === 0 ? (
-                        <div className="flex items-center justify-center min-h-[150px]">
-                            <p className="text-sm text-muted-foreground">Not enough data to display.</p>
-                        </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {Object.entries(
-                                calls.reduce((acc, call) => {
-                                    if (call.outcome) {
-                                        acc[call.outcome] = (acc[call.outcome] || 0) + 1;
-                                    }
-                                    return acc;
-                                }, {} as Record<string, number>)
-                            ).map(([reason, count]) => (
-                                <div key={reason} className="flex items-center justify-between">
-                                    <span className="capitalize">{reason}</span>
-                                    <span className="font-semibold">{count}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
                 </CardContent>
             </Card>
         </div>
-        <div className="flex flex-col gap-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Number of Calls</CardTitle>
-                    <CardDescription>The total number of calls made each day</CardDescription>
+        <div className="flex flex-col gap-4 h-full">
+            <Card className="flex flex-col flex-1 min-h-0">
+                <CardHeader className="py-3 px-4">
+                    <CardTitle className="text-base">Recent Appointments</CardTitle>
+                    <CardDescription className="text-xs">Latest appointments set by the AI agent</CardDescription>
                 </CardHeader>
-                <CardContent>
-                <ChartContainer config={chartConfig} className="min-h-[250px] w-full">
-                    <LineChart accessibilityLayer data={dynamicNumberChartData} margin={{ top: 20, left: -10, right: 10, bottom: 0 }}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <ChartLegend />
-                    <Line dataKey="latest" type="monotone" stroke="var(--color-latest)" strokeWidth={2} dot={false} />
-                    <Line dataKey="previous" type="monotone" stroke="var(--color-previous)" strokeWidth={2} dot={false} />
-                    </LineChart>
-                </ChartContainer>
+                <CardContent className="flex-1 min-h-0 p-0">
+                    <ScrollArea className="h-full px-4 pb-4">
+                        {leads.length === 0 ? (
+                            <div className="flex items-center justify-center min-h-[100px]">
+                                <p className="text-xs text-muted-foreground">No appointments scheduled yet.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4 pt-2">
+                                {leads.slice(0, 10).map((lead: any) => (
+                                    <div key={lead.id} className="flex flex-col gap-1 border-b pb-3 last:border-0 last:pb-0">
+                                        <div className="flex justify-between items-start">
+                                            <span className="font-semibold text-sm text-foreground">{lead.name || 'Unknown Caller'}</span>
+                                            <span className="text-xs text-muted-foreground">{parseDate(lead.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">{lead.phone || 'No phone number'}</span>
+                                        <p className="text-sm mt-1 line-clamp-2 text-muted-foreground">{lead.notes || lead.agentSummary || 'No details provided.'}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </ScrollArea>
                 </CardContent>
             </Card>
         </div>

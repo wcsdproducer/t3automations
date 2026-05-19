@@ -127,7 +127,8 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
 
 ### Webhook Endpoints (to build)
 - `POST /api/elevenlabs/personalization` — looks up caller ID, returns `dynamic_variables`.
-- `POST /api/elevenlabs/tools/*` — suite of API endpoints for calendar booking, rescheduling, and cancellation.
+- `POST /api/elevenlabs/tools/check-availability` — checks native T3 calendar for free slots based on `workingHours`.
+- `POST /api/elevenlabs/tools/book-calendar` — books appointment to Firestore or shares external booking URL.
 - `POST /api/elevenlabs/post-call` — receives transcript, writes to Firestore conversations + leads.
 
 ### Agent Schema (Firestore)
@@ -191,6 +192,33 @@ Never stop the loop mid-cycle to ask for confirmation. Resolve all issues autono
   "service": "string",
   "defaultLandingPage": "template-1 | template-2 | template-3 | template-4",
   "heroEffect": "slideshow | parallax"
+}
+```
+
+### Calendar Settings (`businessProfiles/{userId}/settings/calendar`)
+```json
+{
+  "workingHours": {
+    "monday": { "start": "09:00", "end": "17:00", "active": true }
+  },
+  "slotDurationMinutes": 30,
+  "timezone": "America/New_York",
+  "nativeCalendarEnabled": true
+}
+```
+
+### Appointment (`businessProfiles/{userId}/appointments/{appointmentId}`)
+```json
+{
+  "id": "string",
+  "leadId": "string | null",
+  "name": "string",
+  "phone": "string",
+  "date": "string",
+  "time": "string",
+  "service": "string",
+  "status": "scheduled | canceled | completed",
+  "createdAt": "Timestamp"
 }
 ```
 

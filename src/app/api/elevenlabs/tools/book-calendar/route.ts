@@ -77,6 +77,24 @@ export async function POST(req: Request) {
       });
     }
 
+    // Native Calendar verification: ensure slot is free
+    const calendarSettingsDoc = await businessProfileRef.collection('settings').doc('calendar').get();
+    if (calendarSettingsDoc.exists && calendarSettingsDoc.data()?.nativeCalendarEnabled) {
+      // Check for existing appointments at this date/time
+      const conflictSnapshot = await businessProfileRef.collection('appointments')
+        .where('date', '==', date)
+        .where('time', '==', time)
+        .where('status', '==', 'scheduled')
+        .get();
+
+      if (!conflictSnapshot.empty) {
+        return NextResponse.json({
+          success: false,
+          message: `The time slot ${time} on ${date} is already booked. Please ask the user to pick another time.`
+        });
+      }
+    }
+
     // Save the appointment
     const appointmentsRef = businessProfileRef.collection('appointments');
     await appointmentsRef.add({

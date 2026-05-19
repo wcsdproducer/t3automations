@@ -229,6 +229,17 @@ service cloud.firestore {
       }
 
       // --------------------------------------------------------------------
+      // Settings Subcollection
+      // --------------------------------------------------------------------
+      match /settings/{settingId} {
+        allow get: if isOwner(businessProfileId);
+        allow list: if isOwner(businessProfileId);
+        allow create: if isOwner(businessProfileId);
+        allow update: if isExistingOwner(businessProfileId);
+        allow delete: if isExistingOwner(businessProfileId);
+      }
+
+      // --------------------------------------------------------------------
       // Leads Subcollection
       // --------------------------------------------------------------------
       match /leads/{leadId} {

@@ -18,7 +18,8 @@ import {
   MessageSquare,
   Megaphone,
   Cog,
-  Users
+  Users,
+  CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -170,11 +171,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/agent-settings`}>
                 <Cog className="h-4 w-4" />
-                Agent Settings
+                AI Voice Agent
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
                 <Settings className="h-4 w-4" />
                 Company Details
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/billing`}>
+                <CreditCard className="h-4 w-4" />
+                Billing
               </SidebarNavLink>
             </nav>
           </div>
