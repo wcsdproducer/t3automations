@@ -1124,59 +1124,74 @@ export default function AgentSettingsPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="phonenumbers" className="mt-6 overflow-y-auto">
-          {/* Telnyx Phone Number quick-edit field at the top */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Phone className="h-5 w-5" />
-                Telnyx Phone Number
-              </CardTitle>
-              <CardDescription>
-                The phone number currently assigned to your AI agent.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-end gap-4">
-                <div className="space-y-2 flex-1">
-                  <Label htmlFor="telnyxPhoneNumber">Phone Number</Label>
-                  <Input 
-                    id="telnyxPhoneNumber" 
-                    value={telnyxPhoneNumber} 
-                    onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
-                    placeholder="e.g. +1234567890"
-                  />
-                </div>
-                <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
-                  {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Save
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {purchasedNumber ? (
-            <Card className="mb-6">
+        <TabsContent value="phonenumbers" className="mt-6 overflow-y-auto space-y-6">
+          {/* Active Number Card — shown when a number is provisioned */}
+          {isPhoneNumbersLoading ? (
+            <Card>
+              <CardContent className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </CardContent>
+            </Card>
+          ) : purchasedNumber ? (
+            <Card>
               <CardHeader>
-                <CardTitle>Phone Number Provisioned</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Phone className="h-5 w-5" />
+                  Your Phone Number
+                </CardTitle>
                 <CardDescription>
-                  You have already provisioned a phone number for this account. Each account is limited to one phone number.
+                  This number is provisioned and linked to your AI agent. Each account is limited to one number.
                 </CardDescription>
               </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Display provisioned number info */}
+                <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
+                  <div>
+                    <p className="font-semibold text-xl tracking-wide">{purchasedNumber.phoneNumber}</p>
+                    <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                      <span className="capitalize">Provider: {purchasedNumber.provider}</span>
+                      <span>•</span>
+                      <Badge variant="outline" className="text-green-500 border-green-500/50">{purchasedNumber.status}</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Editable agent-assigned number */}
+                <div className="space-y-2">
+                  <Label htmlFor="telnyxPhoneNumber">Assigned Agent Number</Label>
+                  <div className="flex items-center gap-3">
+                    <Input 
+                      id="telnyxPhoneNumber" 
+                      value={telnyxPhoneNumber} 
+                      onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
+                      placeholder="e.g. +1234567890"
+                      className="flex-1"
+                    />
+                    <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
+                      {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Save
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    This is the number your agent will use for inbound calls. It should match your provisioned number above.
+                  </p>
+                </div>
+              </CardContent>
             </Card>
           ) : (
-            <Card className="mb-6">
+            /* No number yet — show search & purchase */
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Search className="h-5 w-5" />
-                  Find a New Number (Telnyx)
+                  Get a Phone Number
                 </CardTitle>
                 <CardDescription>
-                  Search and provision a new phone number instantly for your AI agent.
+                  Search and provision a phone number for your AI agent to receive inbound calls.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSearchNumbers} className="flex gap-4 items-end mb-6">
+              <CardContent className="space-y-6">
+                <form onSubmit={handleSearchNumbers} className="flex gap-4 items-end">
                   <div className="space-y-2 flex-1">
                     <Label htmlFor="areaCode">Area Code</Label>
                     <Input 
@@ -1218,45 +1233,27 @@ export default function AgentSettingsPage() {
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Phone className="h-5 w-5" />
-                Your Provisioned Number
-              </CardTitle>
-              <CardDescription>
-                Number provisioned through Twilio or Telnyx and linked to your agent.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {isPhoneNumbersLoading ? (
-                <div className="flex justify-center py-4">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                </div>
-              ) : !purchasedNumber ? (
-                <p className="text-sm text-muted-foreground">
-                  No provisioned phone number yet. Use the search tool above to purchase one, or assign an existing number to your agent.
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-4 border rounded-md">
-                    <div>
-                      <p className="font-medium text-lg">{purchasedNumber.phoneNumber}</p>
-                      <div className="text-sm text-muted-foreground">Provider: <span className="capitalize">{purchasedNumber.provider}</span> | Status: <Badge variant="outline">{purchasedNumber.status}</Badge></div>
-                    </div>
-                    <Button variant="outline" disabled={isSaving} onClick={() => handleAssignNumber(purchasedNumber.phoneNumber)}>
-                      {isSaving && telnyxPhoneNumber === purchasedNumber.phoneNumber ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Assign to Agent
+                {/* Manual entry fallback */}
+                <div className="pt-4 border-t space-y-2">
+                  <Label htmlFor="telnyxPhoneNumberManual">Or enter an existing number</Label>
+                  <div className="flex items-center gap-3">
+                    <Input 
+                      id="telnyxPhoneNumberManual" 
+                      value={telnyxPhoneNumber} 
+                      onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
+                      placeholder="e.g. +1234567890"
+                      className="flex-1"
+                    />
+                    <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
+                      {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      Save
                     </Button>
                   </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
       </Tabs>
