@@ -138,18 +138,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
               <div className="flex flex-col">
-                <div className="flex items-baseline gap-1.5">
+              <div className="flex items-baseline gap-1.5">
                   <span>T3 Automations</span>
                   <span className="text-[10px] text-muted-foreground font-normal tracking-wide">v{pkg.version}</span>
                 </div>
-                <span className="text-[10px] text-muted-foreground leading-none font-normal tracking-wide uppercase">
-                  ID: {user.uid.slice(-6)}
-                </span>
-              </div>
             </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4 py-4 space-y-1">
+            <div className="px-4 lg:px-6 pt-3 pb-2">
+              <span className="text-[11px] text-muted-foreground font-mono tracking-wide">ID: {user.uid.slice(-6)}</span>
+            </div>
+            <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
                 <BarChart className="h-4 w-4" />
                 Analytics
