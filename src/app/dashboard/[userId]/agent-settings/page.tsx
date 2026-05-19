@@ -9,7 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useUser, useFirestore, useCollection, useMemoFirebase, useDoc } from '@/firebase';
 import { doc, updateDoc, query, collection, addDoc, setDoc, getDocs, deleteDoc, Timestamp, orderBy, limit } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
-import { Loader2, Play, Pause, Plus, Pencil, ArrowLeft, Trash2, Link as LinkIcon, FileText, RefreshCw, Phone, Search } from 'lucide-react';
+import { Loader2, Play, Pause, Plus, Pencil, ArrowLeft, Trash2, Link as LinkIcon, FileText, RefreshCw, Phone, Search, AlertTriangle } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { ElevenLabsTestWidget } from '@/components/dashboard/ElevenLabsTestWidget';
 
@@ -121,6 +122,15 @@ Core Instructions:
     * Urgent Requests: Prioritize emergency bookings and escalate if no slots are available.
 By following these instructions, you will deliver a seamless, {PERSONALITY}, and professional experience that aligns with {COMPANY}'s {MISSION}, ensuring callers feel {FEELING} while efficiently managing appointments and interactions.`;
 
+function formatUSPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  const national = digits.startsWith('1') && digits.length === 11 ? digits.slice(1) : digits;
+  if (national.length === 10) {
+    return `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`;
+  }
+  return phone;
+}
+
 export default function AgentSettingsPage() {
   const params = useParams();
   const userId = params.userId as string;
@@ -139,6 +149,9 @@ export default function AgentSettingsPage() {
   // Phone Number State
   const [searchAreaCode, setSearchAreaCode] = useState('');
   const [availableNumbers, setAvailableNumbers] = useState<any[]>([]);
+  const [isChangingNumber, setIsChangingNumber] = useState(false);
+  const [hasAcknowledgedWarning, setHasAcknowledgedWarning] = useState(false);
+  const [isDeactivatingNumber, setIsDeactivatingNumber] = useState(false);
   const [isSearchingNumbers, setIsSearchingNumbers] = useState(false);
   const [isPurchasingNumber, setIsPurchasingNumber] = useState<string | null>(null);
   const [purchasedNumber, setPurchasedNumber] = useState<any | null>(null);
@@ -501,6 +514,30 @@ export default function AgentSettingsPage() {
     if (!user) return;
     setIsPurchasingNumber(phoneNumber);
     try {
+      // If changing number, deactivate the old one first
+      if (isChangingNumber && purchasedNumber) {
+        setIsDeactivatingNumber(true);
+        try {
+          const deactivateRes = await fetch('/api/telnyx/deactivate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phoneNumber: purchasedNumber.phoneNumber, uid: user.uid })
+          });
+          if (!deactivateRes.ok) {
+            const errData = await deactivateRes.json().catch(() => ({}));
+            console.warn('Deactivation warning:', errData.error || 'Could not deactivate old number');
+          }
+          // Remove old number from Firestore
+          if (purchasedNumber.id) {
+            await deleteDoc(doc(db!, 'businessProfiles', user.uid, 'phoneNumbers', purchasedNumber.id));
+          }
+        } catch (deactivateErr) {
+          console.warn('Old number deactivation failed (proceeding):', deactivateErr);
+        } finally {
+          setIsDeactivatingNumber(false);
+        }
+      }
+
       const res = await fetch(`/api/telnyx/purchase`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -508,8 +545,10 @@ export default function AgentSettingsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast({ title: 'Success', description: `Number ${phoneNumber} purchased successfully!` });
+        toast({ title: 'Success', description: `Number ${formatUSPhone(phoneNumber)} purchased successfully!` });
         setAvailableNumbers([]);
+        setIsChangingNumber(false);
+        setHasAcknowledgedWarning(false);
         fetchPhoneNumber();
         handleAssignNumber(phoneNumber);
       } else {
@@ -687,9 +726,10 @@ export default function AgentSettingsPage() {
         setElevenLabsAgentId(newElevenLabsAgentId);
       }
 
-      // Save to Firestore
+      // Save to Firestore (include phone number assignment)
+      const phoneToAssign = telnyxPhoneNumber || purchasedNumber?.phoneNumber || '';
       if (agentDocRef) {
-        await updateDoc(agentDocRef, { voiceId: id, elevenLabsAgentId: newElevenLabsAgentId });
+        await updateDoc(agentDocRef, { voiceId: id, elevenLabsAgentId: newElevenLabsAgentId, telnyxPhoneNumber: phoneToAssign });
       } else {
         const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
         await setDoc(newDocRef, { 
@@ -697,10 +737,25 @@ export default function AgentSettingsPage() {
           businessProfileId: user.uid,
           voiceId: id,
           elevenLabsAgentId: newElevenLabsAgentId,
+          telnyxPhoneNumber: phoneToAssign,
           name: agentName || 'AI Voice Agent',
           systemPrompt,
           firstMessage,
         });
+      }
+
+      // Configure SIP routing if phone number exists
+      if (phoneToAssign && newElevenLabsAgentId) {
+        await fetch('/api/telnyx/configure-sip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phoneNumber: phoneToAssign,
+            agentId: newElevenLabsAgentId,
+            uid: user.uid
+          })
+        }).catch(err => console.warn('SIP config failed (non-blocking):', err));
+        setTelnyxPhoneNumber(phoneToAssign);
       }
       toast({
         title: 'Voice Selected',
@@ -1125,14 +1180,14 @@ export default function AgentSettingsPage() {
         </TabsContent>
 
         <TabsContent value="phonenumbers" className="mt-6 overflow-y-auto space-y-6">
-          {/* Active Number Card — shown when a number is provisioned */}
           {isPhoneNumbersLoading ? (
             <Card>
               <CardContent className="flex justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
               </CardContent>
             </Card>
-          ) : purchasedNumber ? (
+          ) : purchasedNumber && !isChangingNumber ? (
+            /* ── Active number view ── */
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -1143,11 +1198,10 @@ export default function AgentSettingsPage() {
                   This number is provisioned and linked to your AI agent. Each account is limited to one number.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Display provisioned number info */}
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/30">
                   <div>
-                    <p className="font-semibold text-xl tracking-wide">{purchasedNumber.phoneNumber}</p>
+                    <p className="font-semibold text-xl tracking-wide">{formatUSPhone(purchasedNumber.phoneNumber)}</p>
                     <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                       <span className="capitalize">Provider: {purchasedNumber.provider}</span>
                       <span>•</span>
@@ -1155,40 +1209,91 @@ export default function AgentSettingsPage() {
                     </div>
                   </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-muted-foreground"
+                  onClick={() => { setIsChangingNumber(true); setHasAcknowledgedWarning(false); setAvailableNumbers([]); setSearchAreaCode(''); }}
+                >
+                  Change Number
+                </Button>
+              </CardContent>
+            </Card>
 
-                {/* Editable agent-assigned number */}
-                <div className="space-y-2">
-                  <Label htmlFor="telnyxPhoneNumber">Assigned Agent Number</Label>
-                  <div className="flex items-center gap-3">
-                    <Input 
-                      id="telnyxPhoneNumber" 
-                      value={telnyxPhoneNumber} 
-                      onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
-                      placeholder="e.g. +1234567890"
-                      className="flex-1"
-                    />
-                    <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
-                      {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Save
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    This is the number your agent will use for inbound calls. It should match your provisioned number above.
-                  </p>
+          ) : purchasedNumber && isChangingNumber && !hasAcknowledgedWarning ? (
+            /* ── Warning / disclaimer step ── */
+            <Card className="border-yellow-600/40">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-yellow-500">
+                  <AlertTriangle className="h-5 w-5" />
+                  Change Phone Number
+                </CardTitle>
+                <CardDescription>
+                  You are about to replace your current phone number. Please read the following carefully.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="p-4 rounded-lg bg-yellow-950/30 border border-yellow-700/40 space-y-3">
+                  <p className="text-sm font-medium text-yellow-400">⚠ Important — Please Read</p>
+                  <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+                    <li>Your current number <strong className="text-foreground">{formatUSPhone(purchasedNumber.phoneNumber)}</strong> will be <strong className="text-red-400">permanently deactivated</strong> from your account.</li>
+                    <li>Any marketing materials, business cards, advertisements, or campaigns that reference this number will no longer route to your AI agent.</li>
+                    <li>Callers who dial your old number after the change will not reach your business.</li>
+                    <li>This action cannot be undone. The old number may not be available for repurchase.</li>
+                  </ul>
+                </div>
+
+                <div className="flex items-start gap-3 p-4 rounded-lg border bg-muted/20">
+                  <Checkbox
+                    id="acknowledgeWarning"
+                    checked={false}
+                    onCheckedChange={(checked) => {
+                      if (checked) setHasAcknowledgedWarning(true);
+                    }}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="acknowledgeWarning" className="text-sm leading-relaxed cursor-pointer">
+                    I understand that my current number ({formatUSPhone(purchasedNumber.phoneNumber)}) will be permanently deactivated and that any existing marketing or communications using this number will be affected. I wish to proceed with selecting a new number.
+                  </Label>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => { setIsChangingNumber(false); setHasAcknowledgedWarning(false); }}
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </CardContent>
             </Card>
+
           ) : (
-            /* No number yet — show search & purchase */
+            /* ── Search & purchase UI (new user OR acknowledged change) ── */
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Search className="h-5 w-5" />
-                  Get a Phone Number
-                </CardTitle>
-                <CardDescription>
-                  Search and provision a phone number for your AI agent to receive inbound calls.
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Search className="h-5 w-5" />
+                      {isChangingNumber ? 'Select a New Number' : 'Get a Phone Number'}
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      {isChangingNumber
+                        ? `Your current number (${formatUSPhone(purchasedNumber?.phoneNumber || '')}) will be deactivated when you purchase a new one.`
+                        : 'Search and provision a phone number for your AI agent to receive inbound calls.'}
+                    </CardDescription>
+                  </div>
+                  {isChangingNumber && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => { setIsChangingNumber(false); setHasAcknowledgedWarning(false); setAvailableNumbers([]); }}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="space-y-6">
                 <form onSubmit={handleSearchNumbers} className="flex gap-4 items-end">
@@ -1214,7 +1319,7 @@ export default function AgentSettingsPage() {
                       {availableNumbers.map((num) => (
                         <div key={num.phone_number} className="flex items-center justify-between p-3 border rounded-md">
                           <div>
-                            <p className="font-medium">{num.phone_number}</p>
+                            <p className="font-medium">{formatUSPhone(num.phone_number)}</p>
                             <p className="text-xs text-muted-foreground capitalize">
                               {num.region_information?.find((r: any) => r.region_type === 'location')?.region_name?.toLowerCase() || 'Unknown'}, 
                               {' '}
@@ -1224,9 +1329,11 @@ export default function AgentSettingsPage() {
                           <Button 
                             size="sm" 
                             onClick={() => handlePurchaseNumber(num.phone_number)}
-                            disabled={isPurchasingNumber === num.phone_number}
+                            disabled={!!isPurchasingNumber || isDeactivatingNumber}
                           >
-                            {isPurchasingNumber === num.phone_number ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Buy'}
+                            {isPurchasingNumber === num.phone_number
+                              ? <><Loader2 className="mr-1 h-3 w-3 animate-spin" />{isDeactivatingNumber ? 'Deactivating...' : 'Purchasing...'}</>
+                              : 'Buy'}
                           </Button>
                         </div>
                       ))}
@@ -1234,23 +1341,25 @@ export default function AgentSettingsPage() {
                   </div>
                 )}
 
-                {/* Manual entry fallback */}
-                <div className="pt-4 border-t space-y-2">
-                  <Label htmlFor="telnyxPhoneNumberManual">Or enter an existing number</Label>
-                  <div className="flex items-center gap-3">
-                    <Input 
-                      id="telnyxPhoneNumberManual" 
-                      value={telnyxPhoneNumber} 
-                      onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
-                      placeholder="e.g. +1234567890"
-                      className="flex-1"
-                    />
-                    <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
-                      {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Save
-                    </Button>
+                {/* Manual entry — only for brand new users (not changing) */}
+                {!isChangingNumber && (
+                  <div className="pt-4 border-t space-y-2">
+                    <Label htmlFor="telnyxPhoneNumberManual">Or enter an existing number</Label>
+                    <div className="flex items-center gap-3">
+                      <Input 
+                        id="telnyxPhoneNumberManual" 
+                        value={telnyxPhoneNumber} 
+                        onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
+                        placeholder="e.g. +1234567890"
+                        className="flex-1"
+                      />
+                      <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
+                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        Save
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           )}
