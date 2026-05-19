@@ -138,13 +138,15 @@ export default function AgentSettingsPage() {
   const { user } = useUser();
   const { toast } = useToast();
 
-  const [agentName, setAgentName] = useState('');
+
   const [systemPrompt, setSystemPrompt] = useState(defaultPromptPlaceholder);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [voiceId, setVoiceId] = useState('');
   const [elevenLabsAgentId, setElevenLabsAgentId] = useState('');
   const [telnyxPhoneNumber, setTelnyxPhoneNumber] = useState('');
   const [firstMessage, setFirstMessage] = useState('Hello! How can I assist you today?');
   const [isSaving, setIsSaving] = useState(false);
+  const [isAutoProvisioning, setIsAutoProvisioning] = useState(false);
 
   // Phone Number State
   const [searchAreaCode, setSearchAreaCode] = useState('');
@@ -186,12 +188,80 @@ export default function AgentSettingsPage() {
   const { data: agent, isLoading: isAgentLoading, error } = useDoc(agentDocRef);
   const isLoading = isAgentsLoading || isAgentLoading;
 
+  
+  useEffect(() => {
+    const autoProvisionAgent = async () => {
+      if (isLoading || isAutoProvisioning || agent?.elevenLabsAgentId || !user || !db) return;
+      
+      setIsAutoProvisioning(true);
+      try {
+        const apiPayload = {
+          systemPrompt: defaultPromptPlaceholder,
+          voiceId: 'cjVigY5qzO86Huf0OWa1',
+          firstMessage: 'Hello! How can I assist you today?',
+          userId: user.uid
+        };
+
+        const res = await fetch(`/api/elevenlabs/agents`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(apiPayload)
+        });
+        
+        if (!res.ok) throw new Error('Failed to auto-provision agent');
+        
+        const data = await res.json();
+        const newElevenLabsAgentId = data.agent_id;
+        setElevenLabsAgentId(newElevenLabsAgentId);
+
+        if (agentDocRef) {
+          await updateDoc(agentDocRef, {
+            systemPrompt: defaultPromptPlaceholder,
+            firstMessage: 'Hello! How can I assist you today?',
+            voiceId: 'cjVigY5qzO86Huf0OWa1',
+            elevenLabsAgentId: newElevenLabsAgentId,
+          });
+        } else {
+          const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+          await setDoc(newDocRef, {
+            id: newDocRef.id,
+            businessProfileId: user.uid,
+            systemPrompt: defaultPromptPlaceholder,
+            firstMessage: 'Hello! How can I assist you today?',
+            voiceId: 'cjVigY5qzO86Huf0OWa1',
+            elevenLabsAgentId: newElevenLabsAgentId,
+          });
+        }
+      } catch (err) {
+        console.error('Auto-provisioning failed:', err);
+      } finally {
+        setIsAutoProvisioning(false);
+      }
+    };
+
+    autoProvisionAgent();
+  }, [isLoading, agent, user, db, isAutoProvisioning]);
+
+  
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
   useEffect(() => {
     if (agent) {
-      setAgentName(agent.name || '');
+
       setSystemPrompt(agent.systemPrompt || defaultPromptPlaceholder);
       setFirstMessage(agent.firstMessage || 'Hello! How can I assist you today?');
-      setVoiceId(agent.voiceId || 'cjVigY5qzO86Huf0OWa1'); // Default to Eric
+      setVoiceId(agent.voiceId || 'cjVigY5qzO86Huf0OWa1');
+      setHasUnsavedChanges(false); // Default to Eric
       setElevenLabsAgentId(agent.elevenLabsAgentId || '');
       setTelnyxPhoneNumber(agent.telnyxPhoneNumber || agent.twilioPhoneNumber || '');
     }
@@ -204,10 +274,10 @@ export default function AgentSettingsPage() {
       let newElevenLabsAgentId = elevenLabsAgentId;
 
       const apiPayload = {
-        name: agentName,
         systemPrompt,
         voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
-        firstMessage: firstMessage || "Hello! How can I assist you today?"
+        firstMessage: firstMessage || "Hello! How can I assist you today?",
+        userId: user.uid
       };
 
       if (newElevenLabsAgentId) {
@@ -237,7 +307,6 @@ export default function AgentSettingsPage() {
 
       if (agentDocRef) {
         await updateDoc(agentDocRef, {
-          name: agentName,
           systemPrompt,
           firstMessage,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
@@ -249,7 +318,6 @@ export default function AgentSettingsPage() {
         await setDoc(newDocRef, {
           id: newDocRef.id,
           businessProfileId: user.uid,
-          name: agentName,
           systemPrompt,
           firstMessage,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
@@ -270,6 +338,7 @@ export default function AgentSettingsPage() {
       });
     } finally {
       setIsSaving(false);
+      setHasUnsavedChanges(false);
     }
   };
 
@@ -287,7 +356,6 @@ export default function AgentSettingsPage() {
         await setDoc(newDocRef, {
           id: newDocRef.id,
           businessProfileId: user.uid,
-          name: agentName,
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
           elevenLabsAgentId,
@@ -693,7 +761,6 @@ export default function AgentSettingsPage() {
       let newElevenLabsAgentId = elevenLabsAgentId;
 
       const apiPayload = {
-        name: agentName || 'AI Voice Agent',
         systemPrompt,
         voiceId: id,
         firstMessage: firstMessage || 'Hello! How can I assist you today?'
@@ -738,7 +805,6 @@ export default function AgentSettingsPage() {
           voiceId: id,
           elevenLabsAgentId: newElevenLabsAgentId,
           telnyxPhoneNumber: phoneToAssign,
-          name: agentName || 'AI Voice Agent',
           systemPrompt,
           firstMessage,
         });
@@ -791,7 +857,7 @@ export default function AgentSettingsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Agent Settings</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">AI Voice Agent</h1>
       </div>
       
       <Tabs defaultValue="phonenumbers" className="w-full flex-1 flex flex-col min-h-0">
@@ -997,10 +1063,13 @@ export default function AgentSettingsPage() {
                   Define the behavior, personality, and script for your AI agent.
                 </CardDescription>
               </div>
-              <Button onClick={handleSave} disabled={isSaving}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Prompt
-              </Button>
+              {hasUnsavedChanges && (
+                <Button onClick={handleSave} disabled={isSaving}>
+                  {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Save Prompt
+                </Button>
+              )}
+                
             </CardHeader>
             <CardContent className="flex-1 flex flex-col min-h-0 space-y-4 pb-6">
               <div className="space-y-2 shrink-0">
@@ -1008,7 +1077,7 @@ export default function AgentSettingsPage() {
                 <Input 
                   id="firstMessage" 
                   value={firstMessage}
-                  onChange={(e) => setFirstMessage(e.target.value)}
+                  onChange={(e) => { setFirstMessage(e.target.value); setHasUnsavedChanges(true); }}
                   placeholder="Hello! How can I assist you today?"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
@@ -1020,7 +1089,7 @@ export default function AgentSettingsPage() {
                 <Textarea 
                   id="systemPrompt" 
                   value={systemPrompt}
-                  onChange={(e) => setSystemPrompt(e.target.value)}
+                  onChange={(e) => { setSystemPrompt(e.target.value); setHasUnsavedChanges(true); }}
                   placeholder={defaultPromptPlaceholder}
                   className="flex-1 min-h-[400px] resize-none h-full"
                 />

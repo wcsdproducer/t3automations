@@ -12,7 +12,8 @@ export async function POST(req: Request) {
       duration, 
       status, 
       caller_id, 
-      metadata 
+      metadata,
+      recording_url
     } = body;
 
     if (!agent_id || !call_sid) {
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
       summary: summary || '',
       outcome: status || 'completed',
       startedAt: new Date(),
+      recordingUrl: recording_url || '',
     });
 
     // Handle CRM Lead creation/updating

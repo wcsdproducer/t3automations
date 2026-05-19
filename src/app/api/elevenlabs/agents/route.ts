@@ -3,15 +3,17 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, systemPrompt, voiceId, firstMessage } = body;
+    const { systemPrompt, voiceId, firstMessage, userId } = body;
 
     const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
     if (!elevenLabsApiKey) {
       return NextResponse.json({ error: 'Missing ElevenLabs API Key' }, { status: 500 });
     }
 
+    const formattedName = userId ? `Tenant Agent (UID: ${userId.slice(-6)})` : "Voice Agent";
+
     const payload = {
-      name: name || "Voice Agent",
+      name: formattedName,
       conversation_config: {
         agent: {
           first_message: firstMessage || "Hello! How can I assist you today?",
