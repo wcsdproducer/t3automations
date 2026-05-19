@@ -643,30 +643,77 @@ export default function AgentSettingsPage() {
     fetchVoices();
   }, []);
 
+  const [isSettingVoice, setIsSettingVoice] = useState<string | null>(null);
+
   const handleSetVoice = async (id: string) => {
     setVoiceId(id);
+    setIsSettingVoice(id);
     if (!db || !user) return;
     try {
+      // Auto-create or update the ElevenLabs agent with the selected voice
+      let newElevenLabsAgentId = elevenLabsAgentId;
+
+      const apiPayload = {
+        name: agentName || 'AI Voice Agent',
+        systemPrompt,
+        voiceId: id,
+        firstMessage: firstMessage || 'Hello! How can I assist you today?'
+      };
+
+      if (newElevenLabsAgentId) {
+        // Update existing agent with new voice
+        const res = await fetch(`/api/elevenlabs/agents/${newElevenLabsAgentId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(apiPayload)
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Failed to update ElevenLabs Agent');
+        }
+      } else {
+        // Create new agent with selected voice
+        const res = await fetch(`/api/elevenlabs/agents`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(apiPayload)
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || 'Failed to create ElevenLabs Agent');
+        }
+        const data = await res.json();
+        newElevenLabsAgentId = data.agent_id;
+        setElevenLabsAgentId(newElevenLabsAgentId);
+      }
+
+      // Save to Firestore
       if (agentDocRef) {
-        await updateDoc(agentDocRef, { voiceId: id });
+        await updateDoc(agentDocRef, { voiceId: id, elevenLabsAgentId: newElevenLabsAgentId });
       } else {
         const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
         await setDoc(newDocRef, { 
           id: newDocRef.id,
           businessProfileId: user.uid,
-          voiceId: id 
+          voiceId: id,
+          elevenLabsAgentId: newElevenLabsAgentId,
+          name: agentName || 'AI Voice Agent',
+          systemPrompt,
+          firstMessage,
         });
       }
       toast({
-        title: 'Voice Updated',
-        description: 'The default voice has been updated.',
+        title: 'Voice Selected',
+        description: 'Voice updated and agent synced with ElevenLabs.',
       });
     } catch (err: any) {
       toast({
         title: 'Error',
-        description: 'Failed to update voice.',
+        description: err.message || 'Failed to update voice.',
         variant: 'destructive',
       });
+    } finally {
+      setIsSettingVoice(null);
     }
   };
 
@@ -692,13 +739,12 @@ export default function AgentSettingsPage() {
         <h1 className="text-lg font-semibold md:text-2xl">Agent Settings</h1>
       </div>
       
-      <Tabs defaultValue="general" className="w-full flex-1 flex flex-col min-h-0">
-        <TabsList className="grid w-full grid-cols-6 lg:w-[900px] shrink-0">
-          <TabsTrigger value="general">General</TabsTrigger>
+      <Tabs defaultValue="phonenumbers" className="w-full flex-1 flex flex-col min-h-0">
+        <TabsList className="grid w-full grid-cols-5 lg:w-[800px] shrink-0">
+          <TabsTrigger value="phonenumbers">Phone Number</TabsTrigger>
           <TabsTrigger value="voice">Voice</TabsTrigger>
           <TabsTrigger value="prompts">Prompt</TabsTrigger>
           <TabsTrigger value="knowledge">Knowledge Base</TabsTrigger>
-          <TabsTrigger value="phonenumbers">Phone Number</TabsTrigger>
           <TabsTrigger value="test">Test</TabsTrigger>
         </TabsList>
 
@@ -721,49 +767,7 @@ export default function AgentSettingsPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="general" className="mt-6 overflow-y-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle>General Settings</CardTitle>
-              <CardDescription>
-                Configure the basic identity of your AI Voice Agent.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="agentName">Agent Name</Label>
-                <Input 
-                  id="agentName" 
-                  value={agentName} 
-                  onChange={(e) => setAgentName(e.target.value)} 
-                  placeholder="e.g. Solar London"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="elevenLabsAgentId">ElevenLabs Agent ID</Label>
-                <Input 
-                  id="elevenLabsAgentId" 
-                  value={elevenLabsAgentId} 
-                  onChange={(e) => setElevenLabsAgentId(e.target.value)} 
-                  placeholder="e.g. agent_9301krh2... (Optional: If using pre-configured agent)"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="telnyxPhoneNumber">Telnyx Phone Number</Label>
-                <Input 
-                  id="telnyxPhoneNumber" 
-                  value={telnyxPhoneNumber} 
-                  onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
-                  placeholder="e.g. +1234567890"
-                />
-              </div>
-              <Button className="mt-4" onClick={handleSave} disabled={isSaving}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save General Settings
-              </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
+
 
         <TabsContent value="voice" className="mt-6 overflow-y-auto">
           {editingVoice ? (
@@ -842,7 +846,7 @@ export default function AgentSettingsPage() {
                     <TableHead>Language</TableHead>
                     <TableHead>Use Case</TableHead>
                     <TableHead>Voice ID</TableHead>
-                    <TableHead>Default</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -873,16 +877,18 @@ export default function AgentSettingsPage() {
                       </TableCell>
                       <TableCell>
                         {voiceId === voice.voice_id ? (
-                          <Badge variant="secondary" className="bg-slate-800 text-white hover:bg-slate-700">
-                            Default
+                          <Badge variant="secondary" className="bg-green-700 text-white hover:bg-green-600">
+                            Selected
                           </Badge>
                         ) : (
                           <Button 
                             variant="outline" 
                             size="sm"
                             onClick={() => handleSetVoice(voice.voice_id)}
+                            disabled={isSettingVoice === voice.voice_id}
                           >
-                            Make Default
+                            {isSettingVoice === voice.voice_id ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : null}
+                            Select
                           </Button>
                         )}
                       </TableCell>
@@ -1119,6 +1125,36 @@ export default function AgentSettingsPage() {
         </TabsContent>
 
         <TabsContent value="phonenumbers" className="mt-6 overflow-y-auto">
+          {/* Telnyx Phone Number quick-edit field at the top */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Phone className="h-5 w-5" />
+                Telnyx Phone Number
+              </CardTitle>
+              <CardDescription>
+                The phone number currently assigned to your AI agent.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-end gap-4">
+                <div className="space-y-2 flex-1">
+                  <Label htmlFor="telnyxPhoneNumber">Phone Number</Label>
+                  <Input 
+                    id="telnyxPhoneNumber" 
+                    value={telnyxPhoneNumber} 
+                    onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
+                    placeholder="e.g. +1234567890"
+                  />
+                </div>
+                <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
+                  {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  Save
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {purchasedNumber ? (
             <Card className="mb-6">
               <CardHeader>
