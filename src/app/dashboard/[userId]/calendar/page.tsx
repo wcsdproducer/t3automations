@@ -15,6 +15,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CalendarSettings, WorkingHours, DayOfWeek, Appointment } from '@/types/calendar';
+import { formatPhoneNumber } from '@/lib/utils';
 
 const TIMEZONES = [
   'America/New_York',
@@ -175,7 +176,7 @@ export default function CalendarPage() {
                             <span className="font-semibold text-lg">{apt.name}</span>
                             <Badge variant={apt.status === 'scheduled' ? 'default' : 'secondary'}>{apt.status}</Badge>
                           </div>
-                          <p className="text-sm text-muted-foreground">{apt.phone} {apt.email ? `• ${apt.email}` : ''}</p>
+                          <p className="text-sm text-muted-foreground">{formatPhoneNumber(apt.phone)} {apt.email ? `• ${apt.email}` : ''}</p>
                           <p className="text-sm mt-2">{apt.service}</p>
                         </div>
                         <div className="flex flex-col items-start md:items-end gap-1 bg-muted/50 p-3 rounded-md min-w-[150px]">

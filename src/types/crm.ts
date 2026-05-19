@@ -12,6 +12,7 @@ export interface CallLog {
   leadCaptured: boolean;
   leadId: string | null;
   startedAt: string;
+  recordingUrl?: string;
 }
 
 export interface Lead {
