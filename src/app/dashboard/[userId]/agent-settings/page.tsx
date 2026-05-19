@@ -1341,25 +1341,6 @@ export default function AgentSettingsPage() {
                   </div>
                 )}
 
-                {/* Manual entry — only for brand new users (not changing) */}
-                {!isChangingNumber && (
-                  <div className="pt-4 border-t space-y-2">
-                    <Label htmlFor="telnyxPhoneNumberManual">Or enter an existing number</Label>
-                    <div className="flex items-center gap-3">
-                      <Input 
-                        id="telnyxPhoneNumberManual" 
-                        value={telnyxPhoneNumber} 
-                        onChange={(e) => setTelnyxPhoneNumber(e.target.value)} 
-                        placeholder="e.g. +1234567890"
-                        className="flex-1"
-                      />
-                      <Button onClick={() => handleAssignNumber(telnyxPhoneNumber)} disabled={isSaving || !telnyxPhoneNumber}>
-                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                        Save
-                      </Button>
-                    </div>
-                  </div>
-                )}
               </CardContent>
             </Card>
           )}
