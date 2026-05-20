@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser, useFirestore, useCollection, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
-import { collection, doc, deleteDoc } from 'firebase/firestore';
+import { useUser, useFirestore, useDoc, useCollection, setDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { collection, doc, deleteDoc, query, where } from 'firebase/firestore';
+import { useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2, Edit2, Plus, Phone, Mail, FileText, User } from 'lucide-react';
-import { Lead, LeadStatus, LeadSource } from '@/types/crm';
+import { Lead, LeadStatus, LeadSource, BusinessProfile } from '@/types/crm';
 
 const formatPhoneNumber = (phone: string | undefined | null) => {
   if (!phone) return '';
@@ -53,10 +54,19 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
+const parseDate = (val: any) => {
+  if (!val) return new Date();
+  if (typeof val.toDate === 'function') return val.toDate();
+  if (val.seconds) return new Date(val.seconds * 1000);
+  return new Date(val);
+};
+
 export function LeadsManager() {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
+  const params = useParams();
+  const siteSlug = params.userId as string;
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingLeadId, setEditingLeadId] = useState<string | null>(null);
@@ -70,13 +80,26 @@ export function LeadsManager() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const profileDocRef = useMemoFirebase(() => {
+    if (!siteSlug || !firestore) return null;
+    return doc(firestore, 'businessProfiles', siteSlug);
+  }, [siteSlug, firestore]);
+
+  const { data: businessProfile, isLoading: isProfileLoading } = useDoc<BusinessProfile>(profileDocRef);
+
   // Memoized so useCollection gets a stable ref — prevents infinite re-render loop
   const leadsRef = useMemoFirebase(() => {
-    if (!user || !firestore) return null;
-    return collection(firestore, `businessProfiles/${user.uid}/leads`);
-  }, [user, firestore]);
+    if (!user || !firestore || !siteSlug) return null;
+    const leadsCol = collection(firestore, `businessProfiles/${siteSlug}/leads`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(leadsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(leadsCol);
+  }, [user, firestore, siteSlug, businessProfile]);
 
-  const { data: leads, isLoading } = useCollection(leadsRef);
+  const { data: leadsData, isLoading: isLeadsLoading } = useCollection(leadsRef);
+
+  const isLoading = isProfileLoading || isLeadsLoading;
 
   const handleOpenDialog = (lead?: Lead) => {
     if (lead) {
@@ -97,7 +120,7 @@ export function LeadsManager() {
   };
 
   const handleSaveLead = async () => {
-    if (!user || !firestore) return;
+    if (!user || !firestore || !siteSlug) return;
     if (!formData.name) {
       toast({
         title: 'Validation Error',
@@ -111,18 +134,21 @@ export function LeadsManager() {
 
     try {
       const leadId = editingLeadId || crypto.randomUUID();
-      const docRef = doc(firestore, `businessProfiles/${user.uid}/leads/${leadId}`);
+      const docRef = doc(firestore, `businessProfiles/${siteSlug}/leads/${leadId}`);
       
-      const payload: Partial<Lead> & { businessProfileId?: string } = {
+      const payload: Partial<Lead> & { businessProfileId?: string; assignedRenterId?: string | null } = {
         ...formData,
         id: leadId,
-        businessProfileId: user.uid,
+        businessProfileId: siteSlug,
         updatedAt: new Date().toISOString(),
       };
 
       if (!editingLeadId) {
         payload.createdAt = new Date().toISOString();
         payload.agentSummary = '';
+        if (businessProfile?.currentRenterId) {
+          payload.assignedRenterId = businessProfile.currentRenterId;
+        }
       }
 
       await setDocumentNonBlocking(docRef, payload, { merge: true });
@@ -146,11 +172,11 @@ export function LeadsManager() {
   };
 
   const handleDeleteLead = async (leadId: string) => {
-    if (!user || !firestore) return;
+    if (!user || !firestore || !siteSlug) return;
     if (!confirm('Are you sure you want to delete this lead?')) return;
 
     try {
-      const docRef = doc(firestore, `businessProfiles/${user.uid}/leads/${leadId}`);
+      const docRef = doc(firestore, `businessProfiles/${siteSlug}/leads/${leadId}`);
       await deleteDoc(docRef);
       toast({
         title: 'Lead Deleted',
@@ -170,7 +196,11 @@ export function LeadsManager() {
     return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
   }
 
-  const leadsList = leads as Lead[] | undefined;
+  const leadsList = ((leadsData || []) as Lead[]).sort((a, b) => {
+    const timeA = parseDate(a.createdAt).getTime();
+    const timeB = parseDate(b.createdAt).getTime();
+    return timeB - timeA;
+  });
 
   return (
     <Card className="mt-6">

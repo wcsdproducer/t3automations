@@ -8,16 +8,19 @@ export async function POST(req: Request) {
     });
 
     const body = await req.json();
-    const { userId, userEmail } = body;
+    const { userId, userEmail, renterId, price } = body;
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
+    const rentAmount = price ? Math.round(Number(price) * 100) : 149700;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       customer_email: userEmail,
       client_reference_id: userId,
+      metadata: renterId ? { renterId } : undefined,
       line_items: [
         {
           price_data: {
@@ -26,7 +29,7 @@ export async function POST(req: Request) {
               name: 'T3 Automations Pro Subscription',
               description: 'Includes a dedicated phone number and unlimited minutes for your AI agent.',
             },
-            unit_amount: 149700, // $1497.00
+            unit_amount: rentAmount,
             recurring: {
               interval: 'month',
             },
@@ -35,8 +38,12 @@ export async function POST(req: Request) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/${userId}/billing?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/${userId}/billing?canceled=true`,
+      success_url: renterId
+        ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/onboarding/${userId}?success=true`
+        : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/${userId}/billing?success=true`,
+      cancel_url: renterId
+        ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/marketplace?canceled=true`
+        : `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/${userId}/billing?canceled=true`,
     });
 
     return NextResponse.json({ url: session.url });

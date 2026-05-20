@@ -40,7 +40,7 @@ export default async function PublishedPage({
   }
 
   const profile = profileDoc.data() || {};
-  const templateProps = profileToTemplateProps(profile);
+  const templateProps = profileToTemplateProps(profile, userId);
   const template = profile.defaultLandingPage || 'template-1';
 
   if (template === 'template-2') return <Template2Content {...templateProps} />;

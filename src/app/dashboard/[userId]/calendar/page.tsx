@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
-import { doc, setDoc, collection, query, orderBy } from 'firebase/firestore';
+import { doc, setDoc, collection, query, orderBy, where } from 'firebase/firestore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CalendarSettings, WorkingHours, DayOfWeek, Appointment } from '@/types/calendar';
 import { formatPhoneNumber } from '@/lib/utils';
+import { useParams } from 'next/navigation';
 
 const TIMEZONES = [
   'America/New_York',
@@ -52,33 +53,38 @@ const defaultSettings: CalendarSettings = {
 export default function CalendarPage() {
   const { user } = useUser();
   const firestore = useFirestore();
+  const params = useParams();
+  const siteSlug = params.userId as string;
   const { toast } = useToast();
   
   const [activeTab, setActiveTab] = useState('appointments');
   const [settings, setSettings] = useState<CalendarSettings>(defaultSettings);
   const [isSaving, setIsSaving] = useState(false);
 
-  const userIdSlug = user?.uid.slice(-12);
-
   // Firestore Refs
   const businessProfileRef = useMemoFirebase(() => {
-    if (!user || !firestore) return null;
-    return doc(firestore, `businessProfiles/${user.uid}`);
-  }, [user, firestore]);
+    if (!user || !firestore || !siteSlug) return null;
+    return doc(firestore, 'businessProfiles', siteSlug);
+  }, [user, firestore, siteSlug]);
 
   const settingsRef = useMemoFirebase(() => {
     if (!businessProfileRef) return null;
     return doc(businessProfileRef, 'settings/calendar');
   }, [businessProfileRef]);
 
-  const appointmentsRef = useMemoFirebase(() => {
-    if (!businessProfileRef) return null;
-    return query(collection(businessProfileRef, 'appointments'), orderBy('date', 'desc'), orderBy('time', 'desc'));
-  }, [businessProfileRef]);
-
   // Data Fetching
-  const { data: businessProfile } = useDoc<{ bookingUrl?: string }>(businessProfileRef);
+  const { data: businessProfile, isLoading: isLoadingProfile } = useDoc<{ bookingUrl?: string; currentRenterId?: string }>(businessProfileRef);
   const { data: settingsData, isLoading: isLoadingSettings } = useDoc<CalendarSettings>(settingsRef);
+
+  const appointmentsRef = useMemoFirebase(() => {
+    if (!businessProfileRef || !user) return null;
+    const apptsCol = collection(businessProfileRef, 'appointments');
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(apptsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(apptsCol);
+  }, [businessProfileRef, businessProfile, user]);
+
   const { data: appointmentsData, isLoading: isLoadingAppointments } = useCollection(appointmentsRef);
 
   useEffect(() => {
@@ -129,7 +135,7 @@ export default function CalendarPage() {
 
   const days: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-  if (isLoadingSettings || isLoadingAppointments) {
+  if (isLoadingProfile || isLoadingSettings || isLoadingAppointments) {
     return (
       <div className="flex items-center justify-center h-64">
         <p className="text-muted-foreground animate-pulse">Loading calendar data...</p>
@@ -137,7 +143,11 @@ export default function CalendarPage() {
     );
   }
 
-  const appointments = (appointmentsData || []) as Appointment[];
+  const appointments = ((appointmentsData || []) as Appointment[]).sort((a, b) => {
+    const dateCompare = b.date.localeCompare(a.date);
+    if (dateCompare !== 0) return dateCompare;
+    return b.time.localeCompare(a.time);
+  });
 
   return (
     <div className="flex flex-col flex-1 min-h-0 space-y-6">

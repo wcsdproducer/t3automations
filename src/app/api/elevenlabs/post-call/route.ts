@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db as adminDb } from '@/lib/firebase-admin';
+import { triggerLeadAlerts } from '@/lib/alerts';
 
 export async function POST(req: Request) {
   try {
@@ -60,23 +61,43 @@ export async function POST(req: Request) {
 
       if (existingLeads.empty) {
         // Create new lead
-        await leadsRef.add({
+        const newLead = {
+          name: 'Anonymous Caller',
           phone: callerNumber,
+          email: '',
           source: 'inbound-call',
           status: 'new',
           notes: summary || 'Created from inbound call.',
           agentSummary: summary || '',
           createdAt: new Date(),
           updatedAt: new Date(),
+        };
+        await leadsRef.add(newLead);
+
+        // Trigger lead alerts in background
+        triggerLeadAlerts(businessProfileRef.id, newLead).catch(err => {
+          console.error('Failed to trigger call lead alert:', err);
         });
       } else {
         // Update existing lead
         const leadDoc = existingLeads.docs[0];
-        await leadDoc.ref.update({
+        const updatedLeadData = {
           status: 'contacted',
           agentSummary: summary || leadDoc.data().agentSummary,
           notes: leadDoc.data().notes + '\n\n' + (summary || ''),
           updatedAt: new Date(),
+        };
+        await leadDoc.ref.update(updatedLeadData);
+
+        // Trigger update alert
+        triggerLeadAlerts(businessProfileRef.id, {
+          name: leadDoc.data().name || 'Anonymous Caller',
+          phone: callerNumber,
+          email: leadDoc.data().email || '',
+          source: 'inbound-call-return',
+          notes: `Returned Caller. Summary: ${summary || 'No new summary.'}`
+        }).catch(err => {
+          console.error('Failed to trigger call update alert:', err);
         });
       }
     }

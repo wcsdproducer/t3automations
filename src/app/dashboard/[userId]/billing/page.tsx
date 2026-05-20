@@ -6,7 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, CheckCircle2, CreditCard, Plus, RefreshCw } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -89,6 +89,8 @@ function PaymentForm({
 export default function BillingPage() {
   const { user } = useUser();
   const db = useFirestore();
+  const params = useParams();
+  const siteSlug = params.userId as string;
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
@@ -124,9 +126,9 @@ export default function BillingPage() {
 
   useEffect(() => {
     const fetchStatus = async () => {
-      if (!user) return;
+      if (!user || !siteSlug) return;
       try {
-        const docRef = doc(db, 'businessProfiles', user.uid);
+        const docRef = doc(db, 'businessProfiles', siteSlug);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setSubscriptionStatus(docSnap.data().subscriptionStatus || 'inactive');
@@ -138,14 +140,14 @@ export default function BillingPage() {
       }
     };
     fetchStatus();
-  }, [user, db]);
+  }, [user, db, siteSlug]);
 
   // Fetch saved payment method
   const fetchPaymentMethod = useCallback(async () => {
-    if (!user) return;
+    if (!user || !siteSlug) return;
     setIsLoadingPM(true);
     try {
-      const res = await fetch(`/api/stripe/payment-method?userId=${user.uid}`);
+      const res = await fetch(`/api/stripe/payment-method?userId=${siteSlug}`);
       const data = await res.json();
       setPaymentMethod(data.paymentMethod || null);
     } catch (error) {
@@ -153,21 +155,21 @@ export default function BillingPage() {
     } finally {
       setIsLoadingPM(false);
     }
-  }, [user]);
+  }, [user, siteSlug]);
 
   useEffect(() => {
     fetchPaymentMethod();
   }, [fetchPaymentMethod]);
 
   const handleSubscribe = async () => {
-    if (!user) return;
+    if (!user || !siteSlug) return;
     setCheckoutLoading(true);
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: user.uid,
+          userId: siteSlug,
           userEmail: user.email,
         }),
       });
@@ -190,13 +192,13 @@ export default function BillingPage() {
   };
 
   const handleAddPaymentMethod = async () => {
-    if (!user) return;
+    if (!user || !siteSlug) return;
     setIsCreatingIntent(true);
     try {
       const res = await fetch('/api/stripe/setup-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.uid }),
+        body: JSON.stringify({ userId: siteSlug }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -217,14 +219,14 @@ export default function BillingPage() {
   };
 
   const handlePaymentSuccess = async (paymentMethodId: string) => {
-    if (!user) return;
+    if (!user || !siteSlug) return;
     try {
       // Attach and set as default
       const res = await fetch('/api/stripe/payment-method', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: user.uid,
+          userId: siteSlug,
           paymentMethodId,
         }),
       });

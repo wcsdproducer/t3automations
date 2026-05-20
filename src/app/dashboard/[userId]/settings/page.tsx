@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { useUser, useFirestore, useDoc, useMemoFirebase, useStorage } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -52,6 +53,8 @@ export default function SettingsPage() {
   const { user } = useUser();
   const firestore = useFirestore();
   const storage = useStorage();
+  const params = useParams();
+  const siteSlug = params.userId as string;
   const { toast } = useToast();
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -59,9 +62,9 @@ export default function SettingsPage() {
   const [isRegistering, setIsRegistering] = useState(false);
 
   const businessProfileRef = useMemoFirebase(() => {
-    if (!user || !firestore) return null;
-    return doc(firestore, `businessProfiles/${user.uid}`);
-  }, [user, firestore]);
+    if (!user || !firestore || !siteSlug) return null;
+    return doc(firestore, 'businessProfiles', siteSlug);
+  }, [user, firestore, siteSlug]);
 
   const { data: businessProfile, isLoading } = useDoc<ProfileFormValues>(businessProfileRef);
 
@@ -108,7 +111,7 @@ export default function SettingsPage() {
         let logoUrlToSave = data.logoUrl || '';
 
         if (logoFile) {
-            const filePath = `businessProfiles/${user.uid}/logos/${crypto.randomUUID()}-${logoFile.name}`;
+            const filePath = `businessProfiles/${siteSlug}/logos/${crypto.randomUUID()}-${logoFile.name}`;
             const fileStorageRef = storageRef(storage, filePath);
             await uploadBytes(fileStorageRef, logoFile);
             logoUrlToSave = await getDownloadURL(fileStorageRef);
@@ -446,13 +449,13 @@ export default function SettingsPage() {
                         We automatically generate a compliant Privacy Policy for you based on your Company Details. This includes the mandatory "No Information Sharing" clause required for SMS compliance.
                       </p>
                       <div className="flex gap-3 mt-4">
-                        <Button variant="outline" size="sm" type="button" onClick={() => window.open(`/api/legal/privacy?userId=${user?.uid}`, '_blank')}>
+                        <Button variant="outline" size="sm" type="button" onClick={() => window.open(`/api/legal/privacy?userId=${siteSlug}`, '_blank')}>
                           <Globe className="w-4 h-4 mr-2"/> View Live Policy
                         </Button>
                       </div>
                     </div>
                   </div>
-
+ 
                   <div className="flex items-start gap-4 p-4 border rounded-lg bg-card">
                     <FileText className="w-8 h-8 text-primary mt-1" />
                     <div className="flex-1">
@@ -461,7 +464,7 @@ export default function SettingsPage() {
                         We automatically generate compliant Terms of Service for your business, detailing communication practices and opt-out instructions.
                       </p>
                       <div className="flex gap-3 mt-4">
-                        <Button variant="outline" size="sm" type="button" onClick={() => window.open(`/api/legal/tos?userId=${user?.uid}`, '_blank')}>
+                        <Button variant="outline" size="sm" type="button" onClick={() => window.open(`/api/legal/tos?userId=${siteSlug}`, '_blank')}>
                           <Globe className="w-4 h-4 mr-2"/> View Live Terms
                         </Button>
                       </div>

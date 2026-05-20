@@ -49,13 +49,31 @@ service cloud.firestore {
     }
 
     /**
-     * Verifies that the requesting user's UID matches the businessProfileId.
-     * This is the primary ownership check for the entire database.
+     * Verifies that the requesting user has access to the businessProfileId resource.
+     * This checks for legacy UID matches, ownerId (Landlord), or currentRenterId (Renter).
      */
     function isOwner(businessProfileId) {
-      return isSignedIn() && request.auth.uid == businessProfileId;
+      let docPath = /databases/$(database)/documents/businessProfiles/$(businessProfileId);
+      return isSignedIn() && (
+        request.auth.uid == businessProfileId ||
+        (exists(docPath) && (
+          get(docPath).data.ownerId == request.auth.uid ||
+          get(docPath).data.currentRenterId == request.auth.uid
+        ))
+      );
     }
     
+    /**
+     * Verifies that the requesting user is the landlord/owner of the businessProfileId resource.
+     */
+    function isProfileOwner(businessProfileId) {
+      let docPath = /databases/$(database)/documents/businessProfiles/$(businessProfileId);
+      return isSignedIn() && (
+        request.auth.uid == businessProfileId ||
+        (exists(docPath) && get(docPath).data.ownerId == request.auth.uid)
+      );
+    }
+
     /**
      * Verifies ownership for an existing document. Used for update and delete.
      * Combines ownership check with an existence check for robustness.
@@ -64,13 +82,6 @@ service cloud.firestore {
       return isOwner(businessProfileId) && resource != null;
     }
     
-    /**
-     * On Create: Validates that the new BusinessProfile's ID matches the path.
-     */
-    function isValidBusinessProfileCreate(businessProfileId) {
-      return request.resource.data.id == businessProfileId;
-    }
-
     /**
      * On Update: Enforces immutability of the BusinessProfile's ID.
      */
@@ -106,11 +117,18 @@ service cloud.firestore {
      * @principle Enforces self-creation and strict document ownership. Prevents data enumeration.
      */
     match /businessProfiles/{businessProfileId} {
-      allow get: if isOwner(businessProfileId);
-      allow list: if false;
-      allow create: if isOwner(businessProfileId) && isValidBusinessProfileCreate(businessProfileId);
-      allow update: if isExistingOwner(businessProfileId) && isImmutableBusinessProfile();
-      allow delete: if isExistingOwner(businessProfileId);
+      allow get: if (resource == null) || (resource.data.get('isPubliclyListed', false) == true) || (isSignedIn() && (
+        request.auth.uid == businessProfileId ||
+        resource.data.get('ownerId', '') == request.auth.uid ||
+        resource.data.get('currentRenterId', '') == request.auth.uid
+      ));
+      allow list: if (resource != null && resource.data.get('isPubliclyListed', false) == true) || isSignedIn();
+      allow create: if isSignedIn() && (
+        request.auth.uid == businessProfileId ||
+        request.resource.data.ownerId == request.auth.uid
+      );
+      allow update: if isProfileOwner(businessProfileId) && isImmutableBusinessProfile();
+      allow delete: if isProfileOwner(businessProfileId);
 
       // --------------------------------------------------------------------
       // Custom Greetings Subcollection
@@ -322,6 +340,14 @@ service cloud.firestore {
     // ----------------------------------------------------------------------
     match /deals/{dealId} {
       allow create, read, update, delete: if true;
+    }
+
+    // ----------------------------------------------------------------------
+    // T3 Automations User Roles (Top-Level)
+    // ----------------------------------------------------------------------
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && request.auth.uid == userId;
     }
     // ----------------------------------------------------------------------
     // Agency Global Config (Top-Level)

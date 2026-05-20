@@ -8,9 +8,9 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy } from 'firebase/firestore';
-import { CallLog } from '@/types/crm';
+import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, doc, query, orderBy, where } from 'firebase/firestore';
+import { CallLog, BusinessProfile } from '@/types/crm';
 import { useParams } from 'next/navigation';
 import {
   Select,
@@ -65,43 +65,65 @@ export default function AgentAnalyticsPage() {
 
   const [period, setPeriod] = React.useState('last-7-days');
 
+  const profileDocRef = useMemoFirebase(() => {
+    if (!userIdSlug || !firestore) return null;
+    return doc(firestore, 'businessProfiles', userIdSlug);
+  }, [userIdSlug, firestore]);
+
+  const { data: businessProfile, isLoading: isProfileLoading } = useDoc<BusinessProfile>(profileDocRef);
+
   const agentsRef = useMemoFirebase(() => {
-    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(collection(firestore, `businessProfiles/${user.uid}/agents`));
+    if (!user || !firestore) return null;
+    return query(collection(firestore, `businessProfiles/${userIdSlug}/agents`));
   }, [user, firestore, userIdSlug]);
 
   const { data: agentsData, isLoading: isAgentsLoading } = useCollection(agentsRef);
   const agentId = agentsData?.[0]?.id;
 
   const callsRef = useMemoFirebase(() => {
-    if (!user || !firestore || !agentId || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(
-      collection(firestore, `businessProfiles/${user.uid}/agents/${agentId}/conversations`),
-      orderBy('startedAt', 'asc')
-    );
-  }, [user, firestore, userIdSlug, agentId]);
+    if (!user || !firestore || !agentId) return null;
+    const callsCol = collection(firestore, `businessProfiles/${userIdSlug}/agents/${agentId}/conversations`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(callsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(callsCol);
+  }, [user, firestore, userIdSlug, agentId, businessProfile]);
 
   const { data: callsData, isLoading: isCallsLoading } = useCollection(callsRef);
 
   const leadsRef = useMemoFirebase(() => {
-    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(collection(firestore, `businessProfiles/${user.uid}/leads`), orderBy('createdAt', 'desc'));
-  }, [user, firestore, userIdSlug]);
+    if (!user || !firestore) return null;
+    const leadsCol = collection(firestore, `businessProfiles/${userIdSlug}/leads`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(leadsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(leadsCol);
+  }, [user, firestore, userIdSlug, businessProfile]);
 
   const { data: leadsData, isLoading: isLeadsLoading } = useCollection(leadsRef);
 
-  if (isAgentsLoading || isCallsLoading || isLeadsLoading) {
-    return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
-  }
-
-  const calls = (callsData || []) as CallLog[];
-  const leads = (leadsData || []) as any[];
   const parseDate = (val: any) => {
     if (!val) return new Date();
     if (typeof val.toDate === 'function') return val.toDate();
     if (val.seconds) return new Date(val.seconds * 1000);
     return new Date(val);
   };
+
+  if (isProfileLoading || isAgentsLoading || isCallsLoading || isLeadsLoading) {
+    return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
+  }
+
+  const calls = ((callsData || []) as CallLog[]).sort((a, b) => {
+    const timeA = parseDate(a.startedAt).getTime();
+    const timeB = parseDate(b.startedAt).getTime();
+    return timeA - timeB;
+  });
+
+  const leads = ((leadsData || []) as any[]).sort((a, b) => {
+    const timeA = parseDate(a.createdAt).getTime();
+    const timeB = parseDate(b.createdAt).getTime();
+    return timeB - timeA;
+  });
 
   const numDays = period === 'last-30-days' ? 30 : period === 'last-90-days' ? 90 : 7;
   

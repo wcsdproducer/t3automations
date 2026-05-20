@@ -1,6 +1,35 @@
 export type LeadSource = 'landing-page' | 'inbound-call' | 'manual';
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'closed';
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  role: 'landlord' | 'renter';
+}
+
+export interface BusinessProfile {
+  id: string;
+  businessName: string;
+  contactEmail: string;
+  phoneNumber: string;
+  websiteUrl?: string;
+  logoUrl?: string;
+  service: string;
+  defaultLandingPage: string;
+  heroEffect?: 'slideshow' | 'parallax';
+  ownerId: string;
+  currentRenterId: string | null;
+  isPubliclyListed: boolean;
+  monthlyRentPrice: number;
+  stripePriceId?: string;
+  bookingLink?: string; // Cal.com booking link
+  monthlyLeadCap?: number;
+  leadForwardingEmail?: string;
+  leadForwardingPhone?: string;
+  leadForwardingEnabled?: boolean;
+  niche?: string;
+}
+
 export interface CallLog {
   callSid: string;
   agentId: string;
@@ -13,6 +42,7 @@ export interface CallLog {
   leadId: string | null;
   startedAt: string;
   recordingUrl?: string;
+  assignedRenterId?: string | null;
 }
 
 export interface Lead {
@@ -26,4 +56,6 @@ export interface Lead {
   agentSummary: string;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
+  assignedRenterId?: string | null;
 }
+

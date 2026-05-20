@@ -27,14 +27,19 @@ export async function POST(req: Request) {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.client_reference_id;
+      const renterId = session.metadata?.renterId;
       
       if (userId) {
-        await db.collection('businessProfiles').doc(userId).set({
+        const updateData: Record<string, any> = {
           subscriptionStatus: 'active',
           stripeSubscriptionId: session.subscription,
           stripeCustomerId: session.customer,
           updatedAt: new Date().toISOString(),
-        }, { merge: true });
+        };
+        if (renterId) {
+          updateData.currentRenterId = renterId;
+        }
+        await db.collection('businessProfiles').doc(userId).set(updateData, { merge: true });
       }
     } else if (event.type === 'customer.subscription.deleted') {
       const subscription = event.data.object as Stripe.Subscription;

@@ -173,16 +173,16 @@ export default function AgentSettingsPage() {
   const [urlLink, setUrlLink] = useState('');
 
   const agentsRef = useMemoFirebase(() => {
-    if (!user || !db || user.uid.slice(-12) !== userId) return null;
-    return query(collection(db, `businessProfiles/${user.uid}/agents`));
+    if (!user || !db) return null;
+    return query(collection(db, `businessProfiles/${userId}/agents`));
   }, [user, db, userId]);
 
   const { data: agentsData, isLoading: isAgentsLoading } = useCollection(agentsRef);
   const agentId = agentsData?.[0]?.id;
 
   const agentDocRef = useMemoFirebase(
-    () => (db && user && agentId ? doc(db, 'businessProfiles', user.uid, 'agents', agentId) : null),
-    [db, user, agentId]
+    () => (db && user && agentId ? doc(db, 'businessProfiles', userId, 'agents', agentId) : null),
+    [db, user, agentId, userId]
   );
 
   const { data: agent, isLoading: isAgentLoading, error } = useDoc(agentDocRef);
@@ -199,7 +199,7 @@ export default function AgentSettingsPage() {
           systemPrompt: defaultPromptPlaceholder,
           voiceId: 'cjVigY5qzO86Huf0OWa1',
           firstMessage: 'Hello! How can I assist you today?',
-          userId: user.uid
+          userId: userId
         };
 
         const res = await fetch(`/api/elevenlabs/agents`, {
@@ -221,11 +221,10 @@ export default function AgentSettingsPage() {
             voiceId: 'cjVigY5qzO86Huf0OWa1',
             elevenLabsAgentId: newElevenLabsAgentId,
           });
-        } else {
-          const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+          const newDocRef = doc(collection(db, `businessProfiles/${userId}/agents`));
           await setDoc(newDocRef, {
             id: newDocRef.id,
-            businessProfileId: user.uid,
+            businessProfileId: userId,
             systemPrompt: defaultPromptPlaceholder,
             firstMessage: 'Hello! How can I assist you today?',
             voiceId: 'cjVigY5qzO86Huf0OWa1',
@@ -277,7 +276,7 @@ export default function AgentSettingsPage() {
         systemPrompt,
         voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
         firstMessage: firstMessage || "Hello! How can I assist you today?",
-        userId: user.uid
+        userId: userId
       };
 
       if (newElevenLabsAgentId) {
@@ -314,10 +313,10 @@ export default function AgentSettingsPage() {
           telnyxPhoneNumber,
         });
       } else {
-        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        const newDocRef = doc(collection(db, `businessProfiles/${userId}/agents`));
         await setDoc(newDocRef, {
           id: newDocRef.id,
-          businessProfileId: user.uid,
+          businessProfileId: userId,
           systemPrompt,
           firstMessage,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
@@ -352,10 +351,10 @@ export default function AgentSettingsPage() {
           telnyxPhoneNumber: phoneNumber,
         });
       } else {
-        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        const newDocRef = doc(collection(db, `businessProfiles/${userId}/agents`));
         await setDoc(newDocRef, {
           id: newDocRef.id,
-          businessProfileId: user.uid,
+          businessProfileId: userId,
           systemPrompt,
           voiceId: voiceId || 'cjVigY5qzO86Huf0OWa1',
           elevenLabsAgentId,
@@ -370,7 +369,7 @@ export default function AgentSettingsPage() {
           body: JSON.stringify({
             phoneNumber,
             agentId: elevenLabsAgentId,
-            uid: user.uid
+            uid: userId
           })
         });
       }
@@ -392,11 +391,11 @@ export default function AgentSettingsPage() {
   };
 
   const fetchDocuments = async () => {
-    if (!user || !db) return;
+    if (!user || !db || !userId) return;
     setIsDocsLoading(true);
     try {
       const q = query(
-        collection(db, 'businessProfiles', user.uid, 'knowledgeBase'),
+        collection(db, 'businessProfiles', userId, 'knowledgeBase'),
         orderBy('createdAt', 'desc')
       );
       const querySnapshot = await getDocs(q);
@@ -414,11 +413,11 @@ export default function AgentSettingsPage() {
   };
 
   const fetchPhoneNumber = async () => {
-    if (!user || !db) return;
+    if (!user || !db || !userId) return;
     setIsPhoneNumbersLoading(true);
     try {
       const q = query(
-        collection(db, 'businessProfiles', user.uid, 'phoneNumbers'),
+        collection(db, 'businessProfiles', userId, 'phoneNumbers'),
         limit(1)
       );
       const querySnapshot = await getDocs(q);
@@ -438,7 +437,7 @@ export default function AgentSettingsPage() {
   };
 
   useEffect(() => {
-    if (user && user.uid.slice(-12) === userId) {
+    if (user && userId) {
       fetchDocuments();
       fetchPhoneNumber();
     }
@@ -473,9 +472,9 @@ export default function AgentSettingsPage() {
         throw new Error(errorData.error || 'Failed to sync knowledge to ElevenLabs agent');
       }
 
-      await setDoc(doc(db, 'businessProfiles', user.uid, 'knowledgeBase', docId), {
+      await setDoc(doc(db, 'businessProfiles', userId, 'knowledgeBase', docId), {
         id: docId,
-        businessProfileId: user.uid,
+        businessProfileId: userId,
         title: textTitle,
         content: textContent,
         sourceType: 'text',
@@ -495,7 +494,7 @@ export default function AgentSettingsPage() {
 
   const handleAddUrl = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !db || !urlTitle || !urlLink) return;
+    if (!user || !db || !userId || !urlTitle || !urlLink) return;
 
     if (!elevenLabsAgentId) {
       toast({ title: 'Error', description: 'Please create an ElevenLabs Agent first by saving General Settings.', variant: 'destructive' });
@@ -521,9 +520,9 @@ export default function AgentSettingsPage() {
         throw new Error(errorData.error || 'Failed to sync URL to ElevenLabs agent');
       }
 
-      await setDoc(doc(db, 'businessProfiles', user.uid, 'knowledgeBase', docId), {
+      await setDoc(doc(db, 'businessProfiles', userId, 'knowledgeBase', docId), {
         id: docId,
-        businessProfileId: user.uid,
+        businessProfileId: userId,
         title: urlTitle,
         content: 'Synced to ElevenLabs agent successfully.', 
         sourceType: 'url',
@@ -546,11 +545,11 @@ export default function AgentSettingsPage() {
   };
 
   const handleDeleteDoc = async (docId: string) => {
-    if (!user || !db) return;
+    if (!user || !db || !userId) return;
     if (!confirm('Are you sure you want to delete this document?')) return;
     
     try {
-      await deleteDoc(doc(db, 'businessProfiles', user.uid, 'knowledgeBase', docId));
+      await deleteDoc(doc(db, 'businessProfiles', userId, 'knowledgeBase', docId));
       toast({ title: 'Success', description: 'Document deleted' });
       setDocuments(docs => docs.filter(d => d.id !== docId));
     } catch (error) {
@@ -589,7 +588,7 @@ export default function AgentSettingsPage() {
           const deactivateRes = await fetch('/api/telnyx/deactivate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phoneNumber: purchasedNumber.phoneNumber, uid: user.uid })
+            body: JSON.stringify({ phoneNumber: purchasedNumber.phoneNumber, uid: userId })
           });
           if (!deactivateRes.ok) {
             const errData = await deactivateRes.json().catch(() => ({}));
@@ -597,7 +596,7 @@ export default function AgentSettingsPage() {
           }
           // Remove old number from Firestore
           if (purchasedNumber.id) {
-            await deleteDoc(doc(db!, 'businessProfiles', user.uid, 'phoneNumbers', purchasedNumber.id));
+            await deleteDoc(doc(db!, 'businessProfiles', userId, 'phoneNumbers', purchasedNumber.id));
           }
         } catch (deactivateErr) {
           console.warn('Old number deactivation failed (proceeding):', deactivateErr);
@@ -609,7 +608,7 @@ export default function AgentSettingsPage() {
       const res = await fetch(`/api/telnyx/purchase`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber, uid: user.uid })
+        body: JSON.stringify({ phoneNumber, uid: userId })
       });
       const data = await res.json();
       if (data.success) {
@@ -661,10 +660,10 @@ export default function AgentSettingsPage() {
           voiceSimilarityBoost: voiceSettings.similarityBoost
         });
       } else {
-        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        const newDocRef = doc(collection(db, `businessProfiles/${userId}/agents`));
         await setDoc(newDocRef, {
           id: newDocRef.id,
-          businessProfileId: user.uid,
+          businessProfileId: userId,
           voiceId: editingVoice.voice_id,
           customVoiceName: voiceSettings.name,
           voiceStability: voiceSettings.stability,
@@ -798,10 +797,10 @@ export default function AgentSettingsPage() {
       if (agentDocRef) {
         await updateDoc(agentDocRef, { voiceId: id, elevenLabsAgentId: newElevenLabsAgentId, telnyxPhoneNumber: phoneToAssign });
       } else {
-        const newDocRef = doc(collection(db, `businessProfiles/${user.uid}/agents`));
+        const newDocRef = doc(collection(db, `businessProfiles/${userId}/agents`));
         await setDoc(newDocRef, { 
           id: newDocRef.id,
-          businessProfileId: user.uid,
+          businessProfileId: userId,
           voiceId: id,
           elevenLabsAgentId: newElevenLabsAgentId,
           telnyxPhoneNumber: phoneToAssign,
@@ -818,7 +817,7 @@ export default function AgentSettingsPage() {
           body: JSON.stringify({
             phoneNumber: phoneToAssign,
             agentId: newElevenLabsAgentId,
-            uid: user.uid
+            uid: userId
           })
         }).catch(err => console.warn('SIP config failed (non-blocking):', err));
         setTelnyxPhoneNumber(phoneToAssign);

@@ -2,6 +2,7 @@
 
 import { admin } from '@/lib/firebase-admin';
 import { z } from 'zod';
+import { triggerLeadAlerts } from '@/lib/alerts';
 
 const leadSchema = z.object({
   businessProfileId: z.string().min(1, 'Business profile ID is required'),
@@ -36,6 +37,11 @@ export async function submitLead(formData: z.infer<typeof leadSchema>) {
     };
 
     await leadRef.set(newLead);
+
+    // Trigger alerts in background
+    triggerLeadAlerts(validatedData.businessProfileId, newLead).catch(err => {
+      console.error('Failed to trigger lead alert:', err);
+    });
 
     return { success: true };
   } catch (error) {

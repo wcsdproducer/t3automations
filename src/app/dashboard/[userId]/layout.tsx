@@ -2,9 +2,11 @@
 
 import React from 'react';
 import pkg from '../../../../package.json';
-import { useUser, useAuth } from '@/firebase';
+import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { doc } from 'firebase/firestore';
+import { BusinessProfile } from '@/types/crm';
 import {
   Settings,
   Shield,
@@ -110,19 +112,50 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, isUserLoading } = useUser();
   const params = useParams();
   const router = useRouter();
+  const firestore = useFirestore();
   const userIdSlug = params.userId as string;
 
+  const docRef = useMemoFirebase(() => {
+    if (!userIdSlug) return null;
+    return doc(firestore, 'businessProfiles', userIdSlug);
+  }, [firestore, userIdSlug]);
+
+  const { data: businessProfile, isLoading: isProfileLoading, error: profileError } = useDoc<BusinessProfile>(docRef);
+  const isOwner = businessProfile ? businessProfile.ownerId === user?.uid : user?.uid ? user.uid.slice(-12) === userIdSlug : false;
+
   React.useEffect(() => {
-    if (!isUserLoading) {
+    if (!isUserLoading && !isProfileLoading) {
       if (!user) {
         router.push('/login');
-      } else if (user.uid.slice(-12) !== userIdSlug) {
-        router.push(`/dashboard/${user.uid.slice(-12)}`);
+        return;
+      }
+
+      if (profileError) {
+        console.error("No access to this site dashboard:", profileError);
+        router.push('/dashboard');
+        return;
+      }
+
+      if (!businessProfile) {
+        // Fallback check for legacy match format
+        if (user.uid.slice(-12) !== userIdSlug) {
+          router.push('/dashboard');
+        }
+        return;
+      }
+
+      const hasAccess = 
+        user.uid.slice(-12) === userIdSlug || 
+        businessProfile.ownerId === user.uid || 
+        businessProfile.currentRenterId === user.uid;
+
+      if (!hasAccess) {
+        router.push('/dashboard');
       }
     }
-  }, [user, isUserLoading, userIdSlug, router]);
+  }, [user, isUserLoading, businessProfile, isProfileLoading, userIdSlug, router, profileError]);
 
-  if (isUserLoading || !user || user.uid.slice(-12) !== userIdSlug) {
+  if (isUserLoading || isProfileLoading || !user) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
         <p>Loading...</p>
@@ -148,6 +181,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="text-[11px] text-muted-foreground font-mono tracking-wide">ID: {user.uid.slice(-6)}</span>
             </div>
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
+              {isOwner && (
+                <SidebarNavLink href="/dashboard">
+                  <LayoutGrid className="h-4 w-4 text-indigo-400" />
+                  Portfolio List
+                </SidebarNavLink>
+              )}
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
                 <BarChart className="h-4 w-4" />
                 Analytics
@@ -160,34 +199,42 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Users className="h-4 w-4" />
                 Leads
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/campaigns`}>
-                <Megaphone className="h-4 w-4" />
-                Campaigns
-              </SidebarNavLink>
+              {isOwner && (
+                <>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/campaigns`}>
+                    <Megaphone className="h-4 w-4" />
+                    Campaigns
+                  </SidebarNavLink>
+                </>
+              )}
               <SidebarNavLink href={`/dashboard/${userIdSlug}/calendar`}>
                 <Book className="h-4 w-4" />
                 Calendar & Booking
               </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
-                <LayoutTemplate className="h-4 w-4" />
-                Landing Page Editor
-              </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/domains`}>
-                <Globe className="h-4 w-4" />
-                Domain Management
-              </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/agent-settings`}>
-                <Cog className="h-4 w-4" />
-                AI Voice Agent
-              </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
-                <Settings className="h-4 w-4" />
-                Company Details
-              </SidebarNavLink>
-              <SidebarNavLink href={`/dashboard/${userIdSlug}/billing`}>
-                <CreditCard className="h-4 w-4" />
-                Billing
-              </SidebarNavLink>
+              {isOwner && (
+                <>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
+                    <LayoutTemplate className="h-4 w-4" />
+                    Landing Page Editor
+                  </SidebarNavLink>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/domains`}>
+                    <Globe className="h-4 w-4" />
+                    Domain Management
+                  </SidebarNavLink>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/agent-settings`}>
+                    <Cog className="h-4 w-4" />
+                    AI Voice Agent
+                  </SidebarNavLink>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
+                    <Settings className="h-4 w-4" />
+                    Company Details
+                  </SidebarNavLink>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/billing`}>
+                    <CreditCard className="h-4 w-4" />
+                    Billing
+                  </SidebarNavLink>
+                </>
+              )}
             </nav>
           </div>
           <div className="mt-auto p-4 border-t">

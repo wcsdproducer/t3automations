@@ -17,7 +17,9 @@ import { T3LogoText } from '../ui/logo';
 import { LanguageSelector } from '../ui/language-selector';
 import TranslatedText from '../TranslatedText';
 
-const navLinks: { href: string; label: string }[] = [];
+const navLinks: { href: string; label: string }[] = [
+  { href: '/marketplace', label: 'Marketplace' },
+];
 
 export default function Header() {
   const [isClient, setIsClient] = React.useState(false);

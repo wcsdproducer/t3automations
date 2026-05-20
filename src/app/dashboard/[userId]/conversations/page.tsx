@@ -30,10 +30,10 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, doc, query, orderBy, where } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
-import { CallLog, Lead } from '@/types/crm';
+import { CallLog, Lead, BusinessProfile } from '@/types/crm';
 import { Appointment } from '@/types/calendar';
 import { Badge } from '@/components/ui/badge';
 import { formatPhoneNumber } from '@/lib/utils';
@@ -89,43 +89,70 @@ export default function ConversationsPage() {
   const [period, setPeriod] = useState('last-30-days');
   const [selectedCallId, setSelectedCallId] = useState<string | null>(null);
 
+  const profileDocRef = useMemoFirebase(() => {
+    if (!userIdSlug || !firestore) return null;
+    return doc(firestore, 'businessProfiles', userIdSlug);
+  }, [userIdSlug, firestore]);
+
+  const { data: businessProfile, isLoading: isProfileLoading } = useDoc<BusinessProfile>(profileDocRef);
+
   const agentsRef = useMemoFirebase(() => {
-    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(collection(firestore, `businessProfiles/${user.uid}/agents`));
+    if (!user || !firestore) return null;
+    return query(collection(firestore, `businessProfiles/${userIdSlug}/agents`));
   }, [user, firestore, userIdSlug]);
 
   const { data: agentsData, isLoading: isAgentsLoading } = useCollection(agentsRef);
   const agentId = agentsData?.[0]?.id;
 
   const callsRef = useMemoFirebase(() => {
-    if (!user || !firestore || !agentId || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(
-      collection(firestore, `businessProfiles/${user.uid}/agents/${agentId}/conversations`),
-      orderBy('startedAt', 'desc')
-    );
-  }, [user, firestore, userIdSlug, agentId]);
+    if (!user || !firestore || !agentId) return null;
+    const callsCol = collection(firestore, `businessProfiles/${userIdSlug}/agents/${agentId}/conversations`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(callsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(callsCol);
+  }, [user, firestore, userIdSlug, agentId, businessProfile]);
 
   const { data: callsData, isLoading: isCallsLoading } = useCollection(callsRef);
 
   const leadsRef = useMemoFirebase(() => {
-    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(collection(firestore, `businessProfiles/${user.uid}/leads`));
-  }, [user, firestore, userIdSlug]);
+    if (!user || !firestore) return null;
+    const leadsCol = collection(firestore, `businessProfiles/${userIdSlug}/leads`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(leadsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(leadsCol);
+  }, [user, firestore, userIdSlug, businessProfile]);
 
   const { data: leadsData, isLoading: isLeadsLoading } = useCollection(leadsRef);
 
   const appointmentsRef = useMemoFirebase(() => {
-    if (!user || !firestore || user.uid.slice(-12) !== userIdSlug) return null;
-    return query(collection(firestore, `businessProfiles/${user.uid}/appointments`));
-  }, [user, firestore, userIdSlug]);
+    if (!user || !firestore) return null;
+    const apptsCol = collection(firestore, `businessProfiles/${userIdSlug}/appointments`);
+    if (businessProfile && businessProfile.currentRenterId === user.uid) {
+      return query(apptsCol, where('assignedRenterId', '==', user.uid));
+    }
+    return query(apptsCol);
+  }, [user, firestore, userIdSlug, businessProfile]);
 
   const { data: appointmentsData, isLoading: isAppointmentsLoading } = useCollection(appointmentsRef);
 
-  if (isAgentsLoading || isCallsLoading || isLeadsLoading || isAppointmentsLoading) {
+  if (isProfileLoading || isAgentsLoading || isCallsLoading || isLeadsLoading || isAppointmentsLoading) {
     return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
   }
 
-  const calls = (callsData || []) as CallLog[];
+  const parseDate = (val: any) => {
+    if (!val) return new Date();
+    if (typeof val.toDate === 'function') return val.toDate();
+    if (val.seconds) return new Date(val.seconds * 1000);
+    return new Date(val);
+  };
+
+  const calls = ((callsData || []) as CallLog[]).sort((a, b) => {
+    const timeA = parseDate(a.startedAt).getTime();
+    const timeB = parseDate(b.startedAt).getTime();
+    return timeB - timeA; // Descending order for the sidebar list of conversations
+  });
   const leads = (leadsData || []) as Lead[];
   const appointments = (appointmentsData || []) as Appointment[];
   

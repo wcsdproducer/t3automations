@@ -6,40 +6,76 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth, useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, collection } from 'firebase/firestore';
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 import { initiateGoogleSignIn } from '@/firebase/non-blocking-login';
 import TranslatedText from '@/components/TranslatedText';
+import { Suspense } from 'react';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
-      <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
-      <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
-      <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
-      <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,34.556,44,29.805,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
-    </svg>
-  );
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
+    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,34.556,44,29.805,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+  </svg>
+);
 
-export default function SignupPage() {
+function SignupForm() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const firestore = useFirestore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const rentSite = searchParams.get('rentSite');
+  const rentPrice = searchParams.get('price');
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [businessName, setBusinessName] = React.useState('');
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
+  const [redirecting, setRedirecting] = React.useState(false);
+
+  const handleRedirectToCheckout = React.useCallback(async (siteId: string, userEmail: string, uid: string, price: string) => {
+    try {
+      setRedirecting(true);
+      setError(null);
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: siteId,
+          userEmail: userEmail,
+          renterId: uid,
+          price: price ? Number(price) : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+    } catch (err: any) {
+      console.error('Checkout redirect error:', err);
+      setError(err.message || 'Could not redirect to payment. Please contact support.');
+      setRedirecting(false);
+    }
+  }, []);
 
   React.useEffect(() => {
     if (!isUserLoading && user) {
-      router.push(`/dashboard/${user.uid.slice(-12)}`);
+      if (rentSite) {
+        handleRedirectToCheckout(rentSite, user.email || '', user.uid, rentPrice || '');
+      } else {
+        router.push(`/dashboard`);
+      }
     }
-  }, [user, isUserLoading, router]);
+  }, [user, isUserLoading, router, rentSite, rentPrice, handleRedirectToCheckout]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,24 +86,52 @@ export default function SignupPage() {
       const newUser = userCredential.user;
 
       if (newUser) {
-        const businessProfileRef = doc(firestore, 'businessProfiles', newUser.uid);
-        const businessProfileData = {
-          id: newUser.uid,
-          businessName,
-          contactEmail: email,
-          phoneNumber,
-          service: 'HVAC Maintenance & Repair',
-          defaultLandingPage: 'template-3',
-        };
-        setDocumentNonBlocking(businessProfileRef, businessProfileData, {});
+        const userDocRef = doc(firestore, 'users', newUser.uid);
 
-        const agentRef = doc(collection(firestore, 'businessProfiles', newUser.uid, 'agents'));
-        setDocumentNonBlocking(agentRef, {
-          name: 'Default Agent',
-          voiceId: 'cjVigY5qzO86Huf0OWa1',
-          status: 'active'
-        }, {});
-        // The onAuthStateChanged listener will handle the redirect to the dashboard
+        if (rentSite) {
+          // Signing up to rent an existing site
+          setDocumentNonBlocking(userDocRef, {
+            id: newUser.uid,
+            email,
+            role: 'renter'
+          }, {});
+        } else {
+          // General sign up as a landlord
+          setDocumentNonBlocking(userDocRef, {
+            id: newUser.uid,
+            email,
+            role: 'landlord'
+          }, {});
+
+          const businessProfileRef = doc(firestore, 'businessProfiles', newUser.uid);
+          const businessProfileData = {
+            id: newUser.uid,
+            businessName,
+            contactEmail: email,
+            phoneNumber,
+            service: 'HVAC Maintenance & Repair',
+            defaultLandingPage: 'template-3',
+            ownerId: newUser.uid,
+            currentRenterId: null,
+            isPubliclyListed: true,
+            monthlyRentPrice: 350,
+            createdAt: new Date().toISOString()
+          };
+          setDocumentNonBlocking(businessProfileRef, businessProfileData, {});
+
+          const agentRef = doc(collection(firestore, 'businessProfiles', newUser.uid, 'agents'), 'default');
+          setDocumentNonBlocking(agentRef, {
+            id: 'default',
+            businessProfileId: newUser.uid,
+            elevenLabsAgentId: '',
+            name: `${businessName} Voice Assistant`,
+            systemPrompt: `You are a helpful, professional scheduling voice agent for ${businessName}. Your goal is to gather caller name, phone number, interest, and schedule them into the calendar.`,
+            firstMessage: `Hello, thanks for calling ${businessName}! How can I help you today?`,
+            voiceId: '21m00Tcm4TlvDq8ikWAM', // Rachel
+            status: 'active',
+            createdAt: new Date().toISOString()
+          }, {});
+        }
       }
     } catch (err: any) {
       console.error(err);
@@ -79,37 +143,54 @@ export default function SignupPage() {
     initiateGoogleSignIn(auth, firestore, (err) => setError(err.message));
   };
 
-
-  if (isUserLoading || user) {
+  if (isUserLoading || user || redirecting) {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center">
-            <p><TranslatedText>Loading...</TranslatedText></p>
-        </div>
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-600"></div>
+        <p className="mt-4 text-muted-foreground text-sm font-medium">
+          {redirecting ? <TranslatedText>Redirecting to secure payment checkout...</TranslatedText> : <TranslatedText>Loading...</TranslatedText>}
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-muted/40 py-12">
-      <Card className="w-full max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl"><TranslatedText>Sign Up</TranslatedText></CardTitle>
-            <CardDescription><TranslatedText>Create an account to get started.</TranslatedText></CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b0f19] py-12 px-4">
+      <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-slate-100 shadow-2xl">
+        <CardHeader>
+          <CardTitle className="text-2xl text-white font-extrabold tracking-tight">
+            {rentSite ? (
+              <span><TranslatedText>Create Renter Account</TranslatedText></span>
+            ) : (
+              <span><TranslatedText>Sign Up</TranslatedText></span>
+            )}
+          </CardTitle>
+          <CardDescription className="text-slate-400">
+            {rentSite ? (
+              <span><TranslatedText>Complete signup to lease this digital asset.</TranslatedText></span>
+            ) : (
+              <span><TranslatedText>Create a landlord account to host sites.</TranslatedText></span>
+            )}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
           <form onSubmit={handleSignUp}>
-            <div className="grid gap-2">
-              <Label htmlFor="businessName"><TranslatedText>Business Name</TranslatedText></Label>
-              <Input
-                id="businessName"
-                type="text"
-                placeholder="Acme Inc."
-                required
-                value={businessName}
-                onChange={(e) => setBusinessName(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2 mt-4">
-              <Label htmlFor="email"><TranslatedText>Email</TranslatedText></Label>
+            {!rentSite && (
+              <div className="grid gap-2">
+                <Label htmlFor="businessName" className="text-slate-355"><TranslatedText>Business Name</TranslatedText></Label>
+                <Input
+                  id="businessName"
+                  type="text"
+                  placeholder="Acme Inc."
+                  required
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
+                />
+              </div>
+            )}
+            <div className={`grid gap-2 ${!rentSite ? 'mt-4' : ''}`}>
+              <Label htmlFor="email" className="text-slate-355"><TranslatedText>Email Address</TranslatedText></Label>
               <Input
                 id="email"
                 type="email"
@@ -117,21 +198,25 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
               />
             </div>
-             <div className="grid gap-2 mt-4">
-              <Label htmlFor="phoneNumber"><TranslatedText>Phone Number</TranslatedText></Label>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                placeholder="(123) 456-7890"
-                required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
+            {!rentSite && (
+              <div className="grid gap-2 mt-4">
+                <Label htmlFor="phoneNumber" className="text-slate-355"><TranslatedText>Phone Number</TranslatedText></Label>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  placeholder="(123) 456-7890"
+                  required
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
+                />
+              </div>
+            )}
             <div className="grid gap-2 mt-4">
-              <Label htmlFor="password"><TranslatedText>Password</TranslatedText></Label>
+              <Label htmlFor="password" className="text-slate-355"><TranslatedText>Password</TranslatedText></Label>
               <Input
                 id="password"
                 type="password"
@@ -139,30 +224,51 @@ export default function SignupPage() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
               />
             </div>
             {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-            <Button className="w-full mt-6"><TranslatedText>Sign up</TranslatedText></Button>
-            </form>
-            <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground"><TranslatedText>Or continue with</TranslatedText></span>
-                </div>
-            </div>
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
-                <GoogleIcon className="mr-2 h-4 w-4" />
-                <TranslatedText>Google</TranslatedText>
+            <Button className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all">
+              {rentSite ? <TranslatedText>Sign Up & Continue</TranslatedText> : <TranslatedText>Sign Up</TranslatedText>}
             </Button>
-          </CardContent>
-          <CardFooter className="flex-col gap-4">
-             <div className="text-sm text-center">
-                <TranslatedText>Already have an account?</TranslatedText> <Link href="/login" className='underline'><TranslatedText>Log in</TranslatedText></Link>
+          </form>
+          
+          <div className="relative my-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-slate-800" />
             </div>
-          </CardFooter>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-slate-900 px-2 text-slate-500"><TranslatedText>Or continue with</TranslatedText></span>
+            </div>
+          </div>
+          
+          <Button variant="outline" className="w-full border-slate-850 hover:bg-slate-800 hover:text-white" onClick={handleGoogleSignIn}>
+            <GoogleIcon className="mr-2 h-4 w-4" />
+            <TranslatedText>Google</TranslatedText>
+          </Button>
+        </CardContent>
+        <CardFooter className="flex-col gap-4 border-t border-slate-850 pt-4">
+          <div className="text-sm text-center text-slate-400">
+            <TranslatedText>Already have an account?</TranslatedText>{' '}
+            <Link href={rentSite ? `/login?rentSite=${rentSite}&price=${rentPrice}` : '/login'} className="underline text-indigo-400 hover:text-indigo-300">
+              <TranslatedText>Log in</TranslatedText>
+            </Link>
+          </div>
+        </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b0f19]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-600"></div>
+        <p className="mt-4 text-slate-400 text-sm font-medium"><TranslatedText>Loading signup details...</TranslatedText></p>
+      </div>
+    }>
+      <SignupForm />
+    </Suspense>
   );
 }
