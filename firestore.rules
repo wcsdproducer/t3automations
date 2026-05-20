@@ -49,13 +49,22 @@ service cloud.firestore {
     }
 
     /**
+     * Checks if the requesting user is a platform administrator.
+     */
+    function isAdmin() {
+      let adminProfilePath = /databases/$(database)/documents/businessProfiles/$(request.auth.uid);
+      return isSignedIn() && exists(adminProfilePath) && get(adminProfilePath).data.get('IsAdmin', false) == true;
+    }
+
+    /**
      * Verifies that the requesting user has access to the businessProfileId resource.
-     * This checks for legacy UID matches, ownerId (Landlord), or currentRenterId (Renter).
+     * This checks for legacy UID matches, ownerId (Landlord), currentRenterId (Renter), or Admin status.
      */
     function isOwner(businessProfileId) {
       let docPath = /databases/$(database)/documents/businessProfiles/$(businessProfileId);
       return isSignedIn() && (
         request.auth.uid == businessProfileId ||
+        isAdmin() ||
         (exists(docPath) && (
           get(docPath).data.ownerId == request.auth.uid ||
           get(docPath).data.currentRenterId == request.auth.uid
@@ -70,6 +79,7 @@ service cloud.firestore {
       let docPath = /databases/$(database)/documents/businessProfiles/$(businessProfileId);
       return isSignedIn() && (
         request.auth.uid == businessProfileId ||
+        isAdmin() ||
         (exists(docPath) && get(docPath).data.ownerId == request.auth.uid)
       );
     }
@@ -119,12 +129,14 @@ service cloud.firestore {
     match /businessProfiles/{businessProfileId} {
       allow get: if (resource == null) || (resource.data.get('isPubliclyListed', false) == true) || (isSignedIn() && (
         request.auth.uid == businessProfileId ||
+        isAdmin() ||
         resource.data.get('ownerId', '') == request.auth.uid ||
         resource.data.get('currentRenterId', '') == request.auth.uid
       ));
       allow list: if (resource != null && resource.data.get('isPubliclyListed', false) == true) || isSignedIn();
       allow create: if isSignedIn() && (
         request.auth.uid == businessProfileId ||
+        isAdmin() ||
         request.resource.data.ownerId == request.auth.uid
       );
       allow update: if isProfileOwner(businessProfileId) && isImmutableBusinessProfile();

@@ -74,6 +74,7 @@ export default function DashboardRouterPage() {
 
   const [role, setRole] = React.useState<'landlord' | 'renter' | null>(null);
   const [roleLoading, setRoleLoading] = React.useState(true);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const [newSiteOpen, setNewSiteOpen] = React.useState(false);
   const [isCreatingSite, setIsCreatingSite] = React.useState(false);
   const [rentSettingsOpen, setRentSettingsOpen] = React.useState(false);
@@ -100,11 +101,14 @@ export default function DashboardRouterPage() {
   // Memoized query to fetch landlord's owned sites
   const landlordSitesQuery = useMemoFirebase(() => {
     if (!user || role !== 'landlord') return null;
+    if (isAdmin) {
+      return query(collection(firestore, 'businessProfiles'));
+    }
     return query(
       collection(firestore, 'businessProfiles'), 
       where('ownerId', '==', user.uid)
     );
-  }, [user, role, firestore]);
+  }, [user, role, isAdmin, firestore]);
 
   const { data: ownedSites, isLoading: ownedSitesLoading } = useCollection<BusinessProfile>(landlordSitesQuery);
 
@@ -121,6 +125,13 @@ export default function DashboardRouterPage() {
         setRoleLoading(true);
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
+
+        // Check if platform administrator
+        const profileDocRef = doc(firestore, 'businessProfiles', user.uid);
+        const profileDoc = await getDoc(profileDocRef);
+        if (profileDoc.exists() && profileDoc.data()?.IsAdmin === true) {
+          setIsAdmin(true);
+        }
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
