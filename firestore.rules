@@ -66,8 +66,8 @@ service cloud.firestore {
         request.auth.uid == businessProfileId ||
         isAdmin() ||
         (exists(docPath) && (
-          get(docPath).data.ownerId == request.auth.uid ||
-          get(docPath).data.currentRenterId == request.auth.uid
+          get(docPath).data.get('ownerId', '') == request.auth.uid ||
+          get(docPath).data.get('currentRenterId', '') == request.auth.uid
         ))
       );
     }
@@ -80,7 +80,7 @@ service cloud.firestore {
       return isSignedIn() && (
         request.auth.uid == businessProfileId ||
         isAdmin() ||
-        (exists(docPath) && get(docPath).data.ownerId == request.auth.uid)
+        (exists(docPath) && get(docPath).data.get('ownerId', '') == request.auth.uid)
       );
     }
 
