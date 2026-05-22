@@ -193,7 +193,7 @@ export default function AgentAnalyticsPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-4 lg:p-4 h-full">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <h1 className="text-lg font-semibold md:text-2xl shrink-0">Analytics</h1>
+        <h1 className="text-lg font-semibold md:text-2xl shrink-0">Calls</h1>
       </div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <Select value={period} onValueChange={setPeriod}>

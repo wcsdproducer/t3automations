@@ -22,7 +22,8 @@ import {
   Megaphone,
   Cog,
   Users,
-  CreditCard
+  CreditCard,
+  ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -145,8 +146,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       if (!businessProfile) {
         // Fallback check for legacy match format
-        if (user.uid.slice(-12) !== userIdSlug) {
-          router.push('/dashboard');
+        if (!isAdmin && user.uid.slice(-12) !== userIdSlug) {
+          console.error("Access Denied (Fallback):", { isAdmin, userIdSlug });
+          // router.push('/dashboard'); // Temporarily disabled to debug
         }
         return;
       }
@@ -158,10 +160,48 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         businessProfile.currentRenterId === user.uid;
 
       if (!hasAccess) {
-        router.push('/dashboard');
+        console.error("Access Denied details:", {
+          isAdmin,
+          uidMatch: user.uid.slice(-12) === userIdSlug,
+          ownerMatch: businessProfile.ownerId === user.uid,
+          renterMatch: businessProfile.currentRenterId === user.uid,
+          userUid: user.uid,
+          userIdSlug
+        });
+        // router.push('/dashboard'); // Temporarily disabled to debug
       }
     }
   }, [user, isUserLoading, businessProfile, isProfileLoading, userIdSlug, router, profileError, isAdmin, isUserDocLoading]);
+
+  // If we shouldn't have access, show a debug screen instead of redirecting
+  if (!isUserLoading && !isProfileLoading && !isUserDocLoading && user) {
+    const hasAccess = 
+        isAdmin ||
+        user.uid.slice(-12) === userIdSlug || 
+        businessProfile?.ownerId === user.uid || 
+        businessProfile?.currentRenterId === user.uid;
+
+    if (profileError || !businessProfile || !hasAccess) {
+      return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-white p-8">
+          <h1 className="text-2xl font-bold text-red-500 mb-4">Access Denied (Debug Info)</h1>
+          <pre className="bg-slate-900 p-4 rounded text-sm overflow-auto max-w-2xl w-full text-slate-300">
+            {JSON.stringify({
+              userIdSlug,
+              userUid: user.uid,
+              isAdmin,
+              hasProfileError: !!profileError,
+              profileErrorMessage: profileError?.message,
+              hasBusinessProfile: !!businessProfile,
+              ownerId: businessProfile?.ownerId,
+              currentRenterId: businessProfile?.currentRenterId
+            }, null, 2)}
+          </pre>
+          <Button onClick={() => router.push('/dashboard')} className="mt-6">Return to Dashboard</Button>
+        </div>
+      );
+    }
+  }
 
   if (isUserLoading || isProfileLoading || isUserDocLoading || !user) {
     return (
@@ -185,19 +225,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <div className="px-4 lg:px-6 pt-3 pb-2">
-              <span className="text-[11px] text-muted-foreground font-mono tracking-wide">ID: {user.uid.slice(-6)}</span>
+            <div className="px-4 lg:px-6 pt-4 pb-4 flex flex-col gap-3">
+              {(isOwner || isAdmin) && (
+                <Link href="/dashboard" className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors">
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  Back to Admin
+                </Link>
+              )}
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-slate-200 truncate" title={businessProfile?.businessName || 'Loading...'}>
+                  {businessProfile?.businessName || 'Loading...'}
+                </span>
+                <span className="text-[10px] text-muted-foreground font-mono tracking-wide">
+                  Site ID: {userIdSlug.length > 12 ? userIdSlug.slice(0, 8) + '...' : userIdSlug}
+                </span>
+              </div>
             </div>
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
-              {(isOwner || isAdmin) && (
-                <SidebarNavLink href="/dashboard">
-                  <LayoutGrid className="h-4 w-4 text-indigo-400" />
-                  Portfolio List
-                </SidebarNavLink>
-              )}
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
                 <BarChart className="h-4 w-4" />
-                Analytics
+                Calls
               </SidebarNavLink>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/conversations`}>
                 <MessageSquare className="h-4 w-4" />
