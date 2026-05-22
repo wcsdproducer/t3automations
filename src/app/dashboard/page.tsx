@@ -83,9 +83,6 @@ export default function DashboardRouterPage() {
   // Form states for creating a new site
   const [newSiteName, setNewSiteName] = React.useState('');
   const [newSiteNiche, setNewSiteNiche] = React.useState('');
-  const [newSitePhone, setNewSitePhone] = React.useState('');
-  const [newSiteTemplate, setNewSiteTemplate] = React.useState('template-3');
-  const [newSitePrice, setNewSitePrice] = React.useState('350');
 
   // Form states for renting out a site
   const [renterEmail, setRenterEmail] = React.useState('');
@@ -263,12 +260,12 @@ export default function DashboardRouterPage() {
         businessName: newSiteName,
         contactEmail: user.email || '',
         service: newSiteNiche || 'Lead Generation Site',
-        phoneNumber: newSitePhone,
-        defaultLandingPage: newSiteTemplate,
+        phoneNumber: '',
+        defaultLandingPage: 'template-3',
         ownerId: user.uid,
         currentRenterId: null,
         isPubliclyListed: true,
-        monthlyRentPrice: Number(newSitePrice) || 350,
+        monthlyRentPrice: 0,
         niche: newSiteNiche,
         leadForwardingEnabled: false
       };
@@ -292,8 +289,6 @@ export default function DashboardRouterPage() {
       // Reset Form
       setNewSiteName('');
       setNewSiteNiche('');
-      setNewSitePhone('');
-      setNewSitePrice('350');
       setNewSiteOpen(false);
       setIsCreatingSite(false);
 
@@ -466,45 +461,7 @@ export default function DashboardRouterPage() {
                     className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
                   />
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="sitePhone" className="text-slate-300"><TranslatedText>Phone Number</TranslatedText></Label>
-                  <Input 
-                    id="sitePhone"
-                    value={newSitePhone}
-                    onChange={(e) => setNewSitePhone(e.target.value)}
-                    placeholder="e.g. +13035550192"
-                    required
-                    className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="sitePrice" className="text-slate-300"><TranslatedText>Monthly Rent ($)</TranslatedText></Label>
-                    <Input 
-                      id="sitePrice"
-                      type="number"
-                      value={newSitePrice}
-                      onChange={(e) => setNewSitePrice(e.target.value)}
-                      placeholder="350"
-                      required
-                      className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="siteTemplate" className="text-slate-300"><TranslatedText>Landing Template</TranslatedText></Label>
-                    <Select value={newSiteTemplate} onValueChange={setNewSiteTemplate}>
-                      <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
-                        <SelectValue placeholder="Select template" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-slate-900 border-slate-800 text-white">
-                        <SelectItem value="template-1">Modern Sleek (1)</SelectItem>
-                        <SelectItem value="template-2">Professional Grid (2)</SelectItem>
-                        <SelectItem value="template-3">Clean Minimal (3)</SelectItem>
-                        <SelectItem value="template-4">Feature Rich (4)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+
                 <DialogFooter className="pt-4">
                   <Button 
                     type="submit" 
