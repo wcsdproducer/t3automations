@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   collection, 
   query, 
@@ -557,11 +558,13 @@ export default function DashboardRouterPage() {
                       <TranslatedText>Rent out</TranslatedText>
                     </Button>
                     <Button 
-                      onClick={() => router.push(`/dashboard/${site.id}`)}
+                      asChild
                       className="bg-indigo-600 hover:bg-indigo-700"
                     >
-                      <TranslatedText>Manage</TranslatedText>
-                      <ArrowRight className="h-4 w-4 ml-1.5" />
+                      <Link href={`/dashboard/${site.id}`}>
+                        <TranslatedText>Manage</TranslatedText>
+                        <ArrowRight className="h-4 w-4 ml-1.5" />
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
