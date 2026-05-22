@@ -120,11 +120,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return doc(firestore, 'businessProfiles', userIdSlug);
   }, [firestore, userIdSlug]);
 
+  const userDocRef = useMemoFirebase(() => {
+    if (!user?.uid) return null;
+    return doc(firestore, 'businessProfiles', user.uid);
+  }, [firestore, user?.uid]);
+
   const { data: businessProfile, isLoading: isProfileLoading, error: profileError } = useDoc<BusinessProfile>(docRef);
+  const { data: userProfile, isLoading: isUserDocLoading } = useDoc<BusinessProfile>(userDocRef);
   const isOwner = businessProfile ? businessProfile.ownerId === user?.uid : user?.uid ? user.uid.slice(-12) === userIdSlug : false;
+  const isAdmin = userProfile?.IsAdmin === true;
 
   React.useEffect(() => {
-    if (!isUserLoading && !isProfileLoading) {
+    if (!isUserLoading && !isProfileLoading && !isUserDocLoading) {
       if (!user) {
         router.push('/login');
         return;
@@ -145,6 +152,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
 
       const hasAccess = 
+        isAdmin ||
         user.uid.slice(-12) === userIdSlug || 
         businessProfile.ownerId === user.uid || 
         businessProfile.currentRenterId === user.uid;
@@ -153,9 +161,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         router.push('/dashboard');
       }
     }
-  }, [user, isUserLoading, businessProfile, isProfileLoading, userIdSlug, router, profileError]);
+  }, [user, isUserLoading, businessProfile, isProfileLoading, userIdSlug, router, profileError, isAdmin, isUserDocLoading]);
 
-  if (isUserLoading || isProfileLoading || !user) {
+  if (isUserLoading || isProfileLoading || isUserDocLoading || !user) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
         <p>Loading...</p>
@@ -181,7 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="text-[11px] text-muted-foreground font-mono tracking-wide">ID: {user.uid.slice(-6)}</span>
             </div>
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
-              {isOwner && (
+              {(isOwner || isAdmin) && (
                 <SidebarNavLink href="/dashboard">
                   <LayoutGrid className="h-4 w-4 text-indigo-400" />
                   Portfolio List
@@ -199,7 +207,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Users className="h-4 w-4" />
                 Leads
               </SidebarNavLink>
-              {isOwner && (
+              {(isOwner || isAdmin) && (
                 <>
                   <SidebarNavLink href={`/dashboard/${userIdSlug}/campaigns`}>
                     <Megaphone className="h-4 w-4" />
@@ -211,7 +219,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Book className="h-4 w-4" />
                 Calendar & Booking
               </SidebarNavLink>
-              {isOwner && (
+              {(isOwner || isAdmin) && (
                 <>
                   <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
                     <LayoutTemplate className="h-4 w-4" />
