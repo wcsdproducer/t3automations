@@ -417,8 +417,8 @@ export default function DashboardRouterPage() {
         
         {/* Banner Card */}
         <div className="mb-8 p-6 rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
-          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 -mt-8 -mr-8 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
           
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
