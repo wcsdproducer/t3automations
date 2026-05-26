@@ -1,7 +1,8 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Star, Brush, Hammer, Building, Phone } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { Phone, Star } from 'lucide-react';
 import Image from 'next/image';
 import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Input } from '@/components/ui/input';
@@ -17,12 +18,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
+
 function formatPhone(value: string) {
   if (!value) return value;
   const d = value.replace(/\D/g, '');
   if (d.length < 4) return d;
   if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
   return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
+}
+
+function ServiceIcon({ name, className }: { name?: string; className?: string }) {
+  const Icon = (LucideIcons as any)[name || 'Wrench'] || LucideIcons.Wrench;
+  return <Icon className={className} />;
 }
 
 export function Template2Content({
@@ -33,6 +40,7 @@ export function Template2Content({
   logoUrl = '',
   companyName: companyNameProp = '',
   bookingUrl,
+  websiteConfig,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -72,7 +80,17 @@ export function Template2Content({
     }
   };
 
-  useEffect(() => { setContent(getContentForService(service)); }, [service]);
+  useEffect(() => {
+    const staticContent = getContentForService(service);
+    if (websiteConfig) {
+      setContent({
+        ...websiteConfig,
+        images: staticContent.images,
+      });
+    } else {
+      setContent(staticContent);
+    }
+  }, [service, websiteConfig]);
 
   if (!content) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
 
@@ -157,21 +175,13 @@ export function Template2Content({
             <h3 className="text-3xl font-bold">{content.services.title}</h3>
             <p className="text-muted-foreground mt-2">{content.services.subtitle}</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
-                <Brush className="h-10 w-10 text-primary" />
-                <h4 className="mt-4 text-xl font-semibold">Interior Design & Remodeling</h4>
-                <p className="mt-2 text-muted-foreground">Full-service design and construction for kitchens, bathrooms, and entire homes.</p>
-              </div>
-              <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
-                <Hammer className="h-10 w-10 text-primary" />
-                <h4 className="mt-4 text-xl font-semibold">Custom Cabinetry & Millwork</h4>
-                <p className="mt-2 text-muted-foreground">Bespoke woodworking solutions to add character and functionality to your space.</p>
-              </div>
-              <div className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
-                <Building className="h-10 w-10 text-primary" />
-                <h4 className="mt-4 text-xl font-semibold">Exterior & Landscape Design</h4>
-                <p className="mt-2 text-muted-foreground">Enhancing curb appeal and creating beautiful outdoor living areas.</p>
-              </div>
+              {content.services.items?.map((item: any, i: number) => (
+                <div key={i} className="p-6 transition-all duration-300 hover:bg-background/50 rounded-lg">
+                  <ServiceIcon name={item.icon} className="h-10 w-10 text-primary" />
+                  <h4 className="mt-4 text-xl font-semibold">{item.title}</h4>
+                  <p className="mt-2 text-muted-foreground">{item.description}</p>
+                </div>
+              ))}
             </div>
             {galleryImages.length > 0 && (
               <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -252,7 +262,7 @@ export function Template2Content({
                 />
                 <div className="grid gap-1.5 leading-none">
                   <label htmlFor="consent" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    I agree to receive SMS text messages from {companyName}.
+                    I agree to receive SMS messages from {companyName}.
                   </label>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     By checking this box, you consent to receive SMS messages regarding your inquiry. Message and data rates may apply. Reply STOP to opt-out. See our <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="underline text-primary">Privacy Policy</a> and <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="underline text-primary">Terms of Service</a>.

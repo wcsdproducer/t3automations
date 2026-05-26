@@ -273,10 +273,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </SidebarNavLink>
               {(isOwner || isAdmin) && (
                 <>
-                  <SidebarNavLink href={`/dashboard/${userIdSlug}/landing-page`}>
-                    <LayoutTemplate className="h-4 w-4" />
-                    Landing Page Editor
-                  </SidebarNavLink>
                   <SidebarNavLink href={`/dashboard/${userIdSlug}/domains`}>
                     <Globe className="h-4 w-4" />
                     Domain Management

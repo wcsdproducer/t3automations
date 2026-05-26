@@ -1,6 +1,7 @@
 'use server';
 
 import { admin, db } from '@/lib/firebase-admin';
+import { aiGenerateWebsiteContent } from '@/ai/flows/website-designer';
 
 // Server Action to create a renter account and associate it with a business profile
 export async function createRenterAccountAction(
@@ -35,6 +36,24 @@ export async function createRenterAccountAction(
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
+    // Generate AI website copy & design
+    let websiteConfig: any = null;
+    let colorPalette = 'deep-midnight';
+    let fontPair = 'modern-corporate';
+    try {
+      const generated = await aiGenerateWebsiteContent({
+        serviceCategory: niche || 'Lead Generation Site',
+        companyName: businessName,
+      });
+      websiteConfig = generated;
+      if (generated.theme) {
+        colorPalette = generated.theme.colorPalette || colorPalette;
+        fontPair = generated.theme.fontPair || fontPair;
+      }
+    } catch (e) {
+      console.error('Failed to generate AI website content, falling back to static content:', e);
+    }
+
     // 3. Create businessProfiles/{userId} doc
     await db.collection('businessProfiles').doc(userId).set({
       id: userId,
@@ -49,6 +68,9 @@ export async function createRenterAccountAction(
       monthlyRentPrice: 0,
       niche: niche || '',
       leadForwardingEnabled: false,
+      colorPalette,
+      fontPair,
+      websiteConfig: websiteConfig || null,
     });
 
     // 4. Create standard default assistant/agent skeleton for the new profile

@@ -6,7 +6,7 @@ export const ai = genkit({
   plugins: [
     googleAI(),
     anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
+      apiKey: process.env.ANTHROPIC_API_KEY || 'dummy-key',
     }),
   ],
   model: 'googleai/gemini-2.5-flash',

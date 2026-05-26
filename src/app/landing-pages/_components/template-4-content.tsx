@@ -32,6 +32,7 @@ export function Template4Content({
   logoUrl = '',
   companyName: companyNameProp = '',
   bookingUrl,
+  websiteConfig,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -70,7 +71,17 @@ export function Template4Content({
     }
   };
 
-  useEffect(() => { setContent(getContentForService(service)); }, [service]);
+  useEffect(() => {
+    const staticContent = getContentForService(service);
+    if (websiteConfig) {
+      setContent({
+        ...websiteConfig,
+        images: staticContent.images,
+      });
+    } else {
+      setContent(staticContent);
+    }
+  }, [service, websiteConfig]);
 
   if (!content) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
 

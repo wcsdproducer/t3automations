@@ -2,7 +2,8 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Check, Star, Wrench, Shield, Thermometer, Phone } from 'lucide-react';
+import { Check, Star, Phone } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import Image from 'next/image';
 import { type ImagePlaceholder } from '@/lib/placeholder-images';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,6 +26,11 @@ function formatPhone(value: string) {
   return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
 }
 
+function ServiceIcon({ name, className }: { name?: string; className?: string }) {
+  const Icon = (LucideIcons as any)[name || 'Wrench'] || LucideIcons.Wrench;
+  return <Icon className={className} />;
+}
+
 export function Template3Content({
   businessProfileId,
   heroEffect = 'slideshow',
@@ -33,6 +39,7 @@ export function Template3Content({
   logoUrl = '',
   companyName: companyNameProp = '',
   bookingUrl,
+  websiteConfig,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }));
@@ -72,7 +79,17 @@ export function Template3Content({
     }
   };
 
-  useEffect(() => { setContent(getContentForService(service)); }, [service]);
+  useEffect(() => {
+    const staticContent = getContentForService(service);
+    if (websiteConfig) {
+      setContent({
+        ...websiteConfig,
+        images: staticContent.images,
+      });
+    } else {
+      setContent(staticContent);
+    }
+  }, [service, websiteConfig]);
 
   if (!content) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
 
@@ -161,15 +178,11 @@ export function Template3Content({
             <h3 className="text-3xl font-bold">{content.services.title}</h3>
             <p className="text-muted-foreground mt-2">{content.services.subtitle}</p>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { Icon: Thermometer, title: 'AC & Furnace Repair', desc: 'Fast, reliable repairs to get your system back up and running.' },
-                { Icon: Wrench, title: 'System Maintenance', desc: "Preventative tune-ups to ensure efficiency and extend your system's life." },
-                { Icon: Shield, title: 'New System Installation', desc: 'High-efficiency solutions tailored to your home.' },
-              ].map(({ Icon, title, desc }) => (
-                <div key={title} className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                  <Icon className="h-10 w-10 mx-auto text-primary" />
-                  <h4 className="mt-4 text-xl font-semibold">{title}</h4>
-                  <p className="mt-2 text-muted-foreground">{desc}</p>
+              {content.services.items?.map((item: any, i: number) => (
+                <div key={i} className="p-6 border rounded-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                  <ServiceIcon name={item.iconName || item.icon} className="h-10 w-10 mx-auto text-primary" />
+                  <h4 className="mt-4 text-xl font-semibold">{item.title}</h4>
+                  <p className="mt-2 text-muted-foreground">{item.description}</p>
                 </div>
               ))}
             </div>

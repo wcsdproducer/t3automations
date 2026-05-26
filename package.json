@@ -14,6 +14,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "bot": "tsx bot/index.ts",
+    "generate-blogs": "tsx scripts/generate-daily-blogs.ts",
     "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {

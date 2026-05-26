@@ -15,6 +15,7 @@ export interface TemplateProps {
   fontPair?: string;
   colorPalette?: string;
   bookingUrl?: string;
+  websiteConfig?: Record<string, any>;
 }
 
 /**
@@ -31,6 +32,7 @@ export function profileToTemplateProps(profile: Record<string, any>, id?: string
     fontPair:     profile.fontPair     || 'modern-corporate',
     colorPalette: profile.colorPalette || 'deep-midnight',
     bookingUrl:   profile.bookingUrl   || '',
+    websiteConfig: profile.websiteConfig || null,
   };
 }
 
