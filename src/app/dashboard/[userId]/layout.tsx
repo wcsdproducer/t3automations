@@ -241,12 +241,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   Site ID: {userIdSlug.length > 12 ? userIdSlug.slice(0, 8) + '...' : userIdSlug}
                 </span>
               </div>
+              <a
+                href={`/pages/${userIdSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors mt-1 w-fit bg-blue-950/40 border border-blue-900/60 px-2 py-1 rounded-md"
+              >
+                <Globe className="h-3 w-3" />
+                <span>View Website ↗</span>
+              </a>
             </div>
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
                 <LineChart className="h-4 w-4" />
                 Analytics
               </SidebarNavLink>
+              <a
+                href={`/pages/${userIdSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted/50"
+              >
+                <LayoutTemplate className="h-4 w-4 text-blue-500" />
+                <span className="font-semibold text-blue-500">Preview Website ↗</span>
+              </a>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/calls`}>
                 <BarChart className="h-4 w-4" />
                 Calls
