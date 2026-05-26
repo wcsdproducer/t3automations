@@ -28,6 +28,12 @@ export interface BusinessProfile {
   leadForwardingPhone?: string;
   leadForwardingEnabled?: boolean;
   niche?: string;
+  IsAdmin?: boolean;
+  isMockAnalytics?: boolean;
+  googleAnalyticsMeasurementId?: string;
+  googleAnalyticsPropertyId?: string;
+  googleAnalyticsStreamId?: string;
+  googleAnalyticsUpdatedAt?: string;
 }
 
 export interface CallLog {

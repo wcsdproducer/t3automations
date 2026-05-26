@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { useUser, useFirestore, setDocumentNonBlocking, useCollection, useMemoFirebase } from '@/firebase';
+
 import { collection, doc, deleteDoc } from 'firebase/firestore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -62,8 +64,12 @@ function getStatusConfig(status: string) {
 
 export function CustomDomainManager() {
   const { user } = useUser();
+  const params = useParams();
   const firestore = useFirestore();
   const { toast } = useToast();
+
+  const userIdSlug = params?.userId as string;
+  const profileId = userIdSlug || user?.uid;
 
   const [domainInput, setDomainInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,15 +78,15 @@ export function CustomDomainManager() {
 
   // Memoized so useCollection gets a stable ref — prevents infinite re-render loop
   const customDomainsRef = useMemoFirebase(() => {
-    if (!user || !firestore) return null;
-    return collection(firestore, `businessProfiles/${user.uid}/customDomains`);
-  }, [user, firestore]);
+    if (!profileId || !firestore) return null;
+    return collection(firestore, `businessProfiles/${profileId}/customDomains`);
+  }, [profileId, firestore]);
 
   const { data: domains, isLoading } = useCollection(customDomainsRef);
 
   const handleAddDomain = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !firestore) return;
+    if (!profileId || !firestore) return;
 
     let domain = domainInput.trim().toLowerCase();
     domain = domain.replace(/^https?:\/\//, '');
@@ -97,10 +103,10 @@ export function CustomDomainManager() {
 
     setIsSubmitting(true);
     try {
-      const docRef = doc(firestore, `businessProfiles/${user.uid}/customDomains/${domain}`);
+      const docRef = doc(firestore, `businessProfiles/${profileId}/customDomains/${domain}`);
       await setDocumentNonBlocking(docRef, {
         id: domain,
-        businessProfileId: user.uid,
+        businessProfileId: profileId,
         domain: domain,
         status: 'pending',
         createdAt: new Date().toISOString(),
@@ -119,13 +125,13 @@ export function CustomDomainManager() {
   };
 
   const handleCheckStatus = async (domain: string) => {
-    if (!user) return;
+    if (!profileId) return;
     setCheckingDomain(domain);
     try {
       const res = await fetch('/api/check-domain-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain, userId: user.uid }),
+        body: JSON.stringify({ domain, userId: profileId }),
       });
       const data = await res.json();
 
@@ -144,9 +150,9 @@ export function CustomDomainManager() {
   };
 
   const handleConfirmRemove = async () => {
-    if (!user || !firestore || !domainToRemove) return;
+    if (!profileId || !firestore || !domainToRemove) return;
     try {
-      const docRef = doc(firestore, `businessProfiles/${user.uid}/customDomains/${domainToRemove}`);
+      const docRef = doc(firestore, `businessProfiles/${profileId}/customDomains/${domainToRemove}`);
       await deleteDoc(docRef);
       toast({ title: 'Domain Removed', description: 'The custom domain has been removed.' });
     } catch (error) {
@@ -156,6 +162,7 @@ export function CustomDomainManager() {
       setDomainToRemove(null);
     }
   };
+
 
   if (isLoading) {
     return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;

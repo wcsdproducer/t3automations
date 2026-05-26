@@ -66,6 +66,7 @@ import TranslatedText from '@/components/TranslatedText';
 import { getAuth, signOut } from 'firebase/auth';
 import { BusinessProfile } from '@/types/crm';
 import { useToast } from '@/hooks/use-toast';
+import { createRenterAccountAction } from '@/app/actions/renter';
 
 export default function DashboardRouterPage() {
   const { user, isUserLoading } = useUser();
@@ -84,6 +85,8 @@ export default function DashboardRouterPage() {
   // Form states for creating a new site
   const [newSiteName, setNewSiteName] = React.useState('');
   const [newSiteNiche, setNewSiteNiche] = React.useState('');
+  const [newSiteEmail, setNewSiteEmail] = React.useState('');
+  const [newSitePassword, setNewSitePassword] = React.useState('');
 
   // Form states for renting out a site
   const [renterEmail, setRenterEmail] = React.useState('');
@@ -109,6 +112,23 @@ export default function DashboardRouterPage() {
   }, [user, role, isAdmin, firestore]);
 
   const { data: ownedSites, isLoading: ownedSitesLoading } = useCollection<BusinessProfile>(landlordSitesQuery);
+
+  const filteredSites = React.useMemo(() => {
+    if (!ownedSites) return [];
+    return ownedSites.filter(site => {
+      const excludedIds = [
+        '6Nw77zkDqFdKearSTGxW7YMNFIf2', // Platform Administrator
+        'hkQbBIcZ6BODamj1qi4mRtCNQNp1', // T3 Automations
+        'hrFjbsiMW4ex2RpVaHYhkOmgmp72', // Test Landlord Admin
+      ];
+      const excludedNames = [
+        'Platform Administrator',
+        'T3 Automations',
+        'Test Landlord Admin',
+      ];
+      return !excludedIds.includes(site.id) && !excludedNames.includes(site.businessName);
+    });
+  }, [ownedSites]);
 
   // Fetch roles and execute routing rules
   React.useEffect(() => {
@@ -206,7 +226,7 @@ export default function DashboardRouterPage() {
 
   // Fetch lead counts for landlord's owned sites
   React.useEffect(() => {
-    const sites = ownedSites;
+    const sites = filteredSites;
     if (!sites || sites.length === 0) return;
 
     async function fetchStats(activeSites: BusinessProfile[]) {
@@ -224,7 +244,7 @@ export default function DashboardRouterPage() {
     }
 
     fetchStats(sites);
-  }, [ownedSites, firestore]);
+  }, [filteredSites, firestore]);
 
   const handleLogout = async () => {
     const auth = getAuth();
@@ -238,64 +258,31 @@ export default function DashboardRouterPage() {
 
     try {
       setIsCreatingSite(true);
-      // Slugify name
-      let siteSlug = newSiteName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-      
-      if (!siteSlug) {
-        siteSlug = `site-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const formData = new FormData();
+      formData.append('businessName', newSiteName);
+      formData.append('niche', newSiteNiche);
+      formData.append('email', newSiteEmail);
+      formData.append('password', newSitePassword);
+      formData.append('landlordUid', user.uid);
+
+      const result = await createRenterAccountAction(null, formData);
+
+      if (!result.success) {
+        throw new Error(result.message);
       }
-
-      // Check for collision
-      const siteDocRef = doc(firestore, 'businessProfiles', siteSlug);
-      const siteSnap = await getDoc(siteDocRef);
-      if (siteSnap.exists()) {
-        siteSlug = `${siteSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
-      }
-
-      const finalDocRef = doc(firestore, 'businessProfiles', siteSlug);
-      const newSiteData: BusinessProfile = {
-        id: siteSlug,
-        businessName: newSiteName,
-        contactEmail: user.email || '',
-        service: newSiteNiche || 'Lead Generation Site',
-        phoneNumber: '',
-        defaultLandingPage: 'template-3',
-        ownerId: user.uid,
-        currentRenterId: null,
-        isPubliclyListed: true,
-        monthlyRentPrice: 0,
-        niche: newSiteNiche,
-        leadForwardingEnabled: false
-      };
-
-      await setDoc(finalDocRef, newSiteData);
-
-      // Create ElevenLabs Agent skeleton document
-      const agentRef = doc(firestore, `businessProfiles/${siteSlug}/agents`, 'default');
-      await setDoc(agentRef, {
-        id: 'default',
-        businessProfileId: siteSlug,
-        elevenLabsAgentId: '',
-        name: `${newSiteName} Voice Assistant`,
-        systemPrompt: `You are a helpful, professional scheduling voice agent for ${newSiteName}. Your goal is to gather caller name, phone number, interest, and schedule them into the calendar.`,
-        firstMessage: `Hello, thanks for calling ${newSiteName}! How can I help you today?`,
-        voiceId: '21m00Tcm4TlvDq8ikWAM', // Rachel
-        status: 'active',
-        createdAt: new Date().toISOString()
-      });
 
       // Reset Form
       setNewSiteName('');
       setNewSiteNiche('');
+      setNewSiteEmail('');
+      setNewSitePassword('');
       setNewSiteOpen(false);
       setIsCreatingSite(false);
 
       toast({
         title: 'Success',
-        description: `Site "${newSiteName}" has been successfully created!`,
+        description: `Site "${newSiteName}" and renter account have been successfully created!`,
       });
     } catch (err) {
       console.error('Error creating site:', err);
@@ -462,6 +449,31 @@ export default function DashboardRouterPage() {
                     className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
                   />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="siteEmail" className="text-slate-300"><TranslatedText>Renter/User Email</TranslatedText></Label>
+                  <Input 
+                    id="siteEmail"
+                    type="email"
+                    value={newSiteEmail}
+                    onChange={(e) => setNewSiteEmail(e.target.value)}
+                    placeholder="renter@example.com"
+                    required
+                    className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="sitePassword" className="text-slate-300"><TranslatedText>Initial Password</TranslatedText></Label>
+                  <Input 
+                    id="sitePassword"
+                    type="password"
+                    value={newSitePassword}
+                    onChange={(e) => setNewSitePassword(e.target.value)}
+                    placeholder="Minimum 6 characters"
+                    required
+                    minLength={6}
+                    className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
+                  />
+                </div>
 
                 <DialogFooter className="pt-4">
                   <Button 
@@ -484,7 +496,7 @@ export default function DashboardRouterPage() {
               <Card key={n} className="bg-slate-900 border-slate-800 animate-pulse h-64"></Card>
             ))}
           </div>
-        ) : !ownedSites || ownedSites.length === 0 ? (
+        ) : !filteredSites || filteredSites.length === 0 ? (
           <div className="text-center py-16 border border-dashed border-slate-800 rounded-3xl bg-slate-900/10">
             <Briefcase className="h-16 w-16 text-slate-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-slate-300"><TranslatedText>No Active Sites</TranslatedText></h3>
@@ -494,7 +506,7 @@ export default function DashboardRouterPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ownedSites.map((site) => {
+            {filteredSites.map((site) => {
               const leadsCount = siteStats[site.id]?.leadCount ?? 0;
               const isRented = !!site.currentRenterId;
 

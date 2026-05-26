@@ -23,7 +23,8 @@ import {
   Cog,
   Users,
   CreditCard,
-  ArrowLeft
+  ArrowLeft,
+  LineChart
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -147,7 +148,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       if (!businessProfile) {
         // Fallback check for legacy match format
         if (!isAdmin && user.uid.slice(-12) !== userIdSlug) {
-          console.error("Access Denied (Fallback):", { isAdmin, userIdSlug });
+          console.warn("Access Denied (Fallback) - awaiting data:", { isAdmin, userIdSlug });
           // router.push('/dashboard'); // Temporarily disabled to debug
         }
         return;
@@ -160,7 +161,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         businessProfile.currentRenterId === user.uid;
 
       if (!hasAccess) {
-        console.error("Access Denied details:", {
+        console.warn("Access Denied details:", {
           isAdmin,
           uidMatch: user.uid.slice(-12) === userIdSlug,
           ownerMatch: businessProfile.ownerId === user.uid,
@@ -243,6 +244,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 space-y-1">
               <SidebarNavLink href={`/dashboard/${userIdSlug}`}>
+                <LineChart className="h-4 w-4" />
+                Analytics
+              </SidebarNavLink>
+              <SidebarNavLink href={`/dashboard/${userIdSlug}/calls`}>
                 <BarChart className="h-4 w-4" />
                 Calls
               </SidebarNavLink>

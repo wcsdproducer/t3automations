@@ -65,10 +65,36 @@ export default async function CustomDomainPage({
   const profile = profileDoc.data() || {};
   const templateProps = profileToTemplateProps(profile, businessProfileId);
   const template = profile.defaultLandingPage || 'template-1';
+  const measurementId = profile.googleAnalyticsMeasurementId;
 
   // 3. Render the correct template with real data
-  if (template === 'template-2') return <Template2Content {...templateProps} />;
-  if (template === 'template-3') return <Template3Content {...templateProps} />;
-  if (template === 'template-4') return <Template4Content {...templateProps} />;
-  return <Template1Content {...templateProps} />;
+  const content = (() => {
+    if (template === 'template-2') return <Template2Content {...templateProps} />;
+    if (template === 'template-3') return <Template3Content {...templateProps} />;
+    if (template === 'template-4') return <Template4Content {...templateProps} />;
+    return <Template1Content {...templateProps} />;
+  })();
+
+  return (
+    <>
+      {measurementId && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${measurementId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+        </>
+      )}
+      {content}
+    </>
+  );
 }
