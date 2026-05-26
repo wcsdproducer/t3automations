@@ -93,6 +93,7 @@ export function Template3Content({
 
   if (!content) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
 
+  const isJunkRemoval = service === 'Junk Removal' || service === 'Junk Removal & Moving';
   const phone = formatPhone(phoneProp);
   const companyName = companyNameProp || content.companyName;
   const aboutImage = content.images.about;
@@ -101,24 +102,64 @@ export function Template3Content({
 
   const heroContent = (
     <div className="relative z-10 p-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-      <p className="text-primary font-semibold">24/7 EMERGENCY REPAIR</p>
+      <p className="text-primary font-semibold tracking-wider">
+        {isJunkRemoval ? 'ECO-FRIENDLY & RELIABLE HAULING' : '24/7 EMERGENCY SERVICE'}
+      </p>
       <h1 className="text-4xl md:text-6xl font-extrabold mt-2">{content.hero.title}</h1>
       <h2 className="text-3xl md:text-5xl font-extrabold text-gray-200">{content.hero.subtitle}</h2>
       <ul className="space-y-3 mt-6 max-w-md mx-auto text-left">
-        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /><span className="font-medium">24/7 Emergency Service</span></li>
-        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /><span className="font-medium">Certified & Insured Technicians</span></li>
-        <li className="flex items-center gap-3 text-lg"><Check className="h-6 w-6 text-green-500" /><span className="font-medium">Upfront, Honest Pricing</span></li>
+        {(content.about.points || [
+          "Same-Day / Next-Day Availability",
+          "Licensed & Fully Insured Crew",
+          "Upfront, Flat-Rate Pricing"
+        ]).map((point: string, i: number) => (
+          <li key={i} className="flex items-center gap-3 text-lg">
+            <Check className="h-6 w-6 text-green-500" />
+            <span className="font-medium">{point}</span>
+          </li>
+        ))}
       </ul>
-      <div className="flex flex-col md:flex-row justify-center gap-4 mt-8">
-        <a href="#contact" className="w-full md:w-auto">
-          <Button type="button" className="w-full transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
-        </a>
-        {bookingUrl && (
-          <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
-            <Button size="lg" variant="outline" className="w-full bg-white/10 hover:bg-white/20 text-white border-white transition-transform hover:scale-105">Book Appointment</Button>
+      {isJunkRemoval ? (
+        <div className="bg-white text-slate-900 p-6 rounded-2xl shadow-xl max-w-sm mx-auto mt-8 border border-slate-200/80">
+          <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider mb-3">Check Availability</h3>
+          <div className="flex gap-2">
+            <Input 
+              type="text" 
+              placeholder="Enter Zip Code" 
+              maxLength={5} 
+              className="bg-slate-50 text-slate-900 text-center font-bold tracking-widest text-base h-11" 
+              id="hero-zip-input"
+            />
+            <Button 
+              type="button" 
+              className="bg-green-600 hover:bg-green-700 text-white font-bold h-11 px-5"
+              onClick={() => {
+                const zip = (document.getElementById('hero-zip-input') as HTMLInputElement)?.value;
+                if (!zip || zip.length < 5 || isNaN(Number(zip))) {
+                  toast({ title: "Oops!", description: "Please enter a valid 5-digit zip code.", variant: "destructive" });
+                } else {
+                  toast({ title: "Service Available!", description: "We have trucks in your zip code today! Fill out the form below to book." });
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              GO
+            </Button>
+          </div>
+          <p className="text-[10px] text-slate-500 mt-2">Check if same-day pickup slots are open in your neighborhood.</p>
+        </div>
+      ) : (
+        <div className="flex flex-col md:flex-row justify-center gap-4 mt-8">
+          <a href="#contact" className="w-full md:w-auto">
+            <Button type="button" className="w-full transition-transform hover:scale-105" size="lg">GET MY FREE QUOTE NOW</Button>
           </a>
-        )}
-      </div>
+          {bookingUrl && (
+            <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
+              <Button size="lg" variant="outline" className="w-full bg-white/10 hover:bg-white/20 text-white border-white transition-transform hover:scale-105">Book Appointment</Button>
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 
@@ -188,6 +229,46 @@ export function Template3Content({
             </div>
           </div>
         </section>
+
+        {isJunkRemoval && (
+          <section id="load-pricing" className="bg-slate-50 py-16 md:py-24 px-4 border-y border-slate-200">
+            <div className="container mx-auto text-center max-w-5xl">
+              <h3 className="text-3xl font-extrabold text-slate-900">Transparent Volume-Based Pricing</h3>
+              <p className="text-slate-600 mt-2">You only pay for the space your items occupy in our heavy-duty trucks.</p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                {[
+                  { title: "Single Item / Min Load", desc: "Mattress, sofa, refrigerator, or appliance pick-up.", space: "15%", bg: "bg-blue-100", bar: "bg-blue-600" },
+                  { title: "1/4 Truckload", desc: "Equivalent to 2-3 rooms of general clutter or small renovation piles.", space: "25%", bg: "bg-green-100", bar: "bg-green-600" },
+                  { title: "1/2 Truckload", desc: "Equivalent to a full garage, shed, or attic cleanout.", space: "50%", bg: "bg-yellow-100", bar: "bg-yellow-500" },
+                  { title: "Full Truckload", desc: "Whole-home cleanouts, large construction debris, estate clearing.", space: "100%", bg: "bg-red-100", bar: "bg-red-600" }
+                ].map((load, idx) => (
+                  <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow text-left">
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-lg">{load.title}</h4>
+                      <p className="text-xs text-slate-500 mt-2 min-h-[48px] leading-relaxed">{load.desc}</p>
+                    </div>
+                    <div className="mt-6">
+                      <div className="flex justify-between items-center text-xs font-semibold mb-1 text-slate-700">
+                        <span>Space Occupied</span>
+                        <span>{load.space}</span>
+                      </div>
+                      <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                        <div className={`${load.bar} h-full`} style={{ width: load.space }} />
+                      </div>
+                      <a href="#contact" className="block w-full mt-6">
+                        <Button variant="outline" className="w-full text-xs font-bold border-slate-200 hover:bg-slate-50 h-9">
+                          Book This Load
+                        </Button>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 mt-6 italic">Note: Final quotes are always provided upfront on-site before we lift anything.</p>
+            </div>
+          </section>
+        )}
 
         <section id="about" className="bg-muted py-16 md:py-24 px-4">
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center">
