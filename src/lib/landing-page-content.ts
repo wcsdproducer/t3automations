@@ -199,6 +199,60 @@ export function getContentForService(service: string) {
             }
         };
     }
+    
+    if (serviceName === "Junk Removal" || serviceName === "Junk Removal & Moving") {
+        const junkImages = {
+            hero: findImagesByHints(['move-out cleaning', 'construction team', 'handyman tools']),
+            about: findImageByHint('move-out cleaning') || PlaceHolderImages[0],
+            gallery: findImagesByHints(['move-out cleaning', 'architect team', 'handyman tools', 'construction team']),
+        };
+
+        return {
+            companyName: `Junk Removal Pros`,
+            hero: {
+                title: `Clear the Clutter. Reclaim Your Space.`,
+                subtitle: `Professional, eco-friendly junk removal and hauling services.`,
+                cta: "Get Your Free Quote Now",
+            },
+            services: {
+                title: `Our Junk Removal Services`,
+                subtitle: "We do all the heavy lifting, loading, clean up, and disposal.",
+                items: [
+                    { title: `Residential Cleanouts`, description: "Full-service decluttering for homes, garages, attics, and basements." },
+                    { title: "Commercial Junk Hauling", description: "Professional junk removal for offices, retail spaces, and properties." },
+                    { title: "Eco-Friendly Disposal", description: "We sort, donate, and recycle up to 60% of all items hauled." },
+                ]
+            },
+            about: {
+                title: `Your Trusted Local Haulers`,
+                body: `We are committed to helping you declutter responsibly. Our professional, friendly team handles everything from single item pickups to full estate cleanouts, ensuring a completely stress-free experience.`,
+                points: [
+                    "Same-Day / Next-Day Service",
+                    "Eco-Friendly Disposal Practices",
+                    "Licensed & Fully Insured Crew",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: [
+                    { quote: `They were fantastic! Arrived on time, were extremely polite, and cleared out my entire garage in less than an hour.`, author: "- Greg T." },
+                    { quote: `Straightforward and transparent pricing with no hidden fees. Highly recommend them for any hauling job!`, author: "- Linda M." },
+                    { quote: `Friendly crew did all the heavy lifting, loading, and even swept up afterward. Fantastic service!`, author: "- James K." },
+                    { quote: `I love that they donate and recycle items instead of just throwing everything in a landfill. Excellent company.`, author: "- Karen S." },
+                    { quote: `Fast response time, quick service, and excellent communication throughout. Will definitely use again.`, author: "- Robert P." }
+                ]
+            },
+            contact: {
+                title: "Ready to Get Rid of Clutter?",
+                subtitle: `Contact us now for a free, no-obligation hauling estimate.`,
+            },
+            images: {
+                hero: junkImages.hero,
+                about: junkImages.about,
+                gallery: junkImages.gallery,
+            }
+        };
+    }
 
     const content = {
         companyName: `${serviceName.replace(/ & /g, ' and ')} Pros`,

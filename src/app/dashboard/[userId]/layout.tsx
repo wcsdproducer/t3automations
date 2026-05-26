@@ -256,15 +256,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <LineChart className="h-4 w-4" />
                 Analytics
               </SidebarNavLink>
-              <a
-                href={`/pages/${userIdSlug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted/50"
-              >
-                <LayoutTemplate className="h-4 w-4 text-blue-500" />
-                <span className="font-semibold text-blue-500">Preview Website ↗</span>
-              </a>
               <SidebarNavLink href={`/dashboard/${userIdSlug}/calls`}>
                 <BarChart className="h-4 w-4" />
                 Calls
