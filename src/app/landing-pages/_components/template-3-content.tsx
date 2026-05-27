@@ -233,39 +233,58 @@ export function Template3Content({
         {isJunkRemoval && (
           <section id="load-pricing" className="bg-slate-50 py-16 md:py-24 px-4 border-y border-slate-200">
             <div className="container mx-auto text-center max-w-5xl">
-              <h3 className="text-3xl font-extrabold text-slate-900">Transparent Volume-Based Pricing</h3>
-              <p className="text-slate-600 mt-2">You only pay for the space your items occupy in our heavy-duty trucks.</p>
+              <h3 className="text-3xl font-extrabold text-slate-900">Affordable & Stress-Free Junk Removal</h3>
+              <p className="text-slate-600 mt-2 max-w-2xl mx-auto">
+                Professional hauling services with transparent estimates and zero hidden fees. We work hard to keep our rates budget-friendly.
+              </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
                 {[
-                  { title: "Single Item / Min Load", desc: "Mattress, sofa, refrigerator, or appliance pick-up.", space: "15%", bg: "bg-blue-100", bar: "bg-blue-600" },
-                  { title: "1/4 Truckload", desc: "Equivalent to 2-3 rooms of general clutter or small renovation piles.", space: "25%", bg: "bg-green-100", bar: "bg-green-600" },
-                  { title: "1/2 Truckload", desc: "Equivalent to a full garage, shed, or attic cleanout.", space: "50%", bg: "bg-yellow-100", bar: "bg-yellow-500" },
-                  { title: "Full Truckload", desc: "Whole-home cleanouts, large construction debris, estate clearing.", space: "100%", bg: "bg-red-100", bar: "bg-red-600" }
-                ].map((load, idx) => (
+                  { 
+                    icon: "ClipboardCheck", 
+                    title: "Free Upfront Estimates", 
+                    desc: "We provide complete, non-obligatory estimates before we touch a single item. No surprise fees." 
+                  },
+                  { 
+                    icon: "DollarSign", 
+                    title: "Budget-Friendly Rates", 
+                    desc: "We match or beat local competitors to ensure you get the absolute best value for your cleanup." 
+                  },
+                  { 
+                    icon: "ShieldCheck", 
+                    title: "All-Inclusive Pricing", 
+                    desc: "Our rates cover all labor, loading, transport, and proper recycling/disposal fees." 
+                  },
+                  { 
+                    icon: "Recycle", 
+                    title: "Eco-Friendly Savings", 
+                    desc: "By donating and recycling up to 60% of hauled items, we reduce landfill taxes and pass those savings to you." 
+                  }
+                ].map((item, idx) => (
                   <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow text-left">
                     <div>
-                      <h4 className="font-bold text-slate-900 text-lg">{load.title}</h4>
-                      <p className="text-xs text-slate-500 mt-2 min-h-[48px] leading-relaxed">{load.desc}</p>
-                    </div>
-                    <div className="mt-6">
-                      <div className="flex justify-between items-center text-xs font-semibold mb-1 text-slate-700">
-                        <span>Space Occupied</span>
-                        <span>{load.space}</span>
+                      <div className="bg-primary/10 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <ServiceIcon name={item.icon} className="h-6 w-6 text-primary" />
                       </div>
-                      <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                        <div className={`${load.bar} h-full`} style={{ width: load.space }} />
-                      </div>
-                      <a href="#contact" className="block w-full mt-6">
-                        <Button variant="outline" className="w-full text-xs font-bold border-slate-200 hover:bg-slate-50 h-9">
-                          Book This Load
-                        </Button>
-                      </a>
+                      <h4 className="font-bold text-slate-900 text-lg">{item.title}</h4>
+                      <p className="text-sm text-slate-500 mt-2 leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-slate-500 mt-6 italic">Note: Final quotes are always provided upfront on-site before we lift anything.</p>
+
+              <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#contact" className="w-full sm:w-auto">
+                  <Button type="button" className="w-full sm:w-auto h-12 px-8 font-bold transition-transform hover:scale-105" size="lg">
+                    GET MY FREE ESTIMATE
+                  </Button>
+                </a>
+                <a href={`tel:${phone}`} className="w-full sm:w-auto">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 font-bold border-slate-300 bg-white hover:bg-slate-50 text-slate-700 transition-transform hover:scale-105">
+                    CALL NOW FOR RATES
+                  </Button>
+                </a>
+              </div>
             </div>
           </section>
         )}
