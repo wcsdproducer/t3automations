@@ -202,9 +202,28 @@ export function getContentForService(service: string) {
     
     if (serviceName === "Junk Removal" || serviceName === "Junk Removal & Moving") {
         const junkImages = {
-            hero: findImagesByHints(['move-out cleaning', 'construction team', 'handyman tools']),
-            about: findImageByHint('move-out cleaning') || PlaceHolderImages[0],
-            gallery: findImagesByHints(['move-out cleaning', 'architect team', 'handyman tools', 'construction team']),
+            hero: [
+                {
+                    id: "junk-hero-1",
+                    description: "Professional junk removal crew and truck on driveway",
+                    imageUrl: "/images/junk-removal-hero.png",
+                    imageHint: "junk removal"
+                }
+            ],
+            about: {
+                id: "junk-about",
+                description: "Professional junk removal crew clearing out space",
+                imageUrl: "/images/junk-removal-hero.png",
+                imageHint: "junk removal"
+            },
+            gallery: [
+                {
+                    id: "junk-gal-1",
+                    description: "Professional hauling truck loading junk",
+                    imageUrl: "/images/junk-removal-hero.png",
+                    imageHint: "junk removal"
+                }
+            ]
         };
 
         return {
