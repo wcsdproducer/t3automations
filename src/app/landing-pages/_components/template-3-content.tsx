@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -230,6 +231,26 @@ export function Template3Content({
           </div>
         </section>
 
+        {content.process && (
+          <section id="process" className="py-16 md:py-24 px-4 bg-slate-50 border-y">
+            <div className="container mx-auto text-center max-w-5xl">
+              <h3 className="text-3xl font-bold">{content.process.title || "How It Works"}</h3>
+              <p className="text-muted-foreground mt-2">{content.process.subtitle || "Getting started with us is quick and simple."}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                {content.process.steps?.map((step: any, i: number) => (
+                  <div key={i} className="bg-background p-8 rounded-2xl border shadow-sm relative hover:shadow-md transition-shadow">
+                    <div className="bg-primary text-primary-foreground w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mx-auto mb-6">
+                      {step.number || (i + 1)}
+                    </div>
+                    <h4 className="text-xl font-bold">{step.title}</h4>
+                    <p className="text-muted-foreground mt-3 text-sm leading-relaxed">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {isJunkRemoval && (
           <section id="load-pricing" className="bg-slate-50 py-16 md:py-24 px-4 border-y border-slate-200">
             <div className="container mx-auto text-center max-w-5xl">
@@ -325,6 +346,26 @@ export function Template3Content({
             </div>
           </div>
         </section>
+
+        {content.faqs && content.faqs.length > 0 && (
+          <section id="faqs" className="py-16 md:py-24 px-4 bg-slate-50 dark:bg-slate-950 border-t">
+            <div className="container mx-auto max-w-3xl">
+              <h3 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h3>
+              <Accordion type="single" collapsible className="w-full">
+                {content.faqs.map((faq: any, i: number) => (
+                  <AccordionItem key={i} value={`faq-${i}`} className="border-b">
+                    <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline hover:text-primary">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm leading-relaxed pt-2">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </section>
+        )}
 
         <section id="contact" className="bg-primary text-primary-foreground py-16 md:py-24">
           <div className="container mx-auto px-4">

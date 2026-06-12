@@ -4,61 +4,122 @@ description: Enforces design guidelines and copy requirements for generating hig
 ---
 # Website Designer Skill
 
-This skill guides the AI when generating, structuring, and designing universal local service landing pages. These sites are used in the "Rank and Rent" business model, meaning they must be extremely optimized for search conversion, responsive, and structured so they can easily represent any local business.
+This skill guides the AI when generating, structuring, and designing premium, high-converting local service landing pages. These sites are optimized for local search engine optimization (SEO) and lead conversion (Rank & Rent business model).
 
-## 1. Landing Page Schema (Firestore: `businessProfiles/{userId}/website`)
+## 1. Landing Page Schema (Firestore: `businessProfiles/{userId}/websiteConfig`)
 
-Every landing page must be generated as a JSON configuration saved in Firestore at `businessProfiles/{userId}/website`. This configuration defines the copy, styling variables, and content components of the page.
+Every landing page configuration is saved as a JSON object inside `businessProfiles/{profileId}` under the `websiteConfig` field. The schema structure is as follows:
 
-### Schema Fields
-- `serviceCategory`: string (e.g. "HVAC Maintenance & Repair", "Plumbing", "Junk Removal & Moving")
-- `companyName`: string
-- `phoneNumber`: string
-- `logoUrl`: string
-- `colorPalette`:
-  - `primary`: string (Tailwind-compatible color or Hex code)
-  - `secondary`: string
-  - `accent`: string
-  - `background`: string
-- `typography`:
-  - `headingFont`: string (e.g. "Inter", "Montserrat", "Playfair Display")
-  - `bodyFont`: string (e.g. "Roboto", "Raleway", "Open Sans")
-- `hero`:
-  - `title`: string (high-impact, benefit-driven hook)
-  - `subtitle`: string (supporting detail with a clear offer)
-  - `ctaText`: string (e.g., "GET MY FREE ESTIMATE")
-- `services`:
-  - `title`: string
-  - `subtitle`: string
-  - `items`: Array of `{ title: string, description: string, iconName: string }` (3 service items specific to the niche)
-- `about`:
-  - `title`: string
-  - `body`: string (niche-focused background story highlighting trust and service quality)
-  - `points`: Array of strings (e.g. "Licensed & Insured", "24/7 Availability", "Upfront Pricing")
-- `reviews`:
-  - `title`: string
-  - `items`: Array of `{ quote: string, author: string, location: string }` (5 realistic testimonials with client names and locations)
-- `contact`:
-  - `title`: string
-  - `subtitle`: string
+```json
+{
+  "serviceCategory": "string (e.g. 'Epoxy Flooring', 'Tree Services', 'Paving & Concrete')",
+  "companyName": "string",
+  "phoneNumber": "string",
+  "logoUrl": "string (optional)",
+  "fontPair": "modern-corporate | friendly-local | clean-minimal | bold-tech",
+  "colorPalette": "deep-midnight | earthy-green | professional-blue | warm-amber",
+  "heroEffect": "slideshow | parallax | minimal",
+  "hero": {
+    "title": "string (e.g. 'Premium Epoxy Flooring in Tampa, FL')",
+    "subtitle": "string (e.g. 'Durable, slip-resistant, and stunning epoxy finishes for garages, commercial spaces, and patios. Get your free estimate today!')",
+    "ctaText": "string (e.g. 'GET MY FREE ESTIMATE')",
+    "secondaryCtaText": "string (e.g. 'CALL NOW')"
+  },
+  "trustBadges": [
+    "Licensed, Bonded & Insured",
+    "100% Satisfaction Guarantee",
+    "Free Estimates & Quotes",
+    "Local Tampa Specialists"
+  ],
+  "services": {
+    "title": "Our Professional Services",
+    "subtitle": "High-quality, reliable services tailored to your exact needs.",
+    "items": [
+      {
+        "title": "string",
+        "description": "string",
+        "iconName": "string (Lucide icon key)"
+      }
+    ]
+  },
+  "process": {
+    "title": "How It Works",
+    "subtitle": "Getting started with us is quick, simple, and stress-free.",
+    "steps": [
+      {
+        "number": "1",
+        "title": "Request a Quote",
+        "description": "Call us or fill out our simple online form to detail your project needs."
+      },
+      {
+        "number": "2",
+        "title": "On-Site Assessment",
+        "description": "We'll review your site and provide a clear, upfront estimate with zero hidden fees."
+      },
+      {
+        "number": "3",
+        "title": "Expert Execution",
+        "description": "Our certified local professionals complete the job to the highest industry standards."
+      }
+    ]
+  },
+  "about": {
+    "title": "About Our Company",
+    "body": "string (rich copy highlighting trust, years of local expertise, and customer focus)",
+    "points": [
+      "Licensed & Fully Insured",
+      "Upfront & Transparent Rates",
+      "Highly Rated Local Crew",
+      "Top-Quality Materials & Equipment"
+    ]
+  },
+  "faqs": [
+    {
+      "question": "string",
+      "answer": "string"
+    }
+  ],
+  "reviews": {
+    "title": "What Our Clients Say",
+    "items": [
+      {
+        "quote": "string",
+        "author": "string",
+        "location": "string (e.g. 'Tampa, FL')"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get Your Free Quote Today",
+    "subtitle": "Fill out the form below or call us directly to speak with a specialist."
+  }
+}
+```
 
 ---
 
-## 2. Copywriting Guidelines for High-Conversion
+## 2. Copywriting & Content Guidelines (Unbounce & CXL Best Practices)
 
-To ensure the landing page converts traffic into leads, use the following copywriting guidelines:
-1. **Urgency & Emergency Callouts:** If the niche has emergency scenarios (e.g. HVAC, plumbing, locksmith), include a prominent 24/7 emergency repair tag in the hero and header.
-2. **Clear Value Propositions:** The main H1 must immediately state what the service is and what the primary benefit is. Avoid generic tags like "Home Services." Use strong action verbs (e.g., "Keep Your Home Cool All Summer Long").
-3. **Low-friction Lead Capture Form:** The final section should be a simple lead form containing fields: Name, Email Address, Phone Number, and Consent check for SMS communications.
-4. **Trust Badges:** Highlight that the business has "Certified Professionals", "Upfront Pricing", and "100% Satisfaction Guarantee."
-5. **Calls to Action (CTAs):** Integrate multiple CTAs on the page. The sticky header must have a direct click-to-call button with the dynamic phone number. The hero section must link directly to the contact form.
+To achieve maximum conversion rates (>15% visitor-to-lead), follow these copy rules:
+1. **Hyper-Local Targeting**: Always include the specific city name (e.g. "Tampa, FL") in the H1, sub-headlines, and body text.
+2. **Intent-Aligned Headline (H1)**: The hero headline must state the service and the primary customer benefit immediately (e.g., "Transform Your Garage With Premium Epoxy Coatings in Tampa, FL" or "Professional Tampa Tree Service & Removal").
+3. **The Local "Trust Trio"**:
+   - **Click-to-Call Buttons**: Place a call button prominently in the hero and sticky header.
+   - **Social Proof**: Provide at least 3-5 testimonials with full customer names and locations.
+   - **Credentials**: Highlight licensing, insurance, and satisfaction guarantees.
+4. **Remove Exit Links**: Do not include links that take visitors away from the landing page. Keep navigation minimal and make all navigation links scroll to corresponding sections on the same page.
+5. **High-Converting CTAs**: Use actionable, high-contrast buttons (e.g., "GET MY FREE ESTIMATE" or "CLAIM FREE ESTIMATE NOW" instead of "Submit").
+6. **No pricing tables**: For Rank & Rent service leads, emphasize affordability, upfront estimates, and value rather than generic pricing tiers.
 
 ---
 
-## 3. Dynamic UI Layout Guidelines
+## 3. Visual & UI Guidelines (Tailwind CSS)
 
-When rendering this page on the frontend (Next.js):
-- **Sticky Header:** Keep the header sticky with the company logo or name, a basic navigation list, and a prominent phone icon/button.
-- **Micro-Animations:** Use smooth CSS/Tailwind transitions (`hover:scale-105`, `duration-300`, `transition-all`) for buttons and cards.
-- **Glassmorphism/Backdrops:** In the header or overlays, use `backdrop-blur-sm` and subtle semi-transparent backgrounds to maintain a modern, premium look.
-- **Mobile First:** Ensure all layouts wrap perfectly to a single column on mobile screens. Touch targets for calls and forms must be at least 48px to prevent accidental taps.
+1. **Conversion-Centered Layout**:
+   - **Encapsulated Lead Form**: Wrap the contact form in a visually distinct container with custom shadows (`shadow-xl`), borders, and background color to draw the user's attention.
+   - **Directional Cues**: Use subtle visual indicators (like card hover highlights or layouts that draw the eye toward the CTA).
+2. **Aesthetics & Premium Styling**:
+   - **Modern Typography**: Use distinct font pairings (e.g. Outfit / Inter, Montserrat / Open Sans) loaded dynamically.
+   - **Visual Accents**: Implement smooth color gradients and subtle shadows on buttons and cards.
+   - **Micro-Animations**: Apply transition classes (`transition-all duration-300 hover:scale-105`) for all clickable elements.
+   - **Glassmorphism**: Use backdrop filters (`backdrop-blur-md bg-background/80`) on sticky headers to keep them readable over background media.
