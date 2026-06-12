@@ -209,6 +209,54 @@
       "description": "An empty, clean room with packed moving boxes.",
       "imageUrl": "https://images.unsplash.com/photo-1758273705792-a2887e079e83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtb3ZlLW91dCUyMGNsZWFuaW5nfGVufDB8fHx8MTc3MjE2MDg3OXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "move-out cleaning"
+    },
+    {
+      "id": "epoxy-hero-1",
+      "description": "Modern seamless epoxy garage flooring",
+      "imageUrl": "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "epoxy flooring"
+    },
+    {
+      "id": "epoxy-about",
+      "description": "Worker applying a protective coating to a floor",
+      "imageUrl": "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "epoxy application"
+    },
+    {
+      "id": "tree-hero-1",
+      "description": "Professional arborist climbing a tall tree for pruning",
+      "imageUrl": "https://images.unsplash.com/photo-1590130635472-de36496dbb1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "tree trimming"
+    },
+    {
+      "id": "tree-about",
+      "description": "Close up of a lush green forest landscape",
+      "imageUrl": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "arborist working"
+    },
+    {
+      "id": "concrete-hero-1",
+      "description": "Construction worker smoothing poured concrete on a driveway",
+      "imageUrl": "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "concrete construction"
+    },
+    {
+      "id": "concrete-about",
+      "description": "Modern brick paver patio and driveway entrance",
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "paving driveway"
+    },
+    {
+      "id": "water-hero-1",
+      "description": "Professional cleaning and drying of a water damaged floor",
+      "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "water damage"
+    },
+    {
+      "id": "water-about",
+      "description": "Modern industrial dehumidifiers working in a room",
+      "imageUrl": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "flood restoration"
     }
   ]
 }

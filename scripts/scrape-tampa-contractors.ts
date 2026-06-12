@@ -30,37 +30,33 @@ const APIFY_ACTOR = "lukaskrivka/google-maps-with-contact-details";
 
 // Search queries — targeting contractors who need websites & AI voice agents
 const SEARCH_QUERIES = [
-  // General contractors
-  "general contractor Tampa FL",
-  "general contractor St Petersburg FL",
-  "general contractor Clearwater FL",
-  "general contractor Brandon FL",
+  // High-Ticket Specialty Services (Target Focus)
+  "epoxy flooring Tampa FL",
+  "epoxy floor contractor Tampa FL",
+  "garage flooring Tampa FL",
+  
+  "tree service Tampa FL",
+  "tree removal Tampa FL",
+  "arborist Tampa FL",
+
+  "concrete contractor Tampa FL",
+  "driveway pavers Tampa FL",
+  "paving contractor Tampa FL",
+
+  "water damage restoration Tampa FL",
+  "mold remediation Tampa FL",
+  "water restoration Tampa FL",
 
   // Specialty trades (high-value targets for AI voice agents)
-  "roofing contractor Tampa Bay FL",
+  "roofing contractor Tampa FL",
   "plumbing contractor Tampa FL",
-  "HVAC contractor Tampa Bay FL",
+  "HVAC contractor Tampa FL",
   "electrician contractor Tampa FL",
-  "painting contractor Tampa Bay FL",
-  "landscaping company Tampa FL",
   "pool contractor Tampa FL",
 
   // Remodeling
   "home remodeling Tampa FL",
-  "kitchen remodeling Tampa Bay FL",
-  "bathroom remodeling Tampa FL",
-
-  // Construction
-  "construction company Tampa FL",
-  "commercial contractor Tampa Bay FL",
-  "concrete contractor Tampa FL",
-
-  // Additional high-value services
-  "fence contractor Tampa FL",
-  "flooring contractor Tampa FL",
-  "pressure washing Tampa FL",
-  "pest control Tampa Bay FL",
-  "tree service Tampa FL",
+  "kitchen remodeling Tampa FL",
 ];
 
 // ──────────────────────────────────────────────
@@ -202,7 +198,10 @@ function scoreLead(result: ApifyResult): { score: number; priority: "high" | "me
   }
 
   // Category bonuses (high-value trades)
-  const highValueCategories = ["roofing", "hvac", "plumbing", "electrician", "remodeling", "construction", "pool"];
+  const highValueCategories = [
+    "roofing", "hvac", "plumbing", "electrician", "remodeling", "construction", "pool",
+    "epoxy", "flooring", "paving", "concrete", "tree", "water damage", "restoration", "mold"
+  ];
   const catLower = (result.categoryName || "").toLowerCase();
   if (highValueCategories.some(c => catLower.includes(c))) {
     score += 10;

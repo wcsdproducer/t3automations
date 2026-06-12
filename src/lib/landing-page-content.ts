@@ -33,6 +33,9 @@ const serviceImageHints: Record<string, string[]> = {
   "Senior Home Modifications": ["senior safety", "handyman tools"],
   "Air Duct & Vent Cleaning": ["air duct", "hvac maintenance"],
   "Junk Removal & Moving": ["junk removal", "move-out cleaning"],
+  "Epoxy Flooring": ["epoxy flooring", "epoxy application"],
+  "Paving & Concrete": ["concrete construction", "paving driveway"],
+  "Water Damage Restoration": ["water damage", "flood restoration"],
 };
 
 function findImageByHint(hint: string): ImagePlaceholder | undefined {
@@ -269,6 +272,298 @@ export function getContentForService(service: string) {
                 hero: junkImages.hero,
                 about: junkImages.about,
                 gallery: junkImages.gallery,
+            }
+        };
+    }
+    
+    if (serviceName === "Epoxy Flooring") {
+        const epoxyImages = {
+            hero: [
+                {
+                    id: "epoxy-hero-1",
+                    description: "Modern seamless epoxy garage flooring",
+                    imageUrl: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "epoxy flooring"
+                }
+            ],
+            about: {
+                id: "epoxy-about",
+                description: "Worker applying a protective coating to a floor",
+                imageUrl: "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageHint: "epoxy application"
+            },
+            gallery: [
+                {
+                    id: "epoxy-hero-1",
+                    description: "Modern seamless epoxy garage flooring",
+                    imageUrl: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "epoxy flooring"
+                }
+            ]
+        };
+
+        return {
+            companyName: `Epoxy Flooring Pros`,
+            hero: {
+                title: `Stunning Epoxy Floors. Built to Last.`,
+                subtitle: `Transform your garage, commercial space, or home with premium industrial-grade flooring.`,
+                cta: "Get a Free Custom Quote",
+            },
+            services: {
+                title: `Our Epoxy Coating Services`,
+                subtitle: "Premium floor finishes tailored for aesthetics and extreme durability.",
+                items: [
+                    { title: `Garage Floor Coating`, description: "Ultra-durable, chemical-resistant finishes with beautiful decorative flake patterns." },
+                    { title: "Commercial & Industrial Epoxy", description: "Heavy-duty flooring designed to withstand high traffic, impact, and wear." },
+                    { title: "Metallic & Custom Flooring", description: "Stunning, high-gloss artistic floors tailored to your unique style." },
+                ]
+            },
+            about: {
+                title: `Tampa's Premier Epoxy Flooring Experts`,
+                body: `We specialize in installing professional-grade epoxy and polyaspartic floor coatings. Our multi-step prep and application process ensures a flawless, non-slip finish that stands up to daily wear and tear for decades.`,
+                points: [
+                    "Industrial-Grade Durability",
+                    "10-Year Warranty",
+                    "Certified Local Installers",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: [
+                    { quote: `They transformed my stained garage floor into a gorgeous, clean space. The flake finish looks amazing and cleans up so easily!`, author: "- Steven M. in Tampa, FL" },
+                    { quote: `Fast, professional, and very neat. They completed our commercial warehouse floor over the weekend so we had zero downtime.`, author: "- Amanda K. in St. Petersburg, FL" },
+                    { quote: `Excellent work. The pricing was fair, and the team was extremely detailed with the concrete prep. Highly recommend!`, author: "- Jason D. in Brandon, FL" },
+                    { quote: `I am thrilled with my new metallic epoxy floor. It looks like liquid marble. Truly a work of art!`, author: "- Sarah P. in Clearwater, FL" },
+                    { quote: `Reliable company. They arrived on time, completed the work as promised, and left the workspace spotless.`, author: "- Robert L. in Lutz, FL" }
+                ]
+            },
+            contact: {
+                title: "Ready for a Floor Transformation?",
+                subtitle: `Contact us today for a free, no-obligation on-site estimate.`,
+            },
+            images: {
+                hero: epoxyImages.hero,
+                about: epoxyImages.about,
+                gallery: epoxyImages.gallery,
+            }
+        };
+    }
+
+    if (serviceName === "Tree Services") {
+        const treeImages = {
+            hero: [
+                {
+                    id: "tree-hero-1",
+                    description: "Professional arborist climbing a tall tree for pruning",
+                    imageUrl: "https://images.unsplash.com/photo-1590130635472-de36496dbb1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "tree trimming"
+                }
+            ],
+            about: {
+                id: "tree-about",
+                description: "Close up of a lush green forest landscape",
+                imageUrl: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageHint: "arborist working"
+            },
+            gallery: [
+                {
+                    id: "tree-hero-1",
+                    description: "Professional arborist climbing a tall tree for pruning",
+                    imageUrl: "https://images.unsplash.com/photo-1590130635472-de36496dbb1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "tree trimming"
+                }
+            ]
+        };
+
+        return {
+            companyName: `Tree Care Specialists`,
+            hero: {
+                title: `Professional Tree Services in Tampa Bay`,
+                subtitle: `Safe, efficient tree removal, trimming, and arborist care from local experts.`,
+                cta: "Request a Free Estimate",
+            },
+            services: {
+                title: `Our Tree Care Services`,
+                subtitle: "Keeping your trees healthy and your property safe.",
+                items: [
+                    { title: `Safe Tree Removal`, description: "Professional removal of hazardous, dead, or unwanted trees near structures." },
+                    { title: "Pruning & Trimming", description: "Expert branch trimming to improve tree health, aesthetics, and storm safety." },
+                    { title: "Emergency Storm Response", description: "24/7 emergency clearing and hazard removal after severe weather." },
+                ]
+            },
+            about: {
+                title: `Your Trusted Local Tree Care Specialists`,
+                body: `We are a fully licensed and insured tree service company dedicated to preserving the beauty and safety of your property. Our skilled crew utilizes modern equipment to perform every job safely and efficiently, leaving your yard pristine.`,
+                points: [
+                    "Licensed & Fully Insured",
+                    "24/7 Emergency Storm Service",
+                    "ISA Certified Arborists",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: [
+                    { quote: `They removed a massive oak tree close to my house. The team was incredibly precise, fast, and cleaned up every single leaf!`, author: "- Thomas B. in Tampa, FL" },
+                    { quote: `Excellent tree pruning service. Our palms look healthy and beautiful now. Very reasonable price.`, author: "- Linda G. in Clearwater, FL" },
+                    { quote: `Quick response for emergency tree limb removal after a storm. They saved our roof from serious damage!`, author: "- David R. in St. Petersburg, FL" },
+                    { quote: `Professional crew, great communication, and competitive pricing. I'll definitely use them again.`, author: "- Karen M. in Brandon, FL" },
+                    { quote: `Highly recommend. They are knowledgeable about tree health and gave great advice on preserving our oaks.`, author: "- James H. in Riverview, FL" }
+                ]
+            },
+            contact: {
+                title: "Need Tree Services?",
+                subtitle: `Contact us now for a free, no-obligation estimate from an expert arborist.`,
+            },
+            images: {
+                hero: treeImages.hero,
+                about: treeImages.about,
+                gallery: treeImages.gallery,
+            }
+        };
+    }
+
+    if (serviceName === "Paving & Concrete") {
+        const pavingImages = {
+            hero: [
+                {
+                    id: "concrete-hero-1",
+                    description: "Construction worker smoothing poured concrete on a driveway",
+                    imageUrl: "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "concrete construction"
+                }
+            ],
+            about: {
+                id: "concrete-about",
+                description: "Modern brick paver patio and driveway entrance",
+                imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageHint: "paving driveway"
+            },
+            gallery: [
+                {
+                    id: "concrete-hero-1",
+                    description: "Construction worker smoothing poured concrete on a driveway",
+                    imageUrl: "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "concrete construction"
+                }
+            ]
+        };
+
+        return {
+            companyName: `Concrete & Paving Pros`,
+            hero: {
+                title: `Premium Concrete & Paving Solutions`,
+                subtitle: `Durability meets design. Expert driveways, patios, walkways, and masonry.`,
+                cta: "Schedule a Free Consult",
+            },
+            services: {
+                title: `Our Concrete & Paving Services`,
+                subtitle: "Professional installation and repair of hardscape surfaces.",
+                items: [
+                    { title: `Concrete Driveways`, description: "Custom-poured concrete driveways built to withstand heavy loads and weather." },
+                    { title: "Brick & Stone Pavers", description: "Stunning decorative paver driveways, patios, pool decks, and walkways." },
+                    { title: "Concrete Repair & Refinishing", description: "Restoring cracked, uneven concrete to look brand new." },
+                ]
+            },
+            about: {
+                title: `Crafting Solid Foundations for Tampa Homes`,
+                body: `We deliver top-tier concrete placement and paver installation. Our team blends solid craftsmanship with premium materials to construct beautiful, long-lasting outdoor surfaces that increase your property's value.`,
+                points: [
+                    "Licensed Concrete Contractors",
+                    "Premium Materials & Finishing",
+                    "Free Design Consultations",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: [
+                    { quote: `The new paver patio and driveway look stunning! It has completely changed the curb appeal of our home.`, author: "- Mark S. in Tampa, FL" },
+                    { quote: `Excellent concrete driveway installation. They reinforced it properly and finished it perfectly. Solid work.`, author: "- Jeffrey W. in Brandon, FL" },
+                    { quote: `Great crew. They worked fast, poured a beautiful new slab for our workshop, and left the yard clean.`, author: "- Brian O. in Lutz, FL" },
+                    { quote: `Our pool deck was cracked and ugly. They repaved it with gorgeous pavers. Outstanding transformation!`, author: "- Melissa T. in Clearwater, FL" },
+                    { quote: `Professional communication and high-quality craftsmanship. Very pleased with the custom walkway.`, author: "- Sandra L. in St. Petersburg, FL" }
+                ]
+            },
+            contact: {
+                title: "Start Your Paving Project",
+                subtitle: `Get in touch today for a free design consultation and project estimate.`,
+            },
+            images: {
+                hero: pavingImages.hero,
+                about: pavingImages.about,
+                gallery: pavingImages.gallery,
+            }
+        };
+    }
+
+    if (serviceName === "Water Damage Restoration") {
+        const restorationImages = {
+            hero: [
+                {
+                    id: "water-hero-1",
+                    description: "Professional cleaning and drying of a water damaged floor",
+                    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "water damage"
+                }
+            ],
+            about: {
+                id: "water-about",
+                description: "Modern industrial dehumidifiers working in a room",
+                imageUrl: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageHint: "flood restoration"
+            },
+            gallery: [
+                {
+                    id: "water-hero-1",
+                    description: "Professional cleaning and drying of a water damaged floor",
+                    imageUrl: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageHint: "water damage"
+                }
+            ]
+        };
+
+        return {
+            companyName: `Water Damage Restoration Pros`,
+            hero: {
+                title: `24/7 Emergency Water Damage Restoration`,
+                subtitle: `Fast water extraction, structural drying, and complete mold remediation.`,
+                cta: "Call Now - Immediate Dispatch",
+            },
+            services: {
+                title: `Our Restoration Services`,
+                subtitle: "Certified response for cleanups, mold mitigation, and full repairs.",
+                items: [
+                    { title: `Water Extraction & Drying`, description: "Rapid water removal and high-speed industrial drying to prevent rot." },
+                    { title: "Mold Remediation", description: "Safe containment, removal, and air purification to eliminate mold spores." },
+                    { title: "Full Property Restoration", description: "Reconstructing damaged walls, floors, and ceilings to pre-loss condition." },
+                ]
+            },
+            about: {
+                title: `Tampa's Trusted Emergency Restoration Crew`,
+                body: `We respond to water disasters instantly, 24 hours a day. Our certified technicians use state-of-the-art moisture detection and drying equipment to protect your home and prevent long-term mold issues.`,
+                points: [
+                    "24/7 Immediate Response",
+                    "IICRC Certified Technicians",
+                    "Direct Insurance Billing",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: [
+                    { quote: `We woke up to a flooded kitchen at 3 AM. They arrived within 45 minutes and immediately started drying. Absolute lifesavers!`, author: "- Jennifer F. in Tampa, FL" },
+                    { quote: `They handled our mold remediation professionally. They explained the process, set up containment, and cleaned everything.`, author: "- Charles K. in St. Petersburg, FL" },
+                    { quote: `Very grateful for their help. They handled the insurance paperwork directly, making a stressful situation much easier.`, author: "- Patricia A. in Clearwater, FL" },
+                    { quote: `Expert water extraction and drying. They kept checking the moisture levels daily until everything was perfect.`, author: "- Richard G. in Brandon, FL" },
+                    { quote: `Top-notch restoration service. They did a fantastic job rebuilding our drywall and flooring after a pipe burst.`, author: "- Susan M. in Lutz, FL" }
+                ]
+            },
+            contact: {
+                title: "Flooding or Mold Emergency?",
+                subtitle: `Call us immediately for 24/7 emergency dispatch and assistance.`,
+            },
+            images: {
+                hero: restorationImages.hero,
+                about: restorationImages.about,
+                gallery: restorationImages.gallery,
             }
         };
     }
