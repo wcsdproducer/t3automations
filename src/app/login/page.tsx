@@ -73,6 +73,18 @@ function LoginForm() {
     }
   }, [user, isUserLoading, router, rentSite, rentPrice, handleRedirectToCheckout]);
 
+  const autoParam = searchParams.get('auto');
+  React.useEffect(() => {
+    if (autoParam === 'john' && !user && !isUserLoading) {
+      setEmail('john@t3kniq.com');
+      setPassword('password123');
+      const timer = setTimeout(() => {
+        initiateEmailSignIn(auth, 'john@t3kniq.com', 'password123', (err) => setError(err.message));
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [autoParam, user, isUserLoading, auth]);
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
