@@ -25,12 +25,30 @@ export default async function CustomDomainPage({
   let businessProfileId: string | null = null;
 
   try {
-    const snap = await admin
+    let snap = await admin
       .firestore()
       .collectionGroup('customDomains')
       .where('id', '==', cleanDomain)
       .limit(1)
       .get();
+
+    if (snap.empty) {
+      snap = await admin
+        .firestore()
+        .collectionGroup('customDomains')
+        .where('domain', '==', cleanDomain)
+        .limit(1)
+        .get();
+    }
+
+    if (snap.empty) {
+      snap = await admin
+        .firestore()
+        .collectionGroup('customDomains')
+        .where('domainName', '==', cleanDomain)
+        .limit(1)
+        .get();
+    }
 
     if (!snap.empty) {
       businessProfileId = snap.docs[0].data().businessProfileId;

@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, CheckCircle2, Globe, AlertTriangle, RefreshCw, ShieldCheck } from 'lucide-react';
+import { Loader2, CheckCircle2, Globe, AlertTriangle, RefreshCw, ShieldCheck, Copy } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -182,46 +182,178 @@ export function CustomDomainManager() {
           {domains && domains.length > 0 ? (
             <div className="space-y-4">
               <h3 className="text-sm font-medium">Your Connected Domains</h3>
-              <div className="grid gap-3">
+              <div className="grid gap-4">
                 {domains.map((d: any) => {
                   const cfg = getStatusConfig(d.status);
                   const isChecking = checkingDomain === d.id;
                   return (
-                    <div key={d.id} className="flex items-center gap-4 px-5 py-4 border rounded-xl bg-card">
-                      <div className={`p-2 rounded-lg shrink-0 ${cfg.iconBg}`}>
-                        {cfg.icon}
+                    <div key={d.id} className="border rounded-xl bg-card overflow-hidden">
+                      <div className="flex items-center gap-4 px-5 py-4">
+                        <div className={`p-2 rounded-lg shrink-0 ${cfg.iconBg}`}>
+                          {cfg.icon}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-base truncate">{d.domain}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {d.lastCheckedAt
+                              ? `Last checked: ${new Date(d.lastCheckedAt).toLocaleTimeString()}`
+                              : 'Not checked yet'}
+                          </p>
+                        </div>
+                        <Badge variant="outline" className={`text-xs font-medium shrink-0 ${cfg.badgeClass}`}>
+                          {cfg.label}
+                        </Badge>
+                        <div className="flex items-center gap-2 ml-auto shrink-0">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleCheckStatus(d.id)}
+                            disabled={isChecking}
+                            className="h-8"
+                          >
+                            {isChecking
+                              ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                              : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
+                            {isChecking ? 'Checking…' : 'Check Status'}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="h-8"
+                            onClick={() => setDomainToRemove(d.id)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       </div>
-                      <p className="font-semibold text-base truncate">{d.domain}</p>
-                      <Badge variant="outline" className={`text-xs font-medium shrink-0 ${cfg.badgeClass}`}>
-                        {cfg.label}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground shrink-0">
-                        {d.lastCheckedAt
-                          ? `Checked ${new Date(d.lastCheckedAt).toLocaleTimeString()}`
-                          : ''}
-                      </span>
-                      <div className="flex items-center gap-2 ml-auto shrink-0">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleCheckStatus(d.id)}
-                          disabled={isChecking}
-                          className="h-8"
-                        >
-                          {isChecking
-                            ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                            : <RefreshCw className="h-3.5 w-3.5 mr-1.5" />}
-                          {isChecking ? 'Checking…' : 'Check Status'}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="h-8"
-                          onClick={() => setDomainToRemove(d.id)}
-                        >
-                          Remove
-                        </Button>
-                      </div>
+
+                      {/* DNS Settings Table for inactive/provisioning domains */}
+                      {d.status !== 'active' && (
+                        <div className="px-5 pb-5 pt-3 bg-muted/10 border-t border-border/20 space-y-4">
+                          <div className="space-y-1">
+                            <h4 className="text-sm font-semibold text-foreground">Required DNS Settings</h4>
+                            <p className="text-xs text-muted-foreground">
+                              Add these records at your domain registrar (e.g., Namecheap, GoDaddy) to connect your custom domain to T3 Automations.
+                            </p>
+                          </div>
+
+                          <div className="overflow-x-auto rounded-lg border border-border/60 bg-slate-950/40">
+                            <table className="w-full text-left border-collapse text-xs">
+                              <thead>
+                                <tr className="border-b border-border/40 bg-muted/50 text-muted-foreground font-medium">
+                                  <th className="p-3">Type</th>
+                                  <th className="p-3">Host/Name</th>
+                                  <th className="p-3">Value/Target</th>
+                                  <th className="p-3 text-right">Copy</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-border/30">
+                                {/* A Records */}
+                                {(d.dnsRecords?.aRecords || ['35.219.200.4']).map((ip: string, idx: number) => (
+                                  <tr key={`a-${idx}`} className="hover:bg-muted/10">
+                                    <td className="p-3 font-mono font-bold text-slate-300">A</td>
+                                    <td className="p-3 font-mono text-slate-300">@</td>
+                                    <td className="p-3 font-mono text-white font-semibold">{ip}</td>
+                                    <td className="p-3 text-right">
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                                        onClick={() => {
+                                          navigator.clipboard.writeText(ip);
+                                          toast({ title: 'Copied A Record!', description: ip });
+                                        }}
+                                      >
+                                        <Copy className="h-3 w-3" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+
+                                {/* TXT Record */}
+                                <tr className="hover:bg-muted/10">
+                                  <td className="p-3 font-mono font-bold text-indigo-400">TXT</td>
+                                  <td className="p-3 font-mono text-indigo-400">@</td>
+                                  <td className="p-3 font-mono text-indigo-300 max-w-[200px] sm:max-w-xs md:max-w-md truncate" title={d.dnsRecords?.txtRecord || "Click 'Check Status' to load token"}>
+                                    {d.dnsRecords?.txtRecord || (
+                                      <span className="italic text-muted-foreground text-[10px]">
+                                        [Click &apos;Check Status&apos; to load verification key]
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="p-3 text-right">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      disabled={!d.dnsRecords?.txtRecord}
+                                      className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                                      onClick={() => {
+                                        if (d.dnsRecords?.txtRecord) {
+                                          navigator.clipboard.writeText(d.dnsRecords.txtRecord);
+                                          toast({ title: 'Copied TXT Record!', description: d.dnsRecords.txtRecord });
+                                        }
+                                      }}
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                    </Button>
+                                  </td>
+                                </tr>
+
+                                {/* CNAME Record */}
+                                <tr className="hover:bg-muted/10">
+                                  <td className="p-3 font-mono font-bold text-amber-400">CNAME</td>
+                                  <td className="p-3 font-mono text-amber-400 max-w-[120px] truncate" title={d.dnsRecords?.cnameHost || "Click 'Check Status' to load"}>
+                                    {d.dnsRecords?.cnameHost || (
+                                      <span className="italic text-muted-foreground text-[10px]">
+                                        [Click &apos;Check Status&apos; to load host]
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="p-3 font-mono text-amber-300 max-w-[200px] sm:max-w-xs md:max-w-md truncate" title={d.dnsRecords?.cnameValue || "Click 'Check Status' to load"}>
+                                    {d.dnsRecords?.cnameValue || (
+                                      <span className="italic text-muted-foreground text-[10px]">
+                                        [Click &apos;Check Status&apos; to load target]
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="p-3 text-right">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      disabled={!d.dnsRecords?.cnameValue}
+                                      className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                                      onClick={() => {
+                                        if (d.dnsRecords?.cnameValue) {
+                                          navigator.clipboard.writeText(d.dnsRecords.cnameValue);
+                                          toast({ title: 'Copied CNAME target!', description: d.dnsRecords.cnameValue });
+                                        }
+                                      }}
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                          <div className="p-3 rounded-lg border border-indigo-500/20 bg-indigo-500/5 text-[11px] text-slate-400 space-y-1">
+                            <span className="font-semibold text-indigo-400 block text-xs">DNS Setup Guide:</span>
+                            <p>
+                              1. Log in to your domain registrar (e.g. Namecheap) and open DNS settings for <strong className="text-slate-300">{d.domain}</strong>.
+                            </p>
+                            <p>
+                              2. Remove any conflicting A/TXT/CNAME records (such as host parking pages).
+                            </p>
+                            <p>
+                              3. Add the records listed above exactly as shown. For the TXT record, host `@` and value `fah-claim=...`. For the CNAME record, host `_acme-challenge_...` and target ending in `.certificatemanager.goog.`.
+                            </p>
+                            <p>
+                              4. Once DNS is added, click <strong className="text-slate-300">Check Status</strong> to verify and trigger SSL generation.
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
