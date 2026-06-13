@@ -1,13 +1,16 @@
 import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/google-genai';
+import { vertexAI } from '@genkit-ai/google-genai';
 import { anthropic } from 'genkitx-anthropic';
 
 export const ai = genkit({
   plugins: [
-    googleAI(),
+    vertexAI({
+      projectId: 'studio-1410114603-9e1f6',
+      location: 'us-central1',
+    }),
     anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY || 'dummy-key',
     }),
   ],
-  model: 'googleai/gemini-2.5-flash',
+  model: 'vertexai/gemini-2.5-flash',
 });

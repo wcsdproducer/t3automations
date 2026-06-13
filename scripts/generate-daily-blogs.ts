@@ -54,7 +54,7 @@ SEO Writing Guidelines:
 5. **No placeholders:** Do not use "[City]" or "[Phone]". Everything must be fully filled out.`;
 
   const response = await ai.generate({
-    model: 'googleai/gemini-2.5-flash',
+    model: 'vertexai/gemini-2.5-flash',
     prompt: promptText,
     output: {
       schema: BlogOutputSchema,
