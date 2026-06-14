@@ -1,20 +1,8 @@
-import * as admin from 'firebase-admin';
-import { config } from 'dotenv';
-config(); // Load environment variables from .env file
-
-import { ai } from '../src/ai/genkit';
+import { NextResponse } from 'next/server';
+import { admin } from '@/lib/firebase-admin';
+import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
-// Initialize firebase admin
-if (!admin.apps.length) {
-  admin.initializeApp({
-    projectId: 'studio-1410114603-9e1f6'
-  });
-}
-
-const db = admin.firestore();
-
-// Schema for the blog post output
 const BlogOutputSchema = z.object({
   title: z.string().describe('Catchy, benefit-driven H1 blog title optimized for local search'),
   slug: z.string().describe('Hyphenated slug for URL (lowercase, maximum 5 words)'),
@@ -64,103 +52,110 @@ SEO Writing Guidelines:
   return response.output;
 }
 
-async function runDailyBlogGeneration() {
-  console.log('Starting daily SEO blog generation job...');
+export async function GET(request: Request) {
+  // Simple auth check using a header or query parameter
+  const { searchParams } = new URL(request.url);
+  const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
+  
+  const expectedSecret = process.env.CRON_SECRET || 't3_cron_secret_key_2026';
+  
+  if (secret !== expectedSecret) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
+  const db = admin.firestore();
+  const logs: string[] = [];
+  
   try {
-    const snap = await db.collection('businessProfiles').get();
-    console.log(`Found ${snap.size} total business profiles in database.`);
+    // 1. Get current hour in EST/EDT
+    const estHour = parseInt(
+      new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric',
+        hour12: false,
+      }).format(new Date()),
+      10
+    );
 
+    // 2. Define the target count based on EST schedule: 3x per day starting at 8am (e.g. 8am, 1pm, 6pm)
+    let targetCount = 0;
+    if (estHour >= 18) {
+      targetCount = 3;
+    } else if (estHour >= 13) {
+      targetCount = 2;
+    } else if (estHour >= 8) {
+      targetCount = 1;
+    }
+
+    logs.push(`EST Hour: ${estHour}, Target Blog Count today: ${targetCount}`);
+
+    if (targetCount === 0) {
+      return NextResponse.json({ message: 'Outside of posting hours (8 AM - 12 AM EST)', logs });
+    }
+
+    const snap = await db.collection('businessProfiles').get();
+    
     for (const doc of snap.docs) {
       const userId = doc.id;
       const profile = doc.data();
 
-      // Skip platform placeholder accounts
       if (excludedIds.includes(userId)) {
-        console.log(`Skipping platform account: ${profile.businessName} (${userId})`);
         continue;
       }
 
-      console.log(`Processing site: ${profile.businessName} (${userId}) - Niche: ${profile.service}`);
-
-      // 1. Get existing blog slugs to prevent duplicates
+      // 3. Count blogs generated today (starting midnight EST)
       const blogCollection = db.collection('businessProfiles').doc(userId).collection('blogs');
-      const blogsSnap = await blogCollection.get();
-      const existingSlugs = blogsSnap.docs.map(d => d.data().slug);
-
-      // 2. Count blogs generated today (starting midnight EST)
+      
+      // Get today's start in EST formatted as ISO string
       const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
-
-      // Get current hour in EST/EDT
-      const estHour = parseInt(
-        new Intl.DateTimeFormat('en-US', {
-          timeZone: 'America/New_York',
-          hour: 'numeric',
-          hour12: false,
-        }).format(new Date()),
-        10
-      );
-
-      // Define target blogs count based on 3x daily posting starting at 8 AM EST
-      let targetCount = 0;
-      if (estHour >= 18) {
-        targetCount = 3;
-      } else if (estHour >= 13) {
-        targetCount = 2;
-      } else if (estHour >= 8) {
-        targetCount = 1;
-      }
-
-      console.log(`EST Hour: ${estHour}, Target Blogs: ${targetCount}, Current Today: ${existingSlugs.length}`);
-
-      if (targetCount === 0) {
-        console.log(`Outside of posting hours for ${profile.businessName}. Skipping.`);
-        continue;
-      }
+      // Adjust to EST start of day
+      const estOffset = -5; // Default EST offset
+      todayStart.setUTCHours(12 + estOffset, 0, 0, 0); // Roughly midnight EST
 
       const todayBlogsSnap = await blogCollection
         .where('createdAt', '>=', todayStart.toISOString())
         .get();
 
       if (todayBlogsSnap.size >= targetCount) {
-        console.log(`Site ${profile.businessName} has ${todayBlogsSnap.size}/${targetCount} blogs generated today. Skipping.`);
+        logs.push(`Site "${profile.businessName}" has ${todayBlogsSnap.size}/${targetCount} blogs today. Skipping.`);
         continue;
       }
 
       const neededCount = targetCount - todayBlogsSnap.size;
-      console.log(`Generating ${neededCount} new blog post(s) for ${profile.businessName}...`);
+      logs.push(`Generating ${neededCount} blog(s) for "${profile.businessName}"`);
+
+      // Get all existing slugs to prevent duplication
+      const blogsSnap = await blogCollection.get();
+      const existingSlugs = blogsSnap.docs.map(d => d.data().slug);
 
       for (let i = 0; i < neededCount; i++) {
-        try {
-          const blogData = await generateSingleBlog(
-            profile.businessName || 'Local Service Pro',
-            profile.service || 'Home Services',
-            existingSlugs
-          );
+        const blogData = await generateSingleBlog(
+          profile.businessName || 'Local Service Pro',
+          profile.service || 'Home Services',
+          existingSlugs
+        );
 
-          if (blogData) {
-            const blogId = blogData.slug; // Use slug as document ID to ensure uniqueness
-            await blogCollection.doc(blogId).set({
-              ...blogData,
-              status: 'published',
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            });
-            existingSlugs.push(blogData.slug);
-            console.log(`Successfully published blog post: "${blogData.title}"`);
-          }
-        } catch (err) {
-          console.error(`Failed to generate blog post #${i + 1} for ${profile.businessName}:`, err);
+        if (blogData) {
+          await blogCollection.doc(blogData.slug).set({
+            ...blogData,
+            status: 'published',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          existingSlugs.push(blogData.slug);
+          logs.push(`Published blog "${blogData.title}" for "${profile.businessName}"`);
         }
       }
     }
 
-    console.log('Daily blog generation job completed successfully!');
-  } catch (error) {
-    console.error('Error running blog generation job:', error);
+    return NextResponse.json({ success: true, logs });
+  } catch (error: any) {
+    console.error('[cron-generate-blogs] Error:', error);
+    return NextResponse.json({ error: error.message || 'Internal Server Error', logs }, { status: 500 });
   }
 }
 
-// Run the script
-runDailyBlogGeneration();
+// Support POST requests as well
+export async function POST(request: Request) {
+  return GET(request);
+}
