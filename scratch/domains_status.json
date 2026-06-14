@@ -1,0 +1,420 @@
+{
+  "domains": [
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/tampaconcretepaving.com",
+      "createTime": "2026-06-13T15:41:18.493636354Z",
+      "updateTime": "2026-06-13T15:41:17.805222214Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_NON_FAH",
+        "ownershipState": "OWNERSHIP_MISSING",
+        "certState": "CERT_VALIDATING",
+        "requiredDnsUpdates": [
+          {
+            "discovered": [
+              {
+                "domainName": "tampaconcretepaving.com",
+                "records": [
+                  {
+                    "domainName": "tampaconcretepaving.com",
+                    "type": "A",
+                    "rdata": "192.64.119.244",
+                    "requiredAction": "REMOVE",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaconcretepaving.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "desired": [
+              {
+                "domainName": "tampaconcretepaving.com",
+                "records": [
+                  {
+                    "domainName": "tampaconcretepaving.com",
+                    "type": "A",
+                    "rdata": "35.219.200.3",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaconcretepaving.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=002-02-1e9db9dd-7b58-4aaa-8c8a-414e51421987",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "OWNERSHIP_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaconcretepaving.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T17:11:27.104634059Z"
+          },
+          {
+            "domainName": "_acme-challenge_virkfyq2xhimhaa7.tampaconcretepaving.com.",
+            "desired": [
+              {
+                "domainName": "_acme-challenge_virkfyq2xhimhaa7.tampaconcretepaving.com.",
+                "records": [
+                  {
+                    "domainName": "_acme-challenge_virkfyq2xhimhaa7.tampaconcretepaving.com.",
+                    "type": "CNAME",
+                    "rdata": "f9355d42-c1a1-4bd4-97fd-bad7bfb14004.17.authorize.certificatemanager.goog.",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "CERT_STATE"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T17:09:52.163276693Z"
+          }
+        ]
+      },
+      "reconciling": true,
+      "uid": "1e9db9dd-7b58-4aaa-8c8a-414e51421987",
+      "etag": "-RQgQ4pOngpZExmUn8KPGje7RiXK-OAipr0ozUO8GRA"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/t3automations.com",
+      "createTime": "2026-02-25T17:33:24.100675929Z",
+      "updateTime": "2026-06-12T13:27:17.630515218Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_ACTIVE",
+        "ownershipState": "OWNERSHIP_ACTIVE",
+        "certState": "CERT_ACTIVE"
+      },
+      "reconciling": false,
+      "uid": "6144e9e1-2a6a-4ed4-ab2f-df4ce1e4b5a3",
+      "etag": "5nseTKIPF3CT_J88dSh-yd3abPI1vMOC2Ne6BNEtWAA"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/aisalesrep.live",
+      "createTime": "2026-05-12T11:19:58.311998394Z",
+      "updateTime": "2026-06-12T13:27:17.630610808Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_ACTIVE",
+        "ownershipState": "OWNERSHIP_ACTIVE",
+        "certState": "CERT_ACTIVE"
+      },
+      "reconciling": false,
+      "uid": "21ed7fd1-4793-4b5e-83f0-c232085d9cc4",
+      "etag": "GJwHLLo-9VYMe-N5Ak-l5zIg9FksvO02jf5wW9x6Bh0"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/studio--studio-1410114603-9e1f6.us-central1.hosted.app",
+      "createTime": "2025-12-29T14:49:30.243114934Z",
+      "updateTime": "2025-12-29T14:49:30.183567Z",
+      "type": "DEFAULT",
+      "reconciling": false,
+      "uid": "8a61a5de-e3bb-4576-8171-5197911c5d3d",
+      "etag": "R-kl4riEAk8m1fmohbb6wxYvLTckFCOGnwdgSQe8lLE"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/tampabaytreecare.com",
+      "createTime": "2026-06-13T15:45:15.033206218Z",
+      "updateTime": "2026-06-13T15:45:14.410461710Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_NON_FAH",
+        "ownershipState": "OWNERSHIP_MISSING",
+        "certState": "CERT_VALIDATING",
+        "requiredDnsUpdates": [
+          {
+            "discovered": [
+              {
+                "domainName": "tampabaytreecare.com",
+                "records": [
+                  {
+                    "domainName": "tampabaytreecare.com",
+                    "type": "A",
+                    "rdata": "162.255.119.172",
+                    "requiredAction": "REMOVE",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampabaytreecare.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "desired": [
+              {
+                "domainName": "tampabaytreecare.com",
+                "records": [
+                  {
+                    "domainName": "tampabaytreecare.com",
+                    "type": "A",
+                    "rdata": "35.219.200.2",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampabaytreecare.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=002-02-cf9d04a9-d5a1-49bf-96ff-98b01b68b952",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "OWNERSHIP_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampabaytreecare.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T17:12:23.417420245Z"
+          },
+          {
+            "domainName": "_acme-challenge_ug4slayg43ua4yap.tampabaytreecare.com.",
+            "desired": [
+              {
+                "domainName": "_acme-challenge_ug4slayg43ua4yap.tampabaytreecare.com.",
+                "records": [
+                  {
+                    "domainName": "_acme-challenge_ug4slayg43ua4yap.tampabaytreecare.com.",
+                    "type": "CNAME",
+                    "rdata": "7236a5d0-ff0c-4f8e-b693-f36066c23f23.18.authorize.certificatemanager.goog.",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "CERT_STATE"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T16:58:48.663292833Z"
+          }
+        ]
+      },
+      "reconciling": true,
+      "uid": "cf9d04a9-d5a1-49bf-96ff-98b01b68b952",
+      "etag": "4zJCk7zuWT5gbh454-S5Rl_iDvpAPl9n1Th0g_1Cy0U"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/tampaepoxycoatings.com",
+      "createTime": "2026-06-13T15:44:37.656233903Z",
+      "updateTime": "2026-06-13T15:44:36.931810616Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_NON_FAH",
+        "ownershipState": "OWNERSHIP_MISSING",
+        "certState": "CERT_VALIDATING",
+        "requiredDnsUpdates": [
+          {
+            "discovered": [
+              {
+                "domainName": "tampaepoxycoatings.com",
+                "records": [
+                  {
+                    "domainName": "tampaepoxycoatings.com",
+                    "type": "A",
+                    "rdata": "162.255.119.95",
+                    "requiredAction": "REMOVE",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaepoxycoatings.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "desired": [
+              {
+                "domainName": "tampaepoxycoatings.com",
+                "records": [
+                  {
+                    "domainName": "tampaepoxycoatings.com",
+                    "type": "A",
+                    "rdata": "35.219.200.2",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaepoxycoatings.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=002-02-8d9f5cc1-8b98-4ee7-a2c9-9722c25993b9",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "OWNERSHIP_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "tampaepoxycoatings.com",
+                    "type": "TXT",
+                    "rdata": "v=spf1 include:spf.efwd.registrar-servers.com ~all"
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T17:11:45.812517181Z"
+          },
+          {
+            "domainName": "_acme-challenge_ug4slayg43ua4yap.tampaepoxycoatings.com.",
+            "desired": [
+              {
+                "domainName": "_acme-challenge_ug4slayg43ua4yap.tampaepoxycoatings.com.",
+                "records": [
+                  {
+                    "domainName": "_acme-challenge_ug4slayg43ua4yap.tampaepoxycoatings.com.",
+                    "type": "CNAME",
+                    "rdata": "62adb357-8056-4d30-aaf1-bf03348f14a0.4.authorize.certificatemanager.goog.",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "CERT_STATE"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T16:58:10.919703667Z"
+          }
+        ]
+      },
+      "reconciling": true,
+      "uid": "8d9f5cc1-8b98-4ee7-a2c9-9722c25993b9",
+      "etag": "hIsC8cjfjBEY4PdoXCAWpC2bRZU4Mjq3kXtIQl6M5nU"
+    },
+    {
+      "name": "projects/studio-1410114603-9e1f6/locations/us-central1/backends/studio/domains/cleansweepcleaningcompany.com",
+      "createTime": "2026-06-13T15:55:38.243086926Z",
+      "updateTime": "2026-06-13T15:55:37.298983707Z",
+      "type": "CUSTOM",
+      "customDomainStatus": {
+        "hostState": "HOST_WRONG_SHARD",
+        "ownershipState": "OWNERSHIP_MISMATCH",
+        "certState": "CERT_EXPIRING_SOON",
+        "requiredDnsUpdates": [
+          {
+            "discovered": [
+              {
+                "domainName": "cleansweepcleaningcompany.com",
+                "records": [
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "A",
+                    "rdata": "35.219.200.196",
+                    "requiredAction": "REMOVE",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=002-02-dda0c597-838f-4105-90b1-746b1783116d",
+                    "requiredAction": "REMOVE",
+                    "relevantState": [
+                      "OWNERSHIP_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=023-02-1d3078d9-2f74-4fd5-894e-676b33940fdc"
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "google-site-verification=0eCruCcF6PBxYgDwTc4FL0TMfPJEObSOiMMjiPE2GWE"
+                  }
+                ]
+              }
+            ],
+            "desired": [
+              {
+                "domainName": "cleansweepcleaningcompany.com",
+                "records": [
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "A",
+                    "rdata": "35.219.200.14",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "HOST_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=002-02-3e7f8d69-f31f-4870-8675-cf0bcd9c4a69",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "OWNERSHIP_STATE"
+                    ]
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "fah-claim=023-02-1d3078d9-2f74-4fd5-894e-676b33940fdc"
+                  },
+                  {
+                    "domainName": "cleansweepcleaningcompany.com",
+                    "type": "TXT",
+                    "rdata": "google-site-verification=0eCruCcF6PBxYgDwTc4FL0TMfPJEObSOiMMjiPE2GWE"
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-13T17:12:15.404968997Z"
+          },
+          {
+            "domainName": "_acme-challenge_5fs6avd454ah3pgk.cleansweepcleaningcompany.com.",
+            "desired": [
+              {
+                "domainName": "_acme-challenge_5fs6avd454ah3pgk.cleansweepcleaningcompany.com.",
+                "records": [
+                  {
+                    "domainName": "_acme-challenge_5fs6avd454ah3pgk.cleansweepcleaningcompany.com.",
+                    "type": "CNAME",
+                    "rdata": "5dd390f7-1a69-4fa9-8716-8bd05ca8cddb.10.authorize.certificatemanager.goog.",
+                    "requiredAction": "ADD",
+                    "relevantState": [
+                      "CERT_STATE"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "checkTime": "2026-06-12T20:16:45.317093103Z"
+          }
+        ]
+      },
+      "reconciling": true,
+      "uid": "3e7f8d69-f31f-4870-8675-cf0bcd9c4a69",
+      "etag": "7szxX2LxDCEuJlL40SnqqP_fPxTiEhB74JSNU-efUIU"
+    }
+  ]
+}
