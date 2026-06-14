@@ -17,9 +17,7 @@ import { T3LogoText } from '../ui/logo';
 import { LanguageSelector } from '../ui/language-selector';
 import TranslatedText from '../TranslatedText';
 
-const navLinks: { href: string; label: string }[] = [
-  { href: '/marketplace', label: 'Marketplace' },
-];
+const navLinks: { href: string; label: string }[] = [];
 
 export default function Header() {
   const [isClient, setIsClient] = React.useState(false);
@@ -64,7 +62,7 @@ export default function Header() {
             <LanguageSelector />
             <Link href="/login">
               <Button variant="ghost" className="border-2 border-transparent hover:border-primary hover:bg-transparent">
-                <TranslatedText>Client Login</TranslatedText>
+                <TranslatedText>Admin Login</TranslatedText>
               </Button>
             </Link>
           </div>
@@ -102,7 +100,7 @@ export default function Header() {
                     <SheetClose asChild>
                       <Link href="/login">
                         <Button variant="outline" className="w-full">
-                          <TranslatedText>Client Login</TranslatedText>
+                          <TranslatedText>Admin Login</TranslatedText>
                         </Button>
                       </Link>
                     </SheetClose>

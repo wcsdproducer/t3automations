@@ -294,10 +294,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Settings className="h-4 w-4" />
                     Company Details
                   </SidebarNavLink>
-                  <SidebarNavLink href={`/dashboard/${userIdSlug}/billing`}>
-                    <CreditCard className="h-4 w-4" />
-                    Billing
-                  </SidebarNavLink>
                 </>
               )}
             </nav>

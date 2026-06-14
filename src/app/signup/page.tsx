@@ -159,101 +159,21 @@ function SignupForm() {
       <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-slate-100 shadow-2xl">
         <CardHeader>
           <CardTitle className="text-2xl text-white font-extrabold tracking-tight">
-            {rentSite ? (
-              <span><TranslatedText>Create Renter Account</TranslatedText></span>
-            ) : (
-              <span><TranslatedText>Sign Up</TranslatedText></span>
-            )}
+            <span>Registration Restricted</span>
           </CardTitle>
           <CardDescription className="text-slate-400">
-            {rentSite ? (
-              <span><TranslatedText>Complete signup to lease this digital asset.</TranslatedText></span>
-            ) : (
-              <span><TranslatedText>Create a landlord account to host sites.</TranslatedText></span>
-            )}
+            <span>T3 Automations is a company-owned platform for internal website and asset management.</span>
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4">
-          <form onSubmit={handleSignUp}>
-            {!rentSite && (
-              <div className="grid gap-2">
-                <Label htmlFor="businessName" className="text-slate-355"><TranslatedText>Business Name</TranslatedText></Label>
-                <Input
-                  id="businessName"
-                  type="text"
-                  placeholder="Acme Inc."
-                  required
-                  value={businessName}
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-                />
-              </div>
-            )}
-            <div className={`grid gap-2 ${!rentSite ? 'mt-4' : ''}`}>
-              <Label htmlFor="email" className="text-slate-355"><TranslatedText>Email Address</TranslatedText></Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-              />
-            </div>
-            {!rentSite && (
-              <div className="grid gap-2 mt-4">
-                <Label htmlFor="phoneNumber" className="text-slate-355"><TranslatedText>Phone Number</TranslatedText></Label>
-                <Input
-                  id="phoneNumber"
-                  type="tel"
-                  placeholder="(123) 456-7890"
-                  required
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-                />
-              </div>
-            )}
-            <div className="grid gap-2 mt-4">
-              <Label htmlFor="password" className="text-slate-355"><TranslatedText>Password</TranslatedText></Label>
-              <Input
-                id="password"
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
-              />
-            </div>
-            {error && <p className="text-destructive text-sm mt-2">{error}</p>}
-            <Button className="w-full mt-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all">
-              {rentSite ? <TranslatedText>Sign Up & Continue</TranslatedText> : <TranslatedText>Sign Up</TranslatedText>}
-            </Button>
-          </form>
-          
-          <div className="relative my-2">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-slate-800" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-900 px-2 text-slate-500"><TranslatedText>Or continue with</TranslatedText></span>
-            </div>
-          </div>
-          
-          <Button variant="outline" className="w-full border-slate-850 hover:bg-slate-800 hover:text-white" onClick={handleGoogleSignIn}>
-            <GoogleIcon className="mr-2 h-4 w-4" />
-            <TranslatedText>Google</TranslatedText>
-          </Button>
+        <CardContent className="grid gap-4 py-4">
+          <p className="text-sm text-slate-300 leading-relaxed text-center">
+            Public user registration is disabled. Please log in with your administrator credentials or contact the system administrator to request access.
+          </p>
         </CardContent>
-        <CardFooter className="flex-col gap-4 border-t border-slate-850 pt-4">
-          <div className="text-sm text-center text-slate-400">
-            <TranslatedText>Already have an account?</TranslatedText>{' '}
-            <Link href={rentSite ? `/login?rentSite=${rentSite}&price=${rentPrice}` : '/login'} className="underline text-indigo-400 hover:text-indigo-300">
-              <TranslatedText>Log in</TranslatedText>
-            </Link>
-          </div>
+        <CardFooter>
+          <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700">
+            <Link href="/login">Return to Login</Link>
+          </Button>
         </CardFooter>
       </Card>
     </div>

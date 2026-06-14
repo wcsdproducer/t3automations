@@ -382,7 +382,7 @@ export default function DashboardRouterPage() {
           <div className="flex items-center gap-2">
             <LayoutDashboard className="h-6 w-6 text-indigo-400" />
             <span className="font-bold text-xl tracking-tight bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-              T3 Portfolio Landlord
+              T3 Automations Asset Manager
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -405,10 +405,10 @@ export default function DashboardRouterPage() {
           
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              <TranslatedText>Your Digital Real Estate</TranslatedText>
+              <TranslatedText>For-Rent Website Portfolio</TranslatedText>
             </h1>
             <p className="text-slate-400 mt-2">
-              <TranslatedText>Manage, rank, and rent out landing pages with AI Voice Agents connected.</TranslatedText>
+              <TranslatedText>Track leads, assign renters, set lease pricing, and manage call forward settings for company-owned rank & rent websites.</TranslatedText>
             </p>
           </div>
 
@@ -421,9 +421,9 @@ export default function DashboardRouterPage() {
             </DialogTrigger>
             <DialogContent className="bg-slate-900 border border-slate-800 text-slate-100">
               <DialogHeader>
-                <DialogTitle><TranslatedText>Provision New Rank & Rent Asset</TranslatedText></DialogTitle>
+                <DialogTitle><TranslatedText>Add For-Rent Website Profile</TranslatedText></DialogTitle>
                 <DialogDescription className="text-slate-400">
-                  <TranslatedText>Create a new niche landing page configuration. An AI voice agent skeleton will be created automatically.</TranslatedText>
+                  <TranslatedText>Create a new website profile in our system. An AI voice agent skeleton will be created automatically.</TranslatedText>
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleCreateSite} className="space-y-4 py-4">
