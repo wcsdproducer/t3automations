@@ -331,6 +331,14 @@ service cloud.firestore {
         allow update: if isExistingOwner(businessProfileId) && isImmutableSubDoc();
         allow delete: if isExistingOwner(businessProfileId);
       }
+
+      // --------------------------------------------------------------------
+      // Blogs Subcollection
+      // --------------------------------------------------------------------
+      match /blogs/{blogId} {
+        allow read: if true; // Public access for reading blogs
+        allow write: if isOwner(businessProfileId); // Restricted to the profile owner/renter/admin
+      }
     } // END of match /businessProfiles/{businessProfileId}
 
     // ----------------------------------------------------------------------
