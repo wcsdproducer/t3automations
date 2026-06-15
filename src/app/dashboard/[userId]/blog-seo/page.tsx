@@ -138,7 +138,7 @@ export default function BlogSeoPage() {
 
   const posts = useMemo(() => {
     if (!blogsData) return [];
-    return blogsData.map(doc => doc.data() as BlogPost);
+    return blogsData as unknown as BlogPost[];
   }, [blogsData]);
 
   // Handle opening edit dialog
