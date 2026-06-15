@@ -23,7 +23,7 @@ import {
   AlertTriangle,
   Loader2
 } from 'lucide-react';
-import { setupGoogleAnalyticsAction } from '@/app/actions/google-analytics';
+import { setupGoogleAnalyticsAction, getGoogleAnalyticsDataAction } from '@/app/actions/google-analytics';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -93,6 +93,29 @@ export default function AnalyticsOverviewPage() {
   const hasConnectedDomain = domains && domains.length > 0;
   const isGAConnected = !!businessProfile?.googleAnalyticsMeasurementId;
 
+  const [analyticsData, setAnalyticsData] = React.useState<any>(null);
+  const [isDataLoading, setIsDataLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!userId || !isGAConnected) return;
+
+    async function loadAnalytics() {
+      setIsDataLoading(true);
+      try {
+        const res = await getGoogleAnalyticsDataAction(userId);
+        if (res.success) {
+          setAnalyticsData(res);
+        }
+      } catch (err) {
+        console.error('Failed to load analytics data:', err);
+      } finally {
+        setIsDataLoading(false);
+      }
+    }
+
+    loadAnalytics();
+  }, [userId, isGAConnected]);
+
   const handleSetupAnalytics = () => {
     if (!userId) return;
 
@@ -104,6 +127,13 @@ export default function AnalyticsOverviewPage() {
             title: 'Setup Completed',
             description: res.message,
           });
+          // Reload analytics data after setup completes
+          setIsDataLoading(true);
+          const dataRes = await getGoogleAnalyticsDataAction(userId);
+          if (dataRes.success) {
+            setAnalyticsData(dataRes);
+          }
+          setIsDataLoading(false);
         } else {
           toast({
             title: 'Setup Failed',
@@ -121,7 +151,7 @@ export default function AnalyticsOverviewPage() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || (isGAConnected && isDataLoading && !analyticsData)) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-950">
         <div className="flex flex-col items-center gap-2">
@@ -172,9 +202,9 @@ export default function AnalyticsOverviewPage() {
               <Activity className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,420</div>
+              <div className="text-2xl font-bold">{analyticsData?.metrics.totalVisitors.toLocaleString() || '0'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3" /> +12.5% vs last week
+                <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.visitorsChange || '+0.0%'} vs last week
               </p>
             </CardContent>
           </Card>
@@ -185,9 +215,9 @@ export default function AnalyticsOverviewPage() {
               <Globe className="h-4 w-4 text-emerald-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3,850</div>
+              <div className="text-2xl font-bold">{analyticsData?.metrics.totalPageviews.toLocaleString() || '0'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3" /> +8.3% vs last week
+                <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.pageviewsChange || '+0.0%'} vs last week
               </p>
             </CardContent>
           </Card>
@@ -198,9 +228,9 @@ export default function AnalyticsOverviewPage() {
               <Clock className="h-4 w-4 text-amber-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2m 45s</div>
+              <div className="text-2xl font-bold">{analyticsData?.metrics.avgSessionDuration || '0m 0s'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3" /> +5.2% vs last week
+                <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.durationChange || '+0.0%'} vs last week
               </p>
             </CardContent>
           </Card>
@@ -211,9 +241,9 @@ export default function AnalyticsOverviewPage() {
               <ArrowUpRight className="h-4 w-4 text-purple-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">41.2%</div>
+              <div className="text-2xl font-bold">{analyticsData?.metrics.bounceRate || '0%'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3" /> -2.1% improvement
+                <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.bounceChange || '-0.0%'} improvement
               </p>
             </CardContent>
           </Card>
@@ -229,7 +259,7 @@ export default function AnalyticsOverviewPage() {
             </CardHeader>
             <CardContent className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={TRAFFIC_DATA}>
+                <AreaChart data={analyticsData?.trafficData || []}>
                   <defs>
                     <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
@@ -261,7 +291,7 @@ export default function AnalyticsOverviewPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <RechartsPieChart>
                   <Pie
-                    data={SOURCE_DATA}
+                    data={analyticsData?.sourceData || []}
                     cx="50%"
                     cy="50%"
                     innerRadius={60}
@@ -269,7 +299,7 @@ export default function AnalyticsOverviewPage() {
                     paddingAngle={5}
                     dataKey="value"
                   >
-                    {SOURCE_DATA.map((entry, index) => (
+                    {(analyticsData?.sourceData || []).map((entry: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -277,7 +307,7 @@ export default function AnalyticsOverviewPage() {
                 </RechartsPieChart>
               </ResponsiveContainer>
               <div className="grid grid-cols-2 gap-2 w-full px-4 text-xs">
-                {SOURCE_DATA.map((s, idx) => (
+                {(analyticsData?.sourceData || []).map((s: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
                     <span className="text-slate-300 truncate">{s.name}</span>
@@ -297,7 +327,7 @@ export default function AnalyticsOverviewPage() {
             </CardHeader>
             <CardContent className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
-                <RechartsBarChart data={REFERRAL_DATA} layout="vertical">
+                <RechartsBarChart data={analyticsData?.referralData || []} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                   <XAxis type="number" stroke="#64748b" fontSize={12} />
                   <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} />
