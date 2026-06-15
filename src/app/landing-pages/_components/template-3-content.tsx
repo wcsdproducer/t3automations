@@ -18,6 +18,8 @@ import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { AeoSchema } from '@/components/AeoSchema';
+
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -400,6 +402,14 @@ export function Template3Content({
 
   return (
     <div className={`bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 selection:bg-slate-900 selection:text-white`} style={{ fontFamily: font.body }}>
+      <AeoSchema
+        companyName={companyName}
+        phone={phone}
+        service={service}
+        logoUrl={logoUrl}
+        description={content.hero?.subtitle}
+        faqs={content.faqs}
+      />
       {/* Dynamic font stylesheet loading */}
       {font.import && <link rel="stylesheet" href={font.import} />}
 
