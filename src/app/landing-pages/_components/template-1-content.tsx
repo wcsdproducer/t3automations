@@ -39,6 +39,20 @@ export function Template1Content({
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }));
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [blogLink, setBlogLink] = useState('/blog');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname.startsWith('/pages/')) {
+        setBlogLink(`/pages/${businessProfileId}/blog`);
+      } else if (window.location.pathname.startsWith('/landing-pages/')) {
+        setBlogLink('#');
+      } else {
+        setBlogLink('/blog');
+      }
+    }
+  }, [businessProfileId]);
+
 
   const contactSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -159,6 +173,7 @@ export function Template1Content({
           <a href="#about" className="text-sm font-medium hover:text-primary transition-colors">About Us</a>
           <a href="#reviews" className="text-sm font-medium hover:text-primary transition-colors">Reviews</a>
           <a href="#contact" className="text-sm font-medium hover:text-primary transition-colors">Contact</a>
+          <a href={blogLink} className="text-sm font-medium hover:text-primary transition-colors">Blog</a>
         </nav>
         <a href={`tel:${phone}`} className="flex items-center gap-2 font-semibold">
           <Phone className="h-5 w-5" /><span>{phone}</span>
@@ -276,6 +291,7 @@ export function Template1Content({
       <footer className="py-8 px-6 text-center text-muted-foreground border-t">
         <p>&copy; {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
         <div className="mt-4 flex justify-center gap-4 text-sm">
+          <a href={blogLink} className="hover:underline">Blog</a>
           <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline">Privacy Policy</a>
           <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline">Terms of Service</a>
         </div>

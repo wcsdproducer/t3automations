@@ -207,6 +207,20 @@ export function Template3Content({
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isHeaderShrunk, setIsHeaderShrunk] = useState(false);
+  const [blogLink, setBlogLink] = useState('/blog');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname.startsWith('/pages/')) {
+        setBlogLink(`/pages/${businessProfileId}/blog`);
+      } else if (window.location.pathname.startsWith('/landing-pages/')) {
+        setBlogLink('#');
+      } else {
+        setBlogLink('/blog');
+      }
+    }
+  }, [businessProfileId]);
+
 
   // Fallback scroll listener for header shrinking
   useEffect(() => {
@@ -411,6 +425,7 @@ export function Template3Content({
             <a href="#about" className="hover:text-slate-900 dark:hover:text-white transition-colors font-medium">Why Us</a>
             <a href="#reviews" className="hover:text-slate-900 dark:hover:text-white transition-colors">Testimonials</a>
             <a href="#faqs" className="hover:text-slate-900 dark:hover:text-white transition-colors">FAQs</a>
+            <a href={blogLink} className="hover:text-slate-900 dark:hover:text-white transition-colors">Blog</a>
           </nav>
           <div className="flex items-center gap-3">
             <a href={`tel:${phone}`} className={`flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs md:text-sm shadow-md transition-all text-white bg-slate-900 dark:bg-white dark:text-slate-950 hover:bg-slate-800 hover:scale-105 active:scale-95`}>
@@ -694,6 +709,7 @@ export function Template3Content({
       <footer className="py-12 text-center text-slate-400 dark:text-slate-500 border-t border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-950">
         <p className="text-sm font-semibold">&copy; {new Date().getFullYear()} {companyName}. All rights reserved.</p>
         <div className="mt-4 flex justify-center gap-6 text-xs font-medium">
+          <a href={blogLink} className="hover:underline hover:text-slate-700 dark:hover:text-slate-300">Blog</a>
           <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700 dark:hover:text-slate-300">Privacy Policy</a>
           <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700 dark:hover:text-slate-300">Terms of Service</a>
         </div>
