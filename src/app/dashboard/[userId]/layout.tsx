@@ -290,6 +290,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Cog className="h-4 w-4" />
                     AI Voice Agent
                   </SidebarNavLink>
+                  <SidebarNavLink href={`/dashboard/${userIdSlug}/blog-seo`}>
+                    <Book className="h-4 w-4" />
+                    Blog & SEO
+                  </SidebarNavLink>
                   <SidebarNavLink href={`/dashboard/${userIdSlug}/settings`}>
                     <Settings className="h-4 w-4" />
                     Company Details
