@@ -74,6 +74,7 @@ export default async function CustomDomainBlogIndexPage({
   const profile = profileDoc.data() || {};
   const companyName = profile.businessName || 'Our Service Company';
   const phone = formatPhone(profile.phoneNumber || '');
+  const measurementId = profile.googleAnalyticsMeasurementId;
 
   // 2. Fetch blogs
   let blogs: any[] = [];
@@ -100,6 +101,24 @@ export default async function CustomDomainBlogIndexPage({
 
   return (
     <div className="bg-slate-50 min-h-screen text-slate-800 flex flex-col font-sans">
+      {/* Google Analytics Script if connected */}
+      {measurementId && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${measurementId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+        </>
+      )}
       {/* Header */}
       <header className="sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center border-b bg-white/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
