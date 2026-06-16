@@ -373,7 +373,38 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
             },
           };
       } catch (innerError: any) {
-        console.warn(`Failed to retrieve Google Analytics Data API response, using seeded fallback:`, innerError.response?.data || innerError.message || innerError);
+        console.error(`Failed to retrieve Google Analytics Data API response:`, innerError.response?.data || innerError.message || innerError);
+        
+        // Return zero metrics and empty arrays to avoid showing simulated data
+        const trafficData: { date: string; visitors: number; pageviews: number }[] = [];
+        const now = new Date();
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(now);
+          d.setDate(now.getDate() - i);
+          const dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          trafficData.push({
+            date: dateLabel,
+            visitors: 0,
+            pageviews: 0,
+          });
+        }
+
+        return {
+          success: false,
+          trafficData,
+          sourceData: [],
+          referralData: [],
+          metrics: {
+            totalVisitors: 0,
+            totalPageviews: 0,
+            avgSessionDuration: '0m 0s',
+            bounceRate: '0%',
+            visitorsChange: '+0.0%',
+            pageviewsChange: '+0.0%',
+            durationChange: '+0.0%',
+            bounceChange: '-0.0%',
+          },
+        };
       }
     }
 
