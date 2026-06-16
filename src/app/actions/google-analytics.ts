@@ -211,7 +211,6 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
     // Check if we can attempt to fetch real Google Analytics data
     if (propertyId && !isMockFlag && !propertyId.includes('mock')) {
       try {
-        console.log(`Attempting to fetch real Google Analytics data for ${businessProfileId} (${propertyId})...`);
         const auth = new GoogleAuth({
           scopes: [
             'https://www.googleapis.com/auth/analytics.readonly',
@@ -219,57 +218,54 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
           ],
         });
         const client = await auth.getClient();
-        const tokenResponse = await client.getAccessToken();
-        const accessToken = tokenResponse.token;
 
-        if (accessToken) {
-          // 1. Fetch 7-day traffic trend
-          const trafficRes = await axios.post(
-            `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
-            {
-              dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-              dimensions: [{ name: 'date' }],
-              metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }],
-            },
-            { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
-          );
+        // 1. Fetch 7-day traffic trend
+        const trafficRes = await client.request<any>({
+          url: `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
+          method: 'POST',
+          data: {
+            dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+            dimensions: [{ name: 'date' }],
+            metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }],
+          },
+        });
 
-          // 2. Fetch channel grouping
-          const channelRes = await axios.post(
-            `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
-            {
-              dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-              dimensions: [{ name: 'sessionDefaultChannelGroup' }],
-              metrics: [{ name: 'activeUsers' }],
-            },
-            { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
-          );
+        // 2. Fetch channel grouping
+        const channelRes = await client.request<any>({
+          url: `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
+          method: 'POST',
+          data: {
+            dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+            dimensions: [{ name: 'sessionDefaultChannelGroup' }],
+            metrics: [{ name: 'activeUsers' }],
+          },
+        });
 
-          // 3. Fetch traffic sources
-          const sourceRes = await axios.post(
-            `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
-            {
-              dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-              dimensions: [{ name: 'sessionSource' }],
-              metrics: [{ name: 'activeUsers' }],
-            },
-            { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
-          );
+        // 3. Fetch traffic sources
+        const sourceRes = await client.request<any>({
+          url: `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
+          method: 'POST',
+          data: {
+            dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+            dimensions: [{ name: 'sessionSource' }],
+            metrics: [{ name: 'activeUsers' }],
+          },
+        });
 
-          // 4. Fetch summary metrics (bounce rate, avg session duration)
-          const summaryRes = await axios.post(
-            `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
-            {
-              dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-              metrics: [
-                { name: 'activeUsers' },
-                { name: 'screenPageViews' },
-                { name: 'bounceRate' },
-                { name: 'averageSessionDuration' }
-              ],
-            },
-            { headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' } }
-          );
+        // 4. Fetch summary metrics (bounce rate, avg session duration)
+        const summaryRes = await client.request<any>({
+          url: `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
+          method: 'POST',
+          data: {
+            dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+            metrics: [
+              { name: 'activeUsers' },
+              { name: 'screenPageViews' },
+              { name: 'bounceRate' },
+              { name: 'averageSessionDuration' }
+            ],
+          },
+        });
 
           // Parse traffic data
           const trafficRows = trafficRes.data.rows || [];
@@ -376,9 +372,8 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
               bounceChange,
             },
           };
-        }
       } catch (innerError: any) {
-        console.warn(`Failed to retrieve Google Analytics Data API response, using seeded fallback:`, innerError.message || innerError);
+        console.warn(`Failed to retrieve Google Analytics Data API response, using seeded fallback:`, innerError.response?.data || innerError.message || innerError);
       }
     }
 
