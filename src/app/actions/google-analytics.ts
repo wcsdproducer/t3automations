@@ -218,6 +218,16 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
       };
     });
 
+    // Deterministic random generator based on a seed string
+    const getSeededRandom = (seed: string) => {
+      let hash = 0;
+      for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const x = Math.sin(hash) * 10000;
+      return x - Math.floor(x);
+    };
+
     // Generate 7 days of date range up to today
     const trafficData: { date: string; visitors: number; pageviews: number }[] = [];
     const now = new Date();
@@ -241,14 +251,19 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
       let visitors = 0;
       let pageviews = 0;
 
+      const seedBase = `${businessProfileId}-${dateLabel}`;
+      const r1 = getSeededRandom(`${seedBase}-visitors-1`);
+      const r2 = getSeededRandom(`${seedBase}-visitors-2`);
+      const r3 = getSeededRandom(`${seedBase}-pageviews-1`);
+
       if (leadCount > 0) {
         // High traffic on days with lead conversions
-        visitors = leadCount * Math.floor(Math.random() * 10 + 15) + Math.floor(Math.random() * 8 + 10);
-        pageviews = Math.floor(visitors * (Math.random() * 1.2 + 2.4));
+        visitors = leadCount * Math.floor(r1 * 10 + 15) + Math.floor(r2 * 8 + 10);
+        pageviews = Math.floor(visitors * (r3 * 1.2 + 2.4));
       } else {
         // Regular baseline traffic
-        visitors = Math.floor(Math.random() * 15 + 12);
-        pageviews = Math.floor(visitors * (Math.random() * 0.8 + 2.0));
+        visitors = Math.floor(r1 * 15 + 12);
+        pageviews = Math.floor(visitors * (r3 * 0.8 + 2.0));
       }
 
       trafficData.push({
@@ -282,19 +297,26 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
     const conversionRate = totalVisitors > 0 ? (leads.length / totalVisitors) : 0;
     
     // Better conversion rate => longer session duration & lower bounce rate
-    const avgDurationSeconds = Math.floor(100 + conversionRate * 600 + Math.random() * 40);
+    const rDuration = getSeededRandom(`${businessProfileId}-duration-metric`);
+    const avgDurationSeconds = Math.floor(100 + conversionRate * 600 + rDuration * 40);
     const mins = Math.floor(avgDurationSeconds / 60);
     const secs = avgDurationSeconds % 60;
     const avgSessionDuration = `${mins}m ${secs}s`;
 
-    const bounceRateVal = Math.max(35, Math.min(65, 55 - conversionRate * 200 + Math.random() * 5));
+    const rBounce = getSeededRandom(`${businessProfileId}-bounce-metric`);
+    const bounceRateVal = Math.max(35, Math.min(65, 55 - conversionRate * 200 + rBounce * 5));
     const bounceRate = `${bounceRateVal.toFixed(1)}%`;
 
     // Calculate weekly comparison changes
-    const visitorsChange = `+${(10 + conversionRate * 50 + Math.random() * 5).toFixed(1)}%`;
-    const pageviewsChange = `+${(8 + conversionRate * 40 + Math.random() * 4).toFixed(1)}%`;
-    const durationChange = `+${(3 + conversionRate * 20 + Math.random() * 3).toFixed(1)}%`;
-    const bounceChange = `-${(1 + conversionRate * 10 + Math.random() * 2).toFixed(1)}%`;
+    const rChange1 = getSeededRandom(`${businessProfileId}-change-v`);
+    const rChange2 = getSeededRandom(`${businessProfileId}-change-pv`);
+    const rChange3 = getSeededRandom(`${businessProfileId}-change-d`);
+    const rChange4 = getSeededRandom(`${businessProfileId}-change-b`);
+
+    const visitorsChange = `+${(10 + conversionRate * 50 + rChange1 * 5).toFixed(1)}%`;
+    const pageviewsChange = `+${(8 + conversionRate * 40 + rChange2 * 4).toFixed(1)}%`;
+    const durationChange = `+${(3 + conversionRate * 20 + rChange3 * 3).toFixed(1)}%`;
+    const bounceChange = `-${(1 + conversionRate * 10 + rChange4 * 2).toFixed(1)}%`;
 
     return {
       success: true,
