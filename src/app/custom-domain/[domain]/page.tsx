@@ -5,6 +5,9 @@ import { Template1Content } from '@/app/landing-pages/_components/template-1-con
 import { Template2Content } from '@/app/landing-pages/_components/template-2-content';
 import { Template3Content } from '@/app/landing-pages/_components/template-3-content';
 import { Template4Content } from '@/app/landing-pages/_components/template-4-content';
+import { TreeCareTemplate } from '@/app/landing-pages/_components/tree-care-template';
+import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flooring-template';
+import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
 
 export const dynamic = 'force-dynamic';
 
@@ -87,8 +90,13 @@ export default async function CustomDomainPage({
 
   // 3. Render the correct template with real data
   const content = (() => {
+    if (template === 'tree-care') return <TreeCareTemplate {...templateProps} />;
+    if (template === 'epoxy-flooring') return <EpoxyFlooringTemplate {...templateProps} />;
+    if (template === 'paving-concrete') return <PavingConcreteTemplate {...templateProps} />;
+    
+    // Legacy fallbacks
     if (template === 'template-2') return <Template2Content {...templateProps} />;
-    if (template === 'template-3') return <Template3Content {...templateProps} />;
+    if (template === 'template-3') return <TreeCareTemplate {...templateProps} />;
     if (template === 'template-4') return <Template4Content {...templateProps} />;
     return <Template1Content {...templateProps} />;
   })();

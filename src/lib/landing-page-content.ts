@@ -282,21 +282,21 @@ export function getContentForService(service: string) {
                 {
                     id: "epoxy-hero-1",
                     description: "Modern seamless epoxy garage flooring",
-                    imageUrl: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageUrl: "/images/epoxy-hero.png",
                     imageHint: "epoxy flooring"
                 }
             ],
             about: {
                 id: "epoxy-about",
                 description: "Worker applying a protective coating to a floor",
-                imageUrl: "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageUrl: "/images/epoxy-about.png",
                 imageHint: "epoxy application"
             },
             gallery: [
                 {
-                    id: "epoxy-hero-1",
-                    description: "Modern seamless epoxy garage flooring",
-                    imageUrl: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    id: "epoxy-gallery-1",
+                    description: "Finished high-gloss epoxy flooring showcase",
+                    imageUrl: "/images/epoxy-gallery.png",
                     imageHint: "epoxy flooring"
                 }
             ]
@@ -355,21 +355,21 @@ export function getContentForService(service: string) {
                 {
                     id: "tree-hero-1",
                     description: "Professional arborist climbing a tall tree for pruning",
-                    imageUrl: "https://images.unsplash.com/photo-1590130635472-de36496dbb1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageUrl: "/images/tree-hero.png",
                     imageHint: "tree trimming"
                 }
             ],
             about: {
                 id: "tree-about",
                 description: "Close up of a lush green forest landscape",
-                imageUrl: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageUrl: "/images/tree-about.png",
                 imageHint: "arborist working"
             },
             gallery: [
                 {
-                    id: "tree-hero-1",
-                    description: "Professional arborist climbing a tall tree for pruning",
-                    imageUrl: "https://images.unsplash.com/photo-1590130635472-de36496dbb1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    id: "tree-gallery-1",
+                    description: "Professional tree pruning and safety operations",
+                    imageUrl: "/images/tree-gallery.png",
                     imageHint: "tree trimming"
                 }
             ]
@@ -428,21 +428,21 @@ export function getContentForService(service: string) {
                 {
                     id: "concrete-hero-1",
                     description: "Construction worker smoothing poured concrete on a driveway",
-                    imageUrl: "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    imageUrl: "/images/paving-hero.png",
                     imageHint: "concrete construction"
                 }
             ],
             about: {
                 id: "concrete-about",
                 description: "Modern brick paver patio and driveway entrance",
-                imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                imageUrl: "/images/paving-about.png",
                 imageHint: "paving driveway"
             },
             gallery: [
                 {
-                    id: "concrete-hero-1",
-                    description: "Construction worker smoothing poured concrete on a driveway",
-                    imageUrl: "https://images.unsplash.com/photo-1541888967080-c956a48eaad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+                    id: "concrete-gallery-1",
+                    description: "Completed brick paver installation",
+                    imageUrl: "/images/paving-gallery.png",
                     imageHint: "concrete construction"
                 }
             ]
