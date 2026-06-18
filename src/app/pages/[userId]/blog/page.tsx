@@ -1,6 +1,7 @@
 import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, Calendar, ArrowLeft, BookOpen } from 'lucide-react';
 
 function formatPhone(value: string) {
@@ -126,6 +127,16 @@ export default async function BlogIndexPage({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs.map((post) => (
               <article key={post.id} className="bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                {post.imageUrl && (
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 border-b border-slate-100">
+                    <Image
+                      src={post.imageUrl}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                )}
                 <div className="p-6 flex-grow flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-2 text-xs text-slate-400 mb-3">

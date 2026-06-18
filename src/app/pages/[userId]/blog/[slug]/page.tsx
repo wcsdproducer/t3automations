@@ -1,6 +1,7 @@
 import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, Calendar, ArrowLeft } from 'lucide-react';
 import { BlogLeadForm } from '@/components/BlogLeadForm';
 import { Metadata } from 'next';
@@ -170,9 +171,21 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Article Section */}
-          <article className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 md:p-10 shadow-sm">
-            <header className="mb-8 border-b border-slate-100 pb-6">
-              <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
+          <article className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            {post.imageUrl && (
+              <div className="relative aspect-[21/9] w-full overflow-hidden bg-slate-100 border-b border-slate-100">
+                <Image
+                  src={post.imageUrl}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
+            <div className="p-6 md:p-10">
+              <header className="mb-8 border-b border-slate-100 pb-6">
+                <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
                 <Calendar className="h-3.5 w-3.5" />
                 <span>{post.createdAt}</span>
                 {post.author && (
@@ -197,7 +210,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="mt-12 pt-8 border-t border-slate-100">
               <BlogLeadForm businessProfileId={userId} companyName={companyName} />
             </div>
-          </article>
+          </div>
+        </article>
 
           {/* Sidebar */}
           <aside className="space-y-8">
