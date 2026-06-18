@@ -565,6 +565,39 @@ export function Template3Content({
           </section>
         )}
 
+        {/* Key Features & Advantages Section */}
+        <section className="bg-slate-50 dark:bg-slate-950 py-20 md:py-28 px-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="container mx-auto text-center max-w-5xl">
+            <span className={`text-xs font-bold uppercase tracking-widest ${theme.primaryText}`}>Why Choose Us</span>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight text-slate-900 dark:text-white" style={{ fontFamily: font.headline }}>
+              The Professional Difference
+            </h2>
+            <div className={`w-16 h-1 mx-auto mt-4 rounded ${theme.primaryBg}`} />
+            <p className="text-slate-500 dark:text-slate-400 mt-3 max-w-xl mx-auto text-base">
+              We deliver elite-level results through strict quality standards, certified specialists, and top-tier materials.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+              {[
+                { icon: "ShieldCheck", title: "Licensed & Insured", desc: "Fully certified, bonded, and backed by comprehensive general liability insurance for your complete protection." },
+                { icon: "Award", title: "Premium Materials", desc: "We utilize industrial-grade materials, advanced reinforcing fibers, and top-tier components on every project." },
+                { icon: "Clock", title: "Reliable Timelines", desc: "Our team respects your schedule, arriving on time and finishing projects within the agreed-upon timeframe." },
+                { icon: "HeartHandshake", title: "Local Guarantee", desc: "As a local Tampa crew, we stand behind our work with dedicated warranties and personal customer service." }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-850 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-left">
+                  <div>
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${theme.iconBg}`}>
+                      <ServiceIcon name={item.icon} className={`h-6 w-6 ${theme.primaryText}`} />
+                    </div>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-lg" style={{ fontFamily: font.headline }}>{item.title}</h4>
+                    <p className="text-slate-500 dark:text-slate-400 mt-3 text-sm leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* About & Trust Bio Section */}
         <section id="about" className="bg-white dark:bg-slate-900 py-20 md:py-28 px-4 border-t border-slate-100 dark:border-slate-800">
           <div className="container mx-auto grid md:grid-cols-2 gap-12 items-center max-w-5xl">
