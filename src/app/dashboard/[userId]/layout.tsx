@@ -242,7 +242,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </span>
               </div>
               <a
-                href={`/pages/${userIdSlug}`}
+                href={businessProfile?.websiteUrl || `/pages/${userIdSlug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors mt-1 w-fit bg-blue-950/40 border border-blue-900/60 px-2 py-1 rounded-md"
