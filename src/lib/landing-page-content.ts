@@ -1,5 +1,6 @@
 
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
+import { EPOXY_REVIEWS, TREE_REVIEWS, PAVING_REVIEWS } from './large-reviews-list';
 
 // A map to associate services with specific image hints for hero sections
 const serviceImageHints: Record<string, string[]> = {
@@ -329,13 +330,7 @@ export function getContentForService(service: string) {
             },
             reviews: {
                 title: `What Your Neighbors Are Saying`,
-                items: [
-                    { quote: `They transformed my stained garage floor into a gorgeous, clean space. The flake finish looks amazing and cleans up so easily!`, author: "- Steven M. in Tampa, FL" },
-                    { quote: `Fast, professional, and very neat. They completed our commercial warehouse floor over the weekend so we had zero downtime.`, author: "- Amanda K. in St. Petersburg, FL" },
-                    { quote: `Excellent work. The pricing was fair, and the team was extremely detailed with the concrete prep. Highly recommend!`, author: "- Jason D. in Brandon, FL" },
-                    { quote: `I am thrilled with my new metallic epoxy floor. It looks like liquid marble. Truly a work of art!`, author: "- Sarah P. in Clearwater, FL" },
-                    { quote: `Reliable company. They arrived on time, completed the work as promised, and left the workspace spotless.`, author: "- Robert L. in Lutz, FL" }
-                ]
+                items: EPOXY_REVIEWS
             },
             contact: {
                 title: "Ready for a Floor Transformation?",
@@ -402,13 +397,7 @@ export function getContentForService(service: string) {
             },
             reviews: {
                 title: `What Your Neighbors Are Saying`,
-                items: [
-                    { quote: `They removed a massive oak tree close to my house. The team was incredibly precise, fast, and cleaned up every single leaf!`, author: "- Thomas B. in Tampa, FL" },
-                    { quote: `Excellent tree pruning service. Our palms look healthy and beautiful now. Very reasonable price.`, author: "- Linda G. in Clearwater, FL" },
-                    { quote: `Quick response for emergency tree limb removal after a storm. They saved our roof from serious damage!`, author: "- David R. in St. Petersburg, FL" },
-                    { quote: `Professional crew, great communication, and competitive pricing. I'll definitely use them again.`, author: "- Karen M. in Brandon, FL" },
-                    { quote: `Highly recommend. They are knowledgeable about tree health and gave great advice on preserving our oaks.`, author: "- James H. in Riverview, FL" }
-                ]
+                items: TREE_REVIEWS
             },
             contact: {
                 title: "Need Tree Services?",
@@ -475,13 +464,7 @@ export function getContentForService(service: string) {
             },
             reviews: {
                 title: `What Your Neighbors Are Saying`,
-                items: [
-                    { quote: `The new paver patio and driveway look stunning! It has completely changed the curb appeal of our home.`, author: "- Mark S. in Tampa, FL" },
-                    { quote: `Excellent concrete driveway installation. They reinforced it properly and finished it perfectly. Solid work.`, author: "- Jeffrey W. in Brandon, FL" },
-                    { quote: `Great crew. They worked fast, poured a beautiful new slab for our workshop, and left the yard clean.`, author: "- Brian O. in Lutz, FL" },
-                    { quote: `Our pool deck was cracked and ugly. They repaved it with gorgeous pavers. Outstanding transformation!`, author: "- Melissa T. in Clearwater, FL" },
-                    { quote: `Professional communication and high-quality craftsmanship. Very pleased with the custom walkway.`, author: "- Sandra L. in St. Petersburg, FL" }
-                ]
+                items: PAVING_REVIEWS
             },
             contact: {
                 title: "Start Your Paving Project",

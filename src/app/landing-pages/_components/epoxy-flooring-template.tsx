@@ -108,8 +108,19 @@ export function EpoxyFlooringTemplate({
   useEffect(() => {
     const staticContent = getContentForService("Epoxy Flooring");
     if (websiteConfig) {
+      const mergedReviews = [
+        ...(websiteConfig.reviews?.items || []),
+        ...(staticContent.reviews?.items || [])
+      ];
+      const uniqueReviews = Array.from(new Map(mergedReviews.map(item => [item.quote, item])).values());
+
       setContent({
         ...websiteConfig,
+        reviews: {
+          ...websiteConfig.reviews,
+          title: websiteConfig.reviews?.title || staticContent.reviews.title,
+          items: uniqueReviews
+        },
         images: staticContent.images,
       });
     } else {
