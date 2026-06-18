@@ -9,6 +9,12 @@ export const config = {
 
 export default function middleware(req: NextRequest) {
     const url = req.nextUrl;
+    
+    // Bypass custom domain routing for static assets in the public/images folder
+    if (url.pathname.startsWith('/images/')) {
+        return NextResponse.next();
+    }
+
     const hostname = req.headers.get('x-forwarded-host') || req.headers.get('host') || '';
 
   // Get the path
