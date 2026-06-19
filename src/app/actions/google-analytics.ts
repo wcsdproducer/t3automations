@@ -85,55 +85,96 @@ export async function setupGoogleAnalyticsAction(businessProfileId: string): Pro
       const accountName = primaryAccount.name; // Format: "accounts/ACCOUNT_ID"
       console.log(`Using primary GA Account: ${primaryAccount.displayName} (${accountName})`);
 
-      // Step 3b: Create a GA4 Property for the site
-      console.log(`Creating GA4 property for ${businessName}...`);
-      const propertyRes = await axios.post(
-        'https://analyticsadmin.googleapis.com/v1beta/properties',
-        {
-          parent: accountName,
-          displayName: `${businessName} (T3 Automation)`,
-          timeZone: 'America/Chicago',
-          currencyCode: 'USD',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
+      // Check if property already exists under this account
+      console.log(`Checking if property for ${businessName} already exists...`);
+      const targetDisplayName = `${businessName} (T3 Automation)`;
+      
+      const propertiesRes = await axios.get('https://analyticsadmin.googleapis.com/v1beta/properties', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: {
+          filter: `parent:${accountName}`,
+          pageSize: 200,
         }
-      );
-
-      const property = propertyRes.data;
-      propertyId = property.name; // Format: "properties/PROPERTY_ID"
-      console.log(`Created property: ${property.displayName} (${propertyId})`);
-
-      // Step 3c: Create a Web Data Stream for the custom domain
-      console.log(`Creating data stream for https://${domainName}...`);
-      const streamRes = await axios.post(
-        `https://analyticsadmin.googleapis.com/v1beta/${propertyId}/dataStreams`,
-        {
-          type: 'WEB_DATA_STREAM',
-          displayName: `${domainName} Web Stream`,
-          webStreamData: {
-            defaultUri: `https://${domainName}`,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
+      });
+      
+      const properties = propertiesRes.data.properties || [];
+      const existingProperty = properties.find((p: any) => p.displayName === targetDisplayName || p.displayName === businessName);
+      
+      if (existingProperty) {
+        propertyId = existingProperty.name;
+        console.log(`Found existing property: ${existingProperty.displayName} (${propertyId})`);
+        
+        // Check if stream already exists
+        const streamsRes = await axios.get(`https://analyticsadmin.googleapis.com/v1beta/${propertyId}/dataStreams`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        const streams = streamsRes.data.dataStreams || [];
+        const targetStreamUrl = `https://${domainName}`.toLowerCase();
+        
+        const existingStream = streams.find((s: any) => {
+          const defaultUri = s.webStreamData?.defaultUri || '';
+          return defaultUri.toLowerCase().replace(/\/$/, '') === targetStreamUrl.replace(/\/$/, '');
+        });
+        
+        if (existingStream) {
+          streamId = existingStream.name;
+          measurementId = existingStream.webStreamData?.measurementId || '';
+          console.log(`Found existing data stream. Measurement ID: ${measurementId}`);
         }
-      );
+      }
 
-      const stream = streamRes.data;
-      streamId = stream.name; // Format: "properties/PROPERTY_ID/dataStreams/STREAM_ID"
-      measurementId = stream.webStreamData?.measurementId || '';
+      // Step 3b: Create property if not exists
+      if (!propertyId) {
+        console.log(`Creating GA4 property for ${businessName}...`);
+        const propertyRes = await axios.post(
+          'https://analyticsadmin.googleapis.com/v1beta/properties',
+          {
+            parent: accountName,
+            displayName: `${businessName} (T3 Automation)`,
+            timeZone: 'America/Chicago',
+            currencyCode: 'USD',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
-      console.log(`Successfully created data stream. Measurement ID: ${measurementId}`);
+        const property = propertyRes.data;
+        propertyId = property.name; // Format: "properties/PROPERTY_ID"
+        console.log(`Created property: ${property.displayName} (${propertyId})`);
+      }
+
+      // Step 3c: Create Web Data Stream if not exists
+      if (!measurementId) {
+        console.log(`Creating data stream for https://${domainName}...`);
+        const streamRes = await axios.post(
+          `https://analyticsadmin.googleapis.com/v1beta/${propertyId}/dataStreams`,
+          {
+            type: 'WEB_DATA_STREAM',
+            displayName: `${domainName} Web Stream`,
+            webStreamData: {
+              defaultUri: `https://${domainName}`,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        const stream = streamRes.data;
+        streamId = stream.name; // Format: "properties/PROPERTY_ID/dataStreams/STREAM_ID"
+        measurementId = stream.webStreamData?.measurementId || '';
+        console.log(`Successfully created data stream. Measurement ID: ${measurementId}`);
+      }
 
       if (!measurementId) {
-        throw new Error('Data stream was created but no measurement ID was returned.');
+        throw new Error('Data stream was not found or created successfully.');
       }
     } catch (apiError: any) {
       console.error(
