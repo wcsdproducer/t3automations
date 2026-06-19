@@ -77,6 +77,21 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
 
     // Get the service account email to show in case of permissions error
     serviceAccountEmail = (client as any).email || (client as any).credentials?.client_email || '';
+    if (!serviceAccountEmail) {
+      if (process.env.NODE_ENV === 'development') {
+        try {
+          serviceAccountEmail = require('child_process').execSync('gcloud config get-value account').toString().trim();
+        } catch (e) {}
+      }
+      if (!serviceAccountEmail) {
+        try {
+          const projectId = await auth.getProjectId();
+          serviceAccountEmail = `firebase-app-hosting-backend@${projectId}.iam.gserviceaccount.com`;
+        } catch (e) {
+          serviceAccountEmail = 'firebase-app-hosting-backend@[your-project-id].iam.gserviceaccount.com';
+        }
+      }
+    }
 
     if (!accessToken) {
       throw new Error('Could not retrieve Search Console API OAuth access token.');
