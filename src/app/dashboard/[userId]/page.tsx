@@ -165,7 +165,7 @@ export default function AnalyticsOverviewPage() {
   // State 1: Active Integration - Show dashboard widgets
   if (isGAConnected) {
     return (
-      <div className="flex flex-col gap-6 p-4 lg:p-6 bg-slate-950 min-h-screen text-slate-100">
+      <div className="flex flex-col gap-4 p-0 bg-slate-950 h-full flex-1 text-slate-100 overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight">Analytics Overview</h1>
@@ -186,8 +186,8 @@ export default function AnalyticsOverviewPage() {
 
         {/* Info banner for simulated/mock tag */}
         {businessProfile.isMockAnalytics && (
-          <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-blue-400 shrink-0" />
+          <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs flex items-center gap-3">
+            <Sparkles className="h-4 w-4 text-blue-400 shrink-0" />
             <div>
               <span className="font-semibold">Simulated Environment:</span> Your Google Analytics property is configured and linked. Tracking tag code has been automatically injected into your landing page head. Simulated traffic data is shown below.
             </div>
@@ -250,14 +250,14 @@ export default function AnalyticsOverviewPage() {
         </div>
 
         {/* Charts Section */}
-        <div className="grid gap-6 md:grid-cols-6 lg:grid-cols-6">
+        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6">
           {/* Main traffic chart */}
           <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-200">Traffic Over Time</CardTitle>
-              <CardDescription className="text-slate-400">Daily breakdown of unique visitors and total pageviews</CardDescription>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base font-semibold text-slate-200">Traffic Over Time</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Daily breakdown of unique visitors and total pageviews</CardDescription>
             </CardHeader>
-            <CardContent className="h-[300px]">
+            <CardContent className="h-[200px] pb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={analyticsData?.trafficData || []}>
                   <defs>
@@ -271,8 +271,8 @@ export default function AnalyticsOverviewPage() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="date" stroke="#64748b" fontSize={12} />
-                  <YAxis stroke="#64748b" fontSize={12} />
+                  <XAxis dataKey="date" stroke="#64748b" fontSize={10} />
+                  <YAxis stroke="#64748b" fontSize={10} />
                   <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
                   <Area type="monotone" dataKey="visitors" name="Visitors" stroke="#3b82f6" fillOpacity={1} fill="url(#colorVisitors)" strokeWidth={2} />
                   <Area type="monotone" dataKey="pageviews" name="Page Views" stroke="#10b981" fillOpacity={1} fill="url(#colorPageviews)" strokeWidth={2} />
@@ -283,19 +283,19 @@ export default function AnalyticsOverviewPage() {
 
           {/* Traffic Sources Pie */}
           <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-200">Acquisition Channels</CardTitle>
-              <CardDescription className="text-slate-400">Where your visitors originate</CardDescription>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base font-semibold text-slate-200">Acquisition Channels</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Where your visitors originate</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center h-[280px]">
+            <CardContent className="flex flex-col items-center justify-center h-[200px] pb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <RechartsPieChart>
                   <Pie
                     data={analyticsData?.sourceData || []}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
+                    innerRadius={45}
+                    outerRadius={65}
                     paddingAngle={5}
                     dataKey="value"
                   >
@@ -306,10 +306,10 @@ export default function AnalyticsOverviewPage() {
                   <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
                 </RechartsPieChart>
               </ResponsiveContainer>
-              <div className="grid grid-cols-2 gap-2 w-full px-4 text-xs">
+              <div className="grid grid-cols-2 gap-1 w-full px-4 text-[10px] mt-1">
                 {(analyticsData?.sourceData || []).map((s: any, idx: number) => (
-                  <div key={idx} className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
+                  <div key={idx} className="flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
                     <span className="text-slate-300 truncate">{s.name}</span>
                   </div>
                 ))}
@@ -319,18 +319,18 @@ export default function AnalyticsOverviewPage() {
         </div>
 
         {/* Detailed breakdown / Referrals table */}
-        <div className="grid gap-6 md:grid-cols-6 lg:grid-cols-6 mb-6">
+        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6">
           <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-200">Top Referral Sources</CardTitle>
-              <CardDescription className="text-slate-400">Referrals and search engines driving traffic to your domain</CardDescription>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base font-semibold text-slate-200">Top Referral Sources</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Referrals and search engines driving traffic to your domain</CardDescription>
             </CardHeader>
-            <CardContent className="h-[250px]">
+            <CardContent className="h-[150px] pb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <RechartsBarChart data={analyticsData?.referralData || []} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis type="number" stroke="#64748b" fontSize={12} />
-                  <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} />
+                  <XAxis type="number" stroke="#64748b" fontSize={10} />
+                  <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={10} />
                   <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
                   <Bar dataKey="value" name="Sessions" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                 </RechartsBarChart>
@@ -340,27 +340,27 @@ export default function AnalyticsOverviewPage() {
 
           {/* Integration Status / Meta */}
           <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800 flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-slate-200">Integration Details</CardTitle>
-              <CardDescription className="text-slate-400">Google Analytics technical assets information</CardDescription>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base font-semibold text-slate-200">Integration Details</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Google Analytics technical assets</CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 flex flex-col justify-between space-y-4 text-sm">
-              <div className="space-y-3">
-                <div className="flex justify-between border-b border-slate-800 pb-2">
+            <CardContent className="flex-1 flex flex-col justify-between space-y-2 text-xs pb-4">
+              <div className="space-y-1.5">
+                <div className="flex justify-between border-b border-slate-800 pb-1.5">
                   <span className="text-slate-400">Property ID</span>
-                  <span className="font-mono text-xs text-slate-300 truncate max-w-[150px]">{businessProfile.googleAnalyticsPropertyId}</span>
+                  <span className="font-mono text-slate-300 truncate max-w-[120px]">{businessProfile.googleAnalyticsPropertyId}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
+                <div className="flex justify-between border-b border-slate-800 pb-1.5">
                   <span className="text-slate-400">Stream ID</span>
-                  <span className="font-mono text-xs text-slate-300 truncate max-w-[150px]">{businessProfile.googleAnalyticsStreamId?.split('/').pop()}</span>
+                  <span className="font-mono text-slate-300 truncate max-w-[120px]">{businessProfile.googleAnalyticsStreamId?.split('/').pop()}</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
+                <div className="flex justify-between border-b border-slate-800 pb-1.5">
                   <span className="text-slate-400">Status</span>
                   <span className="text-emerald-400 flex items-center gap-1 font-semibold">
-                    <CheckCircle2 className="h-3.5 w-3.5" /> Live
+                    <CheckCircle2 className="h-3 w-3" /> Live
                   </span>
                 </div>
-                <div className="flex justify-between pb-2">
+                <div className="flex justify-between pb-1.5">
                   <span className="text-slate-400">Last Synced</span>
                   <span className="text-slate-300">
                     {businessProfile.googleAnalyticsUpdatedAt 
@@ -370,21 +370,21 @@ export default function AnalyticsOverviewPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-800">
+              <div className="pt-2 border-t border-slate-800">
                 <Button 
                   onClick={handleSetupAnalytics} 
                   disabled={isPending}
                   variant="outline" 
-                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="w-full h-8 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white py-1 text-xs"
                 >
                   {isPending ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
                       Syncing...
                     </>
                   ) : (
                     <>
-                      <RefreshCw className="mr-2 h-4 w-4" />
+                      <RefreshCw className="mr-2 h-3.5 w-3.5" />
                       Re-Sync Assets
                     </>
                   )}
