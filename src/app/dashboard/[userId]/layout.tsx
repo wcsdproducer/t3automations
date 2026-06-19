@@ -114,8 +114,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user, isUserLoading } = useUser();
   const params = useParams();
   const router = useRouter();
+  const pathname = usePathname();
   const firestore = useFirestore();
   const userIdSlug = params.userId as string;
+  
+  const isMainDashboard = pathname === `/dashboard/${userIdSlug}` || pathname === `/dashboard/${userIdSlug}/`;
 
   const docRef = useMemoFirebase(() => {
     if (!userIdSlug) return null;
@@ -307,8 +310,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
       </div>
-      <div className="flex flex-col h-screen overflow-y-auto">
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+      <div className="flex flex-col h-screen overflow-hidden">
+        <main className={`flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ${isMainDashboard ? 'overflow-hidden' : 'overflow-y-auto'}`}>
           {children}
         </main>
       </div>

@@ -197,11 +197,11 @@ export default function AnalyticsOverviewPage() {
         {/* 4 Key Metrics Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
               <CardTitle className="text-sm font-medium text-slate-400">Total Visitors</CardTitle>
               <Activity className="h-4 w-4 text-blue-400" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <div className="text-2xl font-bold">{analyticsData?.metrics.totalVisitors.toLocaleString() || '0'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.visitorsChange || '+0.0%'} vs last week
@@ -210,11 +210,11 @@ export default function AnalyticsOverviewPage() {
           </Card>
 
           <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
               <CardTitle className="text-sm font-medium text-slate-400">Page Views</CardTitle>
               <Globe className="h-4 w-4 text-emerald-400" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <div className="text-2xl font-bold">{analyticsData?.metrics.totalPageviews.toLocaleString() || '0'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.pageviewsChange || '+0.0%'} vs last week
@@ -223,11 +223,11 @@ export default function AnalyticsOverviewPage() {
           </Card>
 
           <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
               <CardTitle className="text-sm font-medium text-slate-400">Avg. Session Duration</CardTitle>
               <Clock className="h-4 w-4 text-amber-400" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <div className="text-2xl font-bold">{analyticsData?.metrics.avgSessionDuration || '0m 0s'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.durationChange || '+0.0%'} vs last week
@@ -236,11 +236,11 @@ export default function AnalyticsOverviewPage() {
           </Card>
 
           <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
               <CardTitle className="text-sm font-medium text-slate-400">Bounce Rate</CardTitle>
               <ArrowUpRight className="h-4 w-4 text-purple-400" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0">
               <div className="text-2xl font-bold">{analyticsData?.metrics.bounceRate || '0%'}</div>
               <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.bounceChange || '-0.0%'} improvement
