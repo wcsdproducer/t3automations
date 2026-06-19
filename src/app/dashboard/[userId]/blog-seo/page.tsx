@@ -60,6 +60,8 @@ import {
   saveSeoSettings,
   triggerBlogGeneration,
 } from '@/app/actions/blog-seo';
+import { getSearchConsoleDataAction } from '@/app/actions/search-console';
+import { AlertTriangle } from 'lucide-react';
 
 const KEYWORDS_MOCK_DATA = {
   'tree-care': [
@@ -139,6 +141,38 @@ export default function BlogSeoPage() {
     googleAnalyticsMeasurementId: '',
     blogTargetCount: 1,
   });
+
+  // Search Console states
+  const [gscData, setGscData] = useState<any>(null);
+  const [isGscLoading, setIsGscLoading] = useState(false);
+  const [gscError, setGscError] = useState<string | null>(null);
+  const [serviceAccountEmail, setServiceAccountEmail] = useState<string>('');
+
+  useEffect(() => {
+    if (!userIdSlug) return;
+    
+    const fetchGscData = async () => {
+      setIsGscLoading(true);
+      try {
+        const res = await getSearchConsoleDataAction(userIdSlug);
+        if (res.success) {
+          setGscData(res);
+          setGscError(null);
+        } else {
+          setGscError(res.message || 'Verification pending.');
+          if (res.serviceAccountEmail) {
+            setServiceAccountEmail(res.serviceAccountEmail);
+          }
+        }
+      } catch (err: any) {
+        setGscError(err.message || 'Failed to fetch ranking metrics.');
+      } finally {
+        setIsGscLoading(false);
+      }
+    };
+    
+    fetchGscData();
+  }, [userIdSlug]);
 
   // 1. Fetch Business Profile
   const profileDocRef = useMemoFirebase(() => {
@@ -439,16 +473,67 @@ export default function BlogSeoPage() {
         <TabsContent value="keywords" className="space-y-6">
           {(() => {
             const serviceCategory = businessProfile?.service || 'tree-care';
-            const trackedKeywords = KEYWORDS_MOCK_DATA[serviceCategory as keyof typeof KEYWORDS_MOCK_DATA] || KEYWORDS_MOCK_DATA['tree-care'];
             
-            // Calculate metrics
+            // Determine if we should show real GSC data or fall back to niche-matching simulated preview data
+            const showRealData = !!gscData && !gscError;
+            
+            const trackedKeywords = showRealData
+              ? gscData.keywords
+              : (KEYWORDS_MOCK_DATA[serviceCategory as keyof typeof KEYWORDS_MOCK_DATA] || KEYWORDS_MOCK_DATA['tree-care']);
+            
             const totalKeywords = trackedKeywords.length;
-            const avgPosition = Number((trackedKeywords.reduce((acc, curr) => acc + curr.position, 0) / totalKeywords).toFixed(1));
-            const top3Count = trackedKeywords.filter(k => k.position <= 3).length;
-            const top10Count = trackedKeywords.filter(k => k.position <= 10).length;
+            
+            const avgPosition = showRealData
+              ? gscData.metrics.avgPosition
+              : Number((trackedKeywords.reduce((acc: number, curr: any) => acc + curr.position, 0) / totalKeywords).toFixed(1));
+              
+            const top3Count = showRealData
+              ? gscData.metrics.top3Count
+              : trackedKeywords.filter((k: any) => k.position <= 3).length;
+              
+            const top10Count = showRealData
+              ? gscData.metrics.top10Count
+              : trackedKeywords.filter((k: any) => k.position <= 10).length;
+              
+            const totalSearchVolume = showRealData
+              ? gscData.metrics.totalSearchVolume
+              : trackedKeywords.reduce((acc: number, curr: any) => acc + curr.volume, 0);
+
+            if (isGscLoading) {
+              return (
+                <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-2">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <span className="text-sm">Connecting to Google Search Console API...</span>
+                </div>
+              );
+            }
 
             return (
               <>
+                {/* Integration Setup Warning Header */}
+                {gscError && (
+                  <div className="bg-amber-500/10 border border-amber-500/20 text-amber-300 p-4 rounded-xl text-xs space-y-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1 max-w-2xl">
+                      <h4 className="font-bold flex items-center gap-1.5 text-amber-400">
+                        <AlertTriangle className="h-4 w-4" /> Live Google Search Console Integration Pending
+                      </h4>
+                      <p className="leading-relaxed">
+                        To enable real-time keyword rankings tracking, verify ownership of <strong>{businessProfile?.websiteUrl || `https://${businessProfile?.id}.t3automations.com`}</strong> in Google Search Console and add this service account email as a <strong>Full User</strong> or <strong>Restricted User</strong>:
+                      </p>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <span className="font-mono bg-slate-900 border border-slate-800 px-2.5 py-1 rounded select-all break-all text-[11px] font-semibold text-slate-200">
+                          {serviceAccountEmail || 'fetching service account email...'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/5 font-bold uppercase tracking-wider text-[10px]">
+                        Preview Mode (Simulated Data)
+                      </Badge>
+                    </div>
+                  </div>
+                )}
+
                 {/* Metrics Row */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                   <Card className="bg-slate-900 border-slate-800">
@@ -496,7 +581,7 @@ export default function BlogSeoPage() {
                       <Search className="h-4 w-4 text-purple-400" />
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                      <div className="text-2xl font-bold">{(trackedKeywords.reduce((acc, curr) => acc + curr.volume, 0)).toLocaleString()}</div>
+                      <div className="text-2xl font-bold">{totalSearchVolume.toLocaleString()}</div>
                       <p className="text-xs text-slate-400 mt-1">
                         Combined monthly search queries
                       </p>
@@ -509,7 +594,9 @@ export default function BlogSeoPage() {
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg font-bold">Tracked Keywords</CardTitle>
                     <CardDescription>
-                      Real-time organic ranking positions for local search queries in the Tampa region.
+                      {showRealData 
+                        ? 'Live keyword positions and queries fetched directly from Google Search Console API.'
+                        : 'Real-time organic ranking positions for local search queries in the Tampa region.'}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -525,13 +612,13 @@ export default function BlogSeoPage() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {trackedKeywords.map((item, idx) => (
+                          {trackedKeywords.map((item: any, idx: number) => (
                             <TableRow key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20">
                               <TableCell className="font-semibold text-slate-900 dark:text-slate-100 py-3">
                                 {item.keyword}
                               </TableCell>
                               <TableCell className="text-sm font-medium py-3">
-                                {item.volume.toLocaleString()} / mo
+                                {item.volume !== undefined ? `${item.volume.toLocaleString()} / mo` : `${item.impressions.toLocaleString()} impressions`}
                               </TableCell>
                               <TableCell className="py-3">
                                 <Badge 
