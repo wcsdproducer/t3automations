@@ -1,4 +1,5 @@
 'use client';
+
 import { CustomDomainManager } from '@/components/dashboard/custom-domain-manager';
 
 export default function DomainsPage() {

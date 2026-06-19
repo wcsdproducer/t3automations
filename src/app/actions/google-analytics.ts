@@ -136,17 +136,14 @@ export async function setupGoogleAnalyticsAction(businessProfileId: string): Pro
         throw new Error('Data stream was created but no measurement ID was returned.');
       }
     } catch (apiError: any) {
-      console.warn(
-        'Google Analytics Admin API setup failed (falling back to mock setup):',
+      console.error(
+        'Google Analytics Admin API setup failed:',
         apiError.response?.data || apiError.message
       );
-
-      // Fallback: Generate a realistic mock Google Analytics configuration
-      isMock = true;
-      const randomAlphanumeric = () => Math.random().toString(36).substring(2, 10).toUpperCase();
-      measurementId = `G-${randomAlphanumeric()}`;
-      propertyId = `properties/mock-${Math.floor(100000000 + Math.random() * 900000000)}`;
-      streamId = `${propertyId}/dataStreams/mock-${Math.floor(100000000 + Math.random() * 900000000)}`;
+      return {
+        success: false,
+        message: `Failed to connect Google Analytics: ${apiError.response?.data?.error?.message || apiError.message}`
+      };
     }
 
     // 4. Save the integration details to the business profile document in Firestore
@@ -206,7 +203,7 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
     }
     const profileData = profileSnap.data() || {};
     const propertyId = profileData.googleAnalyticsPropertyId;
-    const isMockFlag = profileData.isMockAnalytics !== false;
+    const isMockFlag = profileData.isMockAnalytics === true;
 
     // Check if we can attempt to fetch real Google Analytics data
     if (propertyId && !isMockFlag && !propertyId.includes('mock')) {
@@ -374,165 +371,37 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
           };
       } catch (innerError: any) {
         console.error(`Failed to retrieve Google Analytics Data API response:`, innerError.response?.data || innerError.message || innerError);
-        
-        // Return zero metrics and empty arrays to avoid showing simulated data
-        const trafficData: { date: string; visitors: number; pageviews: number }[] = [];
-        const now = new Date();
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date(now);
-          d.setDate(now.getDate() - i);
-          const dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          trafficData.push({
-            date: dateLabel,
-            visitors: 0,
-            pageviews: 0,
-          });
-        }
-
-        return {
-          success: false,
-          trafficData,
-          sourceData: [],
-          referralData: [],
-          metrics: {
-            totalVisitors: 0,
-            totalPageviews: 0,
-            avgSessionDuration: '0m 0s',
-            bounceRate: '0%',
-            visitorsChange: '+0.0%',
-            pageviewsChange: '+0.0%',
-            durationChange: '+0.0%',
-            bounceChange: '-0.0%',
-          },
-        };
       }
     }
 
-    // --- FALLBACK (Seeded Deterministic Simulation) ---
-    // Fetch leads to align traffic spikes with actual conversions (leads)
-    const leadsSnap = await db.collection(`businessProfiles/${businessProfileId}/leads`).get();
-    const leads = leadsSnap.docs.map(doc => {
-      const data = doc.data();
-      return {
-        ...data,
-        createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : new Date(),
-      };
-    });
-
-    // Deterministic random generator based on a seed string
-    const getSeededRandom = (seed: string) => {
-      let hash = 0;
-      for (let i = 0; i < seed.length; i++) {
-        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const x = Math.sin(hash) * 10000;
-      return x - Math.floor(x);
-    };
-
-    // Generate 7 days of date range up to today
+    // --- FALLBACK (Bypass Simulation and return zero metrics) ---
     const trafficData: { date: string; visitors: number; pageviews: number }[] = [];
     const now = new Date();
-    
-    // Group leads by day
-    const leadsByDay: Record<string, number> = {};
-    leads.forEach(lead => {
-      const dateStr = lead.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      leadsByDay[dateStr] = (leadsByDay[dateStr] || 0) + 1;
-    });
-
-    let totalVisitors = 0;
-    let totalPageviews = 0;
-
     for (let i = 6; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(now.getDate() - i);
       const dateLabel = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      
-      const leadCount = leadsByDay[dateLabel] || 0;
-      let visitors = 0;
-      let pageviews = 0;
-
-      const seedBase = `${businessProfileId}-${dateLabel}`;
-      const r1 = getSeededRandom(`${seedBase}-visitors-1`);
-      const r2 = getSeededRandom(`${seedBase}-visitors-2`);
-      const r3 = getSeededRandom(`${seedBase}-pageviews-1`);
-
-      if (leadCount > 0) {
-        // High traffic on days with lead conversions
-        visitors = leadCount * Math.floor(r1 * 10 + 15) + Math.floor(r2 * 8 + 10);
-        pageviews = Math.floor(visitors * (r3 * 1.2 + 2.4));
-      } else {
-        // Regular baseline traffic
-        visitors = Math.floor(r1 * 15 + 12);
-        pageviews = Math.floor(visitors * (r3 * 0.8 + 2.0));
-      }
-
       trafficData.push({
         date: dateLabel,
-        visitors,
-        pageviews,
+        visitors: 0,
+        pageviews: 0,
       });
-
-      totalVisitors += visitors;
-      totalPageviews += pageviews;
     }
 
-    // Dynamic Acquisition Channels (distribution)
-    const sourceData = [
-      { name: 'Organic Search', value: Math.floor(totalVisitors * 0.45), color: '#3b82f6' },
-      { name: 'Direct Traffic', value: Math.floor(totalVisitors * 0.30), color: '#10b981' },
-      { name: 'Referrals', value: Math.floor(totalVisitors * 0.15), color: '#f59e0b' },
-      { name: 'Social Media', value: Math.floor(totalVisitors * 0.10), color: '#8b5cf6' },
-    ];
-
-    // Dynamic Referral Sources
-    const referralData = [
-      { name: 'Google', value: Math.floor(totalVisitors * 0.45) },
-      { name: 'Facebook', value: Math.floor(totalVisitors * 0.18) },
-      { name: 'Yelp', value: Math.floor(totalVisitors * 0.12) },
-      { name: 'Direct', value: Math.floor(totalVisitors * 0.20) },
-      { name: 'Bing', value: Math.floor(totalVisitors * 0.05) },
-    ];
-
-    // Calculate session duration and bounce rates dynamically based on leads (conversions)
-    const conversionRate = totalVisitors > 0 ? (leads.length / totalVisitors) : 0;
-    
-    // Better conversion rate => longer session duration & lower bounce rate
-    const rDuration = getSeededRandom(`${businessProfileId}-duration-metric`);
-    const avgDurationSeconds = Math.floor(100 + conversionRate * 600 + rDuration * 40);
-    const mins = Math.floor(avgDurationSeconds / 60);
-    const secs = avgDurationSeconds % 60;
-    const avgSessionDuration = `${mins}m ${secs}s`;
-
-    const rBounce = getSeededRandom(`${businessProfileId}-bounce-metric`);
-    const bounceRateVal = Math.max(35, Math.min(65, 55 - conversionRate * 200 + rBounce * 5));
-    const bounceRate = `${bounceRateVal.toFixed(1)}%`;
-
-    // Calculate weekly comparison changes
-    const rChange1 = getSeededRandom(`${businessProfileId}-change-v`);
-    const rChange2 = getSeededRandom(`${businessProfileId}-change-pv`);
-    const rChange3 = getSeededRandom(`${businessProfileId}-change-d`);
-    const rChange4 = getSeededRandom(`${businessProfileId}-change-b`);
-
-    const visitorsChange = `+${(10 + conversionRate * 50 + rChange1 * 5).toFixed(1)}%`;
-    const pageviewsChange = `+${(8 + conversionRate * 40 + rChange2 * 4).toFixed(1)}%`;
-    const durationChange = `+${(3 + conversionRate * 20 + rChange3 * 3).toFixed(1)}%`;
-    const bounceChange = `-${(1 + conversionRate * 10 + rChange4 * 2).toFixed(1)}%`;
-
     return {
-      success: true,
+      success: false,
       trafficData,
-      sourceData,
-      referralData,
+      sourceData: [],
+      referralData: [],
       metrics: {
-        totalVisitors,
-        totalPageviews,
-        avgSessionDuration,
-        bounceRate,
-        visitorsChange,
-        pageviewsChange,
-        durationChange,
-        bounceChange,
+        totalVisitors: 0,
+        totalPageviews: 0,
+        avgSessionDuration: '0m 0s',
+        bounceRate: '0%',
+        visitorsChange: '+0.0%',
+        pageviewsChange: '+0.0%',
+        durationChange: '+0.0%',
+        bounceChange: '-0.0%',
       },
     };
   } catch (error: any) {
