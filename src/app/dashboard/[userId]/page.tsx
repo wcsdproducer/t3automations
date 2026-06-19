@@ -250,14 +250,14 @@ export default function AnalyticsOverviewPage() {
         </div>
 
         {/* Charts Section */}
-        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6">
+        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6 flex-1 min-h-0">
           {/* Main traffic chart */}
-          <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800">
+          <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
               <CardTitle className="text-base font-semibold text-slate-200">Traffic Over Time</CardTitle>
               <CardDescription className="text-xs text-slate-400">Daily breakdown of unique visitors and total pageviews</CardDescription>
             </CardHeader>
-            <CardContent className="h-[200px] pb-4">
+            <CardContent className="flex-1 min-h-0 pb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={analyticsData?.trafficData || []}>
                   <defs>
@@ -282,30 +282,32 @@ export default function AnalyticsOverviewPage() {
           </Card>
 
           {/* Traffic Sources Pie */}
-          <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800">
+          <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
               <CardTitle className="text-base font-semibold text-slate-200">Acquisition Channels</CardTitle>
               <CardDescription className="text-xs text-slate-400">Where your visitors originate</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center h-[200px] pb-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsPieChart>
-                  <Pie
-                    data={analyticsData?.sourceData || []}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={45}
-                    outerRadius={65}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {(analyticsData?.sourceData || []).map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
-                </RechartsPieChart>
-              </ResponsiveContainer>
+            <CardContent className="flex flex-col items-center justify-between flex-1 min-h-0 pb-4">
+              <div className="flex-1 w-full min-h-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsPieChart>
+                    <Pie
+                      data={analyticsData?.sourceData || []}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={45}
+                      outerRadius={65}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {(analyticsData?.sourceData || []).map((entry: any, index: number) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
+                  </RechartsPieChart>
+                </ResponsiveContainer>
+              </div>
               <div className="grid grid-cols-2 gap-1 w-full px-4 text-[10px] mt-1">
                 {(analyticsData?.sourceData || []).map((s: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-1">
@@ -319,13 +321,13 @@ export default function AnalyticsOverviewPage() {
         </div>
 
         {/* Detailed breakdown / Referrals table */}
-        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6">
-          <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800">
+        <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6 flex-1 min-h-0">
+          <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
               <CardTitle className="text-base font-semibold text-slate-200">Top Referral Sources</CardTitle>
               <CardDescription className="text-xs text-slate-400">Referrals and search engines driving traffic to your domain</CardDescription>
             </CardHeader>
-            <CardContent className="h-[150px] pb-4">
+            <CardContent className="flex-1 min-h-0 pb-4">
               <ResponsiveContainer width="100%" height="100%">
                 <RechartsBarChart data={analyticsData?.referralData || []} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
@@ -339,7 +341,7 @@ export default function AnalyticsOverviewPage() {
           </Card>
 
           {/* Integration Status / Meta */}
-          <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800 flex flex-col">
+          <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
               <CardTitle className="text-base font-semibold text-slate-200">Integration Details</CardTitle>
               <CardDescription className="text-xs text-slate-400">Google Analytics technical assets</CardDescription>
