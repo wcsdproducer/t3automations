@@ -86,9 +86,9 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
       if (!serviceAccountEmail) {
         try {
           const projectId = await auth.getProjectId();
-          serviceAccountEmail = `firebase-app-hosting-backend@${projectId}.iam.gserviceaccount.com`;
+          serviceAccountEmail = `firebase-app-hosting-compute@${projectId}.iam.gserviceaccount.com`;
         } catch (e) {
-          serviceAccountEmail = 'firebase-app-hosting-backend@[your-project-id].iam.gserviceaccount.com';
+          serviceAccountEmail = 'firebase-app-hosting-compute@[your-project-id].iam.gserviceaccount.com';
         }
       }
     }
