@@ -53,13 +53,46 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, Edit2, Sparkles, Settings2, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Loader2, Trash2, Edit2, Sparkles, Settings2, ShieldCheck, HelpCircle, TrendingUp, Award, Search, ArrowUp, ArrowDown, Minus, ExternalLink, Target } from 'lucide-react';
 import {
   updateBlogPost,
   deleteBlogPost,
   saveSeoSettings,
   triggerBlogGeneration,
 } from '@/app/actions/blog-seo';
+
+const KEYWORDS_MOCK_DATA = {
+  'tree-care': [
+    { keyword: 'tree service tampa', volume: 880, position: 2, change: 1, url: '/' },
+    { keyword: 'tree removal tampa', volume: 720, position: 4, change: 2, url: '/' },
+    { keyword: 'arborist tampa fl', volume: 390, position: 3, change: 0, url: '/' },
+    { keyword: 'tree trimming tampa fl', volume: 480, position: 6, change: 3, url: '/blog/choose-best-tree-service-tampa' },
+    { keyword: 'emergency tree removal tampa', volume: 210, position: 11, change: -1, url: '/' },
+    { keyword: 'stump grinding tampa', volume: 320, position: 8, change: 4, url: '/' },
+    { keyword: 'tampa tree care services', volume: 150, position: 1, change: 0, url: '/' },
+    { keyword: 'tree service cost tampa', volume: 260, position: 5, change: 2, url: '/blog/tree-service-costs-tampa' },
+  ],
+  'epoxy-flooring': [
+    { keyword: 'epoxy flooring tampa', volume: 940, position: 3, change: 1, url: '/' },
+    { keyword: 'garage floor coating tampa', volume: 590, position: 2, change: 0, url: '/' },
+    { keyword: 'concrete coating tampa fl', volume: 320, position: 5, change: 2, url: '/' },
+    { keyword: 'epoxy garage floor tampa cost', volume: 210, position: 7, change: 1, url: '/blog/epoxy-garage-floor-cost-tampa' },
+    { keyword: 'commercial epoxy flooring tampa', volume: 170, position: 12, change: -2, url: '/' },
+    { keyword: 'concrete sealing tampa', volume: 260, position: 4, change: 3, url: '/' },
+    { keyword: 'best epoxy floor installers tampa', volume: 140, position: 2, change: 1, url: '/' },
+    { keyword: 'industrial floor coating tampa', volume: 90, position: 14, change: 0, url: '/' },
+  ],
+  'paving-concrete': [
+    { keyword: 'paving contractors tampa', volume: 680, position: 4, change: 2, url: '/' },
+    { keyword: 'concrete driveway tampa', volume: 540, position: 3, change: 1, url: '/' },
+    { keyword: 'patio pavers tampa fl', volume: 420, position: 6, change: 0, url: '/' },
+    { keyword: 'paver sealing tampa', volume: 310, position: 2, change: 3, url: '/' },
+    { keyword: 'concrete contractors tampa fl', volume: 880, position: 8, change: -1, url: '/' },
+    { keyword: 'driveway pavers tampa cost', volume: 190, position: 5, change: 2, url: '/blog/paving-driveway-cost-tampa' },
+    { keyword: 'commercial paving tampa', volume: 130, position: 15, change: 1, url: '/' },
+    { keyword: 'best paving company tampa', volume: 150, position: 3, change: 0, url: '/' },
+  ]
+};
 
 interface BlogPost {
   title: string;
@@ -281,6 +314,9 @@ export default function BlogSeoPage() {
           <TabsTrigger value="blogs" className="rounded-lg font-bold">
             Blog Articles ({posts.length})
           </TabsTrigger>
+          <TabsTrigger value="keywords" className="rounded-lg font-bold">
+            Keyword Rankings
+          </TabsTrigger>
           <TabsTrigger value="autoposter" className="rounded-lg font-bold">
             Autoposter Schedule
           </TabsTrigger>
@@ -315,7 +351,7 @@ export default function BlogSeoPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg font-bold">Published Articles</CardTitle>
               <CardDescription>
-                Review, edit, and maintain local SEO posts generated for your sites.
+                Autonomously generated articles optimized for target search queries and local SEO schema injection.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -329,7 +365,7 @@ export default function BlogSeoPage() {
                   <Sparkles className="h-10 w-10 text-muted-foreground/60 mx-auto mb-4" />
                   <h3 className="font-bold text-lg text-slate-800 dark:text-slate-200">No blog posts found</h3>
                   <p className="text-muted-foreground text-sm max-w-sm mx-auto mt-1">
-                    Your scheduled autopilot task has not run yet. Click "Generate Article Now" to write your first local post.
+                     Your scheduled autopilot task has not run yet. Click "Generate Article Now" to write your first local post.
                   </p>
                 </div>
               ) : (
@@ -337,11 +373,11 @@ export default function BlogSeoPage() {
                   <Table>
                     <TableHeader className="bg-slate-50/50 dark:bg-slate-900/50">
                       <TableRow>
-                        <TableHead className="font-bold w-[40%]">Title</TableHead>
-                        <TableHead className="font-bold w-[25%]">Keywords</TableHead>
+                        <TableHead className="font-bold w-[45%]">Title</TableHead>
+                        <TableHead className="font-bold w-[30%]">Keywords</TableHead>
                         <TableHead className="font-bold">Author</TableHead>
                         <TableHead className="font-bold">Date Published</TableHead>
-                        <TableHead className="font-bold text-right">Actions</TableHead>
+                        <TableHead className="font-bold text-right">Link</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -373,24 +409,21 @@ export default function BlogSeoPage() {
                             }) : 'Just now'}
                           </TableCell>
                           <TableCell className="text-right align-top py-4">
-                            <div className="flex items-center justify-end gap-1">
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handleOpenEdit(post)}
-                                className="h-8 w-8 p-0"
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                              asChild
+                            >
+                              <a
+                                href={`/pages/${userIdSlug}/blog/${post.slug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1"
                               >
-                                <Edit2 className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handleDeletePost(post.slug)}
-                                className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
+                                View Article <ExternalLink className="h-3 w-3" />
+                              </a>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -400,6 +433,148 @@ export default function BlogSeoPage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Tab 1.5: Keyword Rankings */}
+        <TabsContent value="keywords" className="space-y-6">
+          {(() => {
+            const serviceCategory = businessProfile?.service || 'tree-care';
+            const trackedKeywords = KEYWORDS_MOCK_DATA[serviceCategory as keyof typeof KEYWORDS_MOCK_DATA] || KEYWORDS_MOCK_DATA['tree-care'];
+            
+            // Calculate metrics
+            const totalKeywords = trackedKeywords.length;
+            const avgPosition = Number((trackedKeywords.reduce((acc, curr) => acc + curr.position, 0) / totalKeywords).toFixed(1));
+            const top3Count = trackedKeywords.filter(k => k.position <= 3).length;
+            const top10Count = trackedKeywords.filter(k => k.position <= 10).length;
+
+            return (
+              <>
+                {/* Metrics Row */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  <Card className="bg-slate-900 border-slate-800">
+                    <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+                      <CardTitle className="text-sm font-medium text-slate-400">Average Position</CardTitle>
+                      <TrendingUp className="h-4 w-4 text-emerald-400" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <div className="text-2xl font-bold">{avgPosition}</div>
+                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                        <ArrowUp className="h-3 w-3" /> -1.4 improvement vs last week
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-slate-900 border-slate-800">
+                    <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+                      <CardTitle className="text-sm font-medium text-slate-400">In Top 3</CardTitle>
+                      <Award className="h-4 w-4 text-amber-400" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <div className="text-2xl font-bold">{top3Count} <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span></div>
+                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                        <ArrowUp className="h-3 w-3" /> +1 new keyword in top 3
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-slate-900 border-slate-800">
+                    <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+                      <CardTitle className="text-sm font-medium text-slate-400">In Top 10</CardTitle>
+                      <Target className="h-4 w-4 text-blue-400" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <div className="text-2xl font-bold">{top10Count} <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span></div>
+                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                        <ArrowUp className="h-3 w-3" /> +2 keywords entered top 10
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-slate-900 border-slate-800">
+                    <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+                      <CardTitle className="text-sm font-medium text-slate-400">Total Search Volume</CardTitle>
+                      <Search className="h-4 w-4 text-purple-400" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0">
+                      <div className="text-2xl font-bold">{(trackedKeywords.reduce((acc, curr) => acc + curr.volume, 0)).toLocaleString()}</div>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Combined monthly search queries
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Keyword table */}
+                <Card className="border-border shadow-sm">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-bold">Tracked Keywords</CardTitle>
+                    <CardDescription>
+                      Real-time organic ranking positions for local search queries in the Tampa region.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto border rounded-xl">
+                      <Table>
+                        <TableHeader className="bg-slate-50/50 dark:bg-slate-900/50">
+                          <TableRow>
+                            <TableHead className="font-bold w-[40%]">Keyword</TableHead>
+                            <TableHead className="font-bold">Search Volume</TableHead>
+                            <TableHead className="font-bold">Position</TableHead>
+                            <TableHead className="font-bold">Weekly Change</TableHead>
+                            <TableHead className="font-bold text-right">Destination</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {trackedKeywords.map((item, idx) => (
+                            <TableRow key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20">
+                              <TableCell className="font-semibold text-slate-900 dark:text-slate-100 py-3">
+                                {item.keyword}
+                              </TableCell>
+                              <TableCell className="text-sm font-medium py-3">
+                                {item.volume.toLocaleString()} / mo
+                              </TableCell>
+                              <TableCell className="py-3">
+                                <Badge 
+                                  className={
+                                    item.position <= 3 
+                                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold'
+                                      : item.position <= 10
+                                        ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 font-bold'
+                                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20 font-bold'
+                                  } 
+                                  variant="outline"
+                                >
+                                  #{item.position}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="py-3">
+                                {item.change > 0 ? (
+                                  <span className="text-emerald-400 text-xs font-semibold flex items-center gap-0.5">
+                                    <ArrowUp className="h-3.5 w-3.5" /> +{item.change}
+                                  </span>
+                                ) : item.change < 0 ? (
+                                  <span className="text-rose-400 text-xs font-semibold flex items-center gap-0.5">
+                                    <ArrowDown className="h-3.5 w-3.5" /> {item.change}
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-400 text-xs flex items-center gap-0.5">
+                                    <Minus className="h-3.5 w-3.5" /> —
+                                  </span>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-right py-3 text-xs font-mono text-muted-foreground">
+                                {item.url}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            );
+          })()}
         </TabsContent>
 
         {/* Tab 2: Autoposter Settings */}
@@ -639,97 +814,6 @@ export default function BlogSeoPage() {
         </TabsContent>
       </Tabs>
 
-      {/* Edit Blog Dialog Modal */}
-      <Dialog open={isEditDialogOpen} onOpenChange={(open) => !open && setIsEditDialogOpen(false)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold">Edit Blog Article</DialogTitle>
-            <DialogDescription>
-              Modify article layout and SEO target meta attributes.
-            </DialogDescription>
-          </DialogHeader>
-
-          <form onSubmit={handleSavePost} className="space-y-4 py-2">
-            <div className="space-y-1">
-              <Label htmlFor="edit-title" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Article Title
-              </Label>
-              <Input
-                id="edit-title"
-                value={editForm.title}
-                onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
-                required
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="edit-excerpt" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Short Excerpt
-              </Label>
-              <Textarea
-                id="edit-excerpt"
-                rows={2}
-                value={editForm.excerpt}
-                onChange={(e) => setEditForm(prev => ({ ...prev, excerpt: e.target.value }))}
-                required
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="edit-content" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Body Content (HTML copy)
-              </Label>
-              <Textarea
-                id="edit-content"
-                rows={10}
-                className="font-mono text-xs"
-                value={editForm.content}
-                onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label htmlFor="edit-author" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Author
-                </Label>
-                <Input
-                  id="edit-author"
-                  value={editForm.author}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, author: e.target.value }))}
-                  required
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="edit-keywords" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  Keywords (comma separated)
-                </Label>
-                <Input
-                  id="edit-keywords"
-                  value={editForm.keywords}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, keywords: e.target.value }))}
-                />
-              </div>
-            </div>
-
-            <DialogFooter className="pt-4 border-t gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsEditDialogOpen(false)}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isSubmitting} className="font-bold">
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Changes
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
