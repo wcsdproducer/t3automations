@@ -13,7 +13,11 @@ npm run typecheck
 echo "🏗️ Building the Next.js application..."
 npm run build
 
-# 3. Git commit and push
+# 3. Bump version in package.json
+echo "🔢 Bumping version in package.json..."
+node scripts/bump-version.js
+
+# 4. Git commit and push
 read -p "Enter commit message (or press enter for default 'Auto-deploy'): " COMMIT_MSG
 COMMIT_MSG=${COMMIT_MSG:-"deploy: auto-deploy from deploy script"}
 
