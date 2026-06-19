@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export const config = {
     matcher: [
-          '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
+          '/((?!api/|_next/|_static/|_vercel|(?!(sitemap\\.xml))[\\w-]+\\.\\w+).*)',
         ],
 };
 
