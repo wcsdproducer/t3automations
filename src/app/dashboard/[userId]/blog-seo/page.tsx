@@ -139,6 +139,7 @@ export default function BlogSeoPage() {
     metaTitle: '',
     metaDescription: '',
     googleAnalyticsMeasurementId: '',
+    googleSiteVerification: '',
     blogTargetCount: 1,
   });
 
@@ -189,6 +190,7 @@ export default function BlogSeoPage() {
         metaTitle: businessProfile.metaTitle || '',
         metaDescription: businessProfile.metaDescription || '',
         googleAnalyticsMeasurementId: businessProfile.googleAnalyticsMeasurementId || '',
+        googleSiteVerification: businessProfile.googleSiteVerification || '',
         blogTargetCount: businessProfile.blogTargetCount !== undefined ? Number(businessProfile.blogTargetCount) : 1,
       });
     }
@@ -292,6 +294,7 @@ export default function BlogSeoPage() {
       metaTitle: seoForm.metaTitle,
       metaDescription: seoForm.metaDescription,
       googleAnalyticsMeasurementId: seoForm.googleAnalyticsMeasurementId,
+      googleSiteVerification: seoForm.googleSiteVerification,
       blogTargetCount: Number(seoForm.blogTargetCount),
     });
 
@@ -833,6 +836,21 @@ export default function BlogSeoPage() {
                       />
                       <p className="text-[11px] text-muted-foreground">
                         Triggers dynamic gtag page tracking script injections.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <Label htmlFor="googleSiteVerification" className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
+                        Google Search Console Site Verification Tag
+                      </Label>
+                      <Input
+                        id="googleSiteVerification"
+                        placeholder="e.g. FuWCynGBmZtAvKfU6DxP2sSS4SkqE4NU-SMI4UqFW6s"
+                        value={seoForm.googleSiteVerification}
+                        onChange={(e) => setSeoForm(prev => ({ ...prev, googleSiteVerification: e.target.value }))}
+                      />
+                      <p className="text-[11px] text-muted-foreground">
+                        Used to verify domain ownership in Google Search Console. Paste the verification code/token.
                       </p>
                     </div>
 

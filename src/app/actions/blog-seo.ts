@@ -17,6 +17,7 @@ const seoSettingsSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   googleAnalyticsMeasurementId: z.string().optional(),
+  googleSiteVerification: z.string().optional(),
   blogTargetCount: z.number().min(0).max(3).optional(),
 });
 

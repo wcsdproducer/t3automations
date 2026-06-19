@@ -1,5 +1,6 @@
 import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { profileToTemplateProps } from '@/lib/template-props';
 import { Template1Content } from '@/app/landing-pages/_components/template-1-content';
 import { Template2Content } from '@/app/landing-pages/_components/template-2-content';
@@ -10,6 +11,70 @@ import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flo
 import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ domain: string }>;
+}): Promise<Metadata> {
+  const { domain } = await params;
+  if (!domain) return {};
+
+  const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, '');
+
+  let businessProfileId: string | null = null;
+  try {
+    let snap = await admin
+      .firestore()
+      .collectionGroup('customDomains')
+      .where('id', '==', cleanDomain)
+      .limit(1)
+      .get();
+
+    if (snap.empty) {
+      snap = await admin
+        .firestore()
+        .collectionGroup('customDomains')
+        .where('domain', '==', cleanDomain)
+        .limit(1)
+        .get();
+    }
+
+    if (snap.empty) {
+      snap = await admin
+        .firestore()
+        .collectionGroup('customDomains')
+        .where('domainName', '==', cleanDomain)
+        .limit(1)
+        .get();
+    }
+
+    if (!snap.empty) {
+      businessProfileId = snap.docs[0].data().businessProfileId;
+    }
+  } catch (error) {
+    console.error('[custom-domain] generateMetadata lookup error:', error);
+  }
+
+  if (!businessProfileId) return {};
+
+  const profileDoc = await admin
+    .firestore()
+    .collection('businessProfiles')
+    .doc(businessProfileId)
+    .get();
+
+  if (!profileDoc.exists) return {};
+
+  const profile = profileDoc.data() || {};
+  return {
+    title: profile.metaTitle || profile.businessName || 'T3 Partner',
+    description: profile.metaDescription || profile.service || '',
+    verification: {
+      google: profile.googleSiteVerification || undefined,
+    },
+  };
+}
 
 export default async function CustomDomainPage({
   params,

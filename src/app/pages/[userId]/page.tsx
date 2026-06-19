@@ -1,5 +1,6 @@
 import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { profileToTemplateProps } from '@/lib/template-props';
 import { Template1Content } from '@/app/landing-pages/_components/template-1-content';
 import { Template2Content } from '@/app/landing-pages/_components/template-2-content';
@@ -8,6 +9,32 @@ import { Template4Content } from '@/app/landing-pages/_components/template-4-con
 import { TreeCareTemplate } from '@/app/landing-pages/_components/tree-care-template';
 import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flooring-template';
 import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ userId: string }>;
+}): Promise<Metadata> {
+  const { userId } = await params;
+  if (!userId) return {};
+
+  const profileDoc = await admin
+    .firestore()
+    .collection('businessProfiles')
+    .doc(userId)
+    .get();
+
+  if (!profileDoc.exists) return {};
+
+  const profile = profileDoc.data() || {};
+  return {
+    title: profile.metaTitle || profile.businessName || 'T3 Partner',
+    description: profile.metaDescription || profile.service || '',
+    verification: {
+      google: profile.googleSiteVerification || undefined,
+    },
+  };
+}
 
 /**
  * /pages/[userId] — Free published landing page URL.
