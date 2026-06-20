@@ -20,6 +20,46 @@ async function lookupARecords(domain: string): Promise<string[]> {
   }
 }
 
+async function lookupTxtRecords(domain: string): Promise<string[]> {
+  try {
+    const res = await fetch(
+      `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=TXT`,
+      { headers: { Accept: 'application/dns-json' }, next: { revalidate: 0 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.Answer ?? [])
+      .filter((r: any) => r.type === 16)
+      .map((r: any) => {
+        let val = r.data as string;
+        if (val.startsWith('"') && val.endsWith('"')) {
+          val = val.slice(1, -1);
+        }
+        return val;
+      });
+  } catch (error) {
+    console.error('Error resolving DNS TXT records:', error);
+    return [];
+  }
+}
+
+async function lookupCnameRecord(cnameDomain: string): Promise<string[]> {
+  try {
+    const res = await fetch(
+      `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(cnameDomain)}&type=CNAME`,
+      { headers: { Accept: 'application/dns-json' }, next: { revalidate: 0 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.Answer ?? [])
+      .filter((r: any) => r.type === 5)
+      .map((r: any) => r.data as string);
+  } catch (error) {
+    console.error('Error resolving DNS CNAME records:', error);
+    return [];
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { domain, userId } = await req.json();
@@ -125,7 +165,23 @@ export async function POST(req: NextRequest) {
 
     // Query live DNS records
     const liveARecords = await lookupARecords(domain);
-    const isPointing = liveARecords.some((ip) => dnsRecordsData.aRecords.includes(ip));
+    const isAPointed = liveARecords.some((ip) => dnsRecordsData.aRecords.includes(ip));
+
+    const liveTxtRecords = await lookupTxtRecords(domain);
+    const isTxtPointed = liveTxtRecords.some((txt) => txt.trim() === dnsRecordsData.txtRecord.trim());
+
+    let liveCnameRecords: string[] = [];
+    let isCnamePointed = false;
+    if (dnsRecordsData.cnameHost) {
+      liveCnameRecords = await lookupCnameRecord(`${dnsRecordsData.cnameHost}.${domain}`);
+      const expectedCnameNormalized = dnsRecordsData.cnameValue.replace(/\.$/, '').toLowerCase().trim();
+      isCnamePointed = liveCnameRecords.some((cname) => cname.replace(/\.$/, '').toLowerCase().trim() === expectedCnameNormalized);
+    }
+
+    const missing = [];
+    if (!isAPointed) missing.push('A record (points to correct IP)');
+    if (!isTxtPointed) missing.push('TXT record (ownership claim)');
+    if (dnsRecordsData.cnameHost && !isCnamePointed) missing.push('CNAME record (SSL challenge)');
 
     let newStatus: 'active' | 'pending' | 'misconfigured' | 'provisioning';
     let detail: string;
@@ -133,21 +189,12 @@ export async function POST(req: NextRequest) {
     if (hostState === 'HOST_ACTIVE' && ownershipState === 'OWNERSHIP_ACTIVE' && certState === 'CERT_ACTIVE') {
       newStatus = 'active';
       detail = 'Domain is live and serving over HTTPS.';
-    } else if (hostState === 'HOST_ACTIVE' && ownershipState === 'OWNERSHIP_ACTIVE') {
+    } else if (missing.length === 0) {
       newStatus = 'provisioning';
-      detail = 'DNS is correctly configured. SSL certificate is being provisioned by Firebase — this usually takes 15 minutes to a few hours.';
-    } else if (liveARecords.length === 0) {
-      newStatus = 'pending';
-      detail = 'DNS records not detected yet. Propagation can take up to 48 hours.';
-    } else if (!isPointing) {
-      newStatus = 'misconfigured';
-      detail = `DNS resolves to ${liveARecords.join(', ')} instead of the expected IP(s): ${dnsRecordsData.aRecords.join(', ')}.`;
-    } else if (ownershipState !== 'OWNERSHIP_ACTIVE') {
-      newStatus = 'misconfigured';
-      detail = 'A records point to the correct IP, but domain ownership verification is pending. Please configure the TXT record.';
+      detail = 'All DNS records are correctly in place with your registrar! Google is validating ownership and provisioning the SSL certificate. This typically takes 15 minutes to a few hours.';
     } else {
-      newStatus = 'provisioning';
-      detail = 'DNS configuration is correct. Google is validating ownership and provisioning SSL.';
+      newStatus = 'misconfigured';
+      detail = `DNS records are misconfigured or propagating. Missing/Incorrect: ${missing.join(', ')}. (Resolved IPs: ${liveARecords.length > 0 ? liveARecords.join(', ') : 'None'}).`;
     }
 
     // Save update to Firestore
