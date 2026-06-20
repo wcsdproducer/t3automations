@@ -93,6 +93,16 @@ const KEYWORDS_MOCK_DATA = {
     { keyword: 'driveway pavers tampa cost', volume: 190, position: 5, change: 2, url: '/blog/paving-driveway-cost-tampa' },
     { keyword: 'commercial paving tampa', volume: 130, position: 15, change: 1, url: '/' },
     { keyword: 'best paving company tampa', volume: 150, position: 3, change: 0, url: '/' },
+  ],
+  'appliance-repair': [
+    { keyword: 'appliance repair boise', volume: 880, position: 2, change: 1, url: '/' },
+    { keyword: 'refrigerator repair boise id', volume: 720, position: 4, change: 2, url: '/' },
+    { keyword: 'dryer repair boise', volume: 390, position: 3, change: 0, url: '/' },
+    { keyword: 'washer repair boise', volume: 480, position: 6, change: 3, url: '/' },
+    { keyword: 'emergency appliance repair boise', volume: 210, position: 11, change: -1, url: '/' },
+    { keyword: 'dishwasher repair boise id', volume: 320, position: 8, change: 4, url: '/' },
+    { keyword: 'boise appliance repair services', volume: 150, position: 1, change: 0, url: '/' },
+    { keyword: 'appliance repair cost boise', volume: 260, position: 5, change: 2, url: '/' },
   ]
 };
 
@@ -475,14 +485,47 @@ export default function BlogSeoPage() {
         {/* Tab 1.5: Keyword Rankings */}
         <TabsContent value="keywords" className="space-y-6">
           {(() => {
-            const serviceCategory = businessProfile?.service || 'tree-care';
+            let normalizedCategory = (businessProfile?.service || 'tree-care')
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-');
             
+            // Map common synonyms to keys
+            if (normalizedCategory.includes('tree')) {
+              normalizedCategory = 'tree-care';
+            } else if (normalizedCategory.includes('epoxy')) {
+              normalizedCategory = 'epoxy-flooring';
+            } else if (normalizedCategory.includes('paving') || normalizedCategory.includes('concrete')) {
+              normalizedCategory = 'paving-concrete';
+            } else if (normalizedCategory.includes('appliance')) {
+              normalizedCategory = 'appliance-repair';
+            }
+
             // Determine if we should show real GSC data or fall back to niche-matching simulated preview data
             const showRealData = !!gscData && !gscError;
             
-            const trackedKeywords = showRealData
+            let trackedKeywords = showRealData
               ? gscData.keywords
-              : (KEYWORDS_MOCK_DATA[serviceCategory as keyof typeof KEYWORDS_MOCK_DATA] || KEYWORDS_MOCK_DATA['tree-care']);
+              : KEYWORDS_MOCK_DATA[normalizedCategory as keyof typeof KEYWORDS_MOCK_DATA];
+
+            if (!showRealData && !trackedKeywords) {
+              const rawService = businessProfile?.service || 'Local Services';
+              const domain = businessProfile?.id || '';
+              let city = 'Boise';
+              if (domain.toLowerCase().includes('tampa') || businessProfile?.businessName?.toLowerCase().includes('tampa')) {
+                city = 'Tampa';
+              }
+              
+              trackedKeywords = [
+                { keyword: `${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 880, position: 2, change: 1, url: '/' },
+                { keyword: `best ${rawService.toLowerCase()} in ${city.toLowerCase()}`, volume: 720, position: 4, change: 2, url: '/' },
+                { keyword: `local ${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 390, position: 3, change: 0, url: '/' },
+                { keyword: `${rawService.toLowerCase()} service ${city.toLowerCase()}`, volume: 480, position: 6, change: 3, url: '/' },
+                { keyword: `emergency ${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 210, position: 11, change: -1, url: '/' },
+                { keyword: `${rawService.toLowerCase()} cost ${city.toLowerCase()}`, volume: 320, position: 8, change: 4, url: '/' },
+                { keyword: `${city.toLowerCase()} ${rawService.toLowerCase()} company`, volume: 150, position: 1, change: 0, url: '/' },
+                { keyword: `${rawService.toLowerCase()} contractors ${city.toLowerCase()}`, volume: 260, position: 5, change: 2, url: '/' },
+              ];
+            }
             
             const totalKeywords = trackedKeywords.length;
             
