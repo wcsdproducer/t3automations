@@ -4,6 +4,134 @@ import { admin, db } from '@/lib/firebase-admin';
 import { aiGenerateWebsiteContent } from '@/ai/flows/website-designer';
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
+import { GoogleAuth } from 'google-auth-library';
+import axios from 'axios';
+
+async function registerCustomDomainInAppHosting(domain: string, profileId: string) {
+  try {
+    const auth = new GoogleAuth({
+      scopes: ['https://www.googleapis.com/auth/cloud-platform']
+    });
+    const client = await auth.getClient();
+    const tokenResponse = await client.getAccessToken();
+    const accessToken = tokenResponse.token;
+
+    if (!accessToken) {
+      console.error('[registerCustomDomain] Failed to get access token');
+      return;
+    }
+
+    const projectId = 'studio-1410114603-9e1f6';
+    const location = 'us-central1';
+    const backendId = 'studio';
+
+    // 1. Call Firebase App Hosting API to register the custom domain
+    const createUrl = `https://firebaseapphosting.googleapis.com/v1beta/projects/${projectId}/locations/${location}/backends/${backendId}/domains?domainId=${domain}`;
+    console.log(`[registerCustomDomain] Registering domain ${domain} via App Hosting API: ${createUrl}`);
+    
+    try {
+      await axios.post(createUrl, {}, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(`[registerCustomDomain] Domain registration call initiated for ${domain}`);
+    } catch (err: any) {
+      if (err.response && err.response.status === 409) {
+        console.log(`[registerCustomDomain] Domain ${domain} already registered in App Hosting backend.`);
+      } else {
+        console.error('[registerCustomDomain] Error calling App Hosting API:', err.response ? err.response.data : err.message);
+      }
+    }
+
+    // 2. Fetch the domain details to get the DNS settings
+    const getUrl = `https://firebaseapphosting.googleapis.com/v1/projects/${projectId}/locations/${location}/backends/${backendId}/domains/${domain}`;
+    let appHostingData: any = null;
+    try {
+      const response = await axios.get(getUrl, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      appHostingData = response.data;
+    } catch (err: any) {
+      console.error('[registerCustomDomain] Error fetching domain status:', err.message);
+    }
+
+    let desiredA: string[] = [];
+    let desiredTxt: string = '';
+    let desiredCnameHost: string = '';
+    let desiredCnameValue: string = '';
+
+    if (appHostingData) {
+      const customDomainStatus = appHostingData.customDomainStatus || {};
+      const requiredDnsUpdates = customDomainStatus.requiredDnsUpdates || [];
+
+      for (const update of requiredDnsUpdates) {
+        if (update.desired) {
+          for (const desiredItem of update.desired) {
+            if (desiredItem.records) {
+              for (const record of desiredItem.records) {
+                if (record.type === 'A') {
+                  if (record.rdata && !desiredA.includes(record.rdata)) {
+                    desiredA.push(record.rdata);
+                  }
+                } else if (record.type === 'TXT') {
+                  if (record.rdata && record.rdata.startsWith('fah-claim=')) {
+                    desiredTxt = record.rdata;
+                  }
+                } else if (record.type === 'CNAME') {
+                  if (record.rdata) {
+                    desiredCnameValue = record.rdata;
+                    if (record.domainName) {
+                      let host = record.domainName.replace(/\.$/, '');
+                      const root = domain.replace(/\.$/, '');
+                      if (host.endsWith('.' + root)) {
+                        host = host.slice(0, host.length - root.length - 1);
+                      }
+                      desiredCnameHost = host;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const dnsRecordsData = {
+      aRecords: desiredA.length > 0 ? desiredA : ['35.219.200.4'],
+      txtRecord: desiredTxt || '',
+      cnameHost: desiredCnameHost || '',
+      cnameValue: desiredCnameValue || ''
+    };
+
+    // 3. Write custom domain document to Firestore
+    const domainDocRef = db.collection('businessProfiles').doc(profileId).collection('customDomains').doc(domain);
+    await domainDocRef.set({
+      id: domain,
+      businessProfileId: profileId,
+      domain: domain,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      lastCheckedAt: new Date().toISOString(),
+      dnsRecords: dnsRecordsData
+    });
+
+    console.log(`[registerCustomDomain] Domain ${domain} successfully registered in Firestore for profile ${profileId}`);
+
+    // Update primary customDomain and websiteUrl on the business profile
+    await db.collection('businessProfiles').doc(profileId).update({
+      customDomain: domain,
+      websiteUrl: `https://${domain}`
+    });
+
+    console.log(`[registerCustomDomain] Updated businessProfile with customDomain fields`);
+
+  } catch (err: any) {
+    console.error('[registerCustomDomain] Unexpected error:', err.message);
+  }
+}
 
 const BlogOutputSchema = z.object({
   title: z.string().describe('Catchy, benefit-driven H1 blog title optimized for local search'),
@@ -81,9 +209,18 @@ export async function createRenterAccountAction(
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const landlordUid = formData.get('landlordUid') as string;
+  const customDomainInput = formData.get('customDomain') as string;
 
   if (!businessName || !email || !password || !landlordUid) {
     return { success: false, message: 'All fields are required.' };
+  }
+
+  // Determine if a custom domain needs to be registered automatically
+  let domainToRegister = '';
+  if (customDomainInput && customDomainInput.trim().includes('.')) {
+    domainToRegister = customDomainInput.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+  } else if (businessName && /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(businessName.trim())) {
+    domainToRegister = businessName.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
   }
 
   try {
@@ -189,6 +326,12 @@ export async function createRenterAccountAction(
       status: 'active',
       createdAt: new Date().toISOString()
     });
+
+    // 5. Automatically register custom domain if provided or detected
+    if (domainToRegister) {
+      console.log(`[createRenterAccountAction] Initiating auto domain registration for ${domainToRegister}`);
+      await registerCustomDomainInAppHosting(domainToRegister, profileId);
+    }
 
     // Start SEO content setup asynchronously in background so it doesn't block account creation UI
     generateInitialBlogsForProfile(profileId, businessName, niche || 'Lead Generation Site')

@@ -87,6 +87,7 @@ export default function DashboardRouterPage() {
   const [newSiteNiche, setNewSiteNiche] = React.useState('');
   const [newSiteEmail, setNewSiteEmail] = React.useState('');
   const [newSitePassword, setNewSitePassword] = React.useState('');
+  const [newSiteDomain, setNewSiteDomain] = React.useState('');
 
   // Form states for renting out a site
   const [renterEmail, setRenterEmail] = React.useState('');
@@ -265,6 +266,7 @@ export default function DashboardRouterPage() {
       formData.append('email', newSiteEmail);
       formData.append('password', newSitePassword);
       formData.append('landlordUid', user.uid);
+      formData.append('customDomain', newSiteDomain);
 
       const result = await createRenterAccountAction(null, formData);
 
@@ -277,6 +279,7 @@ export default function DashboardRouterPage() {
       setNewSiteNiche('');
       setNewSiteEmail('');
       setNewSitePassword('');
+      setNewSiteDomain('');
       setNewSiteOpen(false);
       setIsCreatingSite(false);
 
@@ -471,6 +474,16 @@ export default function DashboardRouterPage() {
                     placeholder="Minimum 6 characters"
                     required
                     minLength={6}
+                    className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="siteDomain" className="text-slate-300"><TranslatedText>Custom Domain (Optional)</TranslatedText></Label>
+                  <Input 
+                    id="siteDomain"
+                    value={newSiteDomain}
+                    onChange={(e) => setNewSiteDomain(e.target.value)}
+                    placeholder="e.g. knoxvillepestexperts.com (will auto-check business name if blank)"
                     className="bg-slate-800 border-slate-700 text-white placeholder-slate-500"
                   />
                 </div>
