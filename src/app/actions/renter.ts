@@ -87,41 +87,47 @@ export async function createRenterAccountAction(
   }
 
   try {
-    // 1. Create user in Firebase Auth (with auto plus-addressing fallback if already in use)
+    // 1. Resolve or create user in Firebase Auth
     let userRecord;
+    let userId;
+    let isNewUser = false;
+    
     try {
-      userRecord = await admin.auth().createUser({
-        email,
-        password,
-        displayName: businessName,
-      });
+      userRecord = await admin.auth().getUserByEmail(email);
+      userId = userRecord.uid;
+      console.log(`Using existing user record for email: ${email} (${userId})`);
     } catch (err: any) {
-      if (err.code === 'auth/email-already-in-use') {
-        const [local, domain] = email.split('@');
-        const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15);
-        const subEmail = `${local}+${cleanName}@${domain}`;
-        console.log(`Email ${email} already in use. Retrying with sub-email: ${subEmail}`);
+      if (err.code === 'auth/user-not-found') {
         userRecord = await admin.auth().createUser({
-          email: subEmail,
+          email,
           password,
           displayName: businessName,
         });
+        userId = userRecord.uid;
+        isNewUser = true;
+        console.log(`Created new Firebase Auth user for email: ${email} (${userId})`);
       } else {
         throw err;
       }
     }
 
-    const userId = userRecord.uid;
-    const finalEmail = userRecord.email || email;
+    // 2. If it's a new renter user, create the users/{userId} doc
+    if (isNewUser) {
+      await db.collection('users').doc(userId).set({
+        id: userId,
+        email,
+        role: 'renter',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
 
-    // 2. Create users/{userId} doc
-    await db.collection('users').doc(userId).set({
-      id: userId,
-      email: finalEmail,
-      role: 'renter',
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
-
+    // Generate a unique business profile ID based on the business name
+    const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+    let profileId = cleanName;
+    const existingDoc = await db.collection('businessProfiles').doc(profileId).get();
+    if (existingDoc.exists) {
+      profileId = `${cleanName}_${Math.floor(1000 + Math.random() * 9000)}`;
+    }
 
     // Generate AI website copy & design
     let websiteConfig: any = null;
@@ -146,16 +152,16 @@ export async function createRenterAccountAction(
     const propertyId = `properties/mock-${Math.floor(100000000 + Math.random() * 900000000)}`;
     const streamId = `${propertyId}/dataStreams/mock-${Math.floor(100000000 + Math.random() * 900000000)}`;
 
-    // 3. Create businessProfiles/{userId} doc
-    await db.collection('businessProfiles').doc(userId).set({
-      id: userId,
+    // 3. Create businessProfiles/{profileId} doc
+    await db.collection('businessProfiles').doc(profileId).set({
+      id: profileId,
       businessName,
-      contactEmail: finalEmail,
+      contactEmail: email,
       service: niche || 'Lead Generation Site',
       phoneNumber: '',
       defaultLandingPage: 'template-3',
       ownerId: landlordUid,
-      currentRenterId: userId,
+      currentRenterId: userId === landlordUid ? null : userId,
       isPubliclyListed: true,
       monthlyRentPrice: 0,
       niche: niche || '',
@@ -172,9 +178,9 @@ export async function createRenterAccountAction(
     });
 
     // 4. Create standard default assistant/agent skeleton for the new profile
-    await db.collection(`businessProfiles/${userId}/agents`).doc('default').set({
+    await db.collection(`businessProfiles/${profileId}/agents`).doc('default').set({
       id: 'default',
-      businessProfileId: userId,
+      businessProfileId: profileId,
       elevenLabsAgentId: '',
       name: `${businessName} Voice Assistant`,
       systemPrompt: `You are a helpful, professional scheduling voice agent for ${businessName}. Your goal is to gather caller name, phone number, interest, and schedule them into the calendar.`,
@@ -185,20 +191,20 @@ export async function createRenterAccountAction(
     });
 
     // Start SEO content setup asynchronously in background so it doesn't block account creation UI
-    generateInitialBlogsForProfile(userId, businessName, niche || 'Lead Generation Site')
+    generateInitialBlogsForProfile(profileId, businessName, niche || 'Lead Generation Site')
       .then(async () => {
         // Ping Google sitemap after blogs are generated
-        const sitemapUrl = `https://studio--studio-1410114603-9e1f6.us-central1.hosted.app/pages/${userId}/sitemap.xml`;
+        const sitemapUrl = `https://studio--studio-1410114603-9e1f6.us-central1.hosted.app/pages/${profileId}/sitemap.xml`;
         const pingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`;
-        console.log(`Pinging Google sitemap for ${userId}: ${pingUrl}`);
+        console.log(`Pinging Google sitemap for ${profileId}: ${pingUrl}`);
         await fetch(pingUrl);
-        console.log(`Sitemap pinged successfully for user: ${userId}`);
+        console.log(`Sitemap pinged successfully for user: ${profileId}`);
       })
       .catch(err => {
         console.error('Error in background SEO / blog generation:', err);
       });
 
-    return { success: true, message: `Account and profile created successfully for ${finalEmail}.`, userId };
+    return { success: true, message: `Account and profile created successfully for ${email}.`, userId: profileId };
   } catch (error: any) {
     console.error('Error in createRenterAccountAction:', error);
     return { success: false, message: error.message || 'An error occurred during account creation.' };
