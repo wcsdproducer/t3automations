@@ -87,22 +87,41 @@ export async function createRenterAccountAction(
   }
 
   try {
-    // 1. Create user in Firebase Auth
-    const userRecord = await admin.auth().createUser({
-      email,
-      password,
-      displayName: businessName,
-    });
+    // 1. Create user in Firebase Auth (with auto plus-addressing fallback if already in use)
+    let userRecord;
+    try {
+      userRecord = await admin.auth().createUser({
+        email,
+        password,
+        displayName: businessName,
+      });
+    } catch (err: any) {
+      if (err.code === 'auth/email-already-in-use') {
+        const [local, domain] = email.split('@');
+        const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15);
+        const subEmail = `${local}+${cleanName}@${domain}`;
+        console.log(`Email ${email} already in use. Retrying with sub-email: ${subEmail}`);
+        userRecord = await admin.auth().createUser({
+          email: subEmail,
+          password,
+          displayName: businessName,
+        });
+      } else {
+        throw err;
+      }
+    }
 
     const userId = userRecord.uid;
+    const finalEmail = userRecord.email || email;
 
     // 2. Create users/{userId} doc
     await db.collection('users').doc(userId).set({
       id: userId,
-      email,
+      email: finalEmail,
       role: 'renter',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
+
 
     // Generate AI website copy & design
     let websiteConfig: any = null;
@@ -131,7 +150,7 @@ export async function createRenterAccountAction(
     await db.collection('businessProfiles').doc(userId).set({
       id: userId,
       businessName,
-      contactEmail: email,
+      contactEmail: finalEmail,
       service: niche || 'Lead Generation Site',
       phoneNumber: '',
       defaultLandingPage: 'template-3',
@@ -179,7 +198,7 @@ export async function createRenterAccountAction(
         console.error('Error in background SEO / blog generation:', err);
       });
 
-    return { success: true, message: `Account and profile created successfully for ${email}.`, userId };
+    return { success: true, message: `Account and profile created successfully for ${finalEmail}.`, userId };
   } catch (error: any) {
     console.error('Error in createRenterAccountAction:', error);
     return { success: false, message: error.message || 'An error occurred during account creation.' };
