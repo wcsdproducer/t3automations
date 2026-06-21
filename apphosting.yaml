@@ -19,3 +19,12 @@ env:
     value: pk_test_51SeczLDw6gMEr4cc7M5KECgxMqT84C4fYbm1fZMBq3l90Pgyc8TGoAiOWLmX6BdaCU8zOXhbZvIYWEWrWhExC3Fz007S3l7Uvw
   - variable: TELNYX_API_KEY
     secret: TELNYX_API_KEY
+  - variable: NAMECHEAP_API_USER
+    secret: NAMECHEAP_API_USER
+  - variable: NAMECHEAP_API_KEY
+    secret: NAMECHEAP_API_KEY
+  - variable: NAMECHEAP_USERNAME
+    secret: NAMECHEAP_USERNAME
+  - variable: NAMECHEAP_CLIENT_IP
+    secret: NAMECHEAP_CLIENT_IP
+
