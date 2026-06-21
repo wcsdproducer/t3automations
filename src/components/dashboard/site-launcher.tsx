@@ -374,43 +374,97 @@ export function SiteLauncher() {
     );
   }
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      {/* Wizard Step List */}
-      <div className="lg:col-span-1 space-y-2">
-        <div className="bg-slate-900/40 border border-border/40 rounded-xl p-4 space-y-1">
-          <h3 className="text-sm font-semibold tracking-wider uppercase text-indigo-400 mb-3">Launch Steps</h3>
-          {STEPS.map((step, idx) => {
-            const isCompleted =
-              (step.id === 'domain' && activeDomain) ||
-              (step.id === 'dns' && activeDomainDoc?.status === 'active') ||
-              (step.id === 'gsc-verification' && profile?.googleSiteVerification && activeDomainDoc?.status === 'active') ||
-              (step.id === 'sitemap-indexing' && profile?.googleSiteVerification && activeDomainDoc?.status === 'active');
-            
-            const isActive = activeStep === step.id;
+  // Dynamic checklist completions
+  const isStepCompleted = (stepId: StepId) => {
+    switch (stepId) {
+      case 'domain':
+        return !!activeDomain;
+      case 'dns':
+        return activeDomainDoc?.status === 'active';
+      case 'gsc-verification':
+        return !!profile?.googleSiteVerified || (!!profile?.googleSiteVerification && activeDomainDoc?.status === 'active');
+      case 'sitemap-indexing':
+        return !!profile?.sitemapSubmitted;
+      case 'local-seo':
+        return !!profile?.targetCity && !!profile?.nicheKeywords && profile.nicheKeywords.length > 0;
+      case 'blog-seo':
+        return !!profile?.blogPostingSchedule && profile.blogPostingSchedule !== 'manual';
+      default:
+        return false;
+    }
+  };
 
-            return (
-              <button
-                key={step.id}
-                onClick={() => setActiveStep(step.id)}
-                className={`w-full text-left flex items-start gap-3 p-3 rounded-lg transition-all text-xs ${
-                  isActive
-                    ? 'bg-indigo-600/10 border-l-2 border-indigo-500 text-white font-medium'
-                    : 'text-muted-foreground hover:bg-slate-800/40'
-                }`}
-              >
-                <div className={`mt-0.5 rounded-full p-0.5 ${isCompleted ? 'bg-green-500/20 text-green-400' : 'bg-slate-800 text-slate-500'}`}>
-                  {isCompleted ? <Check className="h-3.5 w-3.5" /> : <span className="h-3.5 w-3.5 flex items-center justify-center font-bold text-[9px]">{idx + 1}</span>}
-                </div>
-                <div className="min-w-0">
-                  <p className={`font-semibold ${isActive ? 'text-indigo-400' : 'text-slate-300'}`}>{step.title}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{step.description}</p>
-                </div>
-              </button>
-            );
-          })}
+  const completedCount = STEPS.filter(step => isStepCompleted(step.id)).length;
+  const progressPercentage = Math.round((completedCount / STEPS.length) * 100);
+
+  return (
+    <div className="space-y-6 w-full">
+      {/* Dynamic Launch Progress Header Card */}
+      <Card className="border-border/40 bg-slate-900/60 backdrop-blur-md overflow-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
+        <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5 flex-1">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4.5 w-4.5 text-indigo-400 animate-pulse" />
+              <h2 className="text-base font-bold text-slate-100">Site Launch Completion Checklist</h2>
+            </div>
+            <p className="text-xs text-slate-400">
+              Complete all launch steps to get your website fully certified, indexed, and automated.
+            </p>
+            {/* Progress bar container */}
+            <div className="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden border border-slate-700/50">
+              <div 
+                className="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 h-full rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+          </div>
+          <div className="flex flex-row md:flex-col items-center md:items-end justify-between shrink-0 gap-1 bg-slate-950/40 p-3 rounded-xl border border-slate-800">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Progress</span>
+            <span className="text-2xl font-black text-indigo-400 font-mono leading-none mt-1">{progressPercentage}%</span>
+            <span className="text-[10px] text-slate-400 mt-1 font-semibold">{completedCount} of {STEPS.length} Completed</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Wizard Step List */}
+        <div className="lg:col-span-1 space-y-2">
+          <div className="bg-slate-900/40 border border-border/40 rounded-xl p-4 space-y-1">
+            <h3 className="text-sm font-semibold tracking-wider uppercase text-indigo-400 mb-3">Launch Steps</h3>
+            {STEPS.map((step, idx) => {
+              const isCompleted = isStepCompleted(step.id);
+              const isActive = activeStep === step.id;
+
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => setActiveStep(step.id)}
+                  className={`w-full text-left flex items-start gap-3 p-3 rounded-lg transition-all text-xs ${
+                    isActive
+                      ? 'bg-indigo-600/10 border-l-2 border-indigo-500 text-white font-medium'
+                      : 'text-muted-foreground hover:bg-slate-800/40'
+                  }`}
+                >
+                  <div className={`mt-0.5 rounded-full p-0.5 ${isCompleted ? 'bg-green-500/20 text-green-400' : 'bg-slate-800 text-slate-500'}`}>
+                    {isCompleted ? <Check className="h-3.5 w-3.5" /> : <span className="h-3.5 w-3.5 flex items-center justify-center font-bold text-[9px]">{idx + 1}</span>}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-1.5">
+                      <p className={`font-semibold ${isActive ? 'text-indigo-400' : 'text-slate-300'}`}>{step.title}</p>
+                      {isCompleted && (
+                        <span className="text-[8px] font-bold text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded shrink-0 border border-green-500/15">
+                          Done
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground truncate">{step.description}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
       {/* Wizard Content Panel */}
       <div className="lg:col-span-3">
@@ -859,5 +913,6 @@ export function SiteLauncher() {
         </Card>
       </div>
     </div>
+  </div>
   );
 }

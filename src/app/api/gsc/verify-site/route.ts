@@ -141,6 +141,15 @@ export async function POST(req: NextRequest) {
 
         console.log(`[gsc-verify] Sitemap submitted successfully: ${sitemapFeedUrl}`);
 
+        // Update Firestore profile status
+        await businessDocRef.set(
+          {
+            googleSiteVerified: true,
+            sitemapSubmitted: true,
+          },
+          { merge: true }
+        );
+
         return NextResponse.json({
           success: true,
           detail: 'Ownership verified, site added to Google Search Console, and sitemap successfully submitted!',
