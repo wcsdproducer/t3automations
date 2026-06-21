@@ -122,6 +122,11 @@ export async function POST(req: NextRequest) {
       if (h.Type === 'A' && (h.Name === '@' || h.Name === 'www')) return false;
       if (h.Type === 'TXT' && h.Name === '@' && h.Address.includes('fah-claim')) return false;
       if (h.Type === 'CNAME' && h.Name === requiredCnameHost) return false;
+      
+      // Filter out Namecheap default parking/redirect records that conflict with our new A/TXT records
+      if (h.Name === 'www' && h.Type === 'CNAME' && h.Address.includes('parkingpage.namecheap.com')) return false;
+      if (h.Name === '@' && (h.Type === 'URL' || h.Type === 'URL301' || h.Type === 'FRAME') && h.Address.includes(domain)) return false;
+      
       return true;
     });
 
