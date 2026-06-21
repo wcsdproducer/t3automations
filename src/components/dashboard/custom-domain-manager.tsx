@@ -114,8 +114,9 @@ export function CustomDomainManager() {
       setDomainInput('');
       toast({
         title: 'Domain Added',
-        description: `${domain} has been added. Configure the DNS records below then click Check Status.`,
+        description: `${domain} has been added. Provisioning backend and DNS records...`,
       });
+      handleCheckStatus(domain);
     } catch (error) {
       console.error('Error adding domain', error);
       toast({ title: 'Error', description: 'Failed to add custom domain.', variant: 'destructive' });

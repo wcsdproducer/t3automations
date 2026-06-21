@@ -93,14 +93,38 @@ export async function POST(req: NextRequest) {
       appHostingData = response.data;
     } catch (err: any) {
       if (err.response && err.response.status === 404) {
-        // Domain not registered in App Hosting yet
-        return NextResponse.json({
-          status: 'pending',
-          detail: 'Domain is not registered on the App Hosting backend yet. Please ensure it is added via the Firebase Console.',
-          dnsRecords: null
-        });
+        // Domain not registered in App Hosting yet — let's automatically register it!
+        console.log(`[check-domain-status] Domain ${domain} not registered. Initiating registration...`);
+        const projectId = 'studio-1410114603-9e1f6';
+        const location = 'us-central1';
+        const backendId = 'studio';
+        const createUrl = `https://firebaseapphosting.googleapis.com/v1beta/projects/${projectId}/locations/${location}/backends/${backendId}/domains?domainId=${domain}`;
+        
+        try {
+          await axios.post(createUrl, {}, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log(`[check-domain-status] Successfully triggered domain registration for ${domain}.`);
+          
+          // Re-fetch the domain data
+          const retryRes = await axios.get(url, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+          });
+          appHostingData = retryRes.data;
+        } catch (postErr: any) {
+          console.error('[check-domain-status] Failed to register or re-fetch domain:', postErr.response ? postErr.response.data : postErr.message);
+          return NextResponse.json({
+            status: 'pending',
+            detail: `Failed to programmatically register the domain on Firebase: ${postErr.message}.`,
+            dnsRecords: null
+          });
+        }
+      } else {
+        throw err;
       }
-      throw err;
     }
 
     const customDomainStatus = appHostingData.customDomainStatus || {};
