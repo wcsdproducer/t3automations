@@ -9,6 +9,7 @@ import { Template4Content } from '@/app/landing-pages/_components/template-4-con
 import { TreeCareTemplate } from '@/app/landing-pages/_components/tree-care-template';
 import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flooring-template';
 import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
+import { ApplianceRepairTemplate } from '@/app/landing-pages/_components/appliance-repair-template';
 
 export const dynamic = 'force-dynamic';
 
@@ -158,6 +159,7 @@ export default async function CustomDomainPage({
     if (template === 'tree-care') return <TreeCareTemplate {...templateProps} />;
     if (template === 'epoxy-flooring') return <EpoxyFlooringTemplate {...templateProps} />;
     if (template === 'paving-concrete') return <PavingConcreteTemplate {...templateProps} />;
+    if (template === 'appliance-repair') return <ApplianceRepairTemplate {...templateProps} />;
     
     // Legacy fallbacks
     if (template === 'template-2') return <Template2Content {...templateProps} />;

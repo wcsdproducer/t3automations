@@ -1,6 +1,6 @@
 
 import { PlaceHolderImages, type ImagePlaceholder } from '@/lib/placeholder-images';
-import { EPOXY_REVIEWS, TREE_REVIEWS, PAVING_REVIEWS } from './large-reviews-list';
+import { EPOXY_REVIEWS, TREE_REVIEWS, PAVING_REVIEWS, APPLIANCE_REVIEWS } from './large-reviews-list';
 
 // A map to associate services with specific image hints for hero sections
 const serviceImageHints: Record<string, string[]> = {
@@ -474,6 +474,73 @@ export function getContentForService(service: string) {
                 hero: pavingImages.hero,
                 about: pavingImages.about,
                 gallery: pavingImages.gallery,
+            }
+        };
+    }
+
+    if (serviceName === "Appliance Repair" || serviceName === "Appliance Services") {
+        const applianceImages = {
+            hero: [
+                {
+                    id: "appliance-hero-1",
+                    description: "Professional appliance repair technician fixing refrigerator",
+                    imageUrl: "/images/appliance-hero.png",
+                    imageHint: "appliance repair"
+                }
+            ],
+            about: {
+                id: "appliance-about",
+                description: "Technician checking front-load washing machine components",
+                imageUrl: "/images/appliance-about.png",
+                imageHint: "technician fixing"
+            },
+            gallery: [
+                {
+                    id: "appliance-gallery-1",
+                    description: "High-end kitchen appliances in clean condition",
+                    imageUrl: "/images/appliance-gallery.png",
+                    imageHint: "clean kitchen"
+                }
+            ]
+        };
+
+        return {
+            companyName: `Appliance Repair Pros`,
+            hero: {
+                title: `Same-Day Appliance Repair & Service`,
+                subtitle: `Don't let a broken appliance disrupt your day. Expert, licensed repairs on all major brands with upfront pricing.`,
+                cta: "Book Same-Day Repair",
+            },
+            services: {
+                title: `Our Household Appliance Services`,
+                subtitle: "Fast, certified diagnostic and repair solutions for all major household brands.",
+                items: [
+                    { title: `Refrigerator & Freezer Repair`, description: "Restoring temperature controls, compressors, ice makers, and seal leaks immediately." },
+                    { title: "Washer & Dryer Repair", description: "Fixing spin cycles, drainage, heating coils, belts, and noise issues same-day." },
+                    { title: "Oven, Range & Cooktop Repair", description: "Solving ignition failures, broken elements, temperature offsets, and gas line checks safely." },
+                ]
+            },
+            about: {
+                title: `Your Trusted Local Appliance Technicians`,
+                body: `We provide fast, reliable appliance repair services. Our background-checked, certified technicians travel with fully stocked trucks to complete most repairs in a single visit. Backed by a 90-day parts and labor warranty.`,
+                points: [
+                    "Same-Day Service Availability",
+                    "Licensed & Insured Technicians",
+                    "90-Day Parts & Labor Warranty",
+                ]
+            },
+            reviews: {
+                title: `What Your Neighbors Are Saying`,
+                items: APPLIANCE_REVIEWS
+            },
+            contact: {
+                title: "Schedule Your Service Call",
+                subtitle: `Contact us now to secure a same-day diagnosis appointment.`,
+            },
+            images: {
+                hero: applianceImages.hero,
+                about: applianceImages.about,
+                gallery: applianceImages.gallery,
             }
         };
     }
