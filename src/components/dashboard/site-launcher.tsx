@@ -74,6 +74,7 @@ export function SiteLauncher() {
   const [domainInput, setDomainInput] = useState('');
   const [isSubmittingDomain, setIsSubmittingDomain] = useState(false);
   const [checkingDns, setCheckingDns] = useState(false);
+  const [configuringNamecheap, setConfiguringNamecheap] = useState(false);
 
   // GSC actions states
   const [generatingGscToken, setGeneratingGscToken] = useState(false);
@@ -206,6 +207,36 @@ export function SiteLauncher() {
       });
     } finally {
       setCheckingDns(false);
+    }
+  };
+
+  const handleConfigureNamecheap = async () => {
+    if (!profileId || !activeDomain) return;
+    setConfiguringNamecheap(true);
+    try {
+      const res = await fetch('/api/dns/configure-namecheap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain: activeDomain, userId: profileId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Configuration failed');
+
+      toast({
+        title: 'Namecheap DNS Configured!',
+        description: data.detail || 'DNS records added successfully.',
+      });
+
+      // Automatically trigger check dns status
+      handleCheckDns(activeDomain);
+    } catch (error: any) {
+      toast({
+        title: 'Auto-Configuration Failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setConfiguringNamecheap(false);
     }
   };
 
@@ -535,25 +566,39 @@ export function SiteLauncher() {
                   <div className="text-center p-6 text-muted-foreground">Please configure Step 1: Domain Mapping first.</div>
                 ) : (
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <span className="text-xs text-muted-foreground">Domain: </span>
                         <strong className="text-sm font-mono text-white">{activeDomain}</strong>
                       </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleCheckDns(activeDomain)}
-                        disabled={checkingDns}
-                        className="bg-indigo-500/10 border-indigo-500/30 hover:bg-indigo-500/20"
-                      >
-                        {checkingDns ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin text-indigo-400" />
-                        ) : (
-                          <RefreshCw className="mr-2 h-4 w-4 text-indigo-400" />
-                        )}
-                        Check Status Live
-                      </Button>
+                      <div className="flex items-center gap-3">
+                        <Button
+                          onClick={handleConfigureNamecheap}
+                          disabled={configuringNamecheap}
+                          className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-semibold text-xs h-9 shadow-md shadow-orange-500/10"
+                        >
+                          {configuringNamecheap ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Sparkles className="mr-2 h-4 w-4 text-orange-200" />
+                          )}
+                          Auto-Configure Namecheap DNS
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleCheckDns(activeDomain)}
+                          disabled={checkingDns}
+                          className="bg-indigo-500/10 border-indigo-500/30 hover:bg-indigo-500/20 h-9"
+                        >
+                          {checkingDns ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin text-indigo-400" />
+                          ) : (
+                            <RefreshCw className="mr-2 h-4 w-4 text-indigo-400" />
+                          )}
+                          Check Status Live
+                        </Button>
+                      </div>
                     </div>
 
                     <div className="overflow-x-auto rounded-lg border border-border/40 bg-slate-950/60 text-xs">
