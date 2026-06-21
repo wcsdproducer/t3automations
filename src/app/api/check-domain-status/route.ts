@@ -180,9 +180,10 @@ export async function POST(req: NextRequest) {
     const existingData = docSnap.exists ? docSnap.data() : {};
     const existingDns = existingData?.dnsRecords || {};
 
+    const fallbackTxt = appHostingData?.uid ? `fah-claim=002-02-${appHostingData.uid}` : '';
     const dnsRecordsData = {
-      aRecords: desiredA.length > 0 ? desiredA : (existingDns.aRecords || ['35.219.200.4']),
-      txtRecord: desiredTxt || existingDns.txtRecord || '',
+      aRecords: desiredA.length > 0 ? desiredA : (existingDns.aRecords && existingDns.aRecords[0] !== '35.219.200.4' ? existingDns.aRecords : ['35.219.200.2']),
+      txtRecord: desiredTxt || existingDns.txtRecord || fallbackTxt,
       cnameHost: desiredCnameHost || existingDns.cnameHost || '',
       cnameValue: desiredCnameValue || existingDns.cnameValue || ''
     };

@@ -99,9 +99,10 @@ async function registerCustomDomainInAppHosting(domain: string, profileId: strin
       }
     }
 
+    const fallbackTxt = appHostingData?.uid ? `fah-claim=002-02-${appHostingData.uid}` : '';
     const dnsRecordsData = {
-      aRecords: desiredA.length > 0 ? desiredA : ['35.219.200.4'],
-      txtRecord: desiredTxt || '',
+      aRecords: desiredA.length > 0 ? desiredA : ['35.219.200.2'],
+      txtRecord: desiredTxt || fallbackTxt,
       cnameHost: desiredCnameHost || '',
       cnameValue: desiredCnameValue || ''
     };
