@@ -14,7 +14,18 @@ export async function POST(req: NextRequest) {
     const namecheapUser = process.env.NAMECHEAP_API_USER;
     const namecheapKey = process.env.NAMECHEAP_API_KEY;
     const namecheapUsername = process.env.NAMECHEAP_USERNAME;
-    const namecheapClientIp = process.env.NAMECHEAP_CLIENT_IP;
+    let namecheapClientIp = process.env.NAMECHEAP_CLIENT_IP;
+
+    // Dynamically detect public outbound IP of the server
+    try {
+      const ipRes = await axios.get('https://api.ipify.org?format=json', { timeout: 3000 });
+      if (ipRes.data && ipRes.data.ip) {
+        namecheapClientIp = ipRes.data.ip;
+        console.log('[configure-namecheap] Dynamically detected outbound public IP:', namecheapClientIp);
+      }
+    } catch (ipErr) {
+      console.warn('[configure-namecheap] Failed to dynamically detect outbound IP, using env:', ipErr);
+    }
 
     if (!namecheapUser || !namecheapKey || !namecheapUsername || !namecheapClientIp) {
       return NextResponse.json({ 
