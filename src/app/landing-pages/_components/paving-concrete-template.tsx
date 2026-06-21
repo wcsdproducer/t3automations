@@ -52,6 +52,7 @@ export function PavingConcreteTemplate({
   companyName: companyNameProp = '',
   bookingUrl,
   websiteConfig,
+  targetCity,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -180,6 +181,7 @@ export function PavingConcreteTemplate({
         service={service}
         logoUrl={logoUrl}
         description={content.hero?.subtitle}
+        targetCity={targetCity}
       />
       
       {/* Top Banner Contact bar */}

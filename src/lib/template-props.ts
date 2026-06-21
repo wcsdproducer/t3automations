@@ -16,6 +16,7 @@ export interface TemplateProps {
   colorPalette?: string;
   bookingUrl?: string;
   websiteConfig?: Record<string, any>;
+  targetCity?: string;
 }
 
 /**
@@ -33,6 +34,7 @@ export function profileToTemplateProps(profile: Record<string, any>, id?: string
     colorPalette: profile.colorPalette || 'deep-midnight',
     bookingUrl:   profile.bookingUrl   || '',
     websiteConfig: profile.websiteConfig || null,
+    targetCity:   profile.targetCity   || '',
   };
 }
 
@@ -54,5 +56,6 @@ export function searchParamsToTemplateProps(
     fontPair:     get('fontPair')     || 'modern-corporate',
     colorPalette: get('colorPalette') || 'deep-midnight',
     bookingUrl:   get('bookingUrl')   || '',
+    targetCity:   get('targetCity')   || '',
   };
 }

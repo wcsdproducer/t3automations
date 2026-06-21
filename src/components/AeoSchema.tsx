@@ -9,6 +9,7 @@ interface AeoSchemaProps {
   logoUrl?: string;
   description?: string;
   faqs?: { question: string; answer: string }[];
+  targetCity?: string;
 }
 
 export function AeoSchema({
@@ -18,6 +19,7 @@ export function AeoSchema({
   logoUrl,
   description,
   faqs,
+  targetCity,
 }: AeoSchemaProps) {
   const [currentUrl, setCurrentUrl] = useState('');
 
@@ -26,6 +28,17 @@ export function AeoSchema({
       setCurrentUrl(window.location.origin + window.location.pathname);
     }
   }, []);
+
+  // Parse targetCity (e.g. "Boise, ID")
+  let city = 'Tampa';
+  let state = 'FL';
+  if (targetCity && targetCity.includes(',')) {
+    const parts = targetCity.split(',');
+    city = parts[0].trim();
+    state = parts[1].trim();
+  } else if (targetCity) {
+    city = targetCity.trim();
+  }
 
   // 1. LocalBusiness Schema
   let businessType = 'LocalBusiness';
@@ -49,20 +62,20 @@ export function AeoSchema({
     description: description || `Professional ${service} provider specializing in quality local services.`,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Tampa',
-      addressRegion: 'FL',
+      addressLocality: city,
+      addressRegion: state,
       addressCountry: 'US',
     },
     areaServed: [
       {
         '@type': 'City',
-        name: 'Tampa',
-        sameAs: 'https://en.wikipedia.org/wiki/Tampa,_Florida',
+        name: city,
+        sameAs: `https://en.wikipedia.org/wiki/${encodeURIComponent(city)}`,
       },
       {
         '@type': 'State',
-        name: 'Florida',
-        sameAs: 'https://en.wikipedia.org/wiki/Florida',
+        name: state === 'FL' || state.toLowerCase() === 'florida' ? 'Florida' : state,
+        sameAs: `https://en.wikipedia.org/wiki/${encodeURIComponent(state === 'FL' || state.toLowerCase() === 'florida' ? 'Florida' : state)}`,
       }
     ],
   };

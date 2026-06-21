@@ -4,6 +4,7 @@ import React, { useTransition } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection } from 'firebase/firestore';
+import { SiteLauncher } from '@/components/dashboard/site-launcher';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -404,73 +405,43 @@ export default function AnalyticsOverviewPage() {
     <main className="flex flex-1 flex-col gap-6 p-4 lg:gap-8 lg:p-6 bg-slate-950 min-h-screen text-slate-100">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Analytics Overview</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">Website Launch Center</h1>
           <p className="text-sm text-slate-400 mt-1">
-            Display live web traffic, visitor demographics, and conversion metrics.
+            Complete the steps below to map your domain, verify ownership, and configure SEO/AI blogging content strategies.
           </p>
         </div>
       </div>
       
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center min-h-[400px] bg-slate-900 border border-slate-800 rounded-2xl relative overflow-hidden">
-        {/* Subtle glassmorphic grid background */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.05),transparent_70%)]" />
+      <SiteLauncher />
 
-        <div className="max-w-md mx-auto flex flex-col items-center space-y-6 relative z-10">
-          <div className="flex gap-4 items-center justify-center text-slate-600">
-            <LineChartIcon className="h-16 w-16 stroke-[1.5]" />
-            <PieChartIcon className="h-16 w-16 stroke-[1.5]" />
-          </div>
-
-          <div className="space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-200">
-              Google Analytics Integration Pending
-            </h2>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              Analyze visitor behavior, traffic sources, and lead conversion rates directly in your dashboard. 
-              {hasConnectedDomain 
-                ? ' A custom domain is connected. Click the button below to automatically create and configure Google Analytics assets.'
-                : ' To set up tracking, you must first connect a custom domain name to your site.'}
+      {/* Analytics setup option when domain is live */}
+      {hasConnectedDomain && (
+        <div className="mt-8 p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <h3 className="text-lg font-semibold text-slate-200">Google Analytics Tracking Setup</h3>
+            <p className="text-xs text-slate-400">
+              Create GA dashboard properties automatically to monitor user traffic and lead conversions on your connected custom domain.
             </p>
           </div>
-
-          {hasConnectedDomain ? (
-            <Button 
-              onClick={handleSetupAnalytics} 
-              disabled={isPending}
-              size="lg" 
-              className="px-8 bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:scale-[1.02] shadow-lg shadow-blue-500/20"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Creating GA Assets...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="mr-2 h-5 w-5" />
-                  Set Up Google Analytics
-                </>
-              )}
-            </Button>
-          ) : (
-            <div className="flex flex-col items-center gap-3">
-              <Button 
-                onClick={() => router.push(`/dashboard/${userId}/domains`)} 
-                variant="outline"
-                size="lg"
-                className="px-6 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
-              >
-                <Globe className="mr-2 h-5 w-5" />
-                Connect Custom Domain
-              </Button>
-              <div className="flex items-center gap-1.5 text-xs text-amber-500 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                Google Analytics requires a connected custom domain.
-              </div>
-            </div>
-          )}
+          <Button 
+            onClick={handleSetupAnalytics} 
+            disabled={isPending}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold whitespace-nowrap shadow-lg shadow-blue-500/20 shrink-0"
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Setting up...
+              </>
+            ) : (
+              <>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Initialize Analytics Tracking
+              </>
+            )}
+          </Button>
         </div>
-      </div>
+      )}
     </main>
   );
 }
