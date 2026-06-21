@@ -102,9 +102,39 @@ export function ApplianceRepairTemplate({
   };
 
   useEffect(() => {
-    const rawContent = getContentForService(service);
-    setContent(rawContent);
-  }, [service]);
+    const staticContent = getContentForService(service);
+    if (websiteConfig) {
+      const mergedReviews = [
+        ...(websiteConfig.reviews?.items || []),
+        ...(staticContent.reviews?.items || [])
+      ];
+      const uniqueReviews = Array.from(new Map(mergedReviews.map(item => [item.quote, item])).values());
+
+      setContent({
+        ...websiteConfig,
+        reviews: {
+          ...websiteConfig.reviews,
+          title: websiteConfig.reviews?.title || staticContent.reviews?.title,
+          items: uniqueReviews
+        },
+        images: staticContent.images,
+        about: {
+          ...staticContent.about,
+          ...websiteConfig.about,
+        },
+        hero: {
+          ...staticContent.hero,
+          ...websiteConfig.hero,
+        },
+        services: {
+          ...staticContent.services,
+          ...websiteConfig.services,
+        }
+      });
+    } else {
+      setContent(staticContent);
+    }
+  }, [service, websiteConfig]);
 
   if (!content) {
     return (
@@ -202,12 +232,21 @@ export function ApplianceRepairTemplate({
               📞 Same-Day Service Availability
             </Badge>
             <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
-              Same-Day Appliance Repair & Service in <span className="text-blue-600">{displayCity}</span>
+              {content.hero?.title || `Same-Day Appliance Repair & Service in ${displayCity}`}
             </h2>
             <p className="text-slate-600 text-base md:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Don&apos;t let a broken refrigerator, washer, or oven ruin your schedule. Our licensed local technicians arrive on-time with fully stocked vans to fix your household appliances today.
+              {content.hero?.subtitle || "Don't let a broken refrigerator, washer, or oven ruin your schedule. Our licensed local technicians arrive on-time with fully stocked vans to fix your household appliances today."}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            {/* Quick features checklist in hero */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 max-w-lg">
+              {(content.about?.points || ["Same-Day Priority Service", "Licensed & Insured Techs", "90-Day Repair Warranty", "No Hidden Diagnostic Fees"]).map((feat: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700">
+                  <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0" />
+                  <span>{feat}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
               <a href={`tel:${phone}`} className="w-full sm:w-auto">
                 <Button className="bg-blue-600 hover:bg-blue-500 text-white text-base font-extrabold w-full py-6 px-8 gap-3 shadow-lg shadow-blue-500/15">
                   <Phone className="h-5 w-5" /> Call {phone}
