@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     const sld = parts.join('.');
 
     // 3. Fetch existing hosts from Namecheap (to avoid deleting existing user records)
-    const getHostsUrl = `https://api.namecheap.com/xml.rpc?ApiUser=${namecheapUser}&ApiKey=${namecheapKey}&UserName=${namecheapUsername}&ClientIp=${namecheapClientIp}&Command=namecheap.domains.dns.getHosts&SLD=${sld}&TLD=${tld}`;
+    const getHostsUrl = `https://api.namecheap.com/xml.response?ApiUser=${namecheapUser}&ApiKey=${namecheapKey}&UserName=${namecheapUsername}&ClientIp=${namecheapClientIp}&Command=namecheap.domains.dns.getHosts&SLD=${sld}&TLD=${tld}`;
     const getHostsRes = await axios.get(getHostsUrl);
     
     const $ = cheerio.load(getHostsRes.data, { xmlMode: true });
@@ -185,7 +185,7 @@ export async function POST(req: NextRequest) {
       setParams.append(`TTL${num}`, host.TTL);
     });
 
-    const setHostsUrl = `https://api.namecheap.com/xml.rpc`;
+    const setHostsUrl = `https://api.namecheap.com/xml.response`;
     const setHostsRes = await axios.post(setHostsUrl, setParams.toString(), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
