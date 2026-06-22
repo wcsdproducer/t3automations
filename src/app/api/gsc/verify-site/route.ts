@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       console.log(`[gsc-verify] Fetching token for: ${canonicalSiteUrl}`);
       try {
         const tokenRes = await axios.post(
-          'https://www.googleapis.com/siteVerification/v1/webmasters/getToken',
+          'https://www.googleapis.com/siteVerification/v1/token',
           {
             verificationMethod: 'META',
             site: {
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       try {
         // A. Trigger ownership verification call
         const verifyRes = await axios.post(
-          'https://www.googleapis.com/siteVerification/v1/webmasters/verify?verificationMethod=META',
+          'https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=META',
           {
             site: {
               identifier: canonicalSiteUrl,
