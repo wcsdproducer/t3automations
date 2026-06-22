@@ -695,10 +695,25 @@ export function SiteLauncher() {
           {activeStep === 'gsc-verification' && (
             <>
               <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-indigo-400" />
-                  Step 3: Google Ownership Verification
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    <ShieldCheck className="h-5 w-5 text-indigo-400" />
+                    Step 3: Google Ownership Verification
+                  </CardTitle>
+                  {profile?.googleSiteVerified ? (
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/20 text-[11px] px-2 py-0.5">
+                      Verified
+                    </Badge>
+                  ) : profile?.googleSiteVerification ? (
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 text-[11px] px-2 py-0.5 animate-pulse">
+                      Pending Verification
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/30 hover:bg-slate-500/20 text-[11px] px-2 py-0.5">
+                      Not Generated
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription>
                   Inject your Google verification token into the page head dynamically, then request Google to check ownership.
                 </CardDescription>
@@ -709,7 +724,14 @@ export function SiteLauncher() {
                 ) : (
                   <div className="space-y-6">
                     <div className="p-4 rounded-xl border border-indigo-500/20 bg-slate-900/60 space-y-4">
-                      <h4 className="text-sm font-semibold text-slate-200">Current Token Status</h4>
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-semibold text-slate-200">Current Token Status</h4>
+                        {profile?.googleSiteVerified && (
+                          <span className="text-[10px] text-green-400 font-bold bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">
+                            Ownership Confirmed
+                          </span>
+                        )}
+                      </div>
                       
                       {profile?.googleSiteVerification ? (
                         <div className="space-y-2">
@@ -745,11 +767,11 @@ export function SiteLauncher() {
                       </p>
                       <Button
                         onClick={handleVerifyGscOwnership}
-                        disabled={verifyingGsc || !profile?.googleSiteVerification}
+                        disabled={verifyingGsc || !profile?.googleSiteVerification || profile?.googleSiteVerified}
                         className="bg-indigo-600 hover:bg-indigo-500 w-full"
                       >
                         {verifyingGsc ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
-                        Verify & Add to Search Console
+                        {profile?.googleSiteVerified ? 'Ownership Fully Verified & Registered' : 'Verify & Add to Search Console'}
                       </Button>
                     </div>
                   </div>
@@ -761,10 +783,25 @@ export function SiteLauncher() {
           {activeStep === 'sitemap-indexing' && (
             <>
               <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Search className="h-5 w-5 text-indigo-400" />
-                  Step 4: Sitemap XML & Google Indexing
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    <Search className="h-5 w-5 text-indigo-400" />
+                    Step 4: Sitemap XML & Google Indexing
+                  </CardTitle>
+                  {profile?.googleSiteIndexed ? (
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/20 text-[11px] px-2 py-0.5">
+                      Indexing Complete
+                    </Badge>
+                  ) : profile?.sitemapSubmitted ? (
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 text-[11px] px-2 py-0.5 animate-pulse">
+                      Indexing Pending
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/30 hover:bg-slate-500/20 text-[11px] px-2 py-0.5">
+                      Not Indexed
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription>
                   Submit your dynamically compiled sitemap so Google starts crawling and index matching all landing pages and blog posts.
                 </CardDescription>
@@ -787,6 +824,45 @@ export function SiteLauncher() {
                       >
                         <ExternalLink className="h-4 w-4 text-slate-400" />
                       </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/40 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-200">Google Indexing Status</span>
+                        {profile?.googleSiteIndexed ? (
+                          <span className="text-[10px] text-green-400 font-bold bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 flex items-center gap-1">
+                            <Check className="h-3 w-3" /> Live on Google Search
+                          </span>
+                        ) : profile?.sitemapSubmitted ? (
+                          <span className="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 flex items-center gap-1 animate-pulse">
+                            <RefreshCw className="h-2.5 w-2.5 animate-spin" /> Crawl & Indexing In Progress
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-400 font-bold bg-slate-500/10 px-2 py-0.5 rounded border border-slate-500/20">
+                            Submission Required
+                          </span>
+                        )}
+                      </div>
+                      
+                      {profile?.googleSiteIndexed ? (
+                        <div className="p-3 bg-green-500/5 rounded-lg text-xs space-y-1 text-slate-300 border border-green-500/10">
+                          <p className="font-semibold text-green-400">All pages indexed successfully!</p>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">
+                            Google has processed your sitemap. Your homepage, blog index, and all published articles are live and searchable on Google.
+                          </p>
+                        </div>
+                      ) : profile?.sitemapSubmitted ? (
+                        <div className="p-3 bg-slate-900/80 rounded-lg text-xs space-y-1.5 text-slate-300 border border-slate-800/60">
+                          <p className="font-semibold text-indigo-400">Google Crawl Status: Pending</p>
+                          <p className="text-[11px] text-muted-foreground leading-relaxed">
+                            Your sitemap has been accepted by Google Search Console. Google is currently crawling your pages. This process normally completes within 24-48 hours.
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-muted-foreground p-1">
+                          Click &quot;Submit Sitemap Now&quot; below to trigger initial crawling and indexing.
+                        </p>
+                      )}
                     </div>
 
                     <div className="p-4 border border-indigo-500/20 bg-indigo-500/5 rounded-xl space-y-4">
