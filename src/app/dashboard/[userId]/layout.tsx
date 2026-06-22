@@ -2,10 +2,10 @@
 
 import React from 'react';
 import pkg from '../../../../package.json';
-import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { useUser, useAuth, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { useParams, useRouter, usePathname } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { doc } from 'firebase/firestore';
+import { doc, collection } from 'firebase/firestore';
 import { BusinessProfile } from '@/types/crm';
 import {
   Settings,
@@ -132,8 +132,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const { data: businessProfile, isLoading: isProfileLoading, error: profileError } = useDoc<BusinessProfile>(docRef);
   const { data: userProfile, isLoading: isUserDocLoading } = useDoc<BusinessProfile>(userDocRef);
+
+  const customDomainsRef = useMemoFirebase(() => {
+    if (!userIdSlug) return null;
+    return collection(firestore, `businessProfiles/${userIdSlug}/customDomains`);
+  }, [firestore, userIdSlug]);
+
+  const { data: domains } = useCollection(customDomainsRef);
+
   const isOwner = businessProfile ? businessProfile.ownerId === user?.uid : user?.uid ? user.uid.slice(-12) === userIdSlug : false;
   const isAdmin = userProfile?.IsAdmin === true;
+
+  const firstDomain = domains?.[0]?.id;
+  const websiteUrl = firstDomain ? `https://${firstDomain}` : (businessProfile?.websiteUrl || `/pages/${userIdSlug}`);
 
   React.useEffect(() => {
     if (!isUserLoading && !isProfileLoading && !isUserDocLoading) {
@@ -245,7 +256,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </span>
               </div>
               <a
-                href={businessProfile?.websiteUrl || `/pages/${userIdSlug}`}
+                href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors mt-1 w-fit bg-blue-950/40 border border-blue-900/60 px-2 py-1 rounded-md"

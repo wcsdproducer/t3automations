@@ -149,8 +149,8 @@ export function ApplianceRepairTemplate({
   const displayCity = targetCity || 'Tampa';
 
   // Merge database reviews with fallback large reviews list, de-duplicating by quote text
-  const userReviews = websiteConfig?.reviews || [];
-  const defaultReviews = content.reviews?.items || [];
+  const userReviews = Array.isArray(websiteConfig?.reviews) ? websiteConfig.reviews : [];
+  const defaultReviews = Array.isArray(content.reviews?.items) ? content.reviews.items : [];
   const allReviews = [...userReviews, ...defaultReviews];
   const uniqueReviews = allReviews.filter(
     (review, index, self) => self.findIndex(r => r.quote === review.quote) === index
