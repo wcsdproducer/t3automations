@@ -12,7 +12,7 @@ export default function middleware(req: NextRequest) {
     const url = req.nextUrl;
     
     // Bypass custom domain routing for static assets in the public/images folder
-    if (url.pathname.startsWith('/images/')) {
+    if (url.pathname.startsWith('/images/') || url.pathname.startsWith('/api/')) {
         return NextResponse.next();
     }
 

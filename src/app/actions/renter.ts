@@ -183,9 +183,11 @@ SEO Writing Guidelines:
 
       const blogData = response.output;
       if (blogData) {
+        const { getRelevantBlogImage } = require('@/lib/blog-images');
         const blogId = blogData.slug;
         await blogCollection.doc(blogId).set({
           ...blogData,
+          imageUrl: getRelevantBlogImage(serviceCategory, blogData.keywords, blogData.title),
           status: 'published',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
