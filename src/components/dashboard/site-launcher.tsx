@@ -867,16 +867,23 @@ export function SiteLauncher() {
 
                     <div className="p-4 border border-indigo-500/20 bg-indigo-500/5 rounded-xl space-y-4">
                       <div className="space-y-1">
-                        <h4 className="text-sm font-semibold text-slate-200">Re-Submit XML Sitemap</h4>
+                        <h4 className="text-sm font-semibold text-slate-200">
+                          {profile?.sitemapSubmitted ? 'Sitemap Submitted' : 'Submit XML Sitemap'}
+                        </h4>
                         <p className="text-xs text-muted-foreground">
-                          Google automatically crawls the sitemap periodically. When creating new content or landing pages, submit the sitemap to update index lists.
+                          Google automatically crawls the sitemap periodically. When creating new content or landing pages, you can trigger a manual crawl update.
                         </p>
                       </div>
                       <Button
                         onClick={handleVerifyGscOwnership} // This triggers sitemap submit inside the verify action
-                        className="bg-indigo-600 hover:bg-indigo-500 text-xs h-9"
+                        disabled={verifyingGsc || profile?.sitemapSubmitted}
+                        className={profile?.sitemapSubmitted 
+                          ? "bg-green-500/10 text-green-400 border border-green-500/20 text-xs h-9 w-full sm:w-auto hover:bg-green-500/10" 
+                          : "bg-indigo-600 hover:bg-indigo-500 text-xs h-9 font-semibold w-full sm:w-auto"
+                        }
                       >
-                        Submit Sitemap Now
+                        {verifyingGsc ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        {profile?.sitemapSubmitted ? 'Sitemap Successfully Submitted' : 'Submit Sitemap Now'}
                       </Button>
                     </div>
                   </div>
