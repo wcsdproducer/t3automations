@@ -115,7 +115,13 @@ export async function saveSeoSettings(userId: string, settings: any) {
 export async function triggerBlogGeneration(userId: string) {
   try {
     const headersList = await headers();
-    const host = headersList.get('host') || 'localhost:9003';
+    let host = headersList.get('x-forwarded-host') || headersList.get('host') || 'localhost:9003';
+    
+    // If the host is the internal Cloud Run URL, rewrite it to the public domain to bypass ingress block
+    if (host.includes('a.run.app')) {
+      host = 't3automations.com';
+    }
+    
     const protocol = host.includes('localhost') ? 'http' : 'https';
     
     // Construct the query pointing to our API cron endpoint
