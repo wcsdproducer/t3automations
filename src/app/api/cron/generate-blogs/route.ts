@@ -68,7 +68,7 @@ export async function GET(request: Request) {
   
   try {
     // 1. Get current hour in EST/EDT
-    const estHour = parseInt(
+    let estHour = parseInt(
       new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/New_York',
         hour: 'numeric',
@@ -76,6 +76,9 @@ export async function GET(request: Request) {
       }).format(new Date()),
       10
     );
+    if (estHour === 24) {
+      estHour = 0;
+    }
 
     // 2. Define the target count based on EST schedule: 3x per day starting at 8am (e.g. 8am, 1pm, 6pm)
     let targetCount = 0;

@@ -500,50 +500,36 @@ export default function BlogSeoPage() {
               normalizedCategory = 'appliance-repair';
             }
 
-            // Determine if we should show real GSC data or fall back to niche-matching simulated preview data
+            // Determine if we should show real GSC data or fall back to real target keywords from profile settings
             const showRealData = !!gscData && !gscError;
             
-            let trackedKeywords = showRealData
+            const trackedKeywords = showRealData
               ? gscData.keywords
-              : KEYWORDS_MOCK_DATA[normalizedCategory as keyof typeof KEYWORDS_MOCK_DATA];
-
-            if (!showRealData && !trackedKeywords) {
-              const rawService = businessProfile?.service || 'Local Services';
-              const domain = businessProfile?.id || '';
-              let city = 'Boise';
-              if (domain.toLowerCase().includes('tampa') || businessProfile?.businessName?.toLowerCase().includes('tampa')) {
-                city = 'Tampa';
-              }
-              
-              trackedKeywords = [
-                { keyword: `${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 880, position: 2, change: 1, url: '/' },
-                { keyword: `best ${rawService.toLowerCase()} in ${city.toLowerCase()}`, volume: 720, position: 4, change: 2, url: '/' },
-                { keyword: `local ${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 390, position: 3, change: 0, url: '/' },
-                { keyword: `${rawService.toLowerCase()} service ${city.toLowerCase()}`, volume: 480, position: 6, change: 3, url: '/' },
-                { keyword: `emergency ${rawService.toLowerCase()} ${city.toLowerCase()}`, volume: 210, position: 11, change: -1, url: '/' },
-                { keyword: `${rawService.toLowerCase()} cost ${city.toLowerCase()}`, volume: 320, position: 8, change: 4, url: '/' },
-                { keyword: `${city.toLowerCase()} ${rawService.toLowerCase()} company`, volume: 150, position: 1, change: 0, url: '/' },
-                { keyword: `${rawService.toLowerCase()} contractors ${city.toLowerCase()}`, volume: 260, position: 5, change: 2, url: '/' },
-              ];
-            }
+              : (businessProfile?.nicheKeywords || []).map((kw: string) => ({
+                  keyword: kw,
+                  volume: null,
+                  position: null,
+                  change: null,
+                  url: '/'
+                }));
             
             const totalKeywords = trackedKeywords.length;
             
             const avgPosition = showRealData
               ? gscData.metrics.avgPosition
-              : Number((trackedKeywords.reduce((acc: number, curr: any) => acc + curr.position, 0) / totalKeywords).toFixed(1));
+              : "—";
               
             const top3Count = showRealData
               ? gscData.metrics.top3Count
-              : trackedKeywords.filter((k: any) => k.position <= 3).length;
+              : "—";
               
             const top10Count = showRealData
               ? gscData.metrics.top10Count
-              : trackedKeywords.filter((k: any) => k.position <= 10).length;
+              : "—";
               
             const totalSearchVolume = showRealData
               ? gscData.metrics.totalSearchVolume
-              : trackedKeywords.reduce((acc: number, curr: any) => acc + curr.volume, 0);
+              : "—";
 
             if (isGscLoading) {
               return (
@@ -574,7 +560,7 @@ export default function BlogSeoPage() {
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/5 font-bold uppercase tracking-wider text-[10px]">
-                        Preview Mode (Simulated Data)
+                        Integration Pending
                       </Badge>
                     </div>
                   </div>
@@ -589,9 +575,13 @@ export default function BlogSeoPage() {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                       <div className="text-2xl font-bold">{avgPosition}</div>
-                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                        <ArrowUp className="h-3 w-3" /> -1.4 improvement vs last week
-                      </p>
+                      {showRealData ? (
+                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                          <ArrowUp className="h-3 w-3" /> -1.4 improvement vs last week
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-500 mt-1">Awaiting Google verification</p>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -601,10 +591,17 @@ export default function BlogSeoPage() {
                       <Award className="h-4 w-4 text-amber-400" />
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                      <div className="text-2xl font-bold">{top3Count} <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span></div>
-                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                        <ArrowUp className="h-3 w-3" /> +1 new keyword in top 3
-                      </p>
+                      <div className="text-2xl font-bold">
+                        {top3Count} 
+                        {showRealData && <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span>}
+                      </div>
+                      {showRealData ? (
+                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                          <ArrowUp className="h-3 w-3" /> +1 new keyword in top 3
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-500 mt-1">Awaiting Search Console sync</p>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -614,10 +611,17 @@ export default function BlogSeoPage() {
                       <Target className="h-4 w-4 text-blue-400" />
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                      <div className="text-2xl font-bold">{top10Count} <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span></div>
-                      <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                        <ArrowUp className="h-3 w-3" /> +2 keywords entered top 10
-                      </p>
+                      <div className="text-2xl font-bold">
+                        {top10Count} 
+                        {showRealData && <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span>}
+                      </div>
+                      {showRealData ? (
+                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                          <ArrowUp className="h-3 w-3" /> +2 keywords entered top 10
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-500 mt-1">Awaiting query verification</p>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -627,7 +631,9 @@ export default function BlogSeoPage() {
                       <Search className="h-4 w-4 text-purple-400" />
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
-                      <div className="text-2xl font-bold">{totalSearchVolume.toLocaleString()}</div>
+                      <div className="text-2xl font-bold">
+                        {typeof totalSearchVolume === 'number' ? totalSearchVolume.toLocaleString() : totalSearchVolume}
+                      </div>
                       <p className="text-xs text-slate-400 mt-1">
                         Combined monthly search queries
                       </p>
@@ -642,7 +648,7 @@ export default function BlogSeoPage() {
                     <CardDescription>
                       {showRealData 
                         ? 'Live keyword positions and queries fetched directly from Google Search Console API.'
-                        : 'Real-time organic ranking positions for local search queries in the Tampa region.'}
+                        : 'Organic search terms target configured for SEO & local schema references.'}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -658,48 +664,68 @@ export default function BlogSeoPage() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {trackedKeywords.map((item: any, idx: number) => (
-                            <TableRow key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20">
-                              <TableCell className="font-semibold text-slate-900 dark:text-slate-100 py-3">
-                                {item.keyword}
-                              </TableCell>
-                              <TableCell className="text-sm font-medium py-3">
-                                {item.volume !== undefined ? `${item.volume.toLocaleString()} / mo` : `${item.impressions.toLocaleString()} impressions`}
-                              </TableCell>
-                              <TableCell className="py-3">
-                                <Badge 
-                                  className={
-                                    item.position <= 3 
-                                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold'
-                                      : item.position <= 10
-                                        ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 font-bold'
-                                        : 'bg-amber-500/10 text-amber-400 border-amber-500/20 font-bold'
-                                  } 
-                                  variant="outline"
-                                >
-                                  #{item.position}
-                                </Badge>
-                              </TableCell>
-                              <TableCell className="py-3">
-                                {item.change > 0 ? (
-                                  <span className="text-emerald-400 text-xs font-semibold flex items-center gap-0.5">
-                                    <ArrowUp className="h-3.5 w-3.5" /> +{item.change}
-                                  </span>
-                                ) : item.change < 0 ? (
-                                  <span className="text-rose-400 text-xs font-semibold flex items-center gap-0.5">
-                                    <ArrowDown className="h-3.5 w-3.5" /> {item.change}
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400 text-xs flex items-center gap-0.5">
-                                    <Minus className="h-3.5 w-3.5" /> —
-                                  </span>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-right py-3 text-xs font-mono text-muted-foreground">
-                                {item.url}
+                          {trackedKeywords.length === 0 ? (
+                            <TableRow>
+                              <TableCell colSpan={5} className="text-center py-8 text-muted-foreground text-sm">
+                                {"No target keywords configured yet. Go to Launch Steps -> Schema & Keywords to configure them."}
                               </TableCell>
                             </TableRow>
-                          ))}
+                          ) : (
+                            trackedKeywords.map((item: any, idx: number) => (
+                              <TableRow key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/20">
+                                <TableCell className="font-semibold text-slate-900 dark:text-slate-100 py-3">
+                                  {item.keyword}
+                                </TableCell>
+                                <TableCell className="text-sm font-medium py-3">
+                                  {item.volume !== null && item.volume !== undefined 
+                                    ? `${item.volume.toLocaleString()} / mo` 
+                                    : item.impressions !== undefined 
+                                      ? `${item.impressions.toLocaleString()} impressions` 
+                                      : '—'}
+                                </TableCell>
+                                <TableCell className="py-3">
+                                  {item.position !== null && item.position !== undefined ? (
+                                    <Badge 
+                                      className={
+                                        item.position <= 3 
+                                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold'
+                                          : item.position <= 10
+                                            ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 font-bold'
+                                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20 font-bold'
+                                      } 
+                                      variant="outline"
+                                    >
+                                      #{item.position}
+                                    </Badge>
+                                  ) : (
+                                    <span className="text-muted-foreground text-xs">—</span>
+                                  )}
+                                </TableCell>
+                                <TableCell className="py-3">
+                                  {item.change !== null && item.change !== undefined ? (
+                                    item.change > 0 ? (
+                                      <span className="text-emerald-400 text-xs font-semibold flex items-center gap-0.5">
+                                        <ArrowUp className="h-3.5 w-3.5" /> +{item.change}
+                                      </span>
+                                    ) : item.change < 0 ? (
+                                      <span className="text-rose-400 text-xs font-semibold flex items-center gap-0.5">
+                                        <ArrowDown className="h-3.5 w-3.5" /> {item.change}
+                                      </span>
+                                    ) : (
+                                      <span className="text-slate-400 text-xs flex items-center gap-0.5">
+                                        <Minus className="h-3.5 w-3.5" /> —
+                                      </span>
+                                    )
+                                  ) : (
+                                    <span className="text-muted-foreground text-xs">—</span>
+                                  )}
+                                </TableCell>
+                                <TableCell className="text-right py-3 text-xs font-mono text-muted-foreground">
+                                  {item.url || '—'}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          )}
                         </TableBody>
                       </Table>
                     </div>

@@ -93,7 +93,7 @@ async function runDailyBlogGeneration() {
       todayStart.setHours(0, 0, 0, 0);
 
       // Get current hour in EST/EDT
-      const estHour = parseInt(
+      let estHour = parseInt(
         new Intl.DateTimeFormat('en-US', {
           timeZone: 'America/New_York',
           hour: 'numeric',
@@ -101,6 +101,9 @@ async function runDailyBlogGeneration() {
         }).format(new Date()),
         10
       );
+      if (estHour === 24) {
+        estHour = 0;
+      }
 
       // Define target blogs count based on 3x daily posting starting at 8 AM EST
       let targetCount = 0;
