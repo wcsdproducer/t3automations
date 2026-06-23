@@ -147,7 +147,7 @@ async function runDailyBlogGeneration() {
             const blogId = blogData.slug; // Use slug as document ID to ensure uniqueness
             await blogCollection.doc(blogId).set({
               ...blogData,
-              imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title),
+              imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title, blogData.slug),
               status: 'published',
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),

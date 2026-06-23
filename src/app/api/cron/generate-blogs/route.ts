@@ -142,7 +142,7 @@ export async function GET(request: Request) {
           const { getRelevantBlogImage } = require('@/lib/blog-images');
           await blogCollection.doc(blogData.slug).set({
             ...blogData,
-            imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title),
+            imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title, blogData.slug),
             status: 'published',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

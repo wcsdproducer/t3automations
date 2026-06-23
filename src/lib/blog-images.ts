@@ -1,6 +1,16 @@
-export function getRelevantBlogImage(niche: string, keywords: string[] = [], title: string = ''): string {
+export function getRelevantBlogImage(niche: string, keywords: string[] = [], title: string = '', slug: string = ''): string {
   const normNiche = niche.toLowerCase().trim();
   const searchStr = `${title} ${keywords.join(' ')}`.toLowerCase();
+
+  if (slug) {
+    const cleanSlug = slug.toLowerCase().trim();
+    if (cleanSlug.startsWith('boise-') || cleanSlug.endsWith('-boise') || cleanSlug.includes('boise')) {
+      return `/images/blog/blog-${cleanSlug}.png`;
+    }
+    if (cleanSlug.includes('tampa') || cleanSlug.includes('epoxy') || cleanSlug.includes('concrete') || cleanSlug.includes('paving') || cleanSlug.includes('tree')) {
+      return `/images/blog/blog-${cleanSlug}.png`;
+    }
+  }
 
   if (normNiche.includes('appliance')) {
     if (searchStr.includes('fridge') || searchStr.includes('refrigerator') || searchStr.includes('cool') || searchStr.includes('freez') || searchStr.includes('cold') || searchStr.includes('food')) {
