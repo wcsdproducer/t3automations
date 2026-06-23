@@ -3,6 +3,24 @@ export function getRelevantBlogImage(niche: string, keywords: string[] = [], tit
   const searchStr = `${title} ${keywords.join(' ')}`.toLowerCase();
 
   if (normNiche.includes('appliance')) {
+    if (searchStr.includes('fridge') || searchStr.includes('refrigerator') || searchStr.includes('cool') || searchStr.includes('freez') || searchStr.includes('cold') || searchStr.includes('food')) {
+      return '/images/blog/blog-appliance-fridge.png';
+    }
+    if (searchStr.includes('washer') || searchStr.includes('washing') || searchStr.includes('laundry') || searchStr.includes('flood') || searchStr.includes('water')) {
+      return '/images/blog/blog-appliance-washer.png';
+    }
+    if (searchStr.includes('dryer') || searchStr.includes('heat') || searchStr.includes('hot') || searchStr.includes('lint') || searchStr.includes('spin')) {
+      return '/images/blog/blog-appliance-dryer.png';
+    }
+    if (searchStr.includes('dishwasher') || searchStr.includes('dish') || searchStr.includes('clean') || searchStr.includes('wash') || searchStr.includes('drain')) {
+      return '/images/blog/blog-appliance-dishwasher.png';
+    }
+    if (searchStr.includes('oven') || searchStr.includes('stove') || searchStr.includes('range') || searchStr.includes('cook') || searchStr.includes('bake') || searchStr.includes('burn')) {
+      return '/images/blog/blog-appliance-oven.png';
+    }
+    if (searchStr.includes('tool') || searchStr.includes('breakthrough') || searchStr.includes('fix') || searchStr.includes('tech') || searchStr.includes('diagnos') || searchStr.includes('check')) {
+      return '/images/blog/blog-appliance-tools.png';
+    }
     if (searchStr.includes('efficiency') || searchStr.includes('bill') || searchStr.includes('save') || searchStr.includes('saving') || searchStr.includes('power')) {
       return '/images/appliance-gallery.png';
     }
