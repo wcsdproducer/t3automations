@@ -1,5 +1,7 @@
 import { admin } from '../src/lib/firebase-admin';
 import { generateAndUploadBlogImage } from '../src/lib/blog-image-generator';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const genericPaths = [
   '/images/appliance-gallery.png',
@@ -17,13 +19,23 @@ function isGenericFallback(url: string) {
   if (!url.startsWith('/images/blog/') && !url.includes('firebasestorage.googleapis.com')) {
     return true;
   }
+  
+  // If it points to a local file under /images/blog/ but the file is missing from the public folder
+  if (url.startsWith('/images/blog/')) {
+    const localPath = path.join(process.cwd(), 'public', url);
+    if (!fs.existsSync(localPath)) {
+      console.log(`Local file missing: ${localPath}`);
+      return true;
+    }
+  }
+  
   return false;
 }
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 async function main() {
-  console.log('Starting unique image backfill for all blogs (with rate limit handling)...');
+  console.log('Starting unique image backfill for all blogs (with missing file detection)...');
   const db = admin.firestore();
   
   const profilesSnap = await db.collection('businessProfiles').get();
