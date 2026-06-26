@@ -139,10 +139,17 @@ export async function GET(request: Request) {
         );
 
         if (blogData) {
-          const { getRelevantBlogImage } = require('@/lib/blog-images');
+          const { resolveBlogImageWithFallback } = require('@/lib/blog-image-generator');
+          const imageUrl = await resolveBlogImageWithFallback(
+            userId,
+            blogData.slug,
+            blogData.title,
+            profile.service || 'Home Services',
+            blogData.keywords
+          );
           await blogCollection.doc(blogData.slug).set({
             ...blogData,
-            imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title, blogData.slug),
+            imageUrl,
             status: 'published',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

@@ -143,11 +143,18 @@ async function runDailyBlogGeneration() {
           );
 
           if (blogData) {
-            const { getRelevantBlogImage } = require('../src/lib/blog-images');
+            const { resolveBlogImageWithFallback } = require('../src/lib/blog-image-generator');
             const blogId = blogData.slug; // Use slug as document ID to ensure uniqueness
+            const imageUrl = await resolveBlogImageWithFallback(
+              userId,
+              blogId,
+              blogData.title,
+              profile.service || 'Home Services',
+              blogData.keywords
+            );
             await blogCollection.doc(blogId).set({
               ...blogData,
-              imageUrl: getRelevantBlogImage(profile.service || 'Home Services', blogData.keywords, blogData.title, blogData.slug),
+              imageUrl,
               status: 'published',
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
