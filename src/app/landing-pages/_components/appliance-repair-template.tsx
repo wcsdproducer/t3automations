@@ -257,7 +257,7 @@ export function ApplianceRepairTemplate({
                 </a>
                 <a 
                   href="#quote-form" 
-                  className="w-full sm:w-auto border border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-950 font-bold text-base flex items-center justify-center py-4 px-8 rounded-md transition-colors"
+                  className="w-full sm:w-auto bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:text-slate-950 font-bold text-base flex items-center justify-center py-4 px-8 rounded-md transition-colors"
                 >
                   Request Service Online
                 </a>
