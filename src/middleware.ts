@@ -5,6 +5,7 @@ export const config = {
     matcher: [
           '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
           '/sitemap.xml',
+          '/robots.txt',
         ],
 };
 

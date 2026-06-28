@@ -208,56 +208,60 @@ export function ApplianceRepairTemplate({
       <header className="sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-md">
         <div className="flex items-center gap-3">
           {logoUrl && <Image src={logoUrl} alt={`${companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
-          <h1 className="text-xl md:text-2xl font-black text-blue-950 flex items-center gap-1.5">
+          <div className="text-xl md:text-2xl font-black text-blue-950 flex items-center gap-1.5">
             <Wrench className="h-6 w-6 text-blue-600" />
             <span>{companyName}</span>
-          </h1>
+          </div>
         </div>
         <div className="flex items-center gap-6">
           <a href={blogLink} className="text-sm font-semibold text-slate-600 hover:text-blue-600 transition-colors">Blog</a>
-          <a href={`tel:${phone}`}>
-            <Button className="bg-blue-600 hover:bg-blue-500 text-white font-bold gap-2 text-xs md:text-sm px-4 py-2 shrink-0">
-              <Phone className="h-4 w-4" />
-              Call Now
-            </Button>
+          <a 
+            href={`tel:${phone}`} 
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold inline-flex items-center justify-center gap-2 text-xs md:text-sm px-4 py-2 rounded-md shrink-0 transition-colors"
+          >
+            <Phone className="h-4 w-4" />
+            Call Now
           </a>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative py-16 lg:py-24 px-6 md:px-12 bg-gradient-to-br from-blue-50/50 to-white overflow-hidden border-b border-slate-100">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <Badge className="bg-blue-500/10 hover:bg-blue-500/10 text-blue-600 border-none font-bold text-xs uppercase px-3 py-1 tracking-wider">
-              📞 Same-Day Service Availability
-            </Badge>
-            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
-              {content.hero?.title || `Same-Day Appliance Repair & Service in ${displayCity}`}
-            </h2>
-            <p className="text-slate-600 text-base md:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              {content.hero?.subtitle || "Don't let a broken refrigerator, washer, or oven ruin your schedule. Our licensed local technicians arrive on-time with fully stocked vans to fix your household appliances today."}
-            </p>
-            {/* Quick features checklist in hero */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 max-w-lg">
-              {(content.about?.points || ["Same-Day Priority Service", "Licensed & Insured Techs", "90-Day Repair Warranty", "No Hidden Diagnostic Fees"]).map((feat: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700">
-                  <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0" />
-                  <span>{feat}</span>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-              <a href={`tel:${phone}`} className="w-full sm:w-auto">
-                <Button className="bg-blue-600 hover:bg-blue-500 text-white text-base font-extrabold w-full py-6 px-8 gap-3 shadow-lg shadow-blue-500/15">
+      <main>
+        {/* Hero Section */}
+        <section className="relative py-16 lg:py-24 px-6 md:px-12 bg-gradient-to-br from-blue-50/50 to-white overflow-hidden border-b border-slate-100">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <Badge className="bg-blue-500/10 hover:bg-blue-500/10 text-blue-600 border-none font-bold text-xs uppercase px-3 py-1 tracking-wider">
+                📞 Same-Day Service Availability
+              </Badge>
+              <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
+                {content.hero?.title || `Same-Day Appliance Repair & Service in ${displayCity}`}
+              </h1>
+              <p className="text-slate-600 text-base md:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                {content.hero?.subtitle || "Don't let a broken refrigerator, washer, or oven ruin your schedule. Our licensed local technicians arrive on-time with fully stocked vans to fix your household appliances today."}
+              </p>
+              {/* Quick features checklist in hero */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 max-w-lg">
+                {(content.about?.points || ["Same-Day Priority Service", "Licensed & Insured Techs", "90-Day Repair Warranty", "No Hidden Diagnostic Fees"]).map((feat: string, idx: number) => (
+                  <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-700">
+                    <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0" />
+                    <span>{feat}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                <a 
+                  href={`tel:${phone}`} 
+                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white text-base font-extrabold flex items-center justify-center gap-3 py-4 px-8 rounded-md shadow-lg shadow-blue-500/15 transition-colors"
+                >
                   <Phone className="h-5 w-5" /> Call {phone}
-                </Button>
-              </a>
-              <a href="#quote-form" className="w-full sm:w-auto">
-                <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-950 font-bold text-base w-full py-6 px-8">
+                </a>
+                <a 
+                  href="#quote-form" 
+                  className="w-full sm:w-auto border border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-950 font-bold text-base flex items-center justify-center py-4 px-8 rounded-md transition-colors"
+                >
                   Request Service Online
-                </Button>
-              </a>
-            </div>
+                </a>
+              </div>
             <div className="pt-2 flex flex-wrap gap-x-6 gap-y-2 justify-center lg:justify-start text-xs font-semibold text-slate-500">
               <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> Licensed & Insured</span>
               <span className="flex items-center gap-1.5"><Award className="h-4 w-4 text-emerald-500" /> 90-Day Parts & Labor Warranty</span>
@@ -528,6 +532,8 @@ export function ApplianceRepairTemplate({
           </div>
         </div>
       </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 px-6 border-t border-slate-800 text-center text-xs">
