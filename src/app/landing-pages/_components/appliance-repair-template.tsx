@@ -24,6 +24,7 @@ import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
+import { ChatbotWidget } from './chatbot-widget';
 
 const Loader2 = ({ className }: { className?: string }) => <LucideIcons.Loader2 className={className} />;
 
@@ -548,6 +549,12 @@ export function ApplianceRepairTemplate({
           </div>
         </div>
       </footer>
+
+      <ChatbotWidget 
+        businessProfileId={businessProfileId || ''} 
+        companyName={companyName} 
+        niche={service} 
+      />
     </div>
   );
 }

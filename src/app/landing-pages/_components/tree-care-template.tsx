@@ -23,6 +23,7 @@ import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
+import { ChatbotWidget } from './chatbot-widget';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -509,6 +510,12 @@ export function TreeCareTemplate({
           <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700">Terms of Service</a>
         </div>
       </footer>
+
+      <ChatbotWidget 
+        businessProfileId={businessProfileId || ''} 
+        companyName={companyName} 
+        niche={service} 
+      />
     </div>
   );
 }
