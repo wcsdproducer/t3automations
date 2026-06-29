@@ -237,7 +237,7 @@ export default function OpportunitiesPage() {
     setIsScouting(true);
     toast({
       title: 'AI Opportunity Scout Activated',
-      description: 'Scouting US metropolitan markets and local service niches...',
+      description: 'Scouting, checking domain records, and scoring opportunities...',
     });
 
     const res = await scoutOpportunitiesWithAI();
@@ -251,52 +251,20 @@ export default function OpportunitiesPage() {
       return;
     }
 
-    const rawOpps = res.opportunities.map((o: any) => ({
-      id: Math.random().toString(36).substring(2, 9),
-      niche: o.niche,
-      location: `${o.city}, ${o.state.toUpperCase()}`,
-      population: o.population,
-      difficulty: o.difficulty,
-      domain: o.domain.toLowerCase(),
-      isCustom: true,
-      checking: true,
-    }));
-
-    // Instantly append checking states so the user sees the cards appear immediately
     setOpportunities(prev => {
-      const merged = [...rawOpps, ...prev];
+      // res.opportunities already contains fully checked, scored, and unique elements
+      const merged = [...(res.opportunities as Opportunity[]), ...prev];
       // remove duplicates by domain
       const unique = merged.filter((item, index, self) => 
         self.findIndex(t => t.domain === item.domain) === index
       );
-      return unique;
-    });
-
-    // Check domain availability in background/sequential
-    const results = await checkDomainAvailability(rawOpps);
-    
-    setOpportunities(prev => {
-      const updated = prev.map(o => {
-        const matchingRaw = rawOpps.find((r: any) => r.domain === o.domain);
-        if (matchingRaw) {
-          const available = results[o.domain.toLowerCase()] ?? true;
-          const newOpp = {
-            ...o,
-            available,
-            checking: false,
-          };
-          newOpp.score = calculateScore(newOpp);
-          return newOpp;
-        }
-        return o;
-      });
-      return updated.sort((a, b) => (b.score || 0) - (a.score || 0));
+      return unique.sort((a, b) => (b.score || 0) - (a.score || 0));
     });
 
     setIsScouting(false);
     toast({
       title: 'Scouting Complete!',
-      description: `Identified ${res.opportunities.length} high-potential opportunities.`,
+      description: `Identified, verified, and scored ${res.opportunities.length} opportunities in one go.`,
     });
   };
 
