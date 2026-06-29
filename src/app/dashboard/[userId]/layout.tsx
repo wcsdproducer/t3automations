@@ -308,7 +308,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Book className="h-4 w-4" />
                     Blog & SEO
                   </SidebarNavLink>
-                  <SidebarNavLink href={`/dashboard/${userIdSlug}/opportunities`}>
+                  <SidebarNavLink href="/dashboard/opportunities">
                     <LineChart className="h-4 w-4" />
                     Opportunity Finder
                   </SidebarNavLink>

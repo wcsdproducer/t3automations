@@ -415,13 +415,21 @@ export default function DashboardRouterPage() {
             </p>
           </div>
 
-          <Dialog open={newSiteOpen} onOpenChange={setNewSiteOpen}>
-            <DialogTrigger asChild>
-              <Button size="lg" className="bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 shadow-lg shadow-indigo-500/20">
-                <Plus className="h-5 w-5 mr-2" />
-                <TranslatedText>Create New Site</TranslatedText>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link href="/dashboard/opportunities">
+              <Button size="lg" variant="outline" className="border-slate-850 bg-slate-900/80 text-slate-200 hover:bg-slate-800 hover:text-white h-11">
+                <TrendingUp className="h-4 w-4 mr-2 text-indigo-400" />
+                <TranslatedText>Opportunity Finder</TranslatedText>
               </Button>
-            </DialogTrigger>
+            </Link>
+
+            <Dialog open={newSiteOpen} onOpenChange={setNewSiteOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" className="bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 shadow-lg shadow-indigo-500/20 h-11">
+                  <Plus className="h-5 w-5 mr-2" />
+                  <TranslatedText>Create New Site</TranslatedText>
+                </Button>
+              </DialogTrigger>
             <DialogContent className="bg-slate-900 border border-slate-800 text-slate-100">
               <DialogHeader>
                 <DialogTitle><TranslatedText>Add For-Rent Website Profile</TranslatedText></DialogTitle>
@@ -500,6 +508,7 @@ export default function DashboardRouterPage() {
               </form>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
         {/* Sites Section */}
