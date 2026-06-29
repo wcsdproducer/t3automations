@@ -24,6 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
+import { SharedFooter } from './shared-footer';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -56,6 +57,7 @@ export function TreeCareTemplate({
   bookingUrl,
   websiteConfig,
   targetCity,
+  localSeoData,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -502,14 +504,13 @@ export function TreeCareTemplate({
         </section>
       </main>
 
-      <footer className="py-12 text-center text-slate-400 border-t border-slate-200/50 bg-white">
-        <p className="text-sm font-semibold">&copy; {new Date().getFullYear()} {companyName}. All rights reserved.</p>
-        <div className="mt-4 flex justify-center gap-6 text-xs font-medium">
-          <a href={blogLink} className="hover:underline hover:text-slate-700">Blog</a>
-          <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700">Privacy Policy</a>
-          <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700">Terms of Service</a>
-        </div>
-      </footer>
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink={blogLink}
+        localSeoData={localSeoData}
+        theme="light"
+      />
 
       <ChatbotWidget 
         businessProfileId={businessProfileId || ''} 

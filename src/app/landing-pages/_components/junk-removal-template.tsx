@@ -25,6 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
+import { SharedFooter } from './shared-footer';
 
 const Loader2 = ({ className }: { className?: string }) => <LucideIcons.Loader2 className={className} />;
 
@@ -46,6 +47,7 @@ export function JunkRemovalTemplate({
   bookingUrl,
   websiteConfig,
   targetCity,
+  localSeoData,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -540,16 +542,13 @@ export function JunkRemovalTemplate({
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-6 md:px-12 border-t border-slate-850">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <Truck className="h-5 w-5 text-amber-500" />
-            <span className="text-white font-bold">{companyName}</span>
-          </div>
-          <p className="text-xs text-slate-550">© {new Date().getFullYear()} {companyName}. All rights reserved. Professional eco-friendly local junk removal.</p>
-        </div>
-      </footer>
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink={blogLink}
+        localSeoData={localSeoData}
+        theme="dark"
+      />
 
       {/* Capturing AI Chatbot context widget */}
       {businessProfileId && <ChatbotWidget businessProfileId={businessProfileId} />}

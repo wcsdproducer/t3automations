@@ -17,6 +17,7 @@ export interface TemplateProps {
   bookingUrl?: string;
   websiteConfig?: Record<string, any>;
   targetCity?: string;
+  localSeoData?: Record<string, any>;
 }
 
 /**
@@ -35,6 +36,7 @@ export function profileToTemplateProps(profile: Record<string, any>, id?: string
     bookingUrl:   profile.bookingUrl   || '',
     websiteConfig: profile.websiteConfig || null,
     targetCity:   profile.targetCity   || '',
+    localSeoData:  profile.localSeoData  || null,
   };
 }
 
@@ -57,5 +59,6 @@ export function searchParamsToTemplateProps(
     colorPalette: get('colorPalette') || 'deep-midnight',
     bookingUrl:   get('bookingUrl')   || '',
     targetCity:   get('targetCity')   || '',
+    localSeoData: get('localSeoData') ? JSON.parse(get('localSeoData') as string) : null,
   };
 }

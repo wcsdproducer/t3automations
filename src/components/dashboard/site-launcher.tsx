@@ -40,6 +40,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { triggerBlogGeneration } from '@/app/actions/blog-seo';
+import { generateLocalSeoAndInterlinking } from '@/app/actions/seo-generation';
 
 type StepId = 'domain' | 'dns' | 'gsc-verification' | 'sitemap-indexing' | 'local-seo' | 'blog-seo';
 
@@ -389,9 +390,15 @@ export function SiteLauncher() {
         nicheKeywords: cleanKeywords,
       }, { merge: true });
 
+      // Trigger server action to generate surrounding cities/neighborhoods and interlinking
+      const res = await generateLocalSeoAndInterlinking(profileId);
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to auto-generate local SEO assets.');
+      }
+
       toast({
-        title: 'Local SEO Updated',
-        description: 'Business schema parameters updated. Your Local JSON-LD is automatically re-generated.',
+        title: 'Local SEO Updated & Generated',
+        description: 'Business schema, surrounding cities, and network interlinking successfully generated.',
       });
       setActiveStep('blog-seo');
     } catch (error: any) {
