@@ -27,6 +27,7 @@ const profileSchema = z.object({
   phoneNumber: z.string().min(10, 'Invalid phone number.'),
   websiteUrl: z.string().url('Invalid URL.').optional().or(z.literal('')),
   logoUrl: z.string().url().optional().or(z.literal('')),
+  defaultLandingPage: z.string().optional().default('template-1'),
   
   // Brand Setup (A2P 10DLC)
   legalBusinessName: z.string().optional(),
@@ -76,6 +77,7 @@ export default function SettingsPage() {
       phoneNumber: '',
       websiteUrl: '',
       logoUrl: '',
+      defaultLandingPage: 'template-1',
       legalBusinessName: '',
       ein: '',
       businessType: '',
@@ -91,6 +93,7 @@ export default function SettingsPage() {
         phoneNumber: formatPhoneNumber(businessProfile.phoneNumber || ''),
         websiteUrl: businessProfile.websiteUrl || '',
         logoUrl: businessProfile.logoUrl || '',
+        defaultLandingPage: businessProfile.defaultLandingPage || 'template-1',
         legalBusinessName: businessProfile.legalBusinessName || '',
         ein: businessProfile.ein || '',
         businessType: businessProfile.businessType || '',
@@ -260,6 +263,36 @@ export default function SettingsPage() {
                         <FormControl>
                           <Input placeholder="https://yourbusiness.com" {...field} value={field.value ?? ''} />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="defaultLandingPage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Landing Page Template</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value || 'template-1'}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a template" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="template-1">Default Template (Modern General)</SelectItem>
+                            <SelectItem value="tree-care">Tree Care Specialists Template</SelectItem>
+                            <SelectItem value="epoxy-flooring">Epoxy Flooring Template</SelectItem>
+                            <SelectItem value="paving-concrete">Paving & Concrete Template</SelectItem>
+                            <SelectItem value="appliance-repair">Appliance Repair Template</SelectItem>
+                            <SelectItem value="pest-control">Pest Control Template</SelectItem>
+                            <SelectItem value="junk-removal">Junk Removal Template</SelectItem>
+                            <SelectItem value="template-2">Legacy Multi-Purpose Template</SelectItem>
+                            <SelectItem value="template-4">Alternative Clean Template</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>Choose the website template to use for your business landing page.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

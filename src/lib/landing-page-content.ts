@@ -205,29 +205,17 @@ export function getContentForService(service: string) {
     }
     
     if (serviceName === "Junk Removal" || serviceName === "Junk Removal & Moving") {
+        const allJunkHeroImages = PlaceHolderImages.filter(img => img.id.startsWith('junk-hero'));
+        const allJunkGalleryImages = PlaceHolderImages.filter(img => img.id.startsWith('junk-gallery'));
+        const aboutImage = PlaceHolderImages.find(img => img.id === 'junk-about-1');
+
+        const shuffledHero = shuffle(allJunkHeroImages);
+        const shuffledGallery = shuffle(allJunkGalleryImages);
+
         const junkImages = {
-            hero: [
-                {
-                    id: "junk-hero-1",
-                    description: "Professional junk removal crew and truck on driveway",
-                    imageUrl: "/images/junk-removal-hero.png",
-                    imageHint: "junk removal"
-                }
-            ],
-            about: {
-                id: "junk-about",
-                description: "Professional junk removal crew clearing out space",
-                imageUrl: "/images/junk-removal-hero.png",
-                imageHint: "junk removal"
-            },
-            gallery: [
-                {
-                    id: "junk-gal-1",
-                    description: "Professional hauling truck loading junk",
-                    imageUrl: "/images/junk-removal-hero.png",
-                    imageHint: "junk removal"
-                }
-            ]
+            hero: shuffledHero.slice(0, 5),
+            about: aboutImage,
+            gallery: shuffledGallery.slice(0, 4),
         };
 
         return {
@@ -271,7 +259,7 @@ export function getContentForService(service: string) {
             },
             images: {
                 hero: junkImages.hero,
-                about: junkImages.about,
+                about: junkImages.about || PlaceHolderImages[0],
                 gallery: junkImages.gallery,
             }
         };

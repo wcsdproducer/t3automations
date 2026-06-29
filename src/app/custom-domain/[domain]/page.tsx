@@ -11,6 +11,7 @@ import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flo
 import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
 import { ApplianceRepairTemplate } from '@/app/landing-pages/_components/appliance-repair-template';
 import { PestControlTemplate } from '@/app/landing-pages/_components/pest-control-template';
+import { JunkRemovalTemplate } from '@/app/landing-pages/_components/junk-removal-template';
 
 export const dynamic = 'force-dynamic';
 
@@ -162,6 +163,7 @@ export default async function CustomDomainPage({
     if (template === 'paving-concrete') return <PavingConcreteTemplate {...templateProps} />;
     if (template === 'appliance-repair') return <ApplianceRepairTemplate {...templateProps} />;
     if (template === 'pest-control') return <PestControlTemplate {...templateProps} />;
+    if (template === 'junk-removal') return <JunkRemovalTemplate {...templateProps} />;
     
     // Legacy fallbacks
     if (template === 'template-2') return <Template2Content {...templateProps} />;

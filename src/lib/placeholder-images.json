@@ -317,6 +317,66 @@
       "description": "Professional pest service truck",
       "imageUrl": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "exterminator working"
+    },
+    {
+      "id": "junk-hero-1",
+      "description": "White moving and hauling box truck",
+      "imageUrl": "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-hero-2",
+      "description": "Sorting items and boxes for junk removal and recycling",
+      "imageUrl": "https://images.unsplash.com/photo-1595246140625-573b715d11dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-hero-3",
+      "description": "Cleaning out cluttered items for disposal",
+      "imageUrl": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-hero-4",
+      "description": "Stacked boxes in warehouse for loading",
+      "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-hero-5",
+      "description": "Organizing clutter and boxes during home clear out",
+      "imageUrl": "https://images.unsplash.com/photo-1513151233558-d860c5398176?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-about-1",
+      "description": "Professional cleanout and hauling crew",
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-gallery-1",
+      "description": "Hauling debris and clearing waste materials",
+      "imageUrl": "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-gallery-2",
+      "description": "Beautifully cleaned and decluttered room interior",
+      "imageUrl": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-gallery-3",
+      "description": "Organized clean boxes ready for hauling",
+      "imageUrl": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
+    },
+    {
+      "id": "junk-gallery-4",
+      "description": "Clean, tidy yard space free of outdoor debris",
+      "imageUrl": "https://images.unsplash.com/photo-1558904541-efa8c3a30fc9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "junk removal"
     }
   ]
 }
