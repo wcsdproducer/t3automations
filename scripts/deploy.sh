@@ -18,8 +18,12 @@ echo "🔢 Bumping version in package.json..."
 node scripts/bump-version.js
 
 # 4. Git commit and push
-read -p "Enter commit message (or press enter for default 'Auto-deploy'): " COMMIT_MSG
-COMMIT_MSG=${COMMIT_MSG:-"deploy: auto-deploy from deploy script"}
+if [ -t 0 ]; then
+  read -p "Enter commit message (or press enter for default 'deploy: auto-deploy from deploy script'): " INPUT_MSG
+  COMMIT_MSG=${INPUT_MSG:-"deploy: auto-deploy from deploy script"}
+else
+  COMMIT_MSG="deploy: auto-deploy from deploy script"
+fi
 
 echo "📦 Adding files to Git..."
 git add -A

@@ -24,6 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} dark`} suppressHydrationWarning>
+      <head />
       <body className="font-body antialiased bg-background" suppressHydrationWarning>
         <FirebaseClientProvider>
           <LanguageProvider>
