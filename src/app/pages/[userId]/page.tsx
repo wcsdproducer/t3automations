@@ -10,6 +10,8 @@ import { TreeCareTemplate } from '@/app/landing-pages/_components/tree-care-temp
 import { EpoxyFlooringTemplate } from '@/app/landing-pages/_components/epoxy-flooring-template';
 import { PavingConcreteTemplate } from '@/app/landing-pages/_components/paving-concrete-template';
 import { ApplianceRepairTemplate } from '@/app/landing-pages/_components/appliance-repair-template';
+import { PestControlTemplate } from '@/app/landing-pages/_components/pest-control-template';
+import { JunkRemovalTemplate } from '@/app/landing-pages/_components/junk-removal-template';
 
 export async function generateMetadata({
   params,
@@ -80,6 +82,8 @@ export default async function PublishedPage({
     if (template === 'epoxy-flooring') return <EpoxyFlooringTemplate {...templateProps} />;
     if (template === 'paving-concrete') return <PavingConcreteTemplate {...templateProps} />;
     if (template === 'appliance-repair') return <ApplianceRepairTemplate {...templateProps} />;
+    if (template === 'pest-control') return <PestControlTemplate {...templateProps} />;
+    if (template === 'junk-removal') return <JunkRemovalTemplate {...templateProps} />;
     
     // Legacy fallbacks
     if (template === 'template-2') return <Template2Content {...templateProps} />;
