@@ -64,16 +64,13 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
       throw new Error('Invalid custom domain found.');
     }
 
-    // 3. Authenticate using GoogleAuth with Search Console scopes
+    // 3. Authenticate using GoogleAuth with default scopes
     const auth = new GoogleAuth({
-      scopes: [
-        'https://www.googleapis.com/auth/webmasters.readonly',
-        'https://www.googleapis.com/auth/webmasters'
-      ],
+      scopes: ['https://www.googleapis.com/auth/cloud-platform']
     });
     const client = await auth.getClient();
     const tokenResponse = await client.getAccessToken();
-    const accessToken = tokenResponse.token;
+    let accessToken = tokenResponse.token;
 
     // Get the service account email to show in case of permissions error
     serviceAccountEmail = (client as any).email || (client as any).credentials?.client_email || '';
@@ -95,6 +92,36 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
 
     if (!accessToken) {
       throw new Error('Could not retrieve Search Console API OAuth access token.');
+    }
+
+    // Generate a scoped token using IAM Credentials API (to bypass Cloud Run metadata server scope restrictions)
+    try {
+      const projectId = await auth.getProjectId();
+      const saEmail = serviceAccountEmail || `firebase-app-hosting-compute@${projectId}.iam.gserviceaccount.com`;
+      
+      console.log(`[search-console] Attempting to generate scoped access token for ${saEmail}...`);
+      const iamUrl = `https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${saEmail}:generateAccessToken`;
+      const iamRes = await axios.post(
+        iamUrl,
+        {
+          scope: [
+            'https://www.googleapis.com/auth/webmasters.readonly',
+            'https://www.googleapis.com/auth/webmasters'
+          ]
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      if (iamRes.data && iamRes.data.accessToken) {
+        accessToken = iamRes.data.accessToken;
+        console.log(`[search-console] Successfully obtained scoped access token via IAM Credentials API.`);
+      }
+    } catch (iamErr: any) {
+      console.warn(`[search-console] IAM Credentials API call failed: ${iamErr.response ? JSON.stringify(iamErr.response.data) : iamErr.message}. Falling back to default token.`);
     }
 
     // 4. Verify site access by listing sites in GSC

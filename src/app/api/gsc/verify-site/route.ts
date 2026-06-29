@@ -19,19 +19,46 @@ export async function POST(req: NextRequest) {
 
     const canonicalSiteUrl = `https://${domain.toLowerCase().trim()}/`;
 
-    // 1. Initialize Google Auth with required scopes
+    // 1. Initialize Google Auth with default scopes
     const auth = new GoogleAuth({
-      scopes: [
-        'https://www.googleapis.com/auth/siteverification',
-        'https://www.googleapis.com/auth/webmasters',
-      ],
+      scopes: ['https://www.googleapis.com/auth/cloud-platform']
     });
     const client = await auth.getClient();
     const tokenResponse = await client.getAccessToken();
-    const accessToken = tokenResponse.token;
+    let accessToken = tokenResponse.token;
 
     if (!accessToken) {
       throw new Error('Could not retrieve access token for Google API services.');
+    }
+
+    // 2. Generate a scoped token using IAM Credentials API (to bypass Cloud Run metadata server scope restrictions)
+    try {
+      const projectId = await auth.getProjectId();
+      const saEmail = (client as any).email || `firebase-app-hosting-compute@${projectId}.iam.gserviceaccount.com`;
+      
+      console.log(`[gsc-verify] Attempting to generate scoped access token for ${saEmail}...`);
+      const iamUrl = `https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${saEmail}:generateAccessToken`;
+      const iamRes = await axios.post(
+        iamUrl,
+        {
+          scope: [
+            'https://www.googleapis.com/auth/siteverification',
+            'https://www.googleapis.com/auth/webmasters'
+          ]
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      if (iamRes.data && iamRes.data.accessToken) {
+        accessToken = iamRes.data.accessToken;
+        console.log(`[gsc-verify] Successfully obtained scoped access token via IAM Credentials API.`);
+      }
+    } catch (iamErr: any) {
+      console.warn(`[gsc-verify] IAM Credentials API call failed: ${iamErr.response ? JSON.stringify(iamErr.response.data) : iamErr.message}. Falling back to default token.`);
     }
 
     const businessDocRef = db.doc(`businessProfiles/${userId}`);

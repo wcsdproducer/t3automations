@@ -58,6 +58,71 @@ const STEPS: Step[] = [
   { id: 'blog-seo', title: 'AI Blog Strategy', description: 'Set cron schedule & run article builder' },
 ];
 
+function getEstablishedDefaults(profile: any) {
+  let city = 'Tampa';
+  let state = 'FL';
+  
+  const nameOrId = `${profile?.businessName || ''} ${profile?.id || ''} ${profile?.customDomain || ''}`.toLowerCase();
+  
+  if (nameOrId.includes('boise')) {
+    city = 'Boise';
+    state = 'ID';
+  } else if (nameOrId.includes('knoxville')) {
+    city = 'Knoxville';
+    state = 'TN';
+  } else if (nameOrId.includes('tacoma')) {
+    city = 'Tacoma';
+    state = 'WA';
+  } else if (nameOrId.includes('spokane')) {
+    city = 'Spokane';
+    state = 'WA';
+  } else if (nameOrId.includes('worcester')) {
+    city = 'Worcester';
+    state = 'MA';
+  } else if (nameOrId.includes('greensboro')) {
+    city = 'Greensboro';
+    state = 'NC';
+  } else if (nameOrId.includes('reno')) {
+    city = 'Reno';
+    state = 'NV';
+  } else if (nameOrId.includes('chattanooga')) {
+    city = 'Chattanooga';
+    state = 'TN';
+  } else if (nameOrId.includes('richmond')) {
+    city = 'Richmond';
+    state = 'VA';
+  }
+  
+  const targetCity = `${city}, ${state}`;
+
+  const service = (profile?.service || profile?.niche || '').toLowerCase();
+  let keywords: string[] = [];
+  
+  if (service.includes('tree')) {
+    keywords = ["tree trimming", "tree removal", "stump grinding", "arborist", "emergency tree service"];
+  } else if (service.includes('epoxy')) {
+    keywords = ["epoxy flooring", "garage floor coating", "commercial epoxy", "metallic epoxy", "concrete prep"];
+  } else if (service.includes('concrete') || service.includes('paving')) {
+    keywords = ["concrete pouring", "concrete sealing", "driveway paving", "patio installation", "concrete repair"];
+  } else if (service.includes('appliance')) {
+    keywords = ["appliance repair", "refrigerator repair", "washer dryer repair", "oven repair", "dishwasher repair"];
+  } else if (service.includes('pest')) {
+    keywords = ["pest control", "exterminator", "termite treatment", "bed bug removal", "rodent control"];
+  } else if (service.includes('junk')) {
+    keywords = ["junk removal", "trash hauling", "appliance cleanout", "estate cleanout", "construction debris"];
+  } else if (service.includes('drywall')) {
+    keywords = ["drywall repair", "sheetrock installation", "ceiling repair", "wall patching", "popcorn ceiling removal"];
+  } else if (service.includes('gutter')) {
+    keywords = ["gutter cleaning", "gutter installation", "gutter guards", "seamless gutters", "gutter repair"];
+  } else if (service.includes('pressure') || service.includes('wash')) {
+    keywords = ["pressure washing", "power washing", "house washing", "roof cleaning", "driveway cleaning"];
+  } else {
+    keywords = ["local service", "professional contractor", "affordable pricing", "top rated"];
+  }
+
+  return { targetCity, keywords };
+}
+
 export function SiteLauncher() {
   const { user } = useUser();
   const params = useParams();
@@ -108,14 +173,27 @@ export function SiteLauncher() {
   const activeDomainDoc = domains && domains.length > 0 ? domains[0] : null;
   const activeDomain = activeDomainDoc?.domain || '';
 
-  // Seed default inputs from Firestore
+  // Seed default inputs from Firestore and auto-save defaults if empty
   useEffect(() => {
-    if (profile) {
-      setTargetCity(profile.targetCity || '');
-      setKeywordsInput(profile.nicheKeywords ? profile.nicheKeywords.join(', ') : '');
+    if (profile && firestore && profileId) {
+      const defaults = getEstablishedDefaults(profile);
+      const updatedCity = profile.targetCity || defaults.targetCity;
+      const updatedKeywords = profile.nicheKeywords || defaults.keywords;
+
+      setTargetCity(updatedCity);
+      setKeywordsInput(profile.nicheKeywords ? profile.nicheKeywords.join(', ') : defaults.keywords.join(', '));
       setPostingSchedule(profile.blogPostingSchedule || 'daily');
+
+      const needsUpdate = !profile.targetCity || !profile.nicheKeywords || profile.nicheKeywords.length === 0;
+      if (needsUpdate) {
+        const docRef = doc(firestore, 'businessProfiles', profileId);
+        setDocumentNonBlocking(docRef, {
+          targetCity: updatedCity,
+          nicheKeywords: updatedKeywords,
+        }, { merge: true }).catch(console.error);
+      }
     }
-  }, [profile]);
+  }, [profile, firestore, profileId]);
 
   // Determine active step based on progress if first loading
   useEffect(() => {
