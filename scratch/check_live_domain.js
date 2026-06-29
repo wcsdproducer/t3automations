@@ -12,7 +12,7 @@ async function main() {
   const projectId = 'studio-1410114603-9e1f6';
   const location = 'us-central1';
   const backendId = 'studio';
-  const domain = 'richmondjunkpros.com';
+  const domain = 'tampabaytreecare.com';
 
   const url = `https://firebaseapphosting.googleapis.com/v1/projects/${projectId}/locations/${location}/backends/${backendId}/domains/${domain}`;
   const res = await axios.get(url, {

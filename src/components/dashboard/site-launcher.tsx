@@ -735,9 +735,21 @@ export function SiteLauncher() {
                       
                       {profile?.googleSiteVerification ? (
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-green-400 text-xs font-semibold">
-                            <CheckCircle2 className="h-4 w-4" />
-                            HTML Meta tag injected:
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-green-400 text-xs font-semibold">
+                              <CheckCircle2 className="h-4 w-4" />
+                              HTML Meta tag injected:
+                            </div>
+                            {!profile?.googleSiteVerified && (
+                              <Button
+                                onClick={handleGetGscToken}
+                                disabled={generatingGscToken}
+                                variant="ghost"
+                                className="text-[10px] h-6 text-muted-foreground hover:text-indigo-400 p-0 px-2"
+                              >
+                                {generatingGscToken ? 'Regenerating...' : 'Regenerate Token'}
+                              </Button>
+                            )}
                           </div>
                           <code className="block bg-slate-950 p-2.5 rounded text-[11px] text-indigo-300 overflow-x-auto select-all">
                             &lt;meta name=&quot;google-site-verification&quot; content=&quot;{profile.googleSiteVerification}&quot; /&gt;
