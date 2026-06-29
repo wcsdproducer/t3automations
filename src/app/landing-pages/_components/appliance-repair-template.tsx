@@ -231,7 +231,7 @@ export function ApplianceRepairTemplate({
         <section className="relative py-16 lg:py-24 px-6 md:px-12 bg-gradient-to-br from-blue-50/50 to-white overflow-hidden border-b border-slate-100">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <Badge className="bg-blue-500/10 hover:bg-blue-500/10 text-blue-600 border-none font-bold text-xs uppercase px-3 py-1 tracking-wider">
+              <Badge className="bg-blue-500/10 hover:bg-blue-500/10 text-blue-700 border-none font-bold text-xs uppercase px-3 py-1 tracking-wider">
                 📞 Same-Day Service Availability
               </Badge>
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
@@ -286,19 +286,19 @@ export function ApplianceRepairTemplate({
       <section className="bg-white py-6 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="space-y-1">
-            <h4 className="text-xl md:text-2xl font-black text-blue-600">85%+</h4>
+            <div className="text-xl md:text-2xl font-black text-blue-700">85%+</div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">First Visit Fix Rate</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xl md:text-2xl font-black text-blue-600">Same-Day</h4>
+            <div className="text-xl md:text-2xl font-black text-blue-700">Same-Day</div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Priority Service Slots</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xl md:text-2xl font-black text-blue-600">90-Day</h4>
+            <div className="text-xl md:text-2xl font-black text-blue-700">90-Day</div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Parts & Labor Warranty</p>
           </div>
           <div className="space-y-1">
-            <h4 className="text-xl md:text-2xl font-black text-blue-600">5-Star</h4>
+            <div className="text-xl md:text-2xl font-black text-blue-700">5-Star</div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Local Customer Reviews</p>
           </div>
         </div>
@@ -353,25 +353,25 @@ export function ApplianceRepairTemplate({
             
             <div className="space-y-6 pt-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-600 font-extrabold text-sm flex items-center justify-center">1</div>
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-extrabold text-sm flex items-center justify-center">1</div>
                 <div>
-                  <h5 className="font-bold text-slate-900 text-sm md:text-base">Diagnostic Visit & Troubleshooting</h5>
+                  <h4 className="font-bold text-slate-900 text-sm md:text-base">Diagnostic Visit & Troubleshooting</h4>
                   <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-1">Our certified technician arrives, disassembles the housing, and diagnoses the root cause of your appliance issue.</p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-600 font-extrabold text-sm flex items-center justify-center">2</div>
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-extrabold text-sm flex items-center justify-center">2</div>
                 <div>
-                  <h5 className="font-bold text-slate-900 text-sm md:text-base">Upfront Estimate Approval</h5>
+                  <h4 className="font-bold text-slate-900 text-sm md:text-base">Upfront Estimate Approval</h4>
                   <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-1">We provide a transparent, upfront quote for the parts and labor. If you approve the repair, we waive the diagnostic fee entirely.</p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-600 font-extrabold text-sm flex items-center justify-center">3</div>
+                <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-700 font-extrabold text-sm flex items-center justify-center">3</div>
                 <div>
-                  <h5 className="font-bold text-slate-900 text-sm md:text-base">Immediate Repair & Calibration</h5>
+                  <h4 className="font-bold text-slate-900 text-sm md:text-base">Immediate Repair & Calibration</h4>
                   <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-1">We install genuine OEM replacement parts and calibrate your machine, verifying safety and proper operation.</p>
                 </div>
               </div>
@@ -462,8 +462,8 @@ export function ApplianceRepairTemplate({
             </p>
             <div className="p-6 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between gap-4">
               <div>
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Direct Dispatch Line</span>
-                <p className="text-xl md:text-2xl font-black text-blue-600 mt-1">{phone}</p>
+                <span className="text-xs text-slate-600 font-bold uppercase tracking-wider">Direct Dispatch Line</span>
+                <p className="text-xl md:text-2xl font-black text-blue-700 mt-1">{phone}</p>
               </div>
               <a href={`tel:${phone}`}>
                 <Button className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-12 px-6">

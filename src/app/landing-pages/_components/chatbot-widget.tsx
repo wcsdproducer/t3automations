@@ -96,7 +96,7 @@ export function ChatbotWidget({ businessProfileId, companyName = 'Appliance Repa
         <button
           onClick={() => setIsOpen(true)}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-2xl hover:bg-blue-500 hover:scale-105 transition-all duration-300 relative group animate-bounce"
-          aria-label="Open chat assistant"
+          aria-label="Chat with AI assistant"
         >
           <MessageSquare className="h-6 w-6" />
           <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-white" />
