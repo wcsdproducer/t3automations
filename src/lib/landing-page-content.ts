@@ -617,6 +617,67 @@ export function getContentForService(service: string) {
             }
         };
     }
+    
+    if (serviceName === "Pest Control") {
+        const allPestHeroImages = PlaceHolderImages.filter(img => img.id.startsWith('pest-hero'));
+        const allPestGalleryImages = PlaceHolderImages.filter(img => img.id.startsWith('pest-gallery'));
+        const aboutImage = PlaceHolderImages.find(img => img.id === 'pest-about');
+
+        const shuffledHero = shuffle(allPestHeroImages);
+        const shuffledGallery = shuffle(allPestGalleryImages);
+
+        const pestImages = {
+            hero: shuffledHero.slice(0, 5),
+            about: aboutImage,
+            gallery: shuffledGallery.slice(0, 4),
+        };
+
+        return {
+            companyName: `Pest Control Experts`,
+            hero: {
+                title: `Take Back Your Home from Pests.`,
+                subtitle: `Safe, effective, and eco-friendly pest control & exterminator services.`,
+                cta: "Request a Free Estimate",
+            },
+            services: {
+                title: `Our Pest Control Services`,
+                subtitle: "Protecting your home and family from unwanted intruders.",
+                items: [
+                    { title: `General Pest Control`, description: "Year-round protection against ants, spiders, roaches, and other common household pests." },
+                    { title: "Termite Treatment & Inspection", description: "Comprehensive structural protection and targeted termite eradication treatments." },
+                    { title: "Rodent & Wildlife Control", description: "Humane removal, exclusion, and sanitation to keep mice, rats, and squirrels out." },
+                ]
+            },
+            about: {
+                title: `Your Trusted Local Exterminators`,
+                body: `For over 15 years, our pest control technicians have provided reliable, child-and-pet-safe pest management solutions. We target the root causes of infestations to prevent them from coming back.`,
+                points: [
+                    "Child & Pet Friendly Treatments",
+                    "Licensed & Certified Technicians",
+                    "100% Satisfaction Guarantee",
+                ]
+            },
+            reviews: {
+                title: `What Our Customers Are Saying`,
+                items: [
+                    { quote: `We had a major ant problem that we couldn't get rid of. The technician came out, did a thorough treatment, and we haven't seen an ant since. Outstanding service!`, author: "- Mark S." },
+                    { quote: `They did a termite inspection and treatment for us. Professional, clean, and extremely knowledgeable. Highly recommend their services.`, author: "- Jessica H." },
+                    { quote: `Reliable and always show up on time for our quarterly preventative treatment. Since using them, our home has been completely bug-free.`, author: "- David R." },
+                    { quote: `Very friendly customer service. They explained exactly what they were going to do and ensured it was safe for our dogs. Five stars!`, author: "- Samantha M." },
+                    { quote: `Fast response when we discovered a wasp nest near our front door. They removed it safely the same afternoon. Excellent work.`, author: "- Chris P." }
+                ]
+            },
+            contact: {
+                title: "Have a Pest Problem?",
+                subtitle: `Don't wait until it gets worse. Contact us now for a free, no-obligation estimate!`,
+            },
+            images: {
+                hero: pestImages.hero,
+                about: pestImages.about || PlaceHolderImages.find(img => img.id === 'lp1-about'),
+                gallery: pestImages.gallery,
+            }
+        };
+    }
 
     const content = {
         companyName: `${serviceName.replace(/ & /g, ' and ')} Pros`,

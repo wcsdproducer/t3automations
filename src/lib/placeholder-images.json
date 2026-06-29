@@ -257,6 +257,66 @@
       "description": "Modern industrial dehumidifiers working in a room",
       "imageUrl": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "flood restoration"
+    },
+    {
+      "id": "pest-hero-1",
+      "description": "Pest control technician spraying yard",
+      "imageUrl": "https://images.unsplash.com/photo-1628102479435-014e7a9115f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "pest control"
+    },
+    {
+      "id": "pest-hero-2",
+      "description": "Pest control technician inspecting foundation",
+      "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "pest control"
+    },
+    {
+      "id": "pest-hero-3",
+      "description": "Clean home exterior protective barrier",
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "clean house"
+    },
+    {
+      "id": "pest-hero-4",
+      "description": "Clean kitchen pest prevention",
+      "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "clean kitchen"
+    },
+    {
+      "id": "pest-hero-5",
+      "description": "Exterminator spraying interior baseboards",
+      "imageUrl": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "exterminator working"
+    },
+    {
+      "id": "pest-about",
+      "description": "Professional pest control exterminator inspection",
+      "imageUrl": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "exterminator working"
+    },
+    {
+      "id": "pest-gallery-1",
+      "description": "Eco-friendly pest barrier application",
+      "imageUrl": "https://images.unsplash.com/photo-1595246140625-573b715d11dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "pest control"
+    },
+    {
+      "id": "pest-gallery-2",
+      "description": "Inspecting attic for rodent activity",
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "exterminator working"
+    },
+    {
+      "id": "pest-gallery-3",
+      "description": "Termite treatment inspection",
+      "imageUrl": "https://images.unsplash.com/photo-1628102479435-014e7a9115f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "pest control"
+    },
+    {
+      "id": "pest-gallery-4",
+      "description": "Professional pest service truck",
+      "imageUrl": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "exterminator working"
     }
   ]
 }
