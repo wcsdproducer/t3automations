@@ -32,78 +32,11 @@ interface Opportunity {
   isCustom?: boolean;
 }
 
-const INITIAL_OPPORTUNITIES: Opportunity[] = [
-  {
-    id: '1',
-    niche: 'Drywall Repair',
-    location: 'Tacoma, WA',
-    population: 941000,
-    difficulty: 'Low',
-    domain: 'tacomadrywallexperts.com',
-  },
-  {
-    id: '2',
-    niche: 'Drywall Repair',
-    location: 'Tacoma, WA',
-    population: 941000,
-    difficulty: 'Low',
-    domain: 'drywallrepairtacoma.com',
-  },
-  {
-    id: '3',
-    niche: 'Gutter Services',
-    location: 'Spokane, WA',
-    population: 605000,
-    difficulty: 'Low',
-    domain: 'spokanegutterexperts.com',
-  },
-  {
-    id: '4',
-    niche: 'Pressure Washing',
-    location: 'Worcester, MA',
-    population: 881000,
-    difficulty: 'Low',
-    domain: 'worcesterpressurewashing.com',
-  },
-  {
-    id: '5',
-    niche: 'Pressure Washing',
-    location: 'Worcester, MA',
-    population: 881000,
-    difficulty: 'Low',
-    domain: 'pressurewashingworcester.com',
-  },
-  {
-    id: '6',
-    niche: 'Junk Removal',
-    location: 'Greensboro, NC',
-    population: 801000,
-    difficulty: 'Low',
-    domain: 'greensborojunkpros.com',
-  },
-  {
-    id: '7',
-    niche: 'Epoxy Flooring',
-    location: 'Reno, NV',
-    population: 490000,
-    difficulty: 'Medium',
-    domain: 'renoepoxypros.com',
-  },
-  {
-    id: '8',
-    niche: 'Pest Control',
-    location: 'Chattanooga, TN',
-    population: 396000,
-    difficulty: 'Medium',
-    domain: 'chattanoogapestcontrol.com',
-  }
-];
-
 export default function OpportunitiesPage() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const router = useRouter();
-  const [opportunities, setOpportunities] = useState<Opportunity[]>(INITIAL_OPPORTUNITIES);
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loadingAll, setLoadingAll] = useState(false);
   
   // AI Scout state
@@ -196,43 +129,6 @@ export default function OpportunitiesPage() {
     });
   };
 
-  // Run initial score calculation and auto-verify domain availability on mount
-  useEffect(() => {
-    // 1. Map initial scores
-    setOpportunities(prev => {
-      const mapped = prev.map(o => ({
-        ...o,
-        score: calculateScore(o)
-      }));
-      return mapped.sort((a, b) => (b.score || 0) - (a.score || 0));
-    });
-
-    // 2. Auto-run Namecheap availability check
-    const autoVerify = async () => {
-      setLoadingAll(true);
-      setOpportunities(prev => prev.map(o => ({ ...o, checking: true })));
-      
-      const results = await checkDomainAvailability(INITIAL_OPPORTUNITIES);
-      
-      setOpportunities(prev => {
-        const updated = prev.map(o => {
-          const available = results[o.domain.toLowerCase()] ?? o.available;
-          const newOpp = {
-            ...o,
-            available,
-            checking: false,
-          };
-          newOpp.score = calculateScore(newOpp);
-          return newOpp;
-        });
-        return updated.sort((a, b) => (b.score || 0) - (a.score || 0));
-      });
-      setLoadingAll(false);
-    };
-
-    autoVerify();
-  }, []);
-
   const handleAIScout = async () => {
     setIsScouting(true);
     toast({
@@ -267,6 +163,10 @@ export default function OpportunitiesPage() {
       description: `Identified, verified, and scored ${res.opportunities.length} opportunities in one go.`,
     });
   };
+
+  useEffect(() => {
+    handleAIScout();
+  }, []);
 
   if (isUserLoading) {
     return (
@@ -386,66 +286,77 @@ export default function OpportunitiesPage() {
               </div>
 
               <div className="divide-y divide-slate-800">
-                {opportunities.map((opp, idx) => (
-                  <div key={opp.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/20 transition-colors">
-                    <div className="space-y-1.5 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-base font-bold text-white">{opp.niche}</span>
-                        <span className="text-xs text-slate-400 font-semibold flex items-center gap-1">
-                          <MapPin className="h-3 w-3 text-red-500" /> {opp.location}
-                        </span>
-                        {opp.isCustom && (
-                          <Badge className="bg-emerald-600/15 hover:bg-emerald-600/15 text-emerald-400 text-[10px] py-0 border-none font-bold">
-                            Custom
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 font-medium">
-                        <span>Metro Pop: <strong>{(opp.population / 1000).toFixed(0)}k</strong></span>
-                        <span className="h-1 w-1 bg-slate-850 rounded-full" />
-                        <span>SEO Difficulty: <strong className={
-                          opp.difficulty === 'Low' ? 'text-emerald-500' : opp.difficulty === 'Medium' ? 'text-amber-500' : 'text-red-500'
-                        }>{opp.difficulty}</strong></span>
-                      </div>
-
-                      <div className="flex items-center gap-2 pt-1">
-                        <span className="text-xs text-slate-400 font-mono select-all bg-slate-950 px-2 py-0.5 rounded border border-slate-800">{opp.domain}</span>
-                        {opp.checking ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-500" />
-                        ) : opp.available === true ? (
-                          <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> Domain Available
-                          </span>
-                        ) : opp.available === false ? (
-                          <span className="text-[10px] text-red-400 font-bold flex items-center gap-1">
-                            <XCircle className="h-3.5 w-3.5" /> Taken
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-slate-400 italic">Domain unchecked</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Circular Score Gauge */}
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <div className="text-2xl font-black text-indigo-400">
-                          {opp.score ?? 50}<span className="text-xs font-normal text-slate-400">/100</span>
-                        </div>
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Opportunity</span>
-                      </div>
-                      <div className="h-10 w-10 rounded-full border-4 border-slate-800 flex items-center justify-center relative overflow-hidden">
-                        <div 
-                          className="absolute inset-0 bg-indigo-500/10 transition-all"
-                          style={{ height: `${opp.score ?? 50}%`, bottom: 0, top: 'auto' }}
-                        />
-                        <span className="text-xs font-black text-indigo-400 relative z-10">#{idx + 1}</span>
-                      </div>
-                    </div>
-
+                {opportunities.length === 0 && isScouting ? (
+                  <div className="p-12 text-center flex flex-col items-center justify-center space-y-4">
+                    <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+                    <p className="text-sm text-slate-400 font-medium">Scouting high-potential markets and verifying domain records...</p>
                   </div>
-                ))}
+                ) : opportunities.length === 0 ? (
+                  <div className="p-12 text-center text-slate-500 text-sm">
+                    No opportunities found. Click "Scout Opportunities with AI" to generate.
+                  </div>
+                ) : (
+                  opportunities.map((opp, idx) => (
+                    <div key={opp.id} className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-800/20 transition-colors">
+                      <div className="space-y-1.5 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-base font-bold text-white">{opp.niche}</span>
+                          <span className="text-xs text-slate-400 font-semibold flex items-center gap-1">
+                            <MapPin className="h-3 w-3 text-red-500" /> {opp.location}
+                          </span>
+                          {opp.isCustom && (
+                            <Badge className="bg-emerald-600/15 hover:bg-emerald-600/15 text-emerald-400 text-[10px] py-0 border-none font-bold">
+                              Custom
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 font-medium">
+                          <span>Metro Pop: <strong>{(opp.population / 1000).toFixed(0)}k</strong></span>
+                          <span className="h-1 w-1 bg-slate-850 rounded-full" />
+                          <span>SEO Difficulty: <strong className={
+                            opp.difficulty === 'Low' ? 'text-emerald-500' : opp.difficulty === 'Medium' ? 'text-amber-500' : 'text-red-500'
+                          }>{opp.difficulty}</strong></span>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-1">
+                          <span className="text-xs text-slate-400 font-mono select-all bg-slate-950 px-2 py-0.5 rounded border border-slate-800">{opp.domain}</span>
+                          {opp.checking ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin text-indigo-500" />
+                          ) : opp.available === true ? (
+                            <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                              <CheckCircle2 className="h-3.5 w-3.5" /> Domain Available
+                            </span>
+                          ) : opp.available === false ? (
+                            <span className="text-[10px] text-red-400 font-bold flex items-center gap-1">
+                              <XCircle className="h-3.5 w-3.5" /> Taken
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 italic">Domain unchecked</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Circular Score Gauge */}
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <div className="text-2xl font-black text-indigo-400">
+                            {opp.score ?? 50}<span className="text-xs font-normal text-slate-400">/100</span>
+                          </div>
+                          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Opportunity</span>
+                        </div>
+                        <div className="h-10 w-10 rounded-full border-4 border-slate-800 flex items-center justify-center relative overflow-hidden">
+                          <div 
+                            className="absolute inset-0 bg-indigo-500/10 transition-all"
+                            style={{ height: `${opp.score ?? 50}%`, bottom: 0, top: 'auto' }}
+                          />
+                          <span className="text-xs font-black text-indigo-400 relative z-10">#{idx + 1}</span>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
