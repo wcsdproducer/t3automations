@@ -199,8 +199,9 @@ export default function OpportunitiesPage() {
     });
   };
 
-  // Run initial score calculation
+  // Run initial score calculation and auto-verify domain availability on mount
   useEffect(() => {
+    // 1. Map initial scores
     setOpportunities(prev => {
       const mapped = prev.map(o => ({
         ...o,
@@ -208,6 +209,31 @@ export default function OpportunitiesPage() {
       }));
       return mapped.sort((a, b) => (b.score || 0) - (a.score || 0));
     });
+
+    // 2. Auto-run Namecheap availability check
+    const autoVerify = async () => {
+      setLoadingAll(true);
+      setOpportunities(prev => prev.map(o => ({ ...o, checking: true })));
+      
+      const results = await checkDomainAvailability(INITIAL_OPPORTUNITIES);
+      
+      setOpportunities(prev => {
+        const updated = prev.map(o => {
+          const available = results[o.domain.toLowerCase()] ?? o.available;
+          const newOpp = {
+            ...o,
+            available,
+            checking: false,
+          };
+          newOpp.score = calculateScore(newOpp);
+          return newOpp;
+        });
+        return updated.sort((a, b) => (b.score || 0) - (a.score || 0));
+      });
+      setLoadingAll(false);
+    };
+
+    autoVerify();
   }, []);
 
   const handleAddCustom = async (e: React.FormEvent) => {
