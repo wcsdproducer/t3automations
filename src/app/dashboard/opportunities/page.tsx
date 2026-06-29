@@ -37,7 +37,6 @@ export default function OpportunitiesPage() {
   const auth = useAuth();
   const router = useRouter();
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-  const [loadingAll, setLoadingAll] = useState(false);
   
   // AI Scout state
   const [isScouting, setIsScouting] = useState(false);
@@ -50,83 +49,6 @@ export default function OpportunitiesPage() {
     } catch (err) {
       console.error('Error logging out:', err);
     }
-  };
-
-  // Scoring function
-  const calculateScore = (opp: Opportunity) => {
-    let score = 0;
-
-    // 1. Population Score (max 40 pts)
-    const pop = opp.population;
-    if (pop < 200000) score += 15;
-    else if (pop >= 200000 && pop < 500000) score += 30;
-    else if (pop >= 500000 && pop <= 1200000) score += 40; // Ideal range
-    else score += 25; // Large city, high traffic but offsets competition
-
-    // 2. Difficulty Score (max 30 pts)
-    if (opp.difficulty === 'Low') score += 30;
-    else if (opp.difficulty === 'Medium') score += 20;
-    else score += 10;
-
-    // 3. Domain Availability Score (max 30 pts)
-    if (opp.available === true) {
-      score += 30;
-    } else if (opp.available === false) {
-      score += 0;
-    } else {
-      score += 15; // Unknown status neutral weight
-    }
-
-    return score;
-  };
-
-  const checkDomainAvailability = async (oppsToCheck: Opportunity[]) => {
-    const listToFetch = oppsToCheck.map(o => o.domain).join(',');
-    if (!listToFetch) return {};
-
-    try {
-      const res = await fetch(`/api/dns/check-domain?domains=${listToFetch}`);
-      const data = await res.json();
-      if (data.results) {
-        const resultsMap: Record<string, boolean> = {};
-        data.results.forEach((r: any) => {
-          resultsMap[r.domain] = r.available;
-        });
-        return resultsMap;
-      }
-    } catch (err) {
-      console.error('Failed to verify domain availability:', err);
-    }
-    return {};
-  };
-
-  const handleVerifyAll = async () => {
-    setLoadingAll(true);
-    // Set all checking state
-    setOpportunities(prev => prev.map(o => ({ ...o, checking: true })));
-
-    const results = await checkDomainAvailability(opportunities);
-
-    setOpportunities(prev => {
-      const updated = prev.map(o => {
-        const available = results[o.domain.toLowerCase()] ?? o.available;
-        const newOpp = {
-          ...o,
-          available,
-          checking: false,
-        };
-        newOpp.score = calculateScore(newOpp);
-        return newOpp;
-      });
-      // Sort descending by score
-      return updated.sort((a, b) => (b.score || 0) - (a.score || 0));
-    });
-
-    setLoadingAll(false);
-    toast({
-      title: 'Real-Time Audit Completed',
-      description: 'Domain records checked and opportunity ranks recalculated.',
-    });
   };
 
   const handleAIScout = async () => {
@@ -147,9 +69,10 @@ export default function OpportunitiesPage() {
       return;
     }
 
+    const availableOpps = (res.opportunities as Opportunity[]).filter(o => o.available === true);
+
     setOpportunities(prev => {
-      // res.opportunities already contains fully checked, scored, and unique elements
-      const merged = [...(res.opportunities as Opportunity[]), ...prev];
+      const merged = [...availableOpps, ...prev];
       // remove duplicates by domain
       const unique = merged.filter((item, index, self) => 
         self.findIndex(t => t.domain === item.domain) === index
@@ -160,13 +83,9 @@ export default function OpportunitiesPage() {
     setIsScouting(false);
     toast({
       title: 'Scouting Complete!',
-      description: `Identified, verified, and scored ${res.opportunities.length} opportunities in one go.`,
+      description: `Identified and verified ${availableOpps.length} available opportunities.`,
     });
   };
-
-  useEffect(() => {
-    handleAIScout();
-  }, []);
 
   if (isUserLoading) {
     return (
@@ -220,18 +139,6 @@ export default function OpportunitiesPage() {
               Identify and rank high-potential local service locations and domain assets built for Google & LLM search dominance.
             </p>
           </div>
-          <Button 
-            onClick={handleVerifyAll} 
-            disabled={loadingAll}
-            className="bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-semibold flex items-center gap-2 h-11"
-          >
-            {loadingAll ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Activity className="h-4 w-4" />
-            )}
-            Run Domain & Score Check
-          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
