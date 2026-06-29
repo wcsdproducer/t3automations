@@ -190,7 +190,7 @@ export function SiteLauncher() {
         setDocumentNonBlocking(docRef, {
           targetCity: updatedCity,
           nicheKeywords: updatedKeywords,
-        }, { merge: true }).catch(console.error);
+        }, { merge: true });
       }
     }
   }, [profile, firestore, profileId]);
