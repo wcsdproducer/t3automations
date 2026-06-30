@@ -607,17 +607,29 @@ export function getContentForService(service: string) {
     }
     
     if (serviceName === "Pest Control") {
-        const allPestHeroImages = PlaceHolderImages.filter(img => img.id.startsWith('pest-hero'));
-        const allPestGalleryImages = PlaceHolderImages.filter(img => img.id.startsWith('pest-gallery'));
-        const aboutImage = PlaceHolderImages.find(img => img.id === 'pest-about');
-
-        const shuffledHero = shuffle(allPestHeroImages);
-        const shuffledGallery = shuffle(allPestGalleryImages);
-
         const pestImages = {
-            hero: shuffledHero.slice(0, 5),
-            about: aboutImage,
-            gallery: shuffledGallery.slice(0, 4),
+            hero: [
+                {
+                    id: "pest-hero-1",
+                    description: "Professional pest control technician spraying yard and house foundation",
+                    imageUrl: "/images/pest-hero.jpg",
+                    imageHint: "pest control"
+                }
+            ],
+            about: {
+                id: "pest-about",
+                description: "Pest control technician explaining home defense diagram to homeowner",
+                imageUrl: "/images/pest-about.jpg",
+                imageHint: "pest control"
+            },
+            gallery: [
+                {
+                    id: "pest-gallery-1",
+                    description: "Eco-friendly barrier application around window frame",
+                    imageUrl: "/images/pest-gallery.jpg",
+                    imageHint: "pest control"
+                }
+            ],
         };
 
         return {
