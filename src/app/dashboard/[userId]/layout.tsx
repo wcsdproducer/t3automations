@@ -227,10 +227,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="grid h-screen w-full overflow-hidden md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] bg-background">
-      <div className="hidden border-r bg-background md:flex md:flex-col h-screen sticky top-0">
+    <div className="grid h-screen w-full overflow-hidden md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] bg-slate-950 text-slate-100">
+      <div className="hidden border-r border-slate-800 bg-slate-950 md:flex md:flex-col h-screen sticky top-0">
         <div className="flex h-full flex-col gap-2">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+          <div className="flex h-14 items-center border-b border-slate-800 px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Shield className="h-6 w-6 text-primary" />
               <div className="flex items-baseline gap-1.5">
@@ -320,13 +320,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               )}
             </nav>
           </div>
-          <div className="mt-auto p-4 border-t">
+          <div className="mt-auto p-4 border-t border-slate-800">
             <UserProfileDropdown />
           </div>
         </div>
       </div>
-      <div className="flex flex-col h-screen overflow-hidden bg-background">
-        <main className={`flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ${isMainDashboard ? 'overflow-hidden' : 'overflow-y-auto'} bg-background`}>
+      <div className="flex flex-col h-screen overflow-hidden bg-slate-950">
+        <main className={`flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 ${isMainDashboard ? 'overflow-hidden' : 'overflow-y-auto'} bg-slate-950`}>
           {children}
         </main>
       </div>

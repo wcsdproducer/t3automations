@@ -359,7 +359,7 @@ export default function DashboardRouterPage() {
 
   if (isUserLoading || roleLoading) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-slate-100">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
         <p className="mt-4 text-muted-foreground font-medium"><TranslatedText>Verifying Account...</TranslatedText></p>
       </div>
@@ -369,7 +369,7 @@ export default function DashboardRouterPage() {
   // Renter role renders loading state during redirect
   if (role === 'renter') {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-slate-100">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
         <p className="mt-4 text-muted-foreground font-medium"><TranslatedText>Redirecting to your dashboard...</TranslatedText></p>
       </div>
