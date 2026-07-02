@@ -22,7 +22,6 @@ import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
 import { SharedFooter } from './shared-footer';
 
@@ -202,14 +201,6 @@ export function TreeCareTemplate({
 
   return (
     <div className="bg-white text-slate-900 font-sans antialiased">
-      <AeoSchema
-        companyName={companyName}
-        phone={phone}
-        service={service}
-        logoUrl={logoUrl}
-        description={content.hero?.subtitle}
-        targetCity={targetCity}
-      />
       
       {/* Top Banner Contact bar */}
       <div className="bg-emerald-950 text-emerald-100 py-2.5 px-6 text-center text-xs font-semibold flex justify-center items-center gap-4">

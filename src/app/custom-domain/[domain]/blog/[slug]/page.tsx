@@ -77,10 +77,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!snap.empty) {
       const data = snap.docs[0].data();
+      const canonicalUrl = `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`;
       return {
         title: data.metaTitle || `${data.title} | Blog`,
         description: data.metaDescription || data.excerpt || '',
         keywords: data.keywords || [],
+        alternates: {
+          canonical: canonicalUrl,
+        },
+        openGraph: {
+          title: data.metaTitle || data.title,
+          description: data.metaDescription || data.excerpt,
+          url: canonicalUrl,
+          type: 'article',
+          publishedTime: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : undefined,
+          images: data.imageUrl ? [{ url: data.imageUrl }] : [],
+        },
       };
     }
   } catch (error) {
@@ -161,8 +173,37 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
     console.error('Error fetching recent posts:', e);
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    image: post.imageUrl || undefined,
+    datePublished: post.createdAt,
+    author: {
+      '@type': 'Organization',
+      name: companyName,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: companyName,
+      logo: {
+        '@type': 'ImageObject',
+        url: profile.logoUrl || undefined,
+      },
+    },
+    description: post.excerpt || '',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`,
+    },
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen text-slate-800 flex flex-col font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Google Analytics Script if connected */}
       {measurementId && (
         <>

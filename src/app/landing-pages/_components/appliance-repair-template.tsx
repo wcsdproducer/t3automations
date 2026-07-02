@@ -23,7 +23,6 @@ import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
 import { SharedFooter } from './shared-footer';
 
@@ -149,7 +148,7 @@ export function ApplianceRepairTemplate({
 
   const phone = phoneProp || content.phone || '(000) 000-0000';
   const companyName = companyNameProp || content.companyName || 'Appliance Repair Pros';
-  const displayCity = targetCity || 'Tampa';
+  const displayCity = targetCity?.split(',')[0]?.trim() || 'Tampa';
 
   // Merge database reviews with fallback large reviews list, de-duplicating by quote text
   const userReviews = Array.isArray(websiteConfig?.reviews) ? websiteConfig.reviews : [];
@@ -189,15 +188,6 @@ export function ApplianceRepairTemplate({
 
   return (
     <div className="bg-slate-50 text-slate-900 font-sans antialiased">
-      <AeoSchema
-        companyName={companyName}
-        phone={phone}
-        service={service}
-        logoUrl={logoUrl}
-        description={content.hero?.subtitle}
-        targetCity={displayCity}
-      />
-
       {/* Top Banner Contact bar */}
       <div className="bg-blue-900 text-blue-100 py-2.5 px-6 text-center text-xs font-semibold flex justify-center items-center gap-4">
         <span>⏱️ Same-Day Priority Diagnostics & Repair Slots</span>
@@ -543,6 +533,7 @@ export function ApplianceRepairTemplate({
         companyName={companyName}
         blogLink={blogLink}
         localSeoData={localSeoData}
+        theme="light"
       />
 
       <ChatbotWidget 

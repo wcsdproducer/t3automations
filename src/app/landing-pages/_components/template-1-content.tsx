@@ -16,7 +16,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
-import { AeoSchema } from '@/components/AeoSchema';
 
 
 function formatPhone(value: string) {
@@ -165,14 +164,7 @@ export function Template1Content({
 
   return (
     <div className="bg-background text-foreground">
-      <AeoSchema
-        companyName={companyName}
-        phone={phone}
-        service={service}
-        logoUrl={logoUrl}
-        description={content.hero?.subtitle}
-      />
-      <header className="sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center border-b bg-background/80 backdrop-blur-sm">
+            <header className="sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center border-b bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           {logoUrl && <Image src={logoUrl} alt={`${companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
           <h1 className="text-2xl font-bold text-primary">{companyName}</h1>

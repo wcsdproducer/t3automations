@@ -23,7 +23,6 @@ import { z } from 'zod';
 import { submitLead } from '@/app/actions/leads';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
 import { SharedFooter } from './shared-footer';
 
@@ -188,15 +187,7 @@ export function JunkRemovalTemplate({
 
   return (
     <div className="bg-slate-50 text-slate-900 font-sans antialiased">
-      <AeoSchema
-        companyName={companyName}
-        phone={phone}
-        service={service}
-        logoUrl={logoUrl}
-        description={content.hero?.subtitle}
-        targetCity={displayCity}
-      />
-
+      
       {/* Top Banner Contact bar */}
       <div className="bg-slate-950 text-amber-100 py-2.5 px-6 text-center text-xs font-semibold flex justify-center items-center gap-4">
         <span>📦 Fast, Friendly, Eco-Friendly Junk Removal Services</span>
@@ -547,7 +538,7 @@ export function JunkRemovalTemplate({
         companyName={companyName}
         blogLink={blogLink}
         localSeoData={localSeoData}
-        theme="dark"
+        theme="light"
       />
 
       {/* Capturing AI Chatbot context widget */}

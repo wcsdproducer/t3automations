@@ -8,12 +8,14 @@ interface SharedFooterProps {
   blogLink?: string;
   localSeoData?: {
     surroundingCities?: Array<{ name: string; mapUrl: string }>;
-    neighborhoods?: Array<{ name: string; mapUrl: string }>;
-    networkLinks?: Array<{ anchor: string; url: string }>;
+    neighborhoods?: string[];
+    networkLinks?: { label: string; url: string; }[];
   } | null;
   className?: string;
   theme?: 'light' | 'dark';
 }
+
+const mapUrl = (query: string) => `https://www.google.com/maps/search/${encodeURIComponent(query)}`;
 
 export function SharedFooter({
   businessProfileId = '',
@@ -25,17 +27,15 @@ export function SharedFooter({
 }: SharedFooterProps) {
   const isDark = theme === 'dark';
   
-  const hasGeoData = localSeoData && (
-    (localSeoData.surroundingCities && localSeoData.surroundingCities.length > 0) ||
-    (localSeoData.neighborhoods && localSeoData.neighborhoods.length > 0)
-  );
-  const hasNetworkData = localSeoData && localSeoData.networkLinks && localSeoData.networkLinks.length > 0;
+  const hasGeoData = localSeoData?.neighborhoods && localSeoData.neighborhoods.length > 0;
+  const hasNetworkData = localSeoData?.networkLinks && localSeoData.networkLinks.length > 0;
 
   const bgClass = isDark ? 'bg-slate-950 border-slate-900 text-slate-400' : 'bg-slate-50 border-slate-200/60 text-slate-500';
   const headingClass = isDark ? 'text-slate-200 font-bold' : 'text-slate-900 font-bold';
+  const titleClass = headingClass;
   const textClass = isDark ? 'text-slate-400' : 'text-slate-600';
   const hoverClass = isDark ? 'hover:text-slate-200' : 'hover:text-slate-900';
-  const borderClass = isDark ? 'border-slate-900' : 'border-slate-200';
+  const linkClass = hoverClass;
 
   return (
     <footer className={`py-16 px-6 border-t ${bgClass} ${className} relative z-10`}>
@@ -90,53 +90,39 @@ export function SharedFooter({
 
           {/* Column 3: Areas Serviced */}
           {hasGeoData && (
-            <div className="space-y-4 lg:col-span-1">
-              <h4 className={`text-xs uppercase font-bold tracking-wider ${headingClass}`}>
-                Areas Serviced
-              </h4>
-              <div className="flex flex-wrap gap-1.5 max-w-sm">
-                {localSeoData.surroundingCities?.slice(0, 4).map((city, idx) => (
-                  <a
-                    key={`city-${idx}`}
-                    href={city.mapUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`text-[10px] px-2 py-0.5 rounded bg-muted/65 border border-border/10 font-medium ${textClass} ${hoverClass} transition-all duration-200 hover:border-slate-400`}
-                  >
-                    {city.name}
-                  </a>
+            <div className="space-y-4">
+              <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Areas We Serve</h4>
+              <ul className="flex flex-wrap gap-x-4 gap-y-2">
+                {localSeoData?.neighborhoods?.map((area) => (
+                  <li key={area}>
+                    <a 
+                      href={mapUrl(`${area} ${companyName}`)}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`text-sm transition-colors ${linkClass}`}
+                    >
+                      {area}
+                    </a>
+                  </li>
                 ))}
-                {localSeoData.neighborhoods?.slice(0, 6).map((neigh, idx) => (
-                  <a
-                    key={`neigh-${idx}`}
-                    href={neigh.mapUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`text-[10px] px-2 py-0.5 rounded bg-muted/65 border border-border/10 font-medium ${textClass} ${hoverClass} transition-all duration-200 hover:border-slate-400`}
-                  >
-                    {neigh.name}
-                  </a>
-                ))}
-              </div>
+              </ul>
             </div>
           )}
 
           {/* Column 4: Partner Network (interlinking) */}
           {hasNetworkData && (
-            <div className="space-y-4 lg:col-span-1">
-              <h4 className={`text-xs uppercase font-bold tracking-wider ${headingClass}`}>
-                Our Trusted Partners
-              </h4>
-              <ul className="space-y-2.5 text-xs">
-                {localSeoData.networkLinks?.map((link, idx) => (
-                  <li key={`net-${idx}`} className="truncate max-w-[260px]">
-                    <a
+            <div className="space-y-4">
+              <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Partner Network</h4>
+              <ul className="flex flex-wrap gap-x-4 gap-y-2">
+                {localSeoData?.networkLinks?.map((link) => (
+                  <li key={link.url}>
+                    <a 
                       href={link.url}
-                      target="_blank"
+                      target="_blank" 
                       rel="noopener noreferrer"
-                      className={`transition-colors ${hoverClass} underline decoration-indigo-500/30 hover:decoration-indigo-500 font-medium text-indigo-500/90`}
+                      className={`text-sm transition-colors ${hoverClass} underline decoration-indigo-500/30 hover:decoration-indigo-500 font-medium text-indigo-500/90`}
                     >
-                      {link.anchor}
+                      {link.label}
                     </a>
                   </li>
                 ))}
