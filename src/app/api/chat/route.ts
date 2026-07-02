@@ -53,7 +53,7 @@ Conversation Guidelines:
         inputSchema: z.object({
           name: z.string().describe('The customer name'),
           phone: z.string().describe('The customer contact phone number'),
-          email: z.string().optional().describe('The customer email address, if provided'),
+          email: z.string().nullable().optional().describe('The customer email address, if provided'),
           notes: z.string().describe('Detailed description of their service request and appliance/job details.')
         }),
         outputSchema: z.object({
@@ -92,7 +92,7 @@ Conversation Guidelines:
 
     // 4. Generate AI response
     const response = await ai.generate({
-      model: 'vertexai/gemini-2.5-flash',
+      model: 'googleai/gemini-1.5-flash',
       messages: formattedHistory,
       system: systemPrompt,
       tools: [submitLeadTool],

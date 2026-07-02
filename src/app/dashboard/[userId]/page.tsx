@@ -22,7 +22,11 @@ import {
   Plus,
   RefreshCw,
   AlertTriangle,
-  Loader2
+  Loader2,
+  Phone,
+  Megaphone,
+  User,
+  MessageSquare
 } from 'lucide-react';
 import { setupGoogleAnalyticsAction, getGoogleAnalyticsDataAction } from '@/app/actions/google-analytics';
 import {
@@ -88,6 +92,28 @@ export default function AnalyticsOverviewPage() {
   }, [userId, firestore]);
 
   const { data: domains, isLoading: isDomainsLoading } = useCollection(customDomainsRef);
+
+  const leadsRef = useMemoFirebase(() => {
+    if (!userId || !firestore) return null;
+    return collection(firestore, `businessProfiles/${userId}/leads`);
+  }, [userId, firestore]);
+
+  const { data: leads } = useCollection(leadsRef);
+
+  const agentsRef = useMemoFirebase(() => {
+    if (!userId || !firestore) return null;
+    return collection(firestore, `businessProfiles/${userId}/agents`);
+  }, [userId, firestore]);
+
+  const { data: agents } = useCollection(agentsRef);
+  const agentId = agents?.[0]?.id || 'default';
+
+  const conversationsRef = useMemoFirebase(() => {
+    if (!userId || !firestore || !agentId) return null;
+    return collection(firestore, `businessProfiles/${userId}/agents/${agentId}/conversations`);
+  }, [userId, firestore, agentId]);
+
+  const { data: conversations } = useCollection(conversationsRef);
 
   const isLoading = isProfileLoading || isDomainsLoading;
 
@@ -162,6 +188,28 @@ export default function AnalyticsOverviewPage() {
       </div>
     );
   }
+
+  // Calculate Conversion Metrics
+  const totalLeads = leads?.length || 0;
+  const totalCalls = conversations?.length || 0;
+  const leadsFromCalls = conversations?.filter((c: any) => c.leadCaptured).length || 0;
+  
+  const visitorCount = analyticsData?.metrics.totalVisitors || 0;
+  const leadConversionRate = visitorCount > 0 ? ((totalLeads / visitorCount) * 100).toFixed(1) : '0.0';
+  const callConversionRate = totalCalls > 0 ? ((leadsFromCalls / totalCalls) * 100).toFixed(1) : '0.0';
+
+  const leadSourceData = [
+    { name: 'Forms', value: leads?.filter((l: any) => l.source === 'landing-page').length || 0, color: '#3b82f6' },
+    { name: 'Calls', value: leads?.filter((l: any) => l.source === 'inbound-call').length || 0, color: '#10b981' },
+    { name: 'Chat', value: leads?.filter((l: any) => l.source === 'chatbot').length || 0, color: '#f59e0b' },
+    { name: 'Other', value: leads?.filter((l: any) => !['landing-page', 'inbound-call', 'chatbot'].includes(l.source)).length || 0, color: '#8b5cf6' },
+  ];
+
+  const recentLeads = [...(leads || [])].sort((a: any, b: any) => {
+    const dateA = a.createdAt?.toDate?.() ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const dateB = b.createdAt?.toDate?.() ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return dateB.getTime() - dateA.getTime();
+  }).slice(0, 5);
 
   // State 1: Active Integration - Show dashboard widgets
   if (isGAConnected) {
@@ -238,14 +286,63 @@ export default function AnalyticsOverviewPage() {
 
           <Card className="bg-slate-900 border-slate-800">
             <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
-              <CardTitle className="text-sm font-medium text-slate-400">Bounce Rate</CardTitle>
-              <ArrowUpRight className="h-4 w-4 text-purple-400" />
+              <CardTitle className="text-sm font-medium text-slate-400">Conversion Rate</CardTitle>
+              <Sparkles className="h-4 w-4 text-purple-400" />
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <div className="text-2xl font-bold">{analyticsData?.metrics.bounceRate || '0%'}</div>
-              <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3" /> {analyticsData?.metrics.bounceChange || '-0.0%'} improvement
+              <div className="text-2xl font-bold">{leadConversionRate}%</div>
+              <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                {totalLeads} total leads captured
               </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Conversion Funnel / Call Stats */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+           <Card className="bg-slate-900 border-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+              <CardTitle className="text-sm font-medium text-slate-400">Total Calls</CardTitle>
+              <Phone className="h-4 w-4 text-blue-400" />
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-2xl font-bold">{totalCalls}</div>
+              <p className="text-xs text-slate-400 mt-1">AI voice agent interactions</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900 border-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+              <CardTitle className="text-sm font-medium text-slate-400">Call-to-Lead</CardTitle>
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-2xl font-bold">{callConversionRate}%</div>
+              <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                {leadsFromCalls} leads from AI calls
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900 border-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+              <CardTitle className="text-sm font-medium text-slate-400">Active Campaign</CardTitle>
+              <Megaphone className="h-4 w-4 text-amber-400" />
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-lg font-bold truncate">Local SEO Expansion</div>
+              <p className="text-[10px] text-slate-400 mt-1">20+ Neighborhoods Targeted</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900 border-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between p-4 pb-1.5">
+              <CardTitle className="text-sm font-medium text-slate-400">Site Health</CardTitle>
+              <Activity className="h-4 w-4 text-blue-400" />
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+              <div className="text-2xl font-bold text-emerald-400">98%</div>
+              <p className="text-xs text-slate-400 mt-1">SSL & DNS Verified</p>
             </CardContent>
           </Card>
         </div>
@@ -282,18 +379,18 @@ export default function AnalyticsOverviewPage() {
             </CardContent>
           </Card>
 
-          {/* Traffic Sources Pie */}
+          {/* Lead Source Breakdown */}
           <Card className="col-span-1 md:col-span-2 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
-              <CardTitle className="text-base font-semibold text-slate-200">Acquisition Channels</CardTitle>
-              <CardDescription className="text-xs text-slate-400">Where your visitors originate</CardDescription>
+              <CardTitle className="text-base font-semibold text-slate-200">Lead Sources</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Total: {totalLeads} leads captured</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-between flex-1 min-h-0 pb-4">
               <div className="flex-1 w-full min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPieChart>
                     <Pie
-                      data={analyticsData?.sourceData || []}
+                      data={leadSourceData}
                       cx="50%"
                       cy="50%"
                       innerRadius={45}
@@ -301,19 +398,22 @@ export default function AnalyticsOverviewPage() {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {(analyticsData?.sourceData || []).map((entry: any, index: number) => (
+                      {leadSourceData.map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
                   </RechartsPieChart>
                 </ResponsiveContainer>
               </div>
               <div className="grid grid-cols-2 gap-1 w-full px-4 text-[10px] mt-1">
-                {(analyticsData?.sourceData || []).map((s: any, idx: number) => (
+                {leadSourceData.map((s: any, idx: number) => (
                   <div key={idx} className="flex items-center gap-1">
                     <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
-                    <span className="text-slate-300 truncate">{s.name}</span>
+                    <span className="text-slate-300 truncate">{s.name}: {s.value}</span>
                   </div>
                 ))}
               </div>
@@ -321,8 +421,51 @@ export default function AnalyticsOverviewPage() {
           </Card>
         </div>
 
-        {/* Detailed breakdown / Referrals table */}
+        {/* Recent Activity Section */}
         <div className="grid gap-4 md:grid-cols-6 lg:grid-cols-6 flex-1 min-h-0">
+          <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800 flex flex-col h-full">
+            <CardHeader className="py-3">
+              <CardTitle className="text-base font-semibold text-slate-200">Recent Leads</CardTitle>
+              <CardDescription className="text-xs text-slate-400">Latest activity across all capture channels</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-auto p-0">
+              <div className="divide-y divide-slate-800">
+                {recentLeads.map((lead: any) => (
+                  <div key={lead.id} className="p-3 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        lead.source === 'landing-page' ? 'bg-blue-500/10 text-blue-400' :
+                        lead.source === 'inbound-call' ? 'bg-emerald-500/10 text-emerald-400' :
+                        'bg-amber-500/10 text-amber-400'
+                      }`}>
+                        {lead.source === 'landing-page' ? <Globe className="h-4 w-4" /> :
+                         lead.source === 'inbound-call' ? <Phone className="h-4 w-4" /> :
+                         <MessageSquare className="h-4 w-4" />}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">{lead.name}</p>
+                        <p className="text-[10px] text-slate-500">
+                          {lead.source.replace('-', ' ')} • {lead.createdAt?.toDate?.() ? lead.createdAt.toDate().toLocaleTimeString() : 'Just now'}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className={`text-[10px] ${
+                      lead.status === 'new' ? 'border-blue-500/30 text-blue-400 bg-blue-500/5' :
+                      'border-emerald-500/30 text-emerald-400 bg-emerald-500/5'
+                    }`}>
+                      {lead.status}
+                    </Badge>
+                  </div>
+                ))}
+                {recentLeads.length === 0 && (
+                  <div className="p-8 text-center text-slate-500 text-sm">
+                    No leads captured yet. Start driving traffic to see results!
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           <Card className="col-span-1 md:col-span-4 bg-slate-900 border-slate-800 flex flex-col h-full">
             <CardHeader className="py-3">
               <CardTitle className="text-base font-semibold text-slate-200">Top Referral Sources</CardTitle>

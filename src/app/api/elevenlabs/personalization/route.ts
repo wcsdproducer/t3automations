@@ -28,12 +28,14 @@ export async function POST(req: Request) {
       .get();
 
     let businessProfileData: any = null;
+    let businessProfileId: string | null = null;
 
     if (!agentsSnapshot.empty) {
       const agentDoc = agentsSnapshot.docs[0];
       const businessProfileRef = agentDoc.ref.parent.parent;
       
       if (businessProfileRef) {
+        businessProfileId = businessProfileRef.id;
         const profileDoc = await businessProfileRef.get();
         if (profileDoc.exists) {
           businessProfileData = profileDoc.data();
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
         const businessProfileRef = agentDoc.ref.parent.parent;
         
         if (businessProfileRef) {
+          businessProfileId = businessProfileRef.id;
           const profileDoc = await businessProfileRef.get();
           if (profileDoc.exists) {
             businessProfileData = profileDoc.data();
@@ -59,18 +62,49 @@ export async function POST(req: Request) {
       }
     }
 
-    if (businessProfileData) {
+    if (businessProfileData && businessProfileId) {
+      // --- NEW: Lead Lookup for Personalization ---
+      let customerName = "";
+      let isReturning = false;
+      let lastInteractionSummary = "";
+
+      if (caller_id) {
+        try {
+          const leadsSnapshot = await adminDb.collection(`businessProfiles/${businessProfileId}/leads`)
+            .where('phone', '==', caller_id)
+            .limit(1)
+            .get();
+
+          if (!leadsSnapshot.empty) {
+            const lead = leadsSnapshot.docs[0].data();
+            customerName = lead.name || "";
+            isReturning = true;
+            lastInteractionSummary = lead.agentSummary || lead.notes?.slice(0, 100) || "";
+          }
+        } catch (leadError) {
+          console.error('Error looking up lead for personalization:', leadError);
+        }
+      }
+
       return NextResponse.json({
         dynamic_variables: {
           business_name: businessProfileData.businessName || defaultDynamicVariables.business_name,
           booking_url: businessProfileData.bookingUrl || defaultDynamicVariables.booking_url,
           service: businessProfileData.service || defaultDynamicVariables.service,
+          customer_name: customerName,
+          is_returning_customer: isReturning,
+          last_interaction_summary: lastInteractionSummary,
         }
       });
     }
 
     return NextResponse.json({
-      dynamic_variables: defaultDynamicVariables
+      dynamic_variables: {
+        ...defaultDynamicVariables,
+        customer_name: "",
+        is_returning_customer: false,
+        last_interaction_summary: "",
+      }
     });
 
   } catch (error) {

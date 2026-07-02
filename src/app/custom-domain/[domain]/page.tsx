@@ -220,6 +220,14 @@ export default async function CustomDomainPage({
     areaServed: [
       { '@type': 'City', name: schemaCity },
       { '@type': 'State', name: schemaState },
+      ...(profile.localSeoData?.neighborhoods || []).map((n: any) => ({
+        '@type': 'Place',
+        name: n.name,
+      })),
+      ...(profile.localSeoData?.surroundingCities || []).map((c: any) => ({
+        '@type': 'City',
+        name: c.name,
+      })),
     ],
     openingHoursSpecification: [
       { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '18:00' },
