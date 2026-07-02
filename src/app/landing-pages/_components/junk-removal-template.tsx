@@ -542,7 +542,11 @@ export function JunkRemovalTemplate({
       />
 
       {/* Capturing AI Chatbot context widget */}
-      {businessProfileId && <ChatbotWidget businessProfileId={businessProfileId} />}
+      <ChatbotWidget 
+        businessProfileId={businessProfileId || ''} 
+        companyName={companyName} 
+        niche={service} 
+      />
     </div>
   );
 }

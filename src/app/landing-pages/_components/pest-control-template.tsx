@@ -541,7 +541,11 @@ export function PestControlTemplate({
         theme="light"
       />
 
-      {businessProfileId && <ChatbotWidget businessProfileId={businessProfileId} />}
+      <ChatbotWidget 
+        businessProfileId={businessProfileId || ''} 
+        companyName={companyName} 
+        niche={service} 
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { db } from '@/lib/firebase-admin';
+import { NICHE_KNOWLEDGE } from '@/lib/knowledge-base';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,9 @@ export async function POST(req: Request) {
     const aboutText = config.about?.body || '';
     const servicesList = config.services?.items || [];
 
+    // Get niche-specific knowledge
+    const nicheKnowledge = NICHE_KNOWLEDGE[service] || '';
+
     const systemPrompt = `You are a helpful, professional AI chatbot assistant for "${companyName}", a local ${service} business serving the ${targetCity} area.
 Your primary goal is to answer visitor questions politely and capture inquiries for service.
 
@@ -37,11 +41,14 @@ Business Info:
 - Main Phone Line: ${phoneNumber || 'Contact us via online form'}
 - About Us: ${aboutText}
 
+${nicheKnowledge ? `Expert Knowledge on ${service}:\n${nicheKnowledge}` : ''}
+
 Conversation Guidelines:
 1. Always be polite, professional, and helpful.
-2. If a customer is asking about scheduling, pricing, or booking a service, politely ask for their name, phone number, and details of their request so we can have a technician reach out to them.
-3. Once the customer has provided their name and phone number, invoke the "submitLead" tool to submit their request to our CRM system.
-4. After invoking the tool, confirm to the user that their request has been submitted and that a technician will call or text them shortly.
+2. Use the "Expert Knowledge" provided above to answer general questions about ${service}.
+3. If a customer is asking about scheduling, pricing, or booking a service, politely ask for their name, phone number, and details of their request so we can have a technician reach out to them.
+4. Once the customer has provided their name and phone number, invoke the "submitLead" tool to submit their request to our CRM system.
+5. After invoking the tool, confirm to the user that their request has been submitted and that a technician will call or text them shortly.
 `;
 
     // 2. Define the submitLead tool dynamically with closure
