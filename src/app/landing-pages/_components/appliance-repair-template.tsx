@@ -25,6 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
+import { SharedFooter } from './shared-footer';
 
 const Loader2 = ({ className }: { className?: string }) => <LucideIcons.Loader2 className={className} />;
 
@@ -46,6 +47,7 @@ export function ApplianceRepairTemplate({
   bookingUrl,
   websiteConfig,
   targetCity,
+  localSeoData,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -536,19 +538,12 @@ export function ApplianceRepairTemplate({
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 px-6 border-t border-slate-800 text-center text-xs">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <p className="font-semibold text-slate-200">© {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
-          <p className="max-w-2xl mx-auto leading-relaxed text-[10px]">
-            Disclaimer: All services are provided by certified local appliance technicians. Standard diagnostic and dispatch fees apply. SMS opt-in consent covers immediate quote confirmation, service bookings, and scheduling check-ins.
-          </p>
-          <div className="flex justify-center gap-6 text-[10px] pt-2">
-            <a href="/privacy" className="hover:text-white underline">Privacy Policy</a>
-            <a href="/tos" className="hover:text-white underline">Terms of Service</a>
-          </div>
-        </div>
-      </footer>
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink={blogLink}
+        localSeoData={localSeoData}
+      />
 
       <ChatbotWidget 
         businessProfileId={businessProfileId || ''} 

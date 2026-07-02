@@ -1,5 +1,6 @@
 import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Calendar, ArrowLeft, BookOpen } from 'lucide-react';
@@ -13,6 +14,42 @@ function formatPhone(value: string) {
 }
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ domain: string }>;
+}): Promise<Metadata> {
+  const { domain } = await params;
+  if (!domain) return {};
+
+  const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, '');
+  const businessProfileId = await getBusinessProfileId(cleanDomain);
+  if (!businessProfileId) return {};
+
+  const profileDoc = await admin.firestore().collection('businessProfiles').doc(businessProfileId).get();
+  if (!profileDoc.exists) return {};
+
+  const profile = profileDoc.data() || {};
+  const companyName = profile.businessName || 'Our Service Company';
+  const service = profile.service || 'services';
+  const city = profile.targetCity?.split(',')[0]?.trim() || '';
+  const title = `${service} Blog | Expert Tips & Advice | ${companyName}`;
+  const description = `Read expert ${service.toLowerCase()} tips, guides, and local insights from ${companyName}${city ? ` in ${city}` : ''}. Stay informed with our latest articles.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `https://${cleanDomain}/blog` },
+    openGraph: {
+      title,
+      description,
+      url: `https://${cleanDomain}/blog`,
+      siteName: companyName,
+      type: 'website',
+    },
+  };
+}
 
 async function getBusinessProfileId(domain: string): Promise<string | null> {
   const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, ''); // Remove port if any
@@ -149,7 +186,7 @@ export default async function CustomDomainBlogIndexPage({
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Home</span>
             </Link>
-            <h2 className="text-4xl font-extrabold tracking-tight text-slate-900">Latest Articles & Tips</h2>
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Latest Articles & Tips</h1>
             <p className="text-slate-600 mt-2">Expert advice and local insights from our professional team.</p>
           </div>
         </div>

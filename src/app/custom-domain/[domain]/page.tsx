@@ -70,9 +70,33 @@ export async function generateMetadata({
   if (!profileDoc.exists) return {};
 
   const profile = profileDoc.data() || {};
+
+  const title = profile.metaTitle || profile.businessName || 'T3 Partner';
+  const description = profile.metaDescription || `Professional ${profile.service || 'services'} in ${profile.targetCity || 'your area'}. Call today for a free estimate!`;
+  const canonicalUrl = `https://${cleanDomain}`;
+  const logoUrl = profile.logoUrl || '';
+
   return {
-    title: profile.metaTitle || profile.businessName || 'T3 Partner',
-    description: profile.metaDescription || profile.service || '',
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: profile.businessName || 'T3 Partner',
+      type: 'website',
+      locale: 'en_US',
+      ...(logoUrl ? { images: [{ url: logoUrl, width: 800, height: 600, alt: profile.businessName }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(logoUrl ? { images: [logoUrl] } : {}),
+    },
     verification: {
       google: profile.googleSiteVerification || undefined,
     },
@@ -156,6 +180,53 @@ export default async function CustomDomainPage({
   const template = profile.defaultLandingPage || 'template-1';
   const measurementId = profile.googleAnalyticsMeasurementId;
 
+  // Build server-rendered JSON-LD for guaranteed crawlability
+  const canonicalUrl = `https://${cleanDomain}`;
+  const description = profile.metaDescription || `Professional ${profile.service || 'services'} in ${profile.targetCity || 'your area'}. Call today for a free estimate!`;
+  let schemaCity = 'Tampa';
+  let schemaState = 'FL';
+  const tc = profile.targetCity || '';
+  if (tc.includes(',')) {
+    const parts = tc.split(',');
+    schemaCity = parts[0].trim();
+    schemaState = parts[1].trim();
+  } else if (tc) {
+    schemaCity = tc.trim();
+  }
+  const serviceLower = (profile.service || '').toLowerCase();
+  let businessType = 'LocalBusiness';
+  if (serviceLower.includes('tree') || serviceLower.includes('concrete') || serviceLower.includes('paving') || serviceLower.includes('epoxy') || serviceLower.includes('floor') || serviceLower.includes('appliance')) {
+    businessType = 'HomeAndConstructionBusiness';
+  } else if (serviceLower.includes('pest') || serviceLower.includes('junk') || serviceLower.includes('removal')) {
+    businessType = 'ProfessionalService';
+  }
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': businessType,
+    name: profile.businessName || 'Local Service Pro',
+    telephone: profile.phoneNumber || '',
+    url: canonicalUrl,
+    logo: profile.logoUrl || undefined,
+    image: profile.logoUrl || undefined,
+    description,
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: schemaCity,
+      addressRegion: schemaState,
+      addressCountry: 'US',
+    },
+    areaServed: [
+      { '@type': 'City', name: schemaCity },
+      { '@type': 'State', name: schemaState },
+    ],
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '08:00', closes: '18:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '09:00', closes: '14:00' },
+    ],
+  };
+
   // 3. Render the correct template with real data
   const content = (() => {
     if (template === 'tree-care') return <TreeCareTemplate {...templateProps} />;
@@ -174,6 +245,11 @@ export default async function CustomDomainPage({
 
   return (
     <>
+      {/* Server-rendered JSON-LD — guaranteed visible to crawlers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {measurementId && (
         <>
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} />

@@ -24,6 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { AeoSchema } from '@/components/AeoSchema';
 import { ChatbotWidget } from './chatbot-widget';
+import { SharedFooter } from './shared-footer';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -55,6 +56,7 @@ export function EpoxyFlooringTemplate({
   bookingUrl,
   websiteConfig,
   targetCity,
+  localSeoData,
 }: TemplateProps) {
   const [content, setContent] = useState<any>(null);
   const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }));
@@ -134,6 +136,7 @@ export function EpoxyFlooringTemplate({
 
   const phone = formatPhone(phoneProp);
   const companyName = companyNameProp || content.companyName;
+  const displayCity = targetCity?.split(',')[0]?.trim() || 'Tampa';
   const aboutImage = content.images.about;
   const heroImages: ImagePlaceholder[] = content.images.hero;
   const singleHeroImage = heroImages[0];
@@ -141,11 +144,11 @@ export function EpoxyFlooringTemplate({
   const heroContent = (
     <div className="relative z-10 p-6 max-w-4xl text-left">
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-700 text-sm font-semibold mb-6">
-        <Layers className="h-4 w-4" /> Tampa's Industrial & Residential Flooring Leaders
+        <Layers className="h-4 w-4" /> {displayCity}'s Industrial & Residential Flooring Leaders
       </div>
-      <h2 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">
+      <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 leading-tight">
         {content.hero.title}
-      </h2>
+      </h1>
       <p className="mt-6 text-lg md:text-xl text-slate-600 max-w-2xl leading-relaxed">
         {content.hero.subtitle}
       </p>
@@ -198,10 +201,10 @@ export function EpoxyFlooringTemplate({
       <header className="sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-md">
         <div className="flex items-center gap-3">
           {logoUrl && <Image src={logoUrl} alt={`${companyName} Logo`} width={140} height={40} className="h-10 w-auto object-contain" />}
-          <h1 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-1.5">
+          <div className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-1.5">
             <Layers className="h-6 w-6 text-blue-650" />
             <span>{companyName}</span>
-          </h1>
+          </div>
         </div>
         <nav className="hidden md:flex gap-8 items-center text-sm font-bold text-slate-600">
           <a href="#services" className="hover:text-blue-600 transition-colors">Services</a>
@@ -495,14 +498,13 @@ export function EpoxyFlooringTemplate({
         </section>
       </main>
 
-      <footer className="py-12 text-center text-slate-400 border-t border-slate-200/50 bg-white">
-        <p className="text-sm font-semibold">&copy; {new Date().getFullYear()} {companyName}. All rights reserved.</p>
-        <div className="mt-4 flex justify-center gap-6 text-xs font-medium">
-          <a href={blogLink} className="hover:underline hover:text-slate-700">Blog</a>
-          <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700">Privacy Policy</a>
-          <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline hover:text-slate-700">Terms of Service</a>
-        </div>
-      </footer>
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink={blogLink}
+        localSeoData={localSeoData}
+        theme="light"
+      />
 
       <ChatbotWidget 
         businessProfileId={businessProfileId || ''} 
