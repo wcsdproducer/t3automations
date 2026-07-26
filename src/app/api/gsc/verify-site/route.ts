@@ -120,22 +120,44 @@ export async function POST(req: NextRequest) {
     if (action === 'verify') {
       console.log(`[gsc-verify] Verifying ownership for: ${canonicalSiteUrl}`);
       try {
-        // A. Trigger ownership verification call
-        const verifyRes = await axios.post(
-          'https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=META',
-          {
-            site: {
-              identifier: canonicalSiteUrl,
-              type: 'SITE',
+        let verifyRes;
+        try {
+          // A. Trigger ownership verification call
+          verifyRes = await axios.post(
+            'https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=META',
+            {
+              site: {
+                identifier: canonicalSiteUrl,
+                type: 'SITE',
+              },
             },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+        } catch (verifyErr: any) {
+          console.error('[gsc-verify] API verification check failed:', verifyErr.response?.data || verifyErr.message);
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Google could not verify ownership. Please ensure your verification tag is live on your site, and wait a few minutes for DNS and SSL to propagate.',
             },
-          }
-        );
+            { status: 400 }
+          );
+        }
+
+        if (verifyRes.status !== 200 && verifyRes.status !== 201) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Google could not verify ownership. Please ensure your verification tag is live on your site, and wait a few minutes for DNS and SSL to propagate.',
+            },
+            { status: 400 }
+          );
+        }
 
         console.log(`[gsc-verify] Ownership verified. Registering in Search Console...`);
 
@@ -156,7 +178,7 @@ export async function POST(req: NextRequest) {
         // C. Submit Sitemap (PUT)
         const sitemapFeedUrl = `${canonicalSiteUrl}sitemap.xml`;
         const sitemapUrl = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(canonicalSiteUrl)}/sitemaps/${encodeURIComponent(sitemapFeedUrl)}`;
-        await axios.put(
+        const sitemapRes = await axios.put(
           sitemapUrl,
           {},
           {
@@ -165,6 +187,10 @@ export async function POST(req: NextRequest) {
             },
           }
         );
+
+        if (sitemapRes.status !== 200 && sitemapRes.status !== 201 && sitemapRes.status !== 204) {
+          throw new Error(`Google Sitemap API returned status ${sitemapRes.status}`);
+        }
 
         console.log(`[gsc-verify] Sitemap submitted successfully: ${sitemapFeedUrl}`);
 

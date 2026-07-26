@@ -415,7 +415,7 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
       }
     }
 
-    // --- FALLBACK (Bypass Simulation and return zero metrics) ---
+    // --- FALLBACK (Strictly return zero metrics, no mock/simulated traffic) ---
     const trafficData: { date: string; visitors: number; pageviews: number }[] = [];
     const now = new Date();
     for (let i = 6; i >= 0; i--) {

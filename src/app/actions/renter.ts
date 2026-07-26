@@ -309,12 +309,12 @@ export async function createRenterAccountAction(
       colorPalette,
       fontPair,
       websiteConfig: websiteConfig || null,
-      googleAnalyticsMeasurementId: measurementId,
-      googleAnalyticsPropertyId: propertyId,
-      googleAnalyticsStreamId: streamId,
-      googleAnalyticsStatus: 'connected',
+      googleAnalyticsMeasurementId: '',
+      googleAnalyticsPropertyId: '',
+      googleAnalyticsStreamId: '',
+      googleAnalyticsStatus: '',
       googleAnalyticsUpdatedAt: new Date().toISOString(),
-      isMockAnalytics: true,
+      isMockAnalytics: false,
     });
 
     // 4. Create standard default assistant/agent skeleton for the new profile

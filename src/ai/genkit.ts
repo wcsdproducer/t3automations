@@ -6,6 +6,7 @@ export const ai = genkit({
   plugins: [
     vertexAI({
       location: 'us-central1',
+      projectId: 'studio-1410114603-9e1f6',
     }),
     anthropic({
       apiKey: process.env.ANTHROPIC_API_KEY || 'dummy-key',

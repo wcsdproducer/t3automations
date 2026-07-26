@@ -576,9 +576,19 @@ export default function BlogSeoPage() {
                     <CardContent className="p-4 pt-0">
                       <div className="text-2xl font-bold">{avgPosition}</div>
                       {showRealData ? (
-                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                          <ArrowUp className="h-3 w-3" /> -1.4 improvement vs last week
-                        </p>
+                        gscData.metrics.avgPositionDelta > 0 ? (
+                          <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                            <ArrowUp className="h-3 w-3" /> -{gscData.metrics.avgPositionDelta} improvement vs last week
+                          </p>
+                        ) : gscData.metrics.avgPositionDelta < 0 ? (
+                          <p className="text-xs text-rose-400 flex items-center gap-1 mt-1">
+                            <ArrowDown className="h-3 w-3" /> +{Math.abs(gscData.metrics.avgPositionDelta)} drop vs last week
+                          </p>
+                        ) : (
+                          <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                            <Minus className="h-3 w-3" /> No change vs last week
+                          </p>
+                        )
                       ) : (
                         <p className="text-xs text-slate-500 mt-1">Awaiting Google verification</p>
                       )}
@@ -596,9 +606,19 @@ export default function BlogSeoPage() {
                         {showRealData && <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span>}
                       </div>
                       {showRealData ? (
-                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                          <ArrowUp className="h-3 w-3" /> +1 new keyword in top 3
-                        </p>
+                        gscData.metrics.top3Delta > 0 ? (
+                          <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                            <ArrowUp className="h-3 w-3" /> +{gscData.metrics.top3Delta} new keyword in top 3
+                          </p>
+                        ) : gscData.metrics.top3Delta < 0 ? (
+                          <p className="text-xs text-rose-400 flex items-center gap-1 mt-1">
+                            <ArrowDown className="h-3 w-3" /> {gscData.metrics.top3Delta} lost from top 3
+                          </p>
+                        ) : (
+                          <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                            <Minus className="h-3 w-3" /> No change vs last week
+                          </p>
+                        )
                       ) : (
                         <p className="text-xs text-slate-500 mt-1">Awaiting Search Console sync</p>
                       )}
@@ -616,9 +636,19 @@ export default function BlogSeoPage() {
                         {showRealData && <span className="text-xs font-normal text-muted-foreground">/ {totalKeywords}</span>}
                       </div>
                       {showRealData ? (
-                        <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
-                          <ArrowUp className="h-3 w-3" /> +2 keywords entered top 10
-                        </p>
+                        gscData.metrics.top10Delta > 0 ? (
+                          <p className="text-xs text-emerald-400 flex items-center gap-1 mt-1">
+                            <ArrowUp className="h-3 w-3" /> +{gscData.metrics.top10Delta} keywords entered top 10
+                          </p>
+                        ) : gscData.metrics.top10Delta < 0 ? (
+                          <p className="text-xs text-rose-400 flex items-center gap-1 mt-1">
+                            <ArrowDown className="h-3 w-3" /> {gscData.metrics.top10Delta} dropped from top 10
+                          </p>
+                        ) : (
+                          <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                            <Minus className="h-3 w-3" /> No change vs last week
+                          </p>
+                        )
                       ) : (
                         <p className="text-xs text-slate-500 mt-1">Awaiting query verification</p>
                       )}

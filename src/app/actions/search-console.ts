@@ -24,6 +24,9 @@ interface SearchConsoleDataResponse {
     top3Count: number;
     top10Count: number;
     totalSearchVolume: number; // total impressions or custom
+    avgPositionDelta?: number;
+    top3Delta?: number;
+    top10Delta?: number;
   };
 }
 
@@ -160,13 +163,19 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
     console.log(`Found matched Search Console site: ${siteUrl}`);
 
     // 5. Query Search Analytics API
-    // We group by query to list keyword ranks
+    const today = new Date();
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+    const eightDaysAgo = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000);
+
     const queryUrl = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
-    const analyticsRes = await axios.post(
+    
+    // Call A: Current week (last 7 days)
+    const currentWeekRes = await axios.post(
       queryUrl,
       {
-        startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days ago
-        endDate: new Date().toISOString().split('T')[0],
+        startDate: sevenDaysAgo.toISOString().split('T')[0],
+        endDate: today.toISOString().split('T')[0],
         dimensions: ['query'],
         rowLimit: 50
       },
@@ -178,16 +187,47 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
       }
     );
 
-    const rows = analyticsRes.data.rows || [];
-    const keywords: KeywordRanking[] = rows.map((row: any) => {
+    // Call B: Previous week (days 8 to 14 ago)
+    const previousWeekRes = await axios.post(
+      queryUrl,
+      {
+        startDate: fourteenDaysAgo.toISOString().split('T')[0],
+        endDate: eightDaysAgo.toISOString().split('T')[0],
+        dimensions: ['query'],
+        rowLimit: 50
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const currentRows = currentWeekRes.data.rows || [];
+    const previousRows = previousWeekRes.data.rows || [];
+
+    // Create a map of previous keyword positions
+    const previousPositions = new Map<string, number>();
+    previousRows.forEach((row: any) => {
+      const keyword = row.keys?.[0];
+      if (keyword && row.position !== undefined) {
+        previousPositions.set(keyword, Number(row.position));
+      }
+    });
+
+    const keywords: KeywordRanking[] = currentRows.map((row: any) => {
       const keyword = row.keys?.[0] || 'Unknown';
       const clicks = row.clicks || 0;
       const impressions = row.impressions || 0;
       const ctr = Number(((row.ctr || 0) * 100).toFixed(1));
       const position = Number((row.position || 0).toFixed(1));
       
-      // Weekly change (can be random/mocked for UI aesthetics if not tracking historical snapshots yet)
-      const change = Math.floor(Math.random() * 3) * (Math.random() > 0.3 ? 1 : -1);
+      const previousPosition = previousPositions.get(keyword);
+      // Calculate delta: if previous was 10 and current is 8, change is +2
+      const change = previousPosition !== undefined 
+        ? Number((previousPosition - position).toFixed(1)) 
+        : 0;
 
       return {
         keyword,
@@ -208,6 +248,19 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
     const top10Count = keywords.filter(k => k.position <= 10).length;
     const totalSearchVolume = keywords.reduce((acc, curr) => acc + curr.impressions, 0);
 
+    // Calculate overall metrics delta comparison vs previous week
+    const prevTotalKeywords = previousRows.length;
+    const prevAvgPosition = prevTotalKeywords > 0
+      ? Number((previousRows.reduce((acc: number, curr: any) => acc + (curr.position || 0), 0) / prevTotalKeywords).toFixed(1))
+      : 0;
+    const prevTop3Count = previousRows.filter((r: any) => (r.position || 0) <= 3).length;
+    const prevTop10Count = previousRows.filter((r: any) => (r.position || 0) <= 10).length;
+
+    // Delta matches format: difference in average ranking position (positive represents improvement, i.e., rank position decreased)
+    const avgPositionDelta = prevAvgPosition > 0 ? Number((prevAvgPosition - avgPosition).toFixed(1)) : 0;
+    const top3Delta = top3Count - prevTop3Count;
+    const top10Delta = top10Count - prevTop10Count;
+
     return {
       success: true,
       keywords,
@@ -215,7 +268,10 @@ export async function getSearchConsoleDataAction(businessProfileId: string): Pro
         avgPosition,
         top3Count,
         top10Count,
-        totalSearchVolume
+        totalSearchVolume,
+        avgPositionDelta,
+        top3Delta,
+        top10Delta
       }
     };
 

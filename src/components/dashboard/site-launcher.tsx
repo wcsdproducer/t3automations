@@ -145,6 +145,8 @@ export function SiteLauncher() {
   // GSC actions states
   const [generatingGscToken, setGeneratingGscToken] = useState(false);
   const [verifyingGsc, setVerifyingGsc] = useState(false);
+  const [customGscToken, setCustomGscToken] = useState('');
+  const [isSavingToken, setIsSavingToken] = useState(false);
 
   // Local SEO states
   const [targetCity, setTargetCity] = useState('');
@@ -193,6 +195,11 @@ export function SiteLauncher() {
           nicheKeywords: updatedKeywords,
         }, { merge: true });
       }
+
+      // Initialize custom token input with existing token if present
+      if (profile.googleSiteVerification && !customGscToken) {
+        setCustomGscToken(profile.googleSiteVerification);
+      }
     }
   }, [profile, firestore, profileId]);
 
@@ -200,7 +207,7 @@ export function SiteLauncher() {
   useEffect(() => {
     if (activeDomainDoc) {
       if (activeDomainDoc.status === 'active') {
-        if (profile?.googleSiteVerification) {
+        if (profile?.googleSiteVerified) {
           setActiveStep('sitemap-indexing');
         } else {
           setActiveStep('gsc-verification');
@@ -343,6 +350,41 @@ export function SiteLauncher() {
       });
     } finally {
       setGeneratingGscToken(false);
+    }
+  };
+
+  const handleSaveCustomToken = async () => {
+    if (!profileId || !firestore) return;
+    if (!customGscToken.trim()) {
+      toast({ title: 'Invalid Token', description: 'Please enter a valid token or meta tag.', variant: 'destructive' });
+      return;
+    }
+    
+    setIsSavingToken(true);
+    try {
+      // Extract token if user pasted the full HTML meta tag
+      const match = customGscToken.match(/content="([^"]+)"/);
+      const cleanToken = match ? match[1] : customGscToken.trim();
+
+      const docRef = doc(firestore, 'businessProfiles', profileId);
+      await setDocumentNonBlocking(docRef, {
+        googleSiteVerification: cleanToken,
+      }, { merge: true });
+      
+      setCustomGscToken(cleanToken);
+      
+      toast({
+        title: 'Verification Tag Stored',
+        description: 'Successfully saved custom Google Site Verification tag. It will be injected into your site headers.',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error Saving Token',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSavingToken(false);
     }
   };
 
@@ -498,7 +540,7 @@ export function SiteLauncher() {
       case 'dns':
         return activeDomainDoc?.status === 'active';
       case 'gsc-verification':
-        return !!profile?.googleSiteVerified || (!!profile?.googleSiteVerification && activeDomainDoc?.status === 'active');
+        return !!profile?.googleSiteVerified;
       case 'sitemap-indexing':
         return !!profile?.sitemapSubmitted;
       case 'local-seo':
@@ -845,14 +887,34 @@ export function SiteLauncher() {
                           <p className="text-xs text-muted-foreground">
                             You haven&apos;t generated a Google verification token yet.
                           </p>
-                          <Button
-                            onClick={handleGetGscToken}
-                            disabled={generatingGscToken}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-xs h-9"
-                          >
-                            {generatingGscToken ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                            Generate Google Meta Token
-                          </Button>
+                          <div className="space-y-2">
+                            <Label htmlFor="customGscToken" className="text-slate-300 font-semibold text-xs">Custom Verification Tag or Token</Label>
+                            <Input
+                              id="customGscToken"
+                              placeholder='e.g. <meta name="google-site-verification" content="YOUR_TOKEN" />'
+                              value={customGscToken}
+                              onChange={(e) => setCustomGscToken(e.target.value)}
+                              className="bg-slate-900 border-border/50 text-white placeholder:text-slate-500 text-xs"
+                            />
+                          </div>
+                          <div className="flex gap-3">
+                            <Button
+                              onClick={handleSaveCustomToken}
+                              disabled={isSavingToken || !customGscToken}
+                              className="bg-indigo-600 hover:bg-indigo-500 text-xs h-9 flex-1"
+                            >
+                              {isSavingToken ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Settings className="mr-2 h-4 w-4" />}
+                              Save & Inject Verification Tag
+                            </Button>
+                            <Button
+                              onClick={handleGetGscToken}
+                              disabled={generatingGscToken}
+                              variant="outline"
+                              className="text-xs h-9"
+                            >
+                              {generatingGscToken ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Auto-Generate'}
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -860,7 +922,7 @@ export function SiteLauncher() {
                     <div className="space-y-3">
                       <h4 className="text-sm font-semibold text-slate-200">Trigger Ownership Verification</h4>
                       <p className="text-xs text-muted-foreground">
-                        After saving the token and ensuring SSL is active (takes about 15 minutes), verify GSC ownership and add the property to your Google workspace console automatically.
+                        After saving/injecting your token, wait a few moments (or up to 15 minutes for SSL/DNS to propagate). Then click below to verify ownership directly with Google Search Console.
                       </p>
                       <Button
                         onClick={handleVerifyGscOwnership}

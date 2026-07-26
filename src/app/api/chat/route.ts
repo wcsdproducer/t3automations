@@ -99,7 +99,7 @@ Conversation Guidelines:
 
     // 4. Generate AI response
     const response = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: 'vertexai/gemini-1.5-flash',
       messages: formattedHistory,
       system: systemPrompt,
       tools: [submitLeadTool],
