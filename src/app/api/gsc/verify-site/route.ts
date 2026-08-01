@@ -173,7 +173,32 @@ export async function POST(req: NextRequest) {
           }
         );
 
-        console.log(`[gsc-verify] Property registered in Search Console. Submitting sitemap...`);
+        console.log(`[gsc-verify] Property registered in Search Console. Delegating permissions...`);
+
+        // B.1 Delegate Full Owner permission to john@t3kniq.com
+        const targetEmail = "john@t3kniq.com";
+        const permissionsUrl = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(canonicalSiteUrl)}/permissions/${encodeURIComponent(targetEmail)}`;
+        try {
+          await axios.put(
+            permissionsUrl,
+            {
+              permissionLevel: "siteOwner",
+              userEmail: targetEmail
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+          console.log(`[gsc-verify] Successfully delegated siteOwner permissions to ${targetEmail}`);
+        } catch (permErr: any) {
+          console.error('[gsc-verify] Permission delegation failed:', permErr.response?.data || permErr.message);
+          // Gracefully continue since ownership is already verified and property added
+        }
+
+        console.log(`[gsc-verify] Property permissions updated. Submitting sitemap...`);
 
         // C. Submit Sitemap (PUT)
         const sitemapFeedUrl = `${canonicalSiteUrl}sitemap.xml`;
