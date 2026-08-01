@@ -3,10 +3,11 @@ import type { NextRequest } from 'next/server';
 
 export const config = {
     matcher: [
-          '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
-          '/sitemap.xml',
-          '/robots.txt',
-        ],
+      '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
+      '/sitemap.xml',
+      '/robots.txt',
+      '/google0d0f48a865c38e34.html',
+    ],
 };
 
 export default function middleware(req: NextRequest) {
