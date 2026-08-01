@@ -542,7 +542,7 @@ export function SiteLauncher() {
       case 'gsc-verification':
         return !!profile?.googleSiteVerified;
       case 'sitemap-indexing':
-        return !!profile?.sitemapSubmitted;
+        return !!profile?.googleSiteIndexed;
       case 'local-seo':
         return !!profile?.targetCity && !!profile?.nicheKeywords && profile.nicheKeywords.length > 0;
       case 'blog-seo':

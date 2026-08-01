@@ -120,10 +120,10 @@ export async function POST(req: NextRequest) {
     if (action === 'verify') {
       console.log(`[gsc-verify] Verifying ownership for: ${canonicalSiteUrl}`);
       try {
-        let webResource;
+        let verifyRes;
         try {
           // A. Trigger ownership verification call
-          const verifyRes = await axios.post(
+          verifyRes = await axios.post(
             'https://www.googleapis.com/siteVerification/v1/webResource?verificationMethod=META',
             {
               site: {
@@ -138,66 +138,28 @@ export async function POST(req: NextRequest) {
               },
             }
           );
-          webResource = verifyRes.data;
         } catch (verifyErr: any) {
-          console.log(`[gsc-verify] Verification call returned error, checking if already verified:`, verifyErr.message);
-          try {
-            const getRes = await axios.get(
-              `https://www.googleapis.com/siteVerification/v1/webResource/${encodeURIComponent(canonicalSiteUrl)}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`
-                }
-              }
-            );
-            webResource = getRes.data;
-          } catch (getErr: any) {
-            console.error('[gsc-verify] API verification check failed:', verifyErr.response?.data || verifyErr.message);
-            return NextResponse.json(
-              {
-                success: false,
-                error: 'Google could not verify ownership. Please ensure your verification tag is live on your site, and wait a few minutes for DNS and SSL to propagate.',
-              },
-              { status: 400 }
-            );
-          }
+          console.error('[gsc-verify] API verification check failed:', verifyErr.response?.data || verifyErr.message);
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Google could not verify ownership. Please ensure your verification tag is live on your site, and wait a few minutes for DNS and SSL to propagate.',
+            },
+            { status: 400 }
+          );
         }
 
-        const webResourceId = webResource.id;
-        const currentOwners = webResource.owners || [];
-        
-        // Retrieve business profile to find user email
-        const businessDoc = await businessDocRef.get();
-        const businessData = businessDoc.data();
-        const userEmail = businessData?.contactEmail || businessData?.serviceAccountEmail;
-
-        if (userEmail && !currentOwners.includes(userEmail)) {
-          console.log(`[gsc-verify] Sharing ownership with user: ${userEmail}`);
-          const updatedOwners = [...currentOwners, userEmail];
-          try {
-            await axios.put(
-              `https://www.googleapis.com/siteVerification/v1/webResource/${encodeURIComponent(webResourceId)}`,
-              {
-                site: {
-                  identifier: canonicalSiteUrl,
-                  type: 'SITE',
-                },
-                owners: updatedOwners
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                  'Content-Type': 'application/json',
-                },
-              }
-            );
-            console.log(`[gsc-verify] Ownership shared successfully with ${userEmail}.`);
-          } catch (shareErr: any) {
-            console.error('[gsc-verify] Failed to share ownership with user:', shareErr.response?.data || shareErr.message);
-          }
+        if (verifyRes.status !== 200 && verifyRes.status !== 201) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Google could not verify ownership. Please ensure your verification tag is live on your site, and wait a few minutes for DNS and SSL to propagate.',
+            },
+            { status: 400 }
+          );
         }
 
-        console.log(`[gsc-verify] Ownership verified/confirmed. Registering in Search Console...`);
+        console.log(`[gsc-verify] Ownership verified. Registering in Search Console...`);
 
         // B. Add the property to Search Console (PUT)
         const gscUrl = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(canonicalSiteUrl)}`;
