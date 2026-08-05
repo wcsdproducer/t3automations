@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import {
   Loader2,
@@ -417,6 +418,22 @@ export function SiteLauncher() {
     }
   };
 
+  const handleToggleAnalyticsLinked = async (checked: boolean) => {
+    if (!profileId || !firestore) return;
+    try {
+      const docRef = doc(firestore, 'businessProfiles', profileId);
+      await setDocumentNonBlocking(docRef, {
+        googleAnalyticsLinked: checked,
+      }, { merge: true });
+      toast({
+        title: checked ? 'Analytics Linked' : 'Analytics Unlinked',
+        description: 'Updated your Google Analytics integration status.',
+      });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   const handleSaveLocalSeo = async () => {
     if (!profileId || !firestore) return;
     setIsSavingLocalSeo(true);
@@ -542,7 +559,7 @@ export function SiteLauncher() {
       case 'gsc-verification':
         return !!profile?.googleSiteVerified;
       case 'sitemap-indexing':
-        return !!profile?.googleSiteIndexed;
+        return !!profile?.googleSiteIndexed && !!profile?.googleAnalyticsLinked;
       case 'local-seo':
         return !!profile?.targetCity && !!profile?.nicheKeywords && profile.nicheKeywords.length > 0;
       case 'blog-seo':
@@ -1044,6 +1061,58 @@ export function SiteLauncher() {
                         {verifyingGsc ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         {profile?.sitemapSubmitted ? 'Sitemap Successfully Submitted' : 'Submit Sitemap Now'}
                       </Button>
+                    </div>
+
+                    {/* Google Analytics & Search Console Link Instructions */}
+                    <div className="p-4 rounded-xl border border-blue-500/20 bg-blue-500/5 space-y-4">
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-semibold text-blue-400 flex items-center gap-2">
+                          <ExternalLink className="h-4 w-4" />
+                          Link GA4 & Google Search Console
+                        </h4>
+                        <p className="text-[11px] text-slate-400 leading-relaxed">
+                          To get accurate reporting and complete this step, you must link your Google Analytics 4 property to your Google Search Console. 
+                          This allows search queries and indexing data to flow directly into your dashboard.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-slate-900/60 rounded-lg p-3 border border-slate-800 text-[11px] text-slate-300 space-y-2">
+                        <p className="font-semibold text-slate-200">Instructions:</p>
+                        <ol className="list-decimal list-inside space-y-1.5 ml-1">
+                          <li>Click the button below to open Google Analytics Admin.</li>
+                          <li>Find <strong>Search Console links</strong> under Product Links.</li>
+                          <li>Click <strong>Link</strong> and choose your verified property: <code className="bg-slate-800 px-1 py-0.5 rounded text-blue-300">{activeDomain}</code></li>
+                          <li>Select your web data stream and click Submit.</li>
+                        </ol>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Button
+                          variant="outline"
+                          className="bg-blue-600/10 hover:bg-blue-600/20 border-blue-500/30 text-blue-400 text-xs h-9"
+                          onClick={() => window.open('https://analytics.google.com/analytics/web/#/admin/integrations/search-console', '_blank')}
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 mr-2" />
+                          Open GA4 Integrations
+                        </Button>
+                      </div>
+                      
+                      <div className="pt-2 border-t border-blue-500/20 flex items-start gap-3">
+                        <Checkbox 
+                          id="ga4-linked" 
+                          checked={!!profile?.googleAnalyticsLinked}
+                          onCheckedChange={(checked) => handleToggleAnalyticsLinked(checked as boolean)}
+                          className="mt-0.5 data-[state=checked]:bg-blue-600 data-[state=checked]:text-white border-slate-600"
+                        />
+                        <div className="space-y-1 leading-none">
+                          <label
+                            htmlFor="ga4-linked"
+                            className="text-[11px] font-medium text-slate-300 cursor-pointer"
+                          >
+                            I have linked the Search Console and Google Analytics properties.
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
