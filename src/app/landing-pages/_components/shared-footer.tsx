@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { slugify } from '@/lib/utils';
 
 interface SharedFooterProps {
   businessProfileId?: string;
@@ -99,13 +100,11 @@ export function SharedFooter({
               <ul className="flex flex-wrap gap-x-4 gap-y-2">
                 {neighborhoods.map((area, idx) => {
                   const name = typeof area === 'string' ? area : area.name;
-                  const url = typeof area === 'string' ? defaultMapUrl(`${area} ${companyName}`) : area.mapUrl;
+                  const url = `/${slugify(name)}`;
                   return (
                     <li key={idx}>
                       <a 
                         href={url}
-                        target="_blank" 
-                        rel="noopener noreferrer"
                         className={`text-sm transition-colors ${linkClass}`}
                       >
                         {name}
@@ -143,18 +142,20 @@ export function SharedFooter({
               <div className="space-y-4 pt-4 border-t border-slate-200/40">
                 <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Surrounding Cities</h4>
                 <ul className="flex flex-wrap gap-x-4 gap-y-2">
-                  {surroundingCities.map((city, idx) => (
-                    <li key={idx}>
-                      <a 
-                        href={city.mapUrl}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className={`text-sm transition-colors ${linkClass}`}
-                      >
-                        {city.name}
-                      </a>
-                    </li>
-                  ))}
+                  {surroundingCities.map((city, idx) => {
+                    const name = typeof city === 'string' ? city : city.name;
+                    const url = `/${slugify(name)}`;
+                    return (
+                      <li key={idx}>
+                        <a 
+                          href={url}
+                          className={`text-sm transition-colors ${linkClass}`}
+                        >
+                          {name}
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}

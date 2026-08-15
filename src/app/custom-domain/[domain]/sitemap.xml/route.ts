@@ -1,4 +1,5 @@
 import { admin } from '@/lib/firebase-admin';
+import { slugify } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,9 +34,15 @@ export async function GET(
     return new Response('Domain not mapped to any profile', { status: 404 });
   }
 
-  // 2. Fetch blogs for this profile
+  // 2. Fetch blogs and business profile for this profile
   let blogs: any[] = [];
+  let localSeoData: any = null;
   try {
+    const bpSnap = await db.collection('businessProfiles').doc(businessProfileId).get();
+    if (bpSnap.exists) {
+      localSeoData = bpSnap.data()?.localSeoData;
+    }
+
     const snap = await db
       .collection('businessProfiles')
       .doc(businessProfileId)
@@ -44,10 +51,34 @@ export async function GET(
       .get();
     blogs = snap.docs.map(doc => doc.data());
   } catch (error) {
-    console.error('[sitemap-custom-domain] Failed to fetch blogs:', error);
+    console.error('[sitemap-custom-domain] Failed to fetch data:', error);
   }
 
   const baseUrl = `https://${cleanDomain}`;
+
+  const neighborhoods: any[] = localSeoData?.neighborhoods || [];
+  const surroundingCities: any[] = localSeoData?.surroundingCities || [];
+
+  const locationUrls = [
+    ...neighborhoods.map((area: any) => {
+      const name = typeof area === 'string' ? area : area.name;
+      return name ? `
+  <url>
+    <loc>${baseUrl}/${slugify(name)}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>` : '';
+    }),
+    ...surroundingCities.map((city: any) => {
+      const name = typeof city === 'string' ? city : city.name;
+      return name ? `
+  <url>
+    <loc>${baseUrl}/${slugify(name)}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>` : '';
+    })
+  ].join('');
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -67,7 +98,7 @@ export async function GET(
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  `).join('').trim()}
+  `).join('').trim()}${locationUrls}
 </urlset>`;
 
   return new Response(sitemapXml.trim(), {
