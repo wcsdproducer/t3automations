@@ -23,8 +23,17 @@ const excludedIds = [
 async function generateSingleBlog(
   companyName: string,
   serviceCategory: string,
-  existingSlugs: string[]
+  existingSlugs: string[],
+  localSeoData?: any
 ) {
+  let locationInstruction = '';
+  if (localSeoData && localSeoData.targetAreas && Array.isArray(localSeoData.targetAreas)) {
+    const locations = localSeoData.targetAreas.map((a: any) => a.city || a).filter(Boolean);
+    if (locations.length > 0) {
+      locationInstruction = `\n6. **Contextual Internal Linking:** Incorporate exactly 1-2 HTML anchor links (e.g. <a href="/">Home</a> or <a href="/city-name">City Name</a>) naturally within the body copy linking to the homepage or targeted city sub-slugs. Use the slugify function on the surrounding cities and neighborhoods: ${locations.join(', ')}.`;
+    }
+  }
+
   const promptText = `You are a professional SEO Copywriter specializing in Content Marketing and Conversion Rate Optimization (CRO) for local service businesses.
 
 Write a comprehensive, high-quality blog post for the following business:
@@ -39,7 +48,7 @@ SEO Writing Guidelines:
 2. **Structural Depth:** Use exactly 3-5 H2 headings containing local questions. Use bulleted/numbered lists for steps.
 3. **Keywords & Value:** Incorporate target search terms naturally. Explain *why* things work based on expert-level experience (E-E-A-T).
 4. **CTA Embedding:** Naturally reference ${companyName} and how their professional services can help in the conclusion.
-5. **No placeholders:** Do not use "[City]" or "[Phone]". Everything must be fully filled out.`;
+5. **No placeholders:** Do not use "[City]" or "[Phone]". Everything must be fully filled out.${locationInstruction}`;
 
   const response = await ai.generate({
     model: 'vertexai/gemini-2.5-flash',
@@ -135,7 +144,8 @@ export async function GET(request: Request) {
         const blogData = await generateSingleBlog(
           profile.businessName || 'Local Service Pro',
           profile.service || 'Home Services',
-          existingSlugs
+          existingSlugs,
+          profile.localSeoData
         );
 
         if (blogData) {

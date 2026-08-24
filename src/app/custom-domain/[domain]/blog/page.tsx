@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Calendar, ArrowLeft, BookOpen } from 'lucide-react';
+import { SharedFooter } from '@/app/landing-pages/_components/shared-footer';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -247,14 +248,12 @@ export default async function CustomDomainBlogIndexPage({
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 px-6 text-center text-slate-500 border-t bg-white">
-        <p>&copy; {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
-        <div className="mt-4 flex justify-center gap-4 text-sm">
-          <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline">Privacy Policy</a>
-          <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline">Terms of Service</a>
-        </div>
-      </footer>
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink="/blog"
+        localSeoData={profile.localSeoData}
+      />
     </div>
   );
 }
