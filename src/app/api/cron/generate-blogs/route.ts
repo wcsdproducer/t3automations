@@ -20,35 +20,71 @@ const excludedIds = [
   'hrFjbsiMW4ex2RpVaHYhkOmgmp72', // Test Landlord Admin
 ];
 
+import { slugify } from '@/lib/utils';
+
 async function generateSingleBlog(
   companyName: string,
   serviceCategory: string,
+  targetCity: string,
   existingSlugs: string[],
   localSeoData?: any
 ) {
   let locationInstruction = '';
-  if (localSeoData && localSeoData.targetAreas && Array.isArray(localSeoData.targetAreas)) {
-    const locations = localSeoData.targetAreas.map((a: any) => a.city || a).filter(Boolean);
-    if (locations.length > 0) {
-      locationInstruction = `\n6. **Contextual Internal Linking:** Incorporate exactly 1-2 HTML anchor links (e.g. <a href="/">Home</a> or <a href="/city-name">City Name</a>) naturally within the body copy linking to the homepage or targeted city sub-slugs. Use the slugify function on the surrounding cities and neighborhoods: ${locations.join(', ')}.`;
+  let availableLocations: { name: string; slug: string }[] = [];
+
+  if (localSeoData) {
+    if (Array.isArray(localSeoData.surroundingCities)) {
+      availableLocations.push(
+        ...localSeoData.surroundingCities.map((c: any) => ({
+          name: c.name || c,
+          slug: slugify(c.name || c)
+        }))
+      );
+    }
+    if (Array.isArray(localSeoData.neighborhoods)) {
+      availableLocations.push(
+        ...localSeoData.neighborhoods.map((n: any) => ({
+          name: n.name || n,
+          slug: slugify(n.name || n)
+        }))
+      );
     }
   }
 
-  const promptText = `You are a professional SEO Copywriter specializing in Content Marketing and Conversion Rate Optimization (CRO) for local service businesses.
+  if (availableLocations.length > 0) {
+    // Pick 3 random target locations to provide as anchor candidates
+    const shuffled = [...availableLocations].sort(() => 0.5 - Math.random());
+    const candidates = shuffled.slice(0, 3);
+    const linkExamples = candidates.map(c => `<li><a href="/${c.slug}">${c.name}</a> (URL: /${c.slug})</li>`).join('\n');
+    
+    locationInstruction = `
+6. **Local Commercial Focus & Contextual Internal Linking:**
+   - Write specifically about common challenges, regional environmental factors, emergency situations, or pricing/service considerations in **${targetCity}** and its surrounding communities.
+   - You MUST embed exactly 1 to 2 HTML anchor links naturally into the body copy using the following local area service paths:
+${linkExamples}
+   - Example anchor usage: "...if you need dependable <a href="/${candidates[0].slug}">${serviceCategory} in ${candidates[0].name}</a>, our team is equipped..."`;
+  }
 
-Write a comprehensive, high-quality blog post for the following business:
+  const promptText = `You are an elite Local SEO Content Strategist & Conversion Copywriter specializing in ${serviceCategory} businesses.
+
+Write a high-converting, deeply helpful, and locally relevant blog post for:
 - Business Name: ${companyName}
-- Service Category: ${serviceCategory}
+- Service: ${serviceCategory}
+- Primary Market: ${targetCity || 'Local Service Area'}
 
-Here are the slugs of existing articles on this website: ${JSON.stringify(existingSlugs)}
-Your new article MUST cover a completely different topic or angle to prevent content cannibalization. Focus on helpful tips, maintenance checklists, emergency advice, or buying guides relevant to the Service Category.
+Existing article slugs on this site (DO NOT duplicate): ${JSON.stringify(existingSlugs.slice(-20))}
 
-SEO Writing Guidelines:
-1. **Direct Answer Block:** Start the body of the article (inside the content field) with a 40-60 word direct, bold answer to a common user question (ideal for Google Featured Snippets/AI Overviews).
-2. **Structural Depth:** Use exactly 3-5 H2 headings containing local questions. Use bulleted/numbered lists for steps.
-3. **Keywords & Value:** Incorporate target search terms naturally. Explain *why* things work based on expert-level experience (E-E-A-T).
-4. **CTA Embedding:** Naturally reference ${companyName} and how their professional services can help in the conclusion.
-5. **No placeholders:** Do not use "[City]" or "[Phone]". Everything must be fully filled out.${locationInstruction}`;
+Content Strategy Guidelines:
+1. **Direct Answer / Snippet Block:** The very first paragraph of content MUST start with a 40-60 word bold, authoritative summary directly answering the user's primary commercial or urgent inquiry (optimized for Google Featured Snippets & AI Overviews).
+2. **Commercial & Problem-Solving Depth:** Rather than generic DIY tutorials, focus on high-intent topics:
+   - Cost factors, pricing breakdowns, and repair vs. replace decisions in ${targetCity}.
+   - Regional seasonal hazards (weather, hard water, local pests, tree root damage).
+   - What to expect during a professional inspection or service call.
+   - Signs of critical system failure requiring immediate local attention.
+3. **Structured Formatting:** Include 3-5 H2 headings (framed as common customer questions), bulleted checklists, and clear step-by-step guidance.
+4. **E-E-A-T & Trust:** Write with the voice of a licensed, experienced local specialist. Explain the *why* and *how* with real industry terminology.
+5. **Brand CTA:** Conclude with a strong, natural call-to-action inviting the reader to call ${companyName} for local service in ${targetCity}.${locationInstruction}
+6. **No Placeholders:** Never output brackets like "[City]" or "[Phone]". Everything must be realistic, factual, and complete.`;
 
   const response = await ai.generate({
     model: 'vertexai/gemini-2.5-flash',
@@ -144,6 +180,7 @@ export async function GET(request: Request) {
         const blogData = await generateSingleBlog(
           profile.businessName || 'Local Service Pro',
           profile.service || 'Home Services',
+          profile.targetCity || 'Local Service Area',
           existingSlugs,
           profile.localSeoData
         );

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Phone, Calendar, ArrowLeft } from 'lucide-react';
 import { BlogLeadForm } from '@/components/BlogLeadForm';
 import { Metadata } from 'next';
+import { SharedFooter } from '@/app/landing-pages/_components/shared-footer';
 
 function formatPhone(value: string) {
   if (!value) return value;
@@ -175,27 +176,55 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    image: post.imageUrl || undefined,
-    datePublished: post.createdAt,
-    author: {
-      '@type': 'Organization',
-      name: companyName,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: companyName,
-      logo: {
-        '@type': 'ImageObject',
-        url: profile.logoUrl || undefined,
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}`
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Blog',
+            'item': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog`
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': post.title,
+            'item': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`
+          }
+        ]
       },
-    },
-    description: post.excerpt || '',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`,
-    },
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        image: post.imageUrl || undefined,
+        datePublished: post.createdAt,
+        author: {
+          '@type': 'Organization',
+          name: companyName,
+          url: `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}`
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: companyName,
+          logo: {
+            '@type': 'ImageObject',
+            url: profile.logoUrl || undefined,
+          },
+        },
+        description: post.excerpt || '',
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`,
+        },
+      }
+    ]
   };
 
   return (
@@ -341,14 +370,13 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 px-6 text-center text-slate-500 border-t bg-white">
-        <p>&copy; {new Date().getFullYear()} {companyName}. All Rights Reserved.</p>
-        <div className="mt-4 flex justify-center gap-4 text-sm">
-          <a href={`/api/legal/privacy?userId=${businessProfileId}`} target="_blank" className="hover:underline">Privacy Policy</a>
-          <a href={`/api/legal/tos?userId=${businessProfileId}`} target="_blank" className="hover:underline">Terms of Service</a>
-        </div>
-      </footer>
+      {/* Footer with Dynamic Local Areas */}
+      <SharedFooter
+        businessProfileId={businessProfileId}
+        companyName={companyName}
+        blogLink="/blog"
+        localSeoData={profile.localSeoData}
+      />
     </div>
   );
 }

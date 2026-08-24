@@ -12,6 +12,19 @@ export async function GET(
   const robotsTxt = `User-agent: *
 Allow: /
 
+# AI & Search Crawlers for GEO
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
 Sitemap: https://${cleanDomain}/sitemap.xml
 `;
 
