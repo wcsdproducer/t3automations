@@ -27,31 +27,14 @@ async function getBusinessData(domain: string) {
   const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, '');
   
   let businessProfileId: string | null = null;
+  const db = admin.firestore();
+
   try {
-    let snap = await admin
-      .firestore()
+    const snap = await db
       .collectionGroup('customDomains')
       .where('id', '==', cleanDomain)
       .limit(1)
       .get();
-
-    if (snap.empty) {
-      snap = await admin
-        .firestore()
-        .collectionGroup('customDomains')
-        .where('domain', '==', cleanDomain)
-        .limit(1)
-        .get();
-    }
-
-    if (snap.empty) {
-      snap = await admin
-        .firestore()
-        .collectionGroup('customDomains')
-        .where('domainName', '==', cleanDomain)
-        .limit(1)
-        .get();
-    }
 
     if (!snap.empty) {
       businessProfileId = snap.docs[0].data().businessProfileId;
@@ -60,10 +43,25 @@ async function getBusinessData(domain: string) {
     console.error('[brand-page] lookup error:', error);
   }
 
+  // Fallback: direct document lookup if document key matches domain
+  if (!businessProfileId) {
+    try {
+      const profilesSnap = await db.collection('businessProfiles').get();
+      for (const pDoc of profilesSnap.docs) {
+        const domSnap = await pDoc.ref.collection('customDomains').doc(cleanDomain).get();
+        if (domSnap.exists) {
+          businessProfileId = pDoc.id;
+          break;
+        }
+      }
+    } catch (e) {
+      console.error('[brand-page] profile scan error:', e);
+    }
+  }
+
   if (!businessProfileId) return null;
 
-  const profileDoc = await admin
-    .firestore()
+  const profileDoc = await db
     .collection('businessProfiles')
     .doc(businessProfileId)
     .get();
