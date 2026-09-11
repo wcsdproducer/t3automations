@@ -375,6 +375,7 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
         businessProfileId={businessProfileId}
         companyName={companyName}
         blogLink="/blog"
+        service={profile.service}
         localSeoData={profile.localSeoData}
       />
     </div>

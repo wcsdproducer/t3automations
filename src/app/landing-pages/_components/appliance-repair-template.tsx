@@ -532,6 +532,7 @@ export function ApplianceRepairTemplate({
         businessProfileId={businessProfileId}
         companyName={companyName}
         blogLink={blogLink}
+        service={service}
         localSeoData={localSeoData}
         theme="light"
       />

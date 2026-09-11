@@ -2,11 +2,13 @@
 
 import React from 'react';
 import { slugify } from '@/lib/utils';
+import { getBrandsForNiche } from '@/lib/constants/brands';
 
 interface SharedFooterProps {
   businessProfileId?: string;
   companyName?: string;
   blogLink?: string;
+  service?: string;
   localSeoData?: {
     surroundingCities?: Array<{ name: string; mapUrl: string }>;
     neighborhoods?: Array<{ name: string; mapUrl: string }> | string[];
@@ -22,6 +24,7 @@ export function SharedFooter({
   businessProfileId = '',
   companyName = '',
   blogLink = '/blog',
+  service = '',
   localSeoData = null,
   className = '',
   theme = 'light'
@@ -31,10 +34,12 @@ export function SharedFooter({
   const neighborhoods = localSeoData?.neighborhoods || [];
   const networkLinks = localSeoData?.networkLinks || [];
   const surroundingCities = localSeoData?.surroundingCities || [];
+  const brands = getBrandsForNiche(service);
 
   const hasGeoData = neighborhoods.length > 0;
   const hasNetworkData = networkLinks.length > 0;
   const hasCityData = surroundingCities.length > 0;
+  const hasBrands = brands.length > 0;
 
   const bgClass = isDark ? 'bg-slate-950 border-slate-900 text-slate-400' : 'bg-slate-50 border-slate-200/60 text-slate-500';
   const headingClass = isDark ? 'text-slate-200 font-bold' : 'text-slate-900 font-bold';
@@ -59,7 +64,7 @@ export function SharedFooter({
             </p>
           </div>
 
-          {/* Column 2: Navigation Links */}
+          {/* Column 2: Navigation & Brands */}
           <div className="space-y-4">
             <h4 className={`text-xs uppercase font-bold tracking-wider ${headingClass}`}>
               Quick Links
@@ -91,6 +96,23 @@ export function SharedFooter({
                 </a>
               </li>
             </ul>
+
+            {hasBrands && (
+              <div className="pt-4 border-t border-slate-200/40">
+                <h4 className={`text-xs uppercase font-bold tracking-wider ${headingClass} mb-2.5`}>
+                  Brands We Service
+                </h4>
+                <ul className="flex flex-wrap gap-x-3 gap-y-1.5 text-xs">
+                  {brands.map((b, idx) => (
+                    <li key={idx}>
+                      <a href={`/brands/${b.slug}`} className={`transition-colors ${linkClass}`}>
+                        {b.name} Repair
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Column 3: Areas Serviced */}

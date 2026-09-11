@@ -1,5 +1,6 @@
 import { admin } from '@/lib/firebase-admin';
 import { slugify } from '@/lib/utils';
+import { getBrandsForNiche } from '@/lib/constants/brands';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,10 +38,13 @@ export async function GET(
   // 2. Fetch blogs and business profile for this profile
   let blogs: any[] = [];
   let localSeoData: any = null;
+  let service: string = '';
   try {
     const bpSnap = await db.collection('businessProfiles').doc(businessProfileId).get();
     if (bpSnap.exists) {
-      localSeoData = bpSnap.data()?.localSeoData;
+      const bpData = bpSnap.data() || {};
+      localSeoData = bpData.localSeoData;
+      service = bpData.service || '';
     }
 
     const snap = await db
@@ -80,6 +84,14 @@ export async function GET(
     })
   ].join('');
 
+  const brandUrls = getBrandsForNiche(service).map(brand => `
+  <url>
+    <loc>${baseUrl}/brands/${brand.slug}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  `).join('').trim();
+
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -92,7 +104,7 @@ export async function GET(
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  ${blogs.map(blog => `
+  ${brandUrls ? `${brandUrls}\n  ` : ''}${blogs.map(blog => `
   <url>
     <loc>${baseUrl}/blog/${blog.slug}</loc>
     <changefreq>monthly</changefreq>

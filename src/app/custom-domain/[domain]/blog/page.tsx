@@ -252,6 +252,7 @@ export default async function CustomDomainBlogIndexPage({
         businessProfileId={businessProfileId}
         companyName={companyName}
         blogLink="/blog"
+        service={profile.service}
         localSeoData={profile.localSeoData}
       />
     </div>
