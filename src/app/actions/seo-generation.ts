@@ -61,40 +61,15 @@ Provide accurate, real local names. Do not hallucinate.`;
       mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name} ${targetCity} ${serviceName}`)}`,
     }));
 
-    // 3. Generate cross-linking network links from other owned sites in Firestore
-    console.log('[seo-generation] Generating network interlinking across active websites...');
-    const allProfilesSnap = await db.collection('businessProfiles').get();
-    const networkLinks: Array<{ anchor: string; url: string }> = [];
-
-    for (const doc of allProfilesSnap.docs) {
-      // Exclude self, and only include profiles with a customDomain configured
-      if (doc.id !== userId) {
-        const data = doc.data();
-        if (data.customDomain && data.customDomain.trim().length > 0) {
-          const domain = data.customDomain.trim();
-          const businessName = data.businessName || 'Partner Business';
-          const niche = data.service || data.niche || 'Local Services';
-          const city = data.targetCity || 'Tampa, FL';
-          
-          networkLinks.push({
-            anchor: `${niche} in ${city.split(',')[0]} (${businessName})`,
-            url: `https://${domain}`,
-          });
-        }
-      }
-    }
-
-    // Limit network links to 4 random partner websites to create a natural linking pattern
-    const shuffledNetwork = networkLinks.sort(() => 0.5 - Math.random()).slice(0, 4);
-
+    // 3. Do NOT cross-link unrelated client sites (avoids Google PBN / Link Scheme penalties)
     const localSeoData = {
       surroundingCities,
       neighborhoods,
-      networkLinks: shuffledNetwork,
+      networkLinks: [],
       generatedAt: new Date().toISOString(),
     };
 
-    console.log(`[seo-generation] Generated: ${surroundingCities.length} cities, ${neighborhoods.length} neighborhoods, ${shuffledNetwork.length} network links.`);
+    console.log(`[seo-generation] Generated: ${surroundingCities.length} cities, ${neighborhoods.length} neighborhoods (network cross-links disabled).`);
 
     // 4. Update the Firestore profile
     await profileRef.update({

@@ -91,11 +91,18 @@ export async function generateMetadata({
   const title = `${service} in ${cityName} | ${profile.businessName || 'Expert Service'}`;
   const description = `Top-rated ${service.toLowerCase()} in ${cityName}. Professional, reliable, and affordable. Call ${profile.businessName} today for a free estimate in ${cityName}!`;
   const canonicalUrl = `https://${cleanDomain}/${citySlug}`;
-  const logoUrl = profile.logoUrl || '';
+  const rawLogoUrl = profile.logoUrl || '';
+  const logoUrl = rawLogoUrl.startsWith('/') ? `https://${cleanDomain}${rawLogoUrl}` : rawLogoUrl;
+
+  // Only allow indexing for top 5 surrounding cities; noindex thin neighborhood/extra doorway pages
+  const top5CitySlugs = surroundingCities.slice(0, 5).map((loc: any) => slugify(typeof loc === 'string' ? loc : loc.name));
+  const shouldIndex = top5CitySlugs.includes(citySlug);
 
   return {
+    metadataBase: new URL(`https://${cleanDomain}`),
     title,
     description,
+    robots: shouldIndex ? { index: true, follow: true } : { index: false, follow: true },
     alternates: {
       canonical: canonicalUrl,
     },

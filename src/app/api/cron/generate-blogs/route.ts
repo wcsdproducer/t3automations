@@ -108,6 +108,18 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Automated bulk AI blog generation is paused to prevent Google Scaled Content Abuse penalties.
+  // Allow only explicit manual single-site generation when manual=true & userId are provided.
+  const isManual = searchParams.get('manual') === 'true';
+  const targetUserIdParam = searchParams.get('userId');
+  if (!isManual || !targetUserIdParam) {
+    return NextResponse.json({
+      success: true,
+      paused: true,
+      message: 'Automated daily AI blog generation is paused to protect domain SEO quality.',
+    });
+  }
+
   const db = admin.firestore();
   const logs: string[] = [];
   

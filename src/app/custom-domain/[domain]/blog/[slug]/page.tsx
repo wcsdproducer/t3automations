@@ -78,11 +78,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!snap.empty) {
       const data = snap.docs[0].data();
-      const canonicalUrl = `https://${domain.toLowerCase().trim().replace(/:\d+$/, '')}/blog/${slug}`;
+      const cleanDomain = domain.toLowerCase().trim().replace(/:\d+$/, '');
+      const canonicalUrl = `https://${cleanDomain}/blog/${slug}`;
+      const rawImageUrl = data.imageUrl || '';
+      const imageUrl = rawImageUrl.startsWith('/') ? `https://${cleanDomain}${rawImageUrl}` : rawImageUrl;
+
+      // Only index the top 10 most recent published posts to avoid Google Scaled Content Abuse demotion
+      const allPublishedSnap = await admin
+        .firestore()
+        .collection('businessProfiles')
+        .doc(businessProfileId)
+        .collection('blogs')
+        .where('status', '==', 'published')
+        .get();
+      const top10Slugs = allPublishedSnap.docs
+        .map(d => d.data())
+        .sort((a, b) => {
+          const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt || 0).getTime();
+          const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt || 0).getTime();
+          return tB - tA;
+        })
+        .slice(0, 10)
+        .map(b => b.slug);
+      const shouldIndex = data.seoIndexed === true || top10Slugs.includes(slug);
+
       return {
+        metadataBase: new URL(`https://${cleanDomain}`),
         title: data.metaTitle || `${data.title} | Blog`,
         description: data.metaDescription || data.excerpt || '',
         keywords: data.keywords || [],
+        robots: shouldIndex ? { index: true, follow: true } : { index: false, follow: true },
         alternates: {
           canonical: canonicalUrl,
         },
@@ -92,7 +117,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: canonicalUrl,
           type: 'article',
           publishedTime: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : undefined,
-          images: data.imageUrl ? [{ url: data.imageUrl }] : [],
+          images: imageUrl ? [{ url: imageUrl }] : [],
         },
       };
     }

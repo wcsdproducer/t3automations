@@ -31,13 +31,11 @@ export function SharedFooter({
 }: SharedFooterProps) {
   const isDark = theme === 'dark';
   
-  const neighborhoods = localSeoData?.neighborhoods || [];
-  const networkLinks = localSeoData?.networkLinks || [];
-  const surroundingCities = localSeoData?.surroundingCities || [];
+  // Only expose top 5 surrounding cities to avoid doorway-page link bloat.
+  // Never render cross-domain networkLinks (PBN footprint).
+  const surroundingCities = (localSeoData?.surroundingCities || []).slice(0, 5);
   const brands = getBrandsForNiche(service);
 
-  const hasGeoData = neighborhoods.length > 0;
-  const hasNetworkData = networkLinks.length > 0;
   const hasCityData = surroundingCities.length > 0;
   const hasBrands = brands.length > 0;
 
@@ -115,13 +113,13 @@ export function SharedFooter({
             )}
           </div>
 
-          {/* Column 3: Areas Serviced */}
-          {hasGeoData && (
+          {/* Column 3: Service Areas (Top 5 Surrounding Cities) */}
+          {hasCityData && (
             <div className="space-y-4">
-              <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Areas We Serve</h4>
+              <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Service Areas</h4>
               <ul className="flex flex-wrap gap-x-4 gap-y-2">
-                {neighborhoods.map((area, idx) => {
-                  const name = typeof area === 'string' ? area : area.name;
+                {surroundingCities.map((city, idx) => {
+                  const name = typeof city === 'string' ? city : city.name;
                   const url = `/${slugify(name)}`;
                   return (
                     <li key={idx}>
@@ -137,51 +135,6 @@ export function SharedFooter({
               </ul>
             </div>
           )}
-
-          {/* Column 4: Partner Network & Surrounding Cities */}
-          <div className="space-y-8">
-            {hasNetworkData && (
-              <div className="space-y-4">
-                <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Partner Network</h4>
-                <ul className="flex flex-col gap-y-2.5">
-                  {networkLinks.map((link, idx) => (
-                    <li key={idx}>
-                      <a 
-                        href={link.url}
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className={`text-xs transition-colors ${hoverClass} underline decoration-indigo-500/30 hover:decoration-indigo-500 font-medium text-indigo-500/90`}
-                      >
-                        {link.anchor || link.label || 'Visit Partner'}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {hasCityData && (
-              <div className="space-y-4 pt-4 border-t border-slate-200/40">
-                <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Surrounding Cities</h4>
-                <ul className="flex flex-wrap gap-x-4 gap-y-2">
-                  {surroundingCities.map((city, idx) => {
-                    const name = typeof city === 'string' ? city : city.name;
-                    const url = `/${slugify(name)}`;
-                    return (
-                      <li key={idx}>
-                        <a 
-                          href={url}
-                          className={`text-sm transition-colors ${linkClass}`}
-                        >
-                          {name}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-          </div>
 
         </div>
       </div>

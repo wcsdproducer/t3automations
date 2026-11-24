@@ -74,9 +74,11 @@ export async function generateMetadata({
   const title = profile.metaTitle || profile.businessName || 'T3 Partner';
   const description = profile.metaDescription || `Professional ${profile.service || 'services'} in ${profile.targetCity || 'your area'}. Call today for a free estimate!`;
   const canonicalUrl = `https://${cleanDomain}`;
-  const logoUrl = profile.logoUrl || '';
+  const rawLogoUrl = profile.logoUrl || '';
+  const logoUrl = rawLogoUrl.startsWith('/') ? `https://${cleanDomain}${rawLogoUrl}` : rawLogoUrl;
 
   return {
+    metadataBase: new URL(`https://${cleanDomain}`),
     title,
     description,
     alternates: {

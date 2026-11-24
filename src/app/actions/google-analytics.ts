@@ -290,12 +290,15 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
           },
         });
 
-        // 4. Fetch summary metrics (bounce rate, avg session duration)
+        // 4. Fetch summary metrics for current 7d AND previous 7d for real week-over-week comparison
         const summaryRes = await client.request<any>({
           url: `https://analyticsdata.googleapis.com/v1beta/${propertyId}:runReport`,
           method: 'POST',
           data: {
-            dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+            dateRanges: [
+              { startDate: '7daysAgo', endDate: 'today' },
+              { startDate: '14daysAgo', endDate: '8daysAgo' },
+            ],
             metrics: [
               { name: 'activeUsers' },
               { name: 'screenPageViews' },
@@ -364,8 +367,14 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
             return { name, value };
           }).sort((a: any, b: any) => b.value - a.value).slice(0, 5);
 
-          // Parse summary metrics
-          const summaryMetrics = summaryRes.data.rows?.[0]?.metricValues || [];
+          // Parse summary metrics (current 7d vs previous 7d)
+          const summaryRows = summaryRes.data.rows || [];
+          const currentRow = summaryRows.find((r: any) => r.dimensionValues?.[0]?.value === 'date_range_0') || summaryRows[0];
+          const prevRow = summaryRows.find((r: any) => r.dimensionValues?.[0]?.value === 'date_range_1') || summaryRows[1];
+
+          const summaryMetrics = currentRow?.metricValues || [];
+          const prevMetrics = prevRow?.metricValues || [];
+
           const totalVisitors = parseInt(summaryMetrics[0]?.value, 10) || 0;
           const totalPageviews = parseInt(summaryMetrics[1]?.value, 10) || 0;
 
@@ -380,11 +389,23 @@ export async function getGoogleAnalyticsDataAction(businessProfileId: string): P
           const secs = Math.round(rawDuration % 60);
           const avgSessionDuration = `${mins}m ${secs}s`;
 
-          // Generate comparisons based on basic variation
-          const visitorsChange = `+${(5 + (rawBounce % 10)).toFixed(1)}%`;
-          const pageviewsChange = `+${(4 + (rawDuration % 8)).toFixed(1)}%`;
-          const durationChange = `+${(2 + (totalVisitors % 5)).toFixed(1)}%`;
-          const bounceChange = `-${(1 + (totalPageviews % 4)).toFixed(1)}%`;
+          const prevVisitors = parseInt(prevMetrics[0]?.value, 10) || 0;
+          const prevPageviews = parseInt(prevMetrics[1]?.value, 10) || 0;
+          let prevBounce = parseFloat(prevMetrics[2]?.value) || 0;
+          if (prevBounce > 0 && prevBounce <= 1) prevBounce *= 100;
+          const prevDuration = parseFloat(prevMetrics[3]?.value) || 0;
+
+          const formatPctChange = (curr: number, prev: number) => {
+            if (curr === 0 && prev === 0) return '0.0%';
+            if (prev === 0) return '+100.0%';
+            const pct = ((curr - prev) / prev) * 100;
+            return `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`;
+          };
+
+          const visitorsChange = formatPctChange(totalVisitors, prevVisitors);
+          const pageviewsChange = formatPctChange(totalPageviews, prevPageviews);
+          const durationChange = formatPctChange(rawDuration, prevDuration);
+          const bounceChange = formatPctChange(rawBounce, prevBounce);
 
           console.log(`Successfully fetched real GA data for ${businessProfileId}`);
 

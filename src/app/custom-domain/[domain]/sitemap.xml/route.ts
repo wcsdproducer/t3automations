@@ -53,36 +53,33 @@ export async function GET(
       .collection('blogs')
       .where('status', '==', 'published')
       .get();
-    blogs = snap.docs.map(doc => doc.data());
+    // Sort by createdAt descending and cap at top 10 to avoid scaled content bloat in sitemap
+    blogs = snap.docs
+      .map(doc => doc.data())
+      .sort((a, b) => {
+        const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt || 0).getTime();
+        const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt || 0).getTime();
+        return tB - tA;
+      })
+      .slice(0, 10);
   } catch (error) {
     console.error('[sitemap-custom-domain] Failed to fetch data:', error);
   }
 
   const baseUrl = `https://${cleanDomain}`;
 
-  const neighborhoods: any[] = localSeoData?.neighborhoods || [];
-  const surroundingCities: any[] = localSeoData?.surroundingCities || [];
+  // Only include top 5 primary surrounding cities (exclude thin neighborhood doorway pages)
+  const surroundingCities: any[] = (localSeoData?.surroundingCities || []).slice(0, 5);
 
-  const locationUrls = [
-    ...neighborhoods.map((area: any) => {
-      const name = typeof area === 'string' ? area : area.name;
-      return name ? `
+  const locationUrls = surroundingCities.map((city: any) => {
+    const name = typeof city === 'string' ? city : city.name;
+    return name ? `
   <url>
     <loc>${baseUrl}/${slugify(name)}</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>` : '';
-    }),
-    ...surroundingCities.map((city: any) => {
-      const name = typeof city === 'string' ? city : city.name;
-      return name ? `
-  <url>
-    <loc>${baseUrl}/${slugify(name)}</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>` : '';
-    })
-  ].join('');
+  }).join('');
 
   const brandUrls = getBrandsForNiche(service).map(brand => `
   <url>
