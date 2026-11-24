@@ -4,6 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getLongTailQueueForNiche, LongTailTopic } from '@/lib/constants/longtail-keywords';
 import { getRelevantBlogImage } from '@/lib/blog-images';
+import { notifyIndexNow, resubmitGscSitemap } from '@/lib/indexing';
 import { slugify } from '@/lib/utils';
 
 const BlogOutputSchema = z.object({
@@ -161,6 +162,26 @@ export async function GET(request: Request) {
           updatedAt: new Date().toISOString(),
         });
         logs.push(`✅ Published curated post "${blogData.title}" (/${nextTopic.slug}) for "${profile.businessName}"`);
+
+        // Auto-ping IndexNow (Bing/DuckDuckGo/ChatGPT) + Google Search Console sitemap
+        try {
+          const cdSnap = await db.collection(`businessProfiles/${userId}/customDomains`).limit(1).get();
+          const domain = cdSnap.docs[0]?.id || profile.customDomain;
+          if (domain) {
+            const urlsToPing = [
+              `https://${domain}/blog/${nextTopic.slug}`,
+              `https://${domain}/blog`,
+              `https://${domain}${nextTopic.ctaPath}`,
+            ];
+            const [idxRes, gscRes] = await Promise.all([
+              notifyIndexNow(domain, urlsToPing),
+              resubmitGscSitemap(domain),
+            ]);
+            logs.push(`   ↳ Indexing pings for ${domain}: IndexNow=${idxRes.ok ? 'OK' : idxRes.error} | GSC=${gscRes.ok ? 'OK' : gscRes.error}`);
+          }
+        } catch (pingErr: any) {
+          logs.push(`   ↳ Indexing ping warning: ${pingErr?.message}`);
+        }
       }
     }
 

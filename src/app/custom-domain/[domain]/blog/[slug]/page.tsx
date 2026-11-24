@@ -190,16 +190,21 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
       .doc(businessProfileId)
       .collection('blogs')
       .where('status', '==', 'published')
-      .orderBy('createdAt', 'desc')
-      .limit(3)
       .get();
 
-    recentPosts = snap.docs
+    const allSiblings = snap.docs
       .map(doc => {
         const data = doc.data() as any;
-        return { id: doc.id, ...data };
+        const ts = data.createdAt?.toMillis ? data.createdAt.toMillis() : new Date(data.createdAt || 0).getTime();
+        return { id: doc.id, ...data, _ts: ts };
       })
-      .filter((p: any) => p.slug !== slug);
+      .filter((p: any) => p.slug !== slug)
+      .sort((a: any, b: any) => b._ts - a._ts);
+
+    // Prioritize curated seoIndexed guides for tight internal-link authority clusters
+    const curatedSiblings = allSiblings.filter((p: any) => p.seoIndexed === true);
+    const legacySiblings = allSiblings.filter((p: any) => p.seoIndexed !== true);
+    recentPosts = [...curatedSiblings, ...legacySiblings].slice(0, 4);
   } catch (e) {
     console.error('Error fetching recent posts:', e);
   }
@@ -343,11 +348,64 @@ export default async function CustomDomainBlogPostPage({ params }: PageProps) {
               </h1>
             </header>
 
+            {/* Contextual Commercial Service CTA Callout */}
+            {(post.ctaPath || phone) && (
+              <div className="mb-8 p-5 rounded-xl bg-blue-50 border border-blue-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-1">
+                    Need Fast Local Help?
+                  </p>
+                  <p className="text-sm font-semibold text-slate-900">
+                    {post.ctaAnchor
+                      ? `Explore our dedicated ${post.ctaAnchor} service or call for same-day pricing.`
+                      : `Call ${companyName} for upfront pricing and fast local dispatch.`}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  {post.ctaPath && (
+                    <Link
+                      href={post.ctaPath}
+                      className="text-xs font-bold bg-white hover:bg-blue-100 text-blue-800 border border-blue-300 px-3.5 py-2 rounded-lg transition-colors"
+                    >
+                      View Service &rarr;
+                    </Link>
+                  )}
+                  {phone && (
+                    <a
+                      href={`tel:${phone}`}
+                      className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition-colors"
+                    >
+                      <Phone className="h-3.5 w-3.5" /> {phone}
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Post Content */}
             <div 
               className="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-6 text-[15px]"
               dangerouslySetInnerHTML={{ __html: post.content }} 
             />
+
+            {/* Related Curated Guides (Internal Link Cluster) */}
+            {recentPosts.length > 0 && (
+              <div className="mt-10 pt-8 border-t border-slate-100">
+                <h2 className="text-lg font-bold text-slate-900 mb-4">Related Local Guides</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {recentPosts.slice(0, 4).map((rp) => (
+                    <Link
+                      key={rp.id}
+                      href={`/blog/${rp.slug}`}
+                      className="block p-4 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/70 hover:border-blue-200 transition-colors"
+                    >
+                      <h3 className="text-sm font-bold text-slate-900 line-clamp-2">{rp.title}</h3>
+                      <p className="text-xs text-slate-500 mt-1 line-clamp-2">{rp.excerpt}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Lead Capture Form Embedded in Post */}
             <div className="mt-12 pt-8 border-t border-slate-100">
