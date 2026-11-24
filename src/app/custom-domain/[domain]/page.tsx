@@ -2,6 +2,7 @@ import { admin } from '@/lib/firebase-admin';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { profileToTemplateProps } from '@/lib/template-props';
+import { getRelevantBlogImage } from '@/lib/blog-images';
 import { Template1Content } from '@/app/landing-pages/_components/template-1-content';
 import { Template2Content } from '@/app/landing-pages/_components/template-2-content';
 import { Template3Content } from '@/app/landing-pages/_components/template-3-content';
@@ -74,7 +75,7 @@ export async function generateMetadata({
   const title = profile.metaTitle || profile.businessName || 'T3 Partner';
   const description = profile.metaDescription || `Professional ${profile.service || 'services'} in ${profile.targetCity || 'your area'}. Call today for a free estimate!`;
   const canonicalUrl = `https://${cleanDomain}`;
-  const rawLogoUrl = profile.logoUrl || '';
+  const rawLogoUrl = profile.logoUrl || getRelevantBlogImage(profile.service || '', profile.businessName || '');
   const logoUrl = rawLogoUrl.startsWith('/') ? `https://${cleanDomain}${rawLogoUrl}` : rawLogoUrl;
 
   return {

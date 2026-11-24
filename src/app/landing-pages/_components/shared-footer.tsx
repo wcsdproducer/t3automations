@@ -3,6 +3,7 @@
 import React from 'react';
 import { slugify } from '@/lib/utils';
 import { getBrandsForNiche } from '@/lib/constants/brands';
+import { getServicesForNiche } from '@/lib/constants/services';
 
 interface SharedFooterProps {
   businessProfileId?: string;
@@ -35,9 +36,11 @@ export function SharedFooter({
   // Never render cross-domain networkLinks (PBN footprint).
   const surroundingCities = (localSeoData?.surroundingCities || []).slice(0, 5);
   const brands = getBrandsForNiche(service);
+  const nicheServices = getServicesForNiche(service);
 
   const hasCityData = surroundingCities.length > 0;
   const hasBrands = brands.length > 0;
+  const hasServices = nicheServices.length > 0;
 
   const bgClass = isDark ? 'bg-slate-950 border-slate-900 text-slate-400' : 'bg-slate-50 border-slate-200/60 text-slate-500';
   const headingClass = isDark ? 'text-slate-200 font-bold' : 'text-slate-900 font-bold';
@@ -113,7 +116,26 @@ export function SharedFooter({
             )}
           </div>
 
-          {/* Column 3: Service Areas (Top 5 Surrounding Cities) */}
+          {/* Column 3: Specialized Services */}
+          {hasServices && (
+            <div className="space-y-4">
+              <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Our Services</h4>
+              <ul className="space-y-2 text-sm">
+                {nicheServices.map((svc, idx) => (
+                  <li key={idx}>
+                    <a
+                      href={`/services/${svc.slug}`}
+                      className={`transition-colors ${linkClass}`}
+                    >
+                      {svc.shortName}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Column 4: Service Areas (Top 5 Surrounding Cities) */}
           {hasCityData && (
             <div className="space-y-4">
               <h4 className={`text-sm font-bold uppercase tracking-wider ${titleClass}`}>Service Areas</h4>

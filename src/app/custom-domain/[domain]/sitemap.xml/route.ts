@@ -1,6 +1,7 @@
 import { admin } from '@/lib/firebase-admin';
 import { slugify } from '@/lib/utils';
 import { getBrandsForNiche } from '@/lib/constants/brands';
+import { getServicesForNiche } from '@/lib/constants/services';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,6 +82,14 @@ export async function GET(
   </url>` : '';
   }).join('');
 
+  const serviceUrls = getServicesForNiche(service).map(svc => `
+  <url>
+    <loc>${baseUrl}/services/${svc.slug}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  `).join('').trim();
+
   const brandUrls = getBrandsForNiche(service).map(brand => `
   <url>
     <loc>${baseUrl}/brands/${brand.slug}</loc>
@@ -101,7 +110,7 @@ export async function GET(
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  ${brandUrls ? `${brandUrls}\n  ` : ''}${blogs.map(blog => `
+  ${serviceUrls ? `${serviceUrls}\n  ` : ''}${brandUrls ? `${brandUrls}\n  ` : ''}${blogs.map(blog => `
   <url>
     <loc>${baseUrl}/blog/${blog.slug}</loc>
     <changefreq>monthly</changefreq>
