@@ -54,15 +54,19 @@ export async function GET(
       .collection('blogs')
       .where('status', '==', 'published')
       .get();
-    // Sort by createdAt descending and cap at top 10 to avoid scaled content bloat in sitemap
-    blogs = snap.docs
+    const allPublished = snap.docs
       .map(doc => doc.data())
       .sort((a, b) => {
         const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt || 0).getTime();
         const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt || 0).getTime();
         return tB - tA;
-      })
-      .slice(0, 10);
+      });
+
+    // Always index all curated long-tail posts (seoIndexed === true).
+    // Include up to 5 most recent legacy posts as fallback while curated library builds.
+    const curatedBlogs = allPublished.filter(b => b.seoIndexed === true);
+    const legacyFallback = allPublished.filter(b => b.seoIndexed !== true).slice(0, 5);
+    blogs = [...curatedBlogs, ...legacyFallback];
   } catch (error) {
     console.error('[sitemap-custom-domain] Failed to fetch data:', error);
   }

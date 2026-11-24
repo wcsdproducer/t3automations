@@ -83,24 +83,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const rawImageUrl = data.imageUrl || '';
       const imageUrl = rawImageUrl.startsWith('/') ? `https://${cleanDomain}${rawImageUrl}` : rawImageUrl;
 
-      // Only index the top 10 most recent published posts to avoid Google Scaled Content Abuse demotion
-      const allPublishedSnap = await admin
-        .firestore()
-        .collection('businessProfiles')
-        .doc(businessProfileId)
-        .collection('blogs')
-        .where('status', '==', 'published')
-        .get();
-      const top10Slugs = allPublishedSnap.docs
-        .map(d => d.data())
-        .sort((a, b) => {
-          const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt || 0).getTime();
-          const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt || 0).getTime();
-          return tB - tA;
-        })
-        .slice(0, 10)
-        .map(b => b.slug);
-      const shouldIndex = data.seoIndexed === true || top10Slugs.includes(slug);
+      // Index all curated long-tail posts (seoIndexed === true) + top 5 legacy posts as fallback.
+      // Keep excess legacy AI posts noindex to avoid Google Scaled Content Abuse demotion.
+      let shouldIndex = data.seoIndexed === true;
+      if (!shouldIndex) {
+        const allPublishedSnap = await admin
+          .firestore()
+          .collection('businessProfiles')
+          .doc(businessProfileId)
+          .collection('blogs')
+          .where('status', '==', 'published')
+          .get();
+        const top5LegacySlugs = allPublishedSnap.docs
+          .map(d => d.data())
+          .filter(b => b.seoIndexed !== true)
+          .sort((a, b) => {
+            const tA = a.createdAt?.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt || 0).getTime();
+            const tB = b.createdAt?.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt || 0).getTime();
+            return tB - tA;
+          })
+          .slice(0, 5)
+          .map(b => b.slug);
+        shouldIndex = top5LegacySlugs.includes(slug);
+      }
 
       return {
         metadataBase: new URL(`https://${cleanDomain}`),
