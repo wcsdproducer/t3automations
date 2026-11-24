@@ -124,16 +124,28 @@ export default async function CustomDomainBlogIndexPage({
       .doc(businessProfileId)
       .collection('blogs')
       .where('status', '==', 'published')
-      .orderBy('createdAt', 'desc')
       .get();
-    
-    blogs = snap.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate
-        ? doc.data().createdAt.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-        : new Date(doc.data().createdAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    }));
+
+    const allPublished = snap.docs
+      .map(doc => {
+        const d = doc.data();
+        const ts = d.createdAt?.toMillis ? d.createdAt.toMillis() : new Date(d.createdAt || 0).getTime();
+        return {
+          id: doc.id,
+          ...d,
+          _ts: ts,
+          createdAt: d.createdAt?.toDate
+            ? d.createdAt.toDate().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            : new Date(d.createdAt || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        };
+      })
+      .sort((a: any, b: any) => b._ts - a._ts);
+
+    // Show all curated long-tail posts (seoIndexed === true) + top 5 legacy fallback posts.
+    // Keeps 300+ noindexed legacy posts off the /blog archive to preserve crawl budget & UX.
+    const curated = allPublished.filter((b: any) => b.seoIndexed === true);
+    const legacyFallback = allPublished.filter((b: any) => b.seoIndexed !== true).slice(0, 5);
+    blogs = [...curated, ...legacyFallback];
   } catch (error) {
     console.error('[custom-domain-blog-index] Blogs fetch error:', error);
   }
